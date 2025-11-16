@@ -1,6 +1,12 @@
 changelog
 =========
 
+0.2.16
+======
+
+- fix: Implement numerical sorting for collection items to ensure correct ordering of numbered pages.
+- fix: Prevent duplicate `toctree` entries when using the `collection` directive on multiple pages, resolving warnings and ensuring correct previous/next navigation.
+
 0.2.15
 ======
 

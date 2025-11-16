@@ -5,6 +5,24 @@ from docutils.parsers.rst import directives
 from docutils import nodes
 from sphinx.addnodes import toctree
 
+
+def to_numeric(value):
+    """
+    Converts a value to a numeric type if possible, trying int then float.
+    """
+    if isinstance(value, (int, float)):
+        return value
+    if isinstance(value, str):
+        try:
+            return int(value)
+        except ValueError:
+            try:
+                return float(value)
+            except ValueError:
+                return value
+    return value
+
+
 class CollectionDirective(SphinxDirective):
     has_content = False
     option_spec = {
@@ -95,7 +113,7 @@ class CollectionDirective(SphinxDirective):
                     collection_items.append(item)
 
         if sort_key:
-            collection_items.sort(key=lambda x: x.get(sort_key, 0), reverse=reverse)
+            collection_items.sort(key=lambda x: to_numeric(x.get(sort_key, 0)), reverse=reverse)
 
         if limit:
             collection_items = collection_items[:limit]
@@ -112,13 +130,31 @@ class CollectionDirective(SphinxDirective):
         jinja_env = self.env.app.builder.templates.environment
         template = jinja_env.get_template(template_name)
         html = template.render(context)
-        
+
+        # Create a toctree with the sorted and limited items
+        # to ensure correct prev/next navigation.
+        # Also, ensure we don't add duplicate entries to the toctree
+        # across multiple collection directives.
+        if not hasattr(self.env, 'photon_publish_collection_docnames'):
+            self.env.photon_publish_collection_docnames = set()
+
+        toc_docnames = [item['docname'] for item in collection_items]
+
+        unique_toc_docnames = []
+        for docname in toc_docnames:
+            if docname not in self.env.photon_publish_collection_docnames:
+                unique_toc_docnames.append(docname)
+                self.env.photon_publish_collection_docnames.add(docname)
+
+        if not unique_toc_docnames:
+            return [nodes.raw('', html, format='html')]
+
         toc = toctree()
         toc['glob'] = False
         toc['hidden'] = True
-        toc['includefiles'] = docnames
-        toc['entries'] = [(None, docname) for docname in docnames]
-        
+        toc['includefiles'] = unique_toc_docnames
+        toc['entries'] = [(None, docname) for docname in unique_toc_docnames]
+
         return [nodes.raw('', html, format='html'), toc]
 
 def collect_metadata(app, env):
@@ -341,10 +377,10 @@ def build_nav_links(app, pagename: str, templatename: str, context: dict, doctre
                     'date': meta.get('date', ''),
                 })
 
-    header_nav_list.sort(key=lambda x: x['order'])
+    header_nav_list.sort(key=lambda x: to_numeric(x['order']))
     context['header_nav_list'] = header_nav_list
 
-    footer_nav_list.sort(key=lambda x: x['order'])
+    footer_nav_list.sort(key=lambda x: to_numeric(x['order']))
     context['footer_nav_list'] = footer_nav_list
 
     recent_logs.sort(key=lambda x: x['date'], reverse=True)
