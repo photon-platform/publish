@@ -1,6 +1,18 @@
 changelog
 =========
 
+0.2.14
+------
+*2025-11-16*
+
+**added**
+
++ Added support for a `:type:` metadata field, allowing content to be classified and displayed in a new sidebar panel.
+
+**changed**
+
++ Updated the metadata field for categories to `:categories:` to better reflect its support for multiple values.
+
 0.2.13
 ------
 *2025-11-11*
