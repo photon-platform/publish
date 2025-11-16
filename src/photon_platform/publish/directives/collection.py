@@ -55,8 +55,8 @@ class CollectionDirective(SphinxDirective):
                     item.update(meta)
                     if 'tags' in item and isinstance(item['tags'], str):
                         item['tags'] = [tag.strip() for tag in item['tags'].split(',')]
-                    if 'category' in item and isinstance(item['category'], str):
-                        item['category'] = [cat.strip() for cat in item['category'].split(',')]
+                    if 'categories' in item and isinstance(item['categories'], str):
+                        item['categories'] = [cat.strip() for cat in item['categories'].split(',')]
                     collection_items.append(item)
 
         if sort_key:
@@ -90,6 +90,7 @@ def collect_metadata(app, env):
     """Collect all tags and categories from document metadata."""
     env.all_tags = set()
     env.all_categories = set()
+    env.all_types = set()
     
     for docname in env.found_docs:
         meta = env.metadata.get(docname, {})
@@ -100,15 +101,17 @@ def collect_metadata(app, env):
             else:
                 tags = tags_meta
             env.all_tags.update(tags)
-        if 'category' in meta:
-            categories_meta = meta['category']
+        if 'categories' in meta:
+            categories_meta = meta['categories']
             if isinstance(categories_meta, str):
                 categories = [cat.strip() for cat in categories_meta.split(',')]
             else:
                 categories = categories_meta
             env.all_categories.update(categories)
+        if 'type' in meta:
+            env.all_types.add(meta['type'])
 
-def generate_tag_category_pages(app):
+def generate_taxonomy_pages(app):
     """Dynamically generate pages for each tag and category."""
     env = app.env
     if hasattr(env, 'all_tags'):
@@ -142,8 +145,8 @@ def generate_tag_category_pages(app):
             articles = []
             for docname in env.found_docs:
                 meta = env.metadata.get(docname, {})
-                if 'category' in meta:
-                    categories_meta = meta['category']
+                if 'categories' in meta:
+                    categories_meta = meta['categories']
                     if isinstance(categories_meta, str):
                         categories = [c.strip() for c in categories_meta.split(',')]
                     else:
@@ -163,16 +166,37 @@ def generate_tag_category_pages(app):
             }
             yield (f'categories/{category}', context, 'category_page.html')
 
+    if hasattr(env, 'all_types'):
+        for type_ in env.all_types:
+            articles = []
+            for docname in env.found_docs:
+                meta = env.metadata.get(docname, {})
+                if 'type' in meta and meta['type'] == type_:
+                    title_node = env.titles.get(docname)
+                    if title_node:
+                        articles.append({
+                            'title': title_node.astext(),
+                            'docname': docname,
+                        })
+            context = {
+                'collection': {
+                    'title': f"Content of type '{type_}'",
+                    'articles': articles,
+                }
+            }
+            yield (f'types/{type_}', context, 'type_page.html')
+
 def build_nav_links(app, pagename: str, templatename: str, context: dict, doctree) -> None:
     """Build navigation links and add tags/categories to the context."""
     context['tags'] = sorted(list(app.env.all_tags)) if hasattr(app.env, 'all_tags') else []
     context['categories'] = sorted(list(app.env.all_categories)) if hasattr(app.env, 'all_categories') else []
+    context['types'] = sorted(list(app.env.all_types)) if hasattr(app.env, 'all_types') else []
 
     if 'meta' in context and context['meta']:
         if 'tags' in context['meta'] and isinstance(context['meta']['tags'], str):
             context['meta']['tags'] = [tag.strip() for tag in context['meta']['tags'].split(',')]
-        if 'category' in context['meta'] and isinstance(context['meta']['category'], str):
-            context['meta']['category'] = [cat.strip() for cat in context['meta']['category'].split(',')]
+        if 'categories' in context['meta'] and isinstance(context['meta']['categories'], str):
+            context['meta']['categories'] = [cat.strip() for cat in context['meta']['categories'].split(',')]
 
     header_nav_list = []
     footer_nav_list = []
@@ -217,7 +241,7 @@ def setup(app) -> dict:
     """Register directives and connect to Sphinx events."""
     app.add_directive("collection", CollectionDirective)
     app.connect('env-updated', collect_metadata)
-    app.connect('html-collect-pages', generate_tag_category_pages)
+    app.connect('html-collect-pages', generate_taxonomy_pages)
     app.connect('html-page-context', build_nav_links)
     return {
         'version': '0.1',
