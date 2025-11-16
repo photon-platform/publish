@@ -17,14 +17,20 @@ Functions
 
 .. autoapisummary::
 
+   publish.directives.collection.to_numeric
    publish.directives.collection.collect_metadata
-   publish.directives.collection.generate_tag_category_pages
+   publish.directives.collection.generate_taxonomy_pages
    publish.directives.collection.build_nav_links
    publish.directives.collection.setup
 
 
 Module Contents
 ---------------
+
+.. py:function:: to_numeric(value)
+
+   Converts a value to a numeric type if possible, trying int then float.
+
 
 .. py:class:: CollectionDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
 
@@ -67,7 +73,7 @@ Module Contents
    Collect all tags and categories from document metadata.
 
 
-.. py:function:: generate_tag_category_pages(app)
+.. py:function:: generate_taxonomy_pages(app)
 
    Dynamically generate pages for each tag and category.
 

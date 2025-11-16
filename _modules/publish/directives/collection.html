@@ -71,6 +71,27 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">docutils</span><span class="w"> </span><span class="kn">import</span> <span class="n">nodes</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sphinx.addnodes</span><span class="w"> </span><span class="kn">import</span> <span class="n">toctree</span>
 
+
+<div class="viewcode-block" id="to_numeric">
+<a class="viewcode-back" href="../../../modules/api/publish/directives/collection/index.html#publish.directives.collection.to_numeric">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_numeric</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a value to a numeric type if possible, trying int then float.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">value</span>
+    <span class="k">return</span> <span class="n">value</span></div>
+
+
+
 <div class="viewcode-block" id="CollectionDirective">
 <a class="viewcode-back" href="../../../modules/api/publish/directives/collection/index.html#publish.directives.collection.CollectionDirective">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CollectionDirective</span><span class="p">(</span><span class="n">SphinxDirective</span><span class="p">):</span>
@@ -106,17 +127,29 @@
         <span class="n">limit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;limit&#39;</span><span class="p">)</span>
         <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;Collection&#39;</span><span class="p">)</span>
 
-        <span class="c1"># Discover files automatically</span>
+        <span class="c1"># Discover files automatically, but not recursively deep</span>
         <span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">docname</span><span class="p">)</span>
-        <span class="n">docnames</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">walk_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">srcdir</span><span class="p">,</span> <span class="n">current_dir</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">dirpath</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">filenames</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">walk_path</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.rst&#39;</span><span class="p">):</span>
-                    <span class="n">full_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
-                    <span class="n">docname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">full_path</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">srcdir</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="n">docname</span> <span class="o">!=</span> <span class="n">env</span><span class="o">.</span><span class="n">docname</span><span class="p">:</span>
-                        <span class="n">docnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">docname</span><span class="p">)</span>
+        <span class="n">docnames</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Process current directory</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">walk_path</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">walk_path</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.rst&#39;</span><span class="p">):</span>
+                <span class="n">docname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">srcdir</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">docname</span> <span class="o">!=</span> <span class="n">env</span><span class="o">.</span><span class="n">docname</span><span class="p">:</span>
+                    <span class="n">docnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">docname</span><span class="p">)</span>
+
+        <span class="c1"># Process immediate subdirectories</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">walk_path</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">walk_path</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">sub_filename</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                    <span class="n">sub_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">sub_filename</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">sub_path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">sub_filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.rst&#39;</span><span class="p">):</span>
+                        <span class="n">docname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">sub_path</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">srcdir</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">docname</span> <span class="o">!=</span> <span class="n">env</span><span class="o">.</span><span class="n">docname</span><span class="p">:</span>
+                            <span class="n">docnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">docname</span><span class="p">)</span>
 
         <span class="n">collection_items</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">docname</span> <span class="ow">in</span> <span class="n">docnames</span><span class="p">:</span>
@@ -127,16 +160,39 @@
                     <span class="n">item</span> <span class="o">=</span> <span class="p">{</span>
                         <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">title_node</span><span class="o">.</span><span class="n">astext</span><span class="p">(),</span>
                         <span class="s1">&#39;docname&#39;</span><span class="p">:</span> <span class="n">docname</span><span class="p">,</span>
+                        <span class="s1">&#39;excerpt_text&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;excerpt_figure_filename&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="p">}</span>
                     <span class="n">item</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+
+                    <span class="n">doctree</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get_doctree</span><span class="p">(</span><span class="n">docname</span><span class="p">)</span>
+                    
+                    <span class="c1"># Find first paragraph or blockquote</span>
+                    <span class="n">first_text</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">doctree</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">paragraph</span><span class="p">,</span> <span class="n">nodes</span><span class="o">.</span><span class="n">block_quote</span><span class="p">))):</span>
+                        <span class="n">first_text</span> <span class="o">=</span> <span class="n">node</span>
+                        <span class="k">break</span>
+                    
+                    <span class="k">if</span> <span class="n">first_text</span><span class="p">:</span>
+                        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;excerpt_text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">render_partial</span><span class="p">(</span><span class="n">first_text</span><span class="p">)[</span><span class="s1">&#39;html_body&#39;</span><span class="p">]</span>
+
+                    <span class="c1"># Find first figure</span>
+                    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">doctree</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">figure</span><span class="p">):</span>
+                        <span class="n">image_node</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">image</span><span class="p">)),</span> <span class="kc">None</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">image_node</span><span class="p">:</span>
+                            <span class="n">item</span><span class="p">[</span><span class="s1">&#39;excerpt_figure_filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">image_node</span><span class="p">[</span><span class="s1">&#39;uri&#39;</span><span class="p">])</span>
+                            <span class="n">item</span><span class="p">[</span><span class="s1">&#39;excerpt_figure_alt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">image_node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;alt&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                            <span class="n">item</span><span class="p">[</span><span class="s1">&#39;excerpt_figure_width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">)</span>
+                            <span class="k">break</span>
+
                     <span class="k">if</span> <span class="s1">&#39;tags&#39;</span> <span class="ow">in</span> <span class="n">item</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
                         <span class="n">item</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
-                    <span class="k">if</span> <span class="s1">&#39;category&#39;</span> <span class="ow">in</span> <span class="n">item</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
-                        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">cat</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+                    <span class="k">if</span> <span class="s1">&#39;categories&#39;</span> <span class="ow">in</span> <span class="n">item</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;categories&#39;</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+                        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;categories&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">cat</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;categories&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
                     <span class="n">collection_items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">sort_key</span><span class="p">:</span>
-            <span class="n">collection_items</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sort_key</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="n">reverse</span><span class="p">)</span>
+            <span class="n">collection_items</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">to_numeric</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sort_key</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span> <span class="n">reverse</span><span class="o">=</span><span class="n">reverse</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">limit</span><span class="p">:</span>
             <span class="n">collection_items</span> <span class="o">=</span> <span class="n">collection_items</span><span class="p">[:</span><span class="n">limit</span><span class="p">]</span>
@@ -153,13 +209,31 @@
         <span class="n">jinja_env</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">environment</span>
         <span class="n">template</span> <span class="o">=</span> <span class="n">jinja_env</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">template_name</span><span class="p">)</span>
         <span class="n">html</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
-        
+
+        <span class="c1"># Create a toctree with the sorted and limited items</span>
+        <span class="c1"># to ensure correct prev/next navigation.</span>
+        <span class="c1"># Also, ensure we don&#39;t add duplicate entries to the toctree</span>
+        <span class="c1"># across multiple collection directives.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="s1">&#39;photon_publish_collection_docnames&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">photon_publish_collection_docnames</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="n">toc_docnames</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;docname&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">collection_items</span><span class="p">]</span>
+
+        <span class="n">unique_toc_docnames</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">docname</span> <span class="ow">in</span> <span class="n">toc_docnames</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">docname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">photon_publish_collection_docnames</span><span class="p">:</span>
+                <span class="n">unique_toc_docnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">docname</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">photon_publish_collection_docnames</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">docname</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">unique_toc_docnames</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">nodes</span><span class="o">.</span><span class="n">raw</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;html&#39;</span><span class="p">)]</span>
+
         <span class="n">toc</span> <span class="o">=</span> <span class="n">toctree</span><span class="p">()</span>
         <span class="n">toc</span><span class="p">[</span><span class="s1">&#39;glob&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">toc</span><span class="p">[</span><span class="s1">&#39;hidden&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">toc</span><span class="p">[</span><span class="s1">&#39;includefiles&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">docnames</span>
-        <span class="n">toc</span><span class="p">[</span><span class="s1">&#39;entries&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[(</span><span class="kc">None</span><span class="p">,</span> <span class="n">docname</span><span class="p">)</span> <span class="k">for</span> <span class="n">docname</span> <span class="ow">in</span> <span class="n">docnames</span><span class="p">]</span>
-        
+        <span class="n">toc</span><span class="p">[</span><span class="s1">&#39;includefiles&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">unique_toc_docnames</span>
+        <span class="n">toc</span><span class="p">[</span><span class="s1">&#39;entries&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[(</span><span class="kc">None</span><span class="p">,</span> <span class="n">docname</span><span class="p">)</span> <span class="k">for</span> <span class="n">docname</span> <span class="ow">in</span> <span class="n">unique_toc_docnames</span><span class="p">]</span>
+
         <span class="k">return</span> <span class="p">[</span><span class="n">nodes</span><span class="o">.</span><span class="n">raw</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;html&#39;</span><span class="p">),</span> <span class="n">toc</span><span class="p">]</span></div>
 </div>
 
@@ -170,6 +244,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Collect all tags and categories from document metadata.&quot;&quot;&quot;</span>
     <span class="n">env</span><span class="o">.</span><span class="n">all_tags</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="n">env</span><span class="o">.</span><span class="n">all_categories</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">all_types</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     
     <span class="k">for</span> <span class="n">docname</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">found_docs</span><span class="p">:</span>
         <span class="n">meta</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">docname</span><span class="p">,</span> <span class="p">{})</span>
@@ -180,18 +255,20 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">tags</span> <span class="o">=</span> <span class="n">tags_meta</span>
             <span class="n">env</span><span class="o">.</span><span class="n">all_tags</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s1">&#39;category&#39;</span> <span class="ow">in</span> <span class="n">meta</span><span class="p">:</span>
-            <span class="n">categories_meta</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;categories&#39;</span> <span class="ow">in</span> <span class="n">meta</span><span class="p">:</span>
+            <span class="n">categories_meta</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;categories&#39;</span><span class="p">]</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">categories_meta</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="n">cat</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">categories_meta</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">categories</span> <span class="o">=</span> <span class="n">categories_meta</span>
-            <span class="n">env</span><span class="o">.</span><span class="n">all_categories</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">categories</span><span class="p">)</span></div>
+            <span class="n">env</span><span class="o">.</span><span class="n">all_categories</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">categories</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;type&#39;</span> <span class="ow">in</span> <span class="n">meta</span><span class="p">:</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">all_types</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span></div>
 
 
-<div class="viewcode-block" id="generate_tag_category_pages">
-<a class="viewcode-back" href="../../../modules/api/publish/directives/collection/index.html#publish.directives.collection.generate_tag_category_pages">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">generate_tag_category_pages</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+<div class="viewcode-block" id="generate_taxonomy_pages">
+<a class="viewcode-back" href="../../../modules/api/publish/directives/collection/index.html#publish.directives.collection.generate_taxonomy_pages">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_taxonomy_pages</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Dynamically generate pages for each tag and category.&quot;&quot;&quot;</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">env</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s1">&#39;all_tags&#39;</span><span class="p">):</span>
@@ -208,10 +285,35 @@
                     <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
                         <span class="n">title_node</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">titles</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">docname</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">title_node</span><span class="p">:</span>
-                            <span class="n">articles</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                            <span class="n">item</span> <span class="o">=</span> <span class="p">{</span>
                                 <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">title_node</span><span class="o">.</span><span class="n">astext</span><span class="p">(),</span>
                                 <span class="s1">&#39;docname&#39;</span><span class="p">:</span> <span class="n">docname</span><span class="p">,</span>
-                            <span class="p">})</span>
+                                <span class="s1">&#39;excerpt_text&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;excerpt_figure_filename&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="p">}</span>
+                            <span class="n">item</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+
+                            <span class="n">doctree</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get_doctree</span><span class="p">(</span><span class="n">docname</span><span class="p">)</span>
+                            
+                            <span class="c1"># Find first paragraph or blockquote</span>
+                            <span class="n">first_text</span> <span class="o">=</span> <span class="kc">None</span>
+                            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">doctree</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">paragraph</span><span class="p">,</span> <span class="n">nodes</span><span class="o">.</span><span class="n">block_quote</span><span class="p">))):</span>
+                                <span class="n">first_text</span> <span class="o">=</span> <span class="n">node</span>
+                                <span class="k">break</span>
+                            
+                            <span class="k">if</span> <span class="n">first_text</span><span class="p">:</span>
+                                <span class="n">item</span><span class="p">[</span><span class="s1">&#39;excerpt_text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">render_partial</span><span class="p">(</span><span class="n">first_text</span><span class="p">)[</span><span class="s1">&#39;html_body&#39;</span><span class="p">]</span>
+
+                            <span class="c1"># Find first figure</span>
+                            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">doctree</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">figure</span><span class="p">):</span>
+                                <span class="n">image_node</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">image</span><span class="p">)),</span> <span class="kc">None</span><span class="p">)</span>
+                                <span class="k">if</span> <span class="n">image_node</span><span class="p">:</span>
+                                    <span class="n">item</span><span class="p">[</span><span class="s1">&#39;excerpt_figure_filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">image_node</span><span class="p">[</span><span class="s1">&#39;uri&#39;</span><span class="p">])</span>
+                                    <span class="n">item</span><span class="p">[</span><span class="s1">&#39;excerpt_figure_alt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">image_node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;alt&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                                    <span class="n">item</span><span class="p">[</span><span class="s1">&#39;excerpt_figure_width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">)</span>
+                                    <span class="k">break</span>
+                            
+                            <span class="n">articles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
             <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s1">&#39;collection&#39;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Posts tagged &#39;</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">,</span>
@@ -225,8 +327,8 @@
             <span class="n">articles</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">docname</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">found_docs</span><span class="p">:</span>
                 <span class="n">meta</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">docname</span><span class="p">,</span> <span class="p">{})</span>
-                <span class="k">if</span> <span class="s1">&#39;category&#39;</span> <span class="ow">in</span> <span class="n">meta</span><span class="p">:</span>
-                    <span class="n">categories_meta</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s1">&#39;categories&#39;</span> <span class="ow">in</span> <span class="n">meta</span><span class="p">:</span>
+                    <span class="n">categories_meta</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;categories&#39;</span><span class="p">]</span>
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">categories_meta</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                         <span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">categories_meta</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
                     <span class="k">else</span><span class="p">:</span>
@@ -234,17 +336,90 @@
                     <span class="k">if</span> <span class="n">category</span> <span class="ow">in</span> <span class="n">categories</span><span class="p">:</span>
                         <span class="n">title_node</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">titles</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">docname</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">title_node</span><span class="p">:</span>
-                            <span class="n">articles</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                            <span class="n">item</span> <span class="o">=</span> <span class="p">{</span>
                                 <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">title_node</span><span class="o">.</span><span class="n">astext</span><span class="p">(),</span>
                                 <span class="s1">&#39;docname&#39;</span><span class="p">:</span> <span class="n">docname</span><span class="p">,</span>
-                            <span class="p">})</span>
+                                <span class="s1">&#39;excerpt_text&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;excerpt_figure_filename&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="p">}</span>
+                            <span class="n">item</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+
+                            <span class="n">doctree</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get_doctree</span><span class="p">(</span><span class="n">docname</span><span class="p">)</span>
+                            
+                            <span class="c1"># Find first paragraph or blockquote</span>
+                            <span class="n">first_text</span> <span class="o">=</span> <span class="kc">None</span>
+                            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">doctree</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">paragraph</span><span class="p">,</span> <span class="n">nodes</span><span class="o">.</span><span class="n">block_quote</span><span class="p">))):</span>
+                                <span class="n">first_text</span> <span class="o">=</span> <span class="n">node</span>
+                                <span class="k">break</span>
+                            
+                            <span class="k">if</span> <span class="n">first_text</span><span class="p">:</span>
+                                <span class="n">item</span><span class="p">[</span><span class="s1">&#39;excerpt_text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">render_partial</span><span class="p">(</span><span class="n">first_text</span><span class="p">)[</span><span class="s1">&#39;html_body&#39;</span><span class="p">]</span>
+
+                            <span class="c1"># Find first figure</span>
+                            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">doctree</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">figure</span><span class="p">):</span>
+                                <span class="n">image_node</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">image</span><span class="p">)),</span> <span class="kc">None</span><span class="p">)</span>
+                                <span class="k">if</span> <span class="n">image_node</span><span class="p">:</span>
+                                    <span class="n">item</span><span class="p">[</span><span class="s1">&#39;excerpt_figure_filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">image_node</span><span class="p">[</span><span class="s1">&#39;uri&#39;</span><span class="p">])</span>
+                                    <span class="n">item</span><span class="p">[</span><span class="s1">&#39;excerpt_figure_alt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">image_node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;alt&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                                    <span class="n">item</span><span class="p">[</span><span class="s1">&#39;excerpt_figure_width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">)</span>
+                                    <span class="k">break</span>
+                            
+                            <span class="n">articles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
             <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s1">&#39;collection&#39;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Posts in category &#39;</span><span class="si">{</span><span class="n">category</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">,</span>
                     <span class="s1">&#39;articles&#39;</span><span class="p">:</span> <span class="n">articles</span><span class="p">,</span>
                 <span class="p">}</span>
             <span class="p">}</span>
-            <span class="k">yield</span> <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;categories/</span><span class="si">{</span><span class="n">category</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="s1">&#39;category_page.html&#39;</span><span class="p">)</span></div>
+            <span class="k">yield</span> <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;categories/</span><span class="si">{</span><span class="n">category</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="s1">&#39;category_page.html&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s1">&#39;all_types&#39;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">type_</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">all_types</span><span class="p">:</span>
+            <span class="n">articles</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">docname</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">found_docs</span><span class="p">:</span>
+                <span class="n">meta</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">docname</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="k">if</span> <span class="s1">&#39;type&#39;</span> <span class="ow">in</span> <span class="n">meta</span> <span class="ow">and</span> <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">type_</span><span class="p">:</span>
+                    <span class="n">title_node</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">titles</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">docname</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">title_node</span><span class="p">:</span>
+                        <span class="n">item</span> <span class="o">=</span> <span class="p">{</span>
+                            <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">title_node</span><span class="o">.</span><span class="n">astext</span><span class="p">(),</span>
+                            <span class="s1">&#39;docname&#39;</span><span class="p">:</span> <span class="n">docname</span><span class="p">,</span>
+                            <span class="s1">&#39;excerpt_text&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;excerpt_figure&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                        <span class="p">}</span>
+                        <span class="n">item</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+
+                        <span class="n">doctree</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get_doctree</span><span class="p">(</span><span class="n">docname</span><span class="p">)</span>
+                        
+                        <span class="c1"># Find first paragraph or blockquote</span>
+                        <span class="n">first_text</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">doctree</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">paragraph</span><span class="p">,</span> <span class="n">nodes</span><span class="o">.</span><span class="n">block_quote</span><span class="p">))):</span>
+                            <span class="n">first_text</span> <span class="o">=</span> <span class="n">node</span>
+                            <span class="k">break</span>
+                        
+                        <span class="k">if</span> <span class="n">first_text</span><span class="p">:</span>
+                            <span class="n">item</span><span class="p">[</span><span class="s1">&#39;excerpt_text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">render_partial</span><span class="p">(</span><span class="n">first_text</span><span class="p">)[</span><span class="s1">&#39;html_body&#39;</span><span class="p">]</span>
+
+                        <span class="c1"># Find first figure</span>
+                        <span class="n">first_figure</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">doctree</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">figure</span><span class="p">):</span>
+                            <span class="c1"># Adjust image URI to be relative to the document</span>
+                            <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">image</span><span class="p">):</span>
+                                <span class="n">img</span><span class="p">[</span><span class="s1">&#39;uri&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">srcdir</span><span class="p">,</span> <span class="n">img</span><span class="p">[</span><span class="s1">&#39;uri&#39;</span><span class="p">]),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">srcdir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">docname</span><span class="p">)))</span>
+                            <span class="n">first_figure</span> <span class="o">=</span> <span class="n">node</span>
+                            <span class="k">break</span>
+
+                        <span class="k">if</span> <span class="n">first_figure</span><span class="p">:</span>
+                            <span class="n">item</span><span class="p">[</span><span class="s1">&#39;excerpt_figure&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">render_partial</span><span class="p">(</span><span class="n">first_figure</span><span class="p">)[</span><span class="s1">&#39;html_body&#39;</span><span class="p">]</span>
+                        
+                        <span class="n">articles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;collection&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Content of type &#39;</span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">,</span>
+                    <span class="s1">&#39;articles&#39;</span><span class="p">:</span> <span class="n">articles</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">yield</span> <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;types/</span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="s1">&#39;type_page.html&#39;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="build_nav_links">
@@ -253,12 +428,13 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Build navigation links and add tags/categories to the context.&quot;&quot;&quot;</span>
     <span class="n">context</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">all_tags</span><span class="p">))</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="s1">&#39;all_tags&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="p">[]</span>
     <span class="n">context</span><span class="p">[</span><span class="s1">&#39;categories&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">all_categories</span><span class="p">))</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="s1">&#39;all_categories&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="p">[]</span>
+    <span class="n">context</span><span class="p">[</span><span class="s1">&#39;types&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">all_types</span><span class="p">))</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="s1">&#39;all_types&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="p">[]</span>
 
     <span class="k">if</span> <span class="s1">&#39;meta&#39;</span> <span class="ow">in</span> <span class="n">context</span> <span class="ow">and</span> <span class="n">context</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="s1">&#39;tags&#39;</span> <span class="ow">in</span> <span class="n">context</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">context</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">context</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
-        <span class="k">if</span> <span class="s1">&#39;category&#39;</span> <span class="ow">in</span> <span class="n">context</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;category&#39;</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">context</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;category&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">cat</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">context</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;category&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="s1">&#39;categories&#39;</span> <span class="ow">in</span> <span class="n">context</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;categories&#39;</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">context</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;categories&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">cat</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">context</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;categories&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
 
     <span class="n">header_nav_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">footer_nav_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -290,10 +466,10 @@
                     <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
                 <span class="p">})</span>
 
-    <span class="n">header_nav_list</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">])</span>
+    <span class="n">header_nav_list</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">to_numeric</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">]))</span>
     <span class="n">context</span><span class="p">[</span><span class="s1">&#39;header_nav_list&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">header_nav_list</span>
 
-    <span class="n">footer_nav_list</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">])</span>
+    <span class="n">footer_nav_list</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">to_numeric</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">]))</span>
     <span class="n">context</span><span class="p">[</span><span class="s1">&#39;footer_nav_list&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">footer_nav_list</span>
 
     <span class="n">recent_logs</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -306,7 +482,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Register directives and connect to Sphinx events.&quot;&quot;&quot;</span>
     <span class="n">app</span><span class="o">.</span><span class="n">add_directive</span><span class="p">(</span><span class="s2">&quot;collection&quot;</span><span class="p">,</span> <span class="n">CollectionDirective</span><span class="p">)</span>
     <span class="n">app</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;env-updated&#39;</span><span class="p">,</span> <span class="n">collect_metadata</span><span class="p">)</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;html-collect-pages&#39;</span><span class="p">,</span> <span class="n">generate_tag_category_pages</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;html-collect-pages&#39;</span><span class="p">,</span> <span class="n">generate_taxonomy_pages</span><span class="p">)</span>
     <span class="n">app</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;html-page-context&#39;</span><span class="p">,</span> <span class="n">build_nav_links</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span>
         <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="s1">&#39;0.1&#39;</span><span class="p">,</span>
@@ -373,13 +549,13 @@
 
     
 
-<aside class="aside-categories">
-    <h3>Categories</h3>
+    
+
+<aside class="aside-types">
+    <h3>Types</h3>
     <ul>
         
-        <li><a href="../../../categories/.html"></a></li>
-        
-        <li><a href="../../../categories/publish.html">publish</a></li>
+        <li><a href="../../../types/log.html">log</a></li>
         
     </ul>
 </aside>

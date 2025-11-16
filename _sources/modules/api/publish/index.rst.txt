@@ -61,7 +61,7 @@ Package Contents
 
 
 .. py:data:: __version__
-   :value: '0.2.13'
+   :value: '0.2.16'
 
 
 .. py:data:: __licence__
