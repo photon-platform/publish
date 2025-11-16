@@ -30,17 +30,29 @@ class CollectionDirective(SphinxDirective):
         limit = self.options.get('limit')
         title = self.options.get('title', 'Collection')
 
-        # Discover files automatically
+        # Discover files automatically, but not recursively deep
         current_dir = os.path.dirname(env.docname)
-        docnames = []
         walk_path = os.path.join(env.srcdir, current_dir)
-        for dirpath, _, filenames in os.walk(walk_path):
-            for filename in filenames:
-                if filename.endswith('.rst'):
-                    full_path = os.path.join(dirpath, filename)
-                    docname = os.path.splitext(os.path.relpath(full_path, env.srcdir))[0]
-                    if docname != env.docname:
-                        docnames.append(docname)
+        docnames = []
+
+        # Process current directory
+        for filename in os.listdir(walk_path):
+            path = os.path.join(walk_path, filename)
+            if os.path.isfile(path) and filename.endswith('.rst'):
+                docname = os.path.splitext(os.path.relpath(path, env.srcdir))[0]
+                if docname != env.docname:
+                    docnames.append(docname)
+
+        # Process immediate subdirectories
+        for item in os.listdir(walk_path):
+            path = os.path.join(walk_path, item)
+            if os.path.isdir(path):
+                for sub_filename in os.listdir(path):
+                    sub_path = os.path.join(path, sub_filename)
+                    if os.path.isfile(sub_path) and sub_filename.endswith('.rst'):
+                        docname = os.path.splitext(os.path.relpath(sub_path, env.srcdir))[0]
+                        if docname != env.docname:
+                            docnames.append(docname)
 
         collection_items = []
         for docname in docnames:
@@ -51,8 +63,31 @@ class CollectionDirective(SphinxDirective):
                     item = {
                         'title': title_node.astext(),
                         'docname': docname,
+                        'excerpt_text': '',
+                        'excerpt_figure_filename': None,
                     }
                     item.update(meta)
+
+                    doctree = env.get_doctree(docname)
+                    
+                    # Find first paragraph or blockquote
+                    first_text = None
+                    for node in doctree.traverse(lambda n: isinstance(n, (nodes.paragraph, nodes.block_quote))):
+                        first_text = node
+                        break
+                    
+                    if first_text:
+                        item['excerpt_text'] = self.env.app.builder.render_partial(first_text)['html_body']
+
+                    # Find first figure
+                    for node in doctree.traverse(nodes.figure):
+                        image_node = next(iter(node.traverse(nodes.image)), None)
+                        if image_node:
+                            item['excerpt_figure_filename'] = os.path.basename(image_node['uri'])
+                            item['excerpt_figure_alt'] = image_node.get('alt', '')
+                            item['excerpt_figure_width'] = node.get('width')
+                            break
+
                     if 'tags' in item and isinstance(item['tags'], str):
                         item['tags'] = [tag.strip() for tag in item['tags'].split(',')]
                     if 'categories' in item and isinstance(item['categories'], str):
@@ -128,10 +163,35 @@ def generate_taxonomy_pages(app):
                     if tag in tags:
                         title_node = env.titles.get(docname)
                         if title_node:
-                            articles.append({
+                            item = {
                                 'title': title_node.astext(),
                                 'docname': docname,
-                            })
+                                'excerpt_text': '',
+                                'excerpt_figure_filename': None,
+                            }
+                            item.update(meta)
+
+                            doctree = env.get_doctree(docname)
+                            
+                            # Find first paragraph or blockquote
+                            first_text = None
+                            for node in doctree.traverse(lambda n: isinstance(n, (nodes.paragraph, nodes.block_quote))):
+                                first_text = node
+                                break
+                            
+                            if first_text:
+                                item['excerpt_text'] = app.builder.render_partial(first_text)['html_body']
+
+                            # Find first figure
+                            for node in doctree.traverse(nodes.figure):
+                                image_node = next(iter(node.traverse(nodes.image)), None)
+                                if image_node:
+                                    item['excerpt_figure_filename'] = os.path.basename(image_node['uri'])
+                                    item['excerpt_figure_alt'] = image_node.get('alt', '')
+                                    item['excerpt_figure_width'] = node.get('width')
+                                    break
+                            
+                            articles.append(item)
             context = {
                 'collection': {
                     'title': f"Posts tagged '{tag}'",
@@ -154,10 +214,35 @@ def generate_taxonomy_pages(app):
                     if category in categories:
                         title_node = env.titles.get(docname)
                         if title_node:
-                            articles.append({
+                            item = {
                                 'title': title_node.astext(),
                                 'docname': docname,
-                            })
+                                'excerpt_text': '',
+                                'excerpt_figure_filename': None,
+                            }
+                            item.update(meta)
+
+                            doctree = env.get_doctree(docname)
+                            
+                            # Find first paragraph or blockquote
+                            first_text = None
+                            for node in doctree.traverse(lambda n: isinstance(n, (nodes.paragraph, nodes.block_quote))):
+                                first_text = node
+                                break
+                            
+                            if first_text:
+                                item['excerpt_text'] = app.builder.render_partial(first_text)['html_body']
+
+                            # Find first figure
+                            for node in doctree.traverse(nodes.figure):
+                                image_node = next(iter(node.traverse(nodes.image)), None)
+                                if image_node:
+                                    item['excerpt_figure_filename'] = os.path.basename(image_node['uri'])
+                                    item['excerpt_figure_alt'] = image_node.get('alt', '')
+                                    item['excerpt_figure_width'] = node.get('width')
+                                    break
+                            
+                            articles.append(item)
             context = {
                 'collection': {
                     'title': f"Posts in category '{category}'",
@@ -174,10 +259,38 @@ def generate_taxonomy_pages(app):
                 if 'type' in meta and meta['type'] == type_:
                     title_node = env.titles.get(docname)
                     if title_node:
-                        articles.append({
+                        item = {
                             'title': title_node.astext(),
                             'docname': docname,
-                        })
+                            'excerpt_text': '',
+                            'excerpt_figure': '',
+                        }
+                        item.update(meta)
+
+                        doctree = env.get_doctree(docname)
+                        
+                        # Find first paragraph or blockquote
+                        first_text = None
+                        for node in doctree.traverse(lambda n: isinstance(n, (nodes.paragraph, nodes.block_quote))):
+                            first_text = node
+                            break
+                        
+                        if first_text:
+                            item['excerpt_text'] = app.builder.render_partial(first_text)['html_body']
+
+                        # Find first figure
+                        first_figure = None
+                        for node in doctree.traverse(nodes.figure):
+                            # Adjust image URI to be relative to the document
+                            for img in node.traverse(nodes.image):
+                                img['uri'] = os.path.relpath(os.path.join(env.srcdir, img['uri']), os.path.join(env.srcdir, os.path.dirname(docname)))
+                            first_figure = node
+                            break
+
+                        if first_figure:
+                            item['excerpt_figure'] = app.builder.render_partial(first_figure)['html_body']
+                        
+                        articles.append(item)
             context = {
                 'collection': {
                     'title': f"Content of type '{type_}'",

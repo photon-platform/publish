@@ -1,10 +1,21 @@
         <article class="excerpt">
           <header>
             <h2><a href="{{ pathto(article.docname) }}">{{ article.title }}</a></h2>
-{% set meta = article %}
-{% include "_articles/_nav_meta.html" %}
           </header>
           <div class="content">
-{#- Placeholder for excerpt content -#}
+            {% if article.excerpt_figure_filename %}
+              <figure{% if article.excerpt_figure_width %} style="width: {{ article.excerpt_figure_width }};"{% endif %}>
+                <a href="{{ pathto(article.docname) }}">
+                  <img src="/_images/{{ article.excerpt_figure_filename }}" alt="{{ article.excerpt_figure_alt }}">
+                </a>
+              </figure>
+            {% endif %}
+            {% if article.excerpt_text %}
+              {{ article.excerpt_text|safe }}
+            {% endif %}
           </div>
+          <footer>
+{% set meta = article %}
+{% include "_articles/_nav_meta.html" %}
+          </footer>
         </article>

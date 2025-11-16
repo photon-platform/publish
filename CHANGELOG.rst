@@ -1,17 +1,23 @@
 changelog
 =========
 
+0.2.15
+======
+
+- feat: Generate rich excerpts for collections, including the first paragraph or blockquote and the first figure.
+- feat: Apply rich excerpt logic to taxonomy pages (tags, categories, types).
+- fix: Limit collection search to the current directory and immediate subdirectories to prevent duplicate `toctree` entries.
+- fix: Correct image paths in excerpts to be root-relative and prevent an erroneous `.html` suffix.
+- style: Move article metadata to a `<footer>` in the excerpt template for better semantic structure.
+
 0.2.14
-------
-*2025-11-16*
+======
 
-**added**
+- fix: Add ``jquery`` as a dependency to ``pyproject.toml`` to ensure it is
+  installed for the ``sphinx-carousel`` extension.
+- docs: Update ``README.rst`` with current project status and details.
+- chore: Update package metadata and dependencies.
 
-+ Added support for a `:type:` metadata field, allowing content to be classified and displayed in a new sidebar panel.
-
-**changed**
-
-+ Updated the metadata field for categories to `:categories:` to better reflect its support for multiple values.
 
 0.2.13
 ------
