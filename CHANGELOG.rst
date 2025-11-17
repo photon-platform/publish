@@ -1,20 +1,26 @@
 changelog
 =========
 
+0.2.17
+======
+
+- feat: Refine article excerpt styling for a more compact, responsive, and vertically-aligned layout.
+- feat: Sort taxonomy pages by the ``:number:`` metadata field to ensure a consistent and predictable order.
+
 0.2.16
 ======
 
 - fix: Implement numerical sorting for collection items to ensure correct ordering of numbered pages.
-- fix: Prevent duplicate `toctree` entries when using the `collection` directive on multiple pages, resolving warnings and ensuring correct previous/next navigation.
+- fix: Prevent duplicate ``toctree`` entries when using the ``collection`` directive on multiple pages, resolving warnings and ensuring correct previous/next navigation.
 
 0.2.15
 ======
 
 - feat: Generate rich excerpts for collections, including the first paragraph or blockquote and the first figure.
 - feat: Apply rich excerpt logic to taxonomy pages (tags, categories, types).
-- fix: Limit collection search to the current directory and immediate subdirectories to prevent duplicate `toctree` entries.
-- fix: Correct image paths in excerpts to be root-relative and prevent an erroneous `.html` suffix.
-- style: Move article metadata to a `<footer>` in the excerpt template for better semantic structure.
+- fix: Limit collection search to the current directory and immediate subdirectories to prevent duplicate ``toctree`` entries.
+- fix: Correct image paths in excerpts to be root-relative and prevent an erroneous ``.html`` suffix.
+- style: Move article metadata to a ``<footer>`` in the excerpt template for better semantic structure.
 
 0.2.14
 ======

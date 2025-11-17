@@ -32,6 +32,7 @@ class CollectionDirective(SphinxDirective):
         'template': directives.unchanged,
         'limit': directives.positive_int,
         'title': directives.unchanged,
+        'class': directives.unchanged,
     }
 
     def run(self) -> list:
@@ -47,6 +48,7 @@ class CollectionDirective(SphinxDirective):
         template_name = self.options.get('template', '_macros/collection.html')
         limit = self.options.get('limit')
         title = self.options.get('title', 'Collection')
+        collection_class = self.options.get('class', '')
 
         # Discover files automatically, but not recursively deep
         current_dir = os.path.dirname(env.docname)
@@ -123,6 +125,7 @@ class CollectionDirective(SphinxDirective):
             'collection': {
                 'title': title,
                 'articles': collection_items,
+                'class': collection_class,
             },
             'pathto': pathto,
         }
@@ -228,10 +231,15 @@ def generate_taxonomy_pages(app):
                                     break
                             
                             articles.append(item)
+            
+            articles.sort(key=lambda x: to_numeric(x.get('number', 0)), reverse=True) # Sort by 'number' descending
+
             context = {
                 'collection': {
                     'title': f"Posts tagged '{tag}'",
                     'articles': articles,
+                    'sort_key': 'number',
+                    'reverse': True,
                 }
             }
             yield (f'tags/{tag}', context, 'tag_page.html')
@@ -279,10 +287,15 @@ def generate_taxonomy_pages(app):
                                     break
                             
                             articles.append(item)
+            
+            articles.sort(key=lambda x: to_numeric(x.get('number', 0)), reverse=True) # Sort by 'number' descending
+
             context = {
                 'collection': {
                     'title': f"Posts in category '{category}'",
                     'articles': articles,
+                    'sort_key': 'number',
+                    'reverse': True,
                 }
             }
             yield (f'categories/{category}', context, 'category_page.html')
@@ -327,10 +340,15 @@ def generate_taxonomy_pages(app):
                             item['excerpt_figure'] = app.builder.render_partial(first_figure)['html_body']
                         
                         articles.append(item)
+            
+            articles.sort(key=lambda x: to_numeric(x.get('number', 0)), reverse=True) # Sort by 'number' descending
+
             context = {
                 'collection': {
                     'title': f"Content of type '{type_}'",
                     'articles': articles,
+                    'sort_key': 'number',
+                    'reverse': True,
                 }
             }
             yield (f'types/{type_}', context, 'type_page.html')
