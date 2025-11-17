@@ -1,7 +1,4 @@
         <article class="excerpt">
-          <header>
-            <h2><a href="{{ pathto(article.docname) }}">{{ article.title }}</a></h2>
-          </header>
           <div class="content">
             {% if article.excerpt_figure_filename %}
               <figure{% if article.excerpt_figure_width %} style="width: {{ article.excerpt_figure_width }};"{% endif %}>
@@ -10,9 +7,12 @@
                 </a>
               </figure>
             {% endif %}
-            {% if article.excerpt_text %}
-              {{ article.excerpt_text|safe }}
-            {% endif %}
+            <section>
+              <h2><a href="{{ pathto(article.docname) }}">{{ article.title }}</a></h2>
+              {% if article.excerpt_text %}
+                <blockquote>{{ article.excerpt_text|safe }}</blockquote>
+              {% endif %}
+            </section>
           </div>
           <footer>
 {% set meta = article %}

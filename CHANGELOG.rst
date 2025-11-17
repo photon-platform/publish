@@ -1,6 +1,11 @@
 changelog
 =========
 
+0.2.18
+======
+
+- refactor: Standardize article and excerpt layouts, converting to a consistent flexbox model and restructuring HTML for better semantic alignment.
+
 0.2.17
 ======
 

@@ -709,9 +709,8 @@ button:hover {
 article {
   padding: var(--fitz-2);
   margin: var(--fitz);
-  display: grid;
-  grid-template-areas: " context  " " header " " figure " " content " " gallery " " footer ";
-  grid-template-columns: auto;
+  display: flex;
+  flex-flow: column nowrap;
 }
 
 article > * {
@@ -982,18 +981,34 @@ article > .gallery.modal > .list > figure > img {
 
 @media (min-width: 96em) {
   article {
-    grid-template-areas: " header context " " content figure " " content gallery " " content footer ";
-    grid-template-columns: auto var(--col);
+    flex-flow: row wrap;
+  }
+  article > .content {
+    flex: 1 1 calc(100% - var(--col));
+    order: 1;
+  }
+  article > figure {
+    flex: 1 1 var(--col);
+    order: 2;
+  }
+  article > .gallery {
+    flex: 1 1 var(--col);
+    order: 4;
   }
   article > footer {
+    flex: 1 1 var(--col);
+    order: 5;
     flex-flow: column nowrap;
     justify-content: flex-start;
   }
 }
 
 @media (min-width: 108em) {
-  article {
-    grid-template-columns: auto var(--col-2);
+  article > .content {
+    flex: 1 1 calc(100% - var(--col-2));
+  }
+  article > figure, article > .gallery, article > footer {
+    flex: 0 0 var(--col-2);
   }
 }
 
@@ -1003,32 +1018,6 @@ article.excerpt {
   border-bottom: 1px solid var(--border-color);
   display: flex;
   flex-flow: column nowrap;
-}
-
-article.excerpt > header {
-  margin-bottom: var(--fitz-half);
-}
-
-article.excerpt > header h2 {
-  font-size: 1.1em;
-  line-height: 1.2;
-  margin: 0;
-}
-
-article.excerpt > header .meta {
-  font-size: 0.7em;
-  display: flex;
-  gap: 0.5em;
-}
-
-article.excerpt > header .meta .category, article.excerpt > header .meta .tags, article.excerpt > header .meta .date {
-  font-weight: bold;
-}
-
-article.excerpt > header .meta .tags a {
-  font-weight: normal;
-  text-decoration: none;
-  margin-right: 0.5em;
 }
 
 article.excerpt > .content {
@@ -1059,8 +1048,17 @@ article.excerpt > .content > figure img {
   object-fit: cover;
 }
 
-article.excerpt > .content > p {
+article.excerpt > .content > section {
   flex: 1;
+}
+
+article.excerpt > .content > section h2 {
+  font-size: 1.1em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+article.excerpt > .content > section blockquote {
   margin: 0;
   font-size: 0.9em;
   line-height: 1.4;

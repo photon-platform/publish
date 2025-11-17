@@ -5,32 +5,6 @@ article.excerpt {
   display: flex;
   flex-flow: column nowrap;
 
-  > header {
-    margin-bottom: var(--fitz-half);
-
-    h2 {
-      font-size: 1.1em;
-      line-height: 1.2;
-      margin: 0;
-    }
-
-    .meta {
-      font-size: 0.7em;
-      display: flex;
-      gap: 0.5em;
-
-      .category, .tags, .date {
-        font-weight: bold;
-      }
-
-      .tags a {
-        font-weight: normal;
-        text-decoration: none;
-        margin-right: 0.5em;
-      }
-    }
-  }
-
   > .content {
     display: flex;
     flex-flow: row-reverse nowrap;
@@ -58,11 +32,20 @@ article.excerpt {
       }
     }
 
-    > p {
+    > section {
       flex: 1;
-      margin: 0;
-      font-size: 0.9em;
-      line-height: 1.4;
+
+      h2 {
+        font-size: 1.1em;
+        line-height: 1.2;
+        margin: 0;
+      }
+
+      blockquote {
+        margin: 0;
+        font-size: 0.9em;
+        line-height: 1.4;
+      }
     }
   }
 
