@@ -31,7 +31,7 @@ Module Contents
 
 .. py:function:: build_sass() -> None
 
-   Compile SASS files for the theme.
+   Compile SASS files for all themes.
 
 
 .. py:function:: build() -> None

@@ -1,7 +1,7 @@
 // Adapted from sphinx_rtd_theme
 // https://github.com/readthedocs/sphinx_rtd_theme/blob/master/src/sass/_theme_layout.sass
 
-.wy-menu-vertical {
+/* .wy-menu-vertical {
   width: 100%; // Let our grid handle the width
 
   header, p.caption {
@@ -41,7 +41,7 @@
       font-family: var(--font-icon); // Use our icon font
       content: '+'; // Placeholder, JS will likely replace
       line-height: 18px;
-      color: var(--text-color);
+      color: var(--text-color); */
       border: none;
       background: none;
       padding: 0;
