@@ -1,6 +1,11 @@
 changelog
 =========
 
+0.2.20
+======
+
+- refactor(theme): Replaced the broad `body > *` selector with specific rules for main layout sections, extending a common `%section-default` placeholder for improved maintainability and CSS specificity.
+
 0.2.19
 ======
 

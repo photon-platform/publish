@@ -9,7 +9,7 @@ import os
 __author__ = "PHOTON platform"
 __maintainer__ = "PHOTON platform"
 __email__ = "github@phiarchitect.com"
-__version__ = "0.2.19"
+__version__ = "0.2.20"
 __licence__ = "MIT"
 
 def get_path() -> str:

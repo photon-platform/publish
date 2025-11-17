@@ -103,6 +103,12 @@
 }
 
 /* Common placeholders, mixins, and variables */
+body > footer, body > .asides, body > main, body > header, .asides, footer, header {
+  background: var(--bg-alt-color);
+  margin: var(--fitz);
+  padding: var(--fitz);
+}
+
 /* base elements *****************************/
 /* elements/reset *****************************/
 *,
@@ -1245,12 +1251,6 @@ nav a[aria-current="true"] {
 }
 
 /* templates/_default *****************************/
-body > * {
-  background: var(--bg-alt-color);
-  margin: var(--fitz);
-  padding: var(--fitz);
-}
-
 body > header {
   grid-area: header;
 }

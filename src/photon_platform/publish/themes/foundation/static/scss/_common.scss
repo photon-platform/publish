@@ -1,6 +1,7 @@
 /* Common placeholders, mixins, and variables */
 
 %section-default {
-  // padding: var(--fitz);
-  // margin: var(--fitz);
+  background: var(--bg-alt-color);
+  margin: var(--fitz);
+  padding: var(--fitz);
 }
