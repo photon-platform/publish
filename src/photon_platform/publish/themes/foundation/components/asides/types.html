@@ -1,0 +1,13 @@
+{#
+    aside for displaying a list of types
+#}
+{% if types %}
+<aside class="aside-types">
+    <h3>Types</h3>
+    <ul>
+        {% for type in types %}
+        <li><a href="{{ pathto('types/' ~ type) }}">{{ type }}</a></li>
+        {% endfor %}
+    </ul>
+</aside>
+{% endif %}

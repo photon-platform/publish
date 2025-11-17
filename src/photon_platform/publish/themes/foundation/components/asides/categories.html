@@ -1,0 +1,13 @@
+{#
+    aside for displaying a list of categories
+#}
+{% if categories %}
+<aside class="aside-categories">
+    <h3>Categories</h3>
+    <ul>
+        {% for category in categories %}
+        <li><a href="{{ pathto('categories/' ~ category) }}">{{ category }}</a></li>
+        {% endfor %}
+    </ul>
+</aside>
+{% endif %}

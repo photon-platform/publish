@@ -1,0 +1,35 @@
+{#
+   PHOTON Theme layout.html
+#}
+{%- set url_root = pathto('', 1) %}
+{%- if url_root == '#' %}{% set url_root = '' %}{% endif %}
+{%- set lang_attr = 'en' if language == None else (language | replace('_', '-')) %}
+
+<!DOCTYPE html>
+<html lang="{{ lang_attr }}">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ title|striptags|e }} &mdash; {{ docstitle|e }}</title>
+{%- for css_file in css_files %}
+  {{ css_tag(css_file) }}
+{%- endfor %}
+</head>
+<body>
+{% include "components/site/header.html" %}
+  <main>
+{% block body %}{% endblock %}
+  </main>
+
+{% include "components/asides/asides.html" %}
+{% include "components/site/footer.html" %}
+
+  {#- JavaScript #}
+{% block scripts %}
+{%- for scriptfile in script_files %}
+  {{ js_tag(scriptfile) }}
+{%- endfor %}
+{% endblock %}
+
+</body>
+</html>

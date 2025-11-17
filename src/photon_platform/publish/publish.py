@@ -22,25 +22,28 @@ def find_git_root() -> str | None:
         return None
 
 def build_sass() -> None:
-    """Compile SASS files for the theme."""
-    click.echo("Compiling SASS...")
+    """Compile SASS files for all themes."""
+    click.echo("Compiling SASS for all themes...")
     try:
         base_dir = os.path.dirname(__file__)
-        scss_dir = os.path.join(base_dir, 'themes', 'photon', 'static', 'scss')
-        css_dir = os.path.join(base_dir, 'themes', 'photon', 'static', 'css')
-        
-        if not os.path.exists(css_dir):
-            os.makedirs(css_dir)
+        themes_dir = os.path.join(base_dir, 'themes')
 
-        scss_file = os.path.join(scss_dir, 'styles.scss')
-        css_file = os.path.join(css_dir, 'styles.css')
+        for theme_name in os.listdir(themes_dir):
+            theme_path = os.path.join(themes_dir, theme_name)
+            if os.path.isdir(theme_path):
+                scss_file = os.path.join(theme_path, 'static', 'scss', 'styles.scss')
+                css_dir = os.path.join(theme_path, 'static', 'css')
+                css_file = os.path.join(css_dir, 'styles.css')
 
-        if not os.path.exists(scss_file):
-            click.echo(f"Error: SASS file not found at {scss_file}", err=True)
-            return
+                if os.path.exists(scss_file):
+                    click.echo(f"  Compiling SASS for theme: {theme_name}")
+                    if not os.path.exists(css_dir):
+                        os.makedirs(css_dir)
 
-        with open(css_file, 'w') as f:
-            f.write(sass.compile(filename=scss_file, output_style='expanded'))
+                    with open(css_file, 'w') as f:
+                        f.write(sass.compile(filename=scss_file, output_style='expanded'))
+                else:
+                    click.echo(f"  No SASS file found for theme: {theme_name}, skipping.")
         click.echo("SASS compilation successful.")
     except Exception as e:
         click.echo(f"Error compiling SASS: {e}", err=True)

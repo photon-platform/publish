@@ -1,6 +1,13 @@
 changelog
 =========
 
+0.2.19
+======
+
+- feat: Introduce the new `foundation` theme, a major refactor designed for composability by co-locating SCSS styles with their corresponding HTML templates.
+- feat: Generalize the SASS build process to automatically discover and compile styles for all available themes.
+- fix: Make the `CollectionDirective` theme-aware, ensuring it uses the correct template path for both the new `foundation` theme and the legacy `photon` theme.
+
 0.2.18
 ======
 

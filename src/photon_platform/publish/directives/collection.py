@@ -42,10 +42,16 @@ class CollectionDirective(SphinxDirective):
         """
         env = self.env
         
+        # Determine the template path based on the current theme
+        if env.app.config.html_theme == 'foundation':
+            default_template = 'components/collection/collection.html'
+        else:
+            default_template = '_macros/collection.html'
+
         collection_type = self.options.get('type')
         sort_key = self.options.get('sort')
         reverse = 'reverse' in self.options
-        template_name = self.options.get('template', '_macros/collection.html')
+        template_name = self.options.get('template', default_template)
         limit = self.options.get('limit')
         title = self.options.get('title', 'Collection')
         collection_class = self.options.get('class', '')

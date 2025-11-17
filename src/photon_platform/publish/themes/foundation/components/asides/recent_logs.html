@@ -1,0 +1,10 @@
+{% if recent_logs %}
+<aside>
+    <h3>Recent Logs</h3>
+    <ul>
+        {% for item in recent_logs %}
+            <li><a href="{{ pathto(item.docname) }}">{{ item.title }}</a></li>
+        {% endfor %}
+    </ul>
+</aside>
+{% endif %}

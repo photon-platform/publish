@@ -1,0 +1,19 @@
+{#-
+    nav_list: collection of pages
+    nav_title: label for list
+#}
+    <nav aria-label="{{ nav_title }}">
+      <input type="checkbox" id="nav-{{ nav_title }}-toggle" >
+      <label for="nav-{{ nav_title }}-toggle" >{{ nav_title }}</label>
+      <ul>
+{%- for p in nav_list %}
+{%-   set docname = p.docname %}
+{%-   set title = p.title %}
+{%-   set selected = 'aria-selected="true"' if pagename.startswith(docname) else '' %}
+{%-   set current = 'aria-current="true"' if docname == pagename else '' %}
+        <li>
+          <a href="{{ pathto(docname) }}" {{ selected }} {{ current }}>{{ title }}</a>
+        </li>
+{%- endfor %}
+      </ul>
+    </nav>

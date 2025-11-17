@@ -32,6 +32,7 @@ publish = "photon_platform.publish.__main__:run"
 
 [project.entry-points."sphinx.html_themes"]
 photon = "photon_platform.publish.themes.photon"
+foundation = "photon_platform.publish.themes.foundation"
 
 
 [build-system]

@@ -1,0 +1,10 @@
+{% macro render(collection) %}
+<aside>
+    <h3>{{ collection.title }}</h3>
+    <ul>
+        {% for item in collection.items %}
+            <li><a href="{{ pathto(item.docname) }}">{{ item.title }}</a></li>
+        {% endfor %}
+    </ul>
+</aside>
+{% endmacro %}

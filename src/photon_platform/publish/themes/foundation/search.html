@@ -1,0 +1,41 @@
+{#
+    publish/search.html
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+
+    Template for the search page, adapted for the publish theme.
+#}
+{%- extends "layout.html" %}
+{% set title = _('Search') %}
+{% set display_vcs_links = False %}
+
+{% block body %}
+  <noscript>
+    <div id="fallback" class="admonition warning">
+      <p class="last">
+        {% trans trimmed %}Please activate JavaScript to enable the search functionality.{% endtrans %}
+      </p>
+    </div>
+  </noscript>
+
+  <h2>{{ _('Search Results') }}</h2>
+
+  <div id="search-results">
+    {#- This is where the JavaScript will inject the results -#}
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }} {#- This is crucial! It includes all scripts from layout.html (like jQuery) first -#}
+
+  {#- The search page requires these specific scripts -#}
+  <script src="{{ pathto('_static/searchtools.js', 1) }}"></script>
+  <script src="{{ pathto('_static/language_data.js', 1) }}"></script>
+
+  {#- Now we can initialize the search -#}
+  <script>
+    jQuery(function() {
+      Search.loadIndex("{{ pathto('searchindex.js', 1) }}");
+      Search.init();
+    });
+  </script>
+{% endblock %}

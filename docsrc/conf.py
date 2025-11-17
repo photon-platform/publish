@@ -10,3 +10,6 @@ repo = "publish"
 repo_name = "publish"
 
 setup_globals(org, org_name, repo, repo_name)
+
+html_theme = "foundation"
+
