@@ -3,7 +3,7 @@
             {% if article.excerpt_figure_filename %}
               <figure{% if article.excerpt_figure_width %} style="width: {{ article.excerpt_figure_width }};"{% endif %}>
                 <a href="{{ pathto(article.docname) }}">
-                  <img src="/_images/{{ article.excerpt_figure_filename }}" alt="{{ article.excerpt_figure_alt }}">
+                  <img src="{{ pathto('_images/' ~ article.excerpt_figure_filename, 1) }}" alt="{{ article.excerpt_figure_alt }}">
                 </a>
               </figure>
             {% endif %}

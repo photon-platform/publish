@@ -1,6 +1,7 @@
 import os
 from functools import partial
 from sphinx.util.docutils import SphinxDirective
+from sphinx.util.osutil import relative_uri
 from docutils.parsers.rst import directives
 from docutils import nodes
 from sphinx.addnodes import toctree
@@ -126,7 +127,10 @@ class CollectionDirective(SphinxDirective):
         if limit:
             collection_items = collection_items[:limit]
 
-        pathto = partial(self.env.app.builder.get_relative_uri, self.env.docname)
+        def pathto(otheruri, resource=False, baseuri=None):
+            if resource:
+                return relative_uri(self.env.app.builder.get_target_uri(self.env.docname), otheruri)
+            return self.env.app.builder.get_relative_uri(self.env.docname, otheruri)
         context = {
             'collection': {
                 'title': title,

@@ -13,6 +13,9 @@ jobs:
     - name: actions/checkout@v3
       uses: actions/checkout@v3
 
+    - name: Install Graphviz
+      run: sudo apt-get update && sudo apt-get install -y graphviz
+
     - name: photon-platform/action-deploy-sphinx-gh-pages
       uses: photon-platform/action-deploy-sphinx-gh-pages@v18
       with:

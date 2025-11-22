@@ -1,6 +1,12 @@
 changelog
 =========
 
+0.2.22
+======
+
+- fix: Correctly handle image paths in the ``collection`` directive by using ``pathto`` with ``relative_uri`` for resources, preventing unwanted ``.html`` extensions on image files.
+- ci: Add Graphviz installation to the GitHub Actions workflow to support graph generation.
+
 0.2.21
 ======
 
