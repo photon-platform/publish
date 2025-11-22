@@ -53,7 +53,7 @@ class CollectionDirective(SphinxDirective):
         reverse = 'reverse' in self.options
         template_name = self.options.get('template', default_template)
         limit = self.options.get('limit')
-        title = self.options.get('title', 'Collection')
+        title = self.options.get('title')
         collection_class = self.options.get('class', '')
 
         # Discover files automatically, but not recursively deep

@@ -1,6 +1,11 @@
 changelog
 =========
 
+0.2.21
+======
+
+- fix(collection): The ``h1`` title in collection sections is now conditional and will only be rendered if a title is explicitly provided. This prevents the display of a default "Collection" title.
+
 0.2.20
 ======
 

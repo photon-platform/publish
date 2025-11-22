@@ -25,6 +25,8 @@ dependencies = [
     "click",
     "sphinx-autoapi",
     "matplotlib",
+    "graphviz",
+    #  "sphinxcontrib.bibtex",
 ]
 
 [project.scripts]
