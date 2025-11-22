@@ -66,41 +66,54 @@
 <h1>changelog<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h1>
 </section>
 <section id="id3">
-<h1>0.2.20<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h1>
+<h1>0.2.22<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h1>
+<ul class="simple">
+<li><p>fix: Correctly handle image paths in the <code class="docutils literal notranslate"><span class="pre">collection</span></code> directive by using <code class="docutils literal notranslate"><span class="pre">pathto</span></code> with <code class="docutils literal notranslate"><span class="pre">relative_uri</span></code> for resources, preventing unwanted <code class="docutils literal notranslate"><span class="pre">.html</span></code> extensions on image files.</p></li>
+<li><p>ci: Add Graphviz installation to the GitHub Actions workflow to support graph generation.</p></li>
+</ul>
+</section>
+<section id="id4">
+<h1>0.2.21<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h1>
+<ul class="simple">
+<li><p>fix(collection): The <code class="docutils literal notranslate"><span class="pre">h1</span></code> title in collection sections is now conditional and will only be rendered if a title is explicitly provided. This prevents the display of a default “Collection” title.</p></li>
+</ul>
+</section>
+<section id="id5">
+<h1>0.2.20<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h1>
 <ul class="simple">
 <li><p>refactor(theme): Replaced the broad <cite>body &gt; *</cite> selector with specific rules for main layout sections, extending a common <cite>%section-default</cite> placeholder for improved maintainability and CSS specificity.</p></li>
 </ul>
 </section>
-<section id="id4">
-<h1>0.2.19<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h1>
+<section id="id6">
+<h1>0.2.19<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h1>
 <ul class="simple">
 <li><p>feat: Introduce the new <cite>foundation</cite> theme, a major refactor designed for composability by co-locating SCSS styles with their corresponding HTML templates.</p></li>
 <li><p>feat: Generalize the SASS build process to automatically discover and compile styles for all available themes.</p></li>
 <li><p>fix: Make the <cite>CollectionDirective</cite> theme-aware, ensuring it uses the correct template path for both the new <cite>foundation</cite> theme and the legacy <cite>photon</cite> theme.</p></li>
 </ul>
 </section>
-<section id="id5">
-<h1>0.2.18<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h1>
+<section id="id7">
+<h1>0.2.18<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h1>
 <ul class="simple">
 <li><p>refactor: Standardize article and excerpt layouts, converting to a consistent flexbox model and restructuring HTML for better semantic alignment.</p></li>
 </ul>
 </section>
-<section id="id6">
-<h1>0.2.17<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h1>
+<section id="id8">
+<h1>0.2.17<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h1>
 <ul class="simple">
 <li><p>feat: Refine article excerpt styling for a more compact, responsive, and vertically-aligned layout.</p></li>
 <li><p>feat: Sort taxonomy pages by the <code class="docutils literal notranslate"><span class="pre">:number:</span></code> metadata field to ensure a consistent and predictable order.</p></li>
 </ul>
 </section>
-<section id="id7">
-<h1>0.2.16<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h1>
+<section id="id9">
+<h1>0.2.16<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h1>
 <ul class="simple">
 <li><p>fix: Implement numerical sorting for collection items to ensure correct ordering of numbered pages.</p></li>
 <li><p>fix: Prevent duplicate <code class="docutils literal notranslate"><span class="pre">toctree</span></code> entries when using the <code class="docutils literal notranslate"><span class="pre">collection</span></code> directive on multiple pages, resolving warnings and ensuring correct previous/next navigation.</p></li>
 </ul>
 </section>
-<section id="id8">
-<h1>0.2.15<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h1>
+<section id="id10">
+<h1>0.2.15<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h1>
 <ul class="simple">
 <li><p>feat: Generate rich excerpts for collections, including the first paragraph or blockquote and the first figure.</p></li>
 <li><p>feat: Apply rich excerpt logic to taxonomy pages (tags, categories, types).</p></li>
@@ -109,24 +122,24 @@
 <li><p>style: Move article metadata to a <code class="docutils literal notranslate"><span class="pre">&lt;footer&gt;</span></code> in the excerpt template for better semantic structure.</p></li>
 </ul>
 </section>
-<section id="id9">
-<h1>0.2.14<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h1>
+<section id="id11">
+<h1>0.2.14<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h1>
 <ul class="simple">
 <li><p>fix: Add <code class="docutils literal notranslate"><span class="pre">jquery</span></code> as a dependency to <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> to ensure it is
 installed for the <code class="docutils literal notranslate"><span class="pre">sphinx-carousel</span></code> extension.</p></li>
 <li><p>docs: Update <code class="docutils literal notranslate"><span class="pre">README.rst</span></code> with current project status and details.</p></li>
 <li><p>chore: Update package metadata and dependencies.</p></li>
 </ul>
-<section id="id10">
-<h2>0.2.13<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h2>
+<section id="id12">
+<h2>0.2.13<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h2>
 <p><em>2025-11-11</em></p>
 <p><strong>fixed</strong></p>
 <ul class="simple">
 <li><p>Removed redundant SASS compilation performed by <cite>sphinxcontrib-sass</cite>, which was creating an empty <cite>docsrc/theme/photon/static/css</cite> directory. The build process now relies solely on the <cite>publish.build_sass()</cite> function for all SASS compilation.</p></li>
 </ul>
 </section>
-<section id="id11">
-<h2>0.2.12<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h2>
+<section id="id13">
+<h2>0.2.12<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h2>
 <p><em>2025-11-11</em></p>
 <p><strong>fixed</strong></p>
 <ul class="simple">
@@ -139,8 +152,8 @@ installed for the <code class="docutils literal notranslate"><span class="pre">s
 <li><p>The styling of article excerpts has been updated to be more condensed and visually consistent with the full article view.</p></li>
 </ul>
 </section>
-<section id="id12">
-<h2>0.2.11<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h2>
+<section id="id14">
+<h2>0.2.11<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h2>
 <p><em>2025-11-11</em></p>
 <p><strong>added</strong></p>
 <ul class="simple">
@@ -148,16 +161,16 @@ installed for the <code class="docutils literal notranslate"><span class="pre">s
 <li><p>Integrated tags and categories into article metadata and sidebar navigation.</p></li>
 </ul>
 </section>
-<section id="id13">
-<h2>0.2.10<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h2>
+<section id="id15">
+<h2>0.2.10<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h2>
 <p><em>2025-11-10</em></p>
 <p><strong>changed</strong></p>
 <ul class="simple">
 <li><p>The article navigation buttons have been styled to be more prominent and consistent with the theme.</p></li>
 </ul>
 </section>
-<section id="id14">
-<h2>0.2.9<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h2>
+<section id="id16">
+<h2>0.2.9<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h2>
 <p><em>2025-11-10</em></p>
 <p><strong>fixed</strong></p>
 <ul class="simple">
@@ -165,8 +178,8 @@ installed for the <code class="docutils literal notranslate"><span class="pre">s
 <li><p>Disabled the <cite>sphinx.ext.autosummary</cite> and <cite>sphinx.ext.autodoc</cite> extensions, which were running unnecessarily and cluttering the build output.</p></li>
 </ul>
 </section>
-<section id="id15">
-<h2>0.2.8<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h2>
+<section id="id17">
+<h2>0.2.8<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h2>
 <p><em>2025-11-10</em></p>
 <p><strong>fixed</strong></p>
 <ul class="simple">
@@ -174,16 +187,16 @@ installed for the <code class="docutils literal notranslate"><span class="pre">s
 <li><p>Added a bottom margin to paragraphs and a top margin to headings to improve readability and spacing.</p></li>
 </ul>
 </section>
-<section id="id16">
-<h2>0.2.7<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h2>
+<section id="id18">
+<h2>0.2.7<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h2>
 <p><em>2025-11-09</em></p>
 <p><strong>changed</strong></p>
 <ul class="simple">
 <li><p>The style of the headerlink has been changed to match the size of the heading it’s in. It is now faded until hovered over, at which point it shows the link color. It also has a little left padding to separate it from the heading.</p></li>
 </ul>
 </section>
-<section id="id17">
-<h2>0.2.6<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h2>
+<section id="id19">
+<h2>0.2.6<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h2>
 <p><em>2025-11-09</em></p>
 <p><strong>added</strong></p>
 <ul class="simple">
@@ -196,32 +209,32 @@ installed for the <code class="docutils literal notranslate"><span class="pre">s
 <li><p>Cleaned up <cite>global_conf.py</cite> by removing unused configuration variables and adding a module docstring.</p></li>
 </ul>
 </section>
-<section id="id18">
-<h2>0.2.5<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h2>
+<section id="id20">
+<h2>0.2.5<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h2>
 <p><em>2025-11-09</em></p>
 <p><strong>added</strong></p>
 <ul class="simple">
 <li><p>Admonition styling for todo, note, warning, danger, attention, caution, error, hint, important, and tip.</p></li>
 </ul>
 </section>
-<section id="id19">
-<h2>0.2.4<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h2>
+<section id="id21">
+<h2>0.2.4<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h2>
 <p><em>2025-11-09</em></p>
 <p><strong>added</strong></p>
 <ul class="simple">
 <li><p>Added the organization and repository name to the header for better branding and context.</p></li>
 </ul>
 </section>
-<section id="id20">
-<h2>0.2.3<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h2>
+<section id="id22">
+<h2>0.2.3<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h2>
 <p><em>2025-11-09</em></p>
 <p><strong>added</strong></p>
 <ul class="simple">
 <li><p>Added a footer navigation section, configurable via page metadata.</p></li>
 </ul>
 </section>
-<section id="id21">
-<h2>0.2.2<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h2>
+<section id="id23">
+<h2>0.2.2<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h2>
 <p><em>2025-11-08</em></p>
 <p><strong>changed</strong></p>
 <ul class="simple">
@@ -231,16 +244,16 @@ installed for the <code class="docutils literal notranslate"><span class="pre">s
 <li><p>Replaced the aggressive CSS reset with a more modern, targeted approach.</p></li>
 </ul>
 </section>
-<section id="id22">
-<h2>0.2.1<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h2>
+<section id="id24">
+<h2>0.2.1<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h2>
 <p><em>2025-11-08</em></p>
 <p><strong>changed</strong></p>
 <ul class="simple">
 <li><p>The SCSS compilation now generates expanded, readable CSS instead of compressed CSS. This improves debuggability of the styles.</p></li>
 </ul>
 </section>
-<section id="id23">
-<h2>0.2.0<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h2>
+<section id="id25">
+<h2>0.2.0<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h2>
 <p><em>2025-11-08</em></p>
 <p><strong>changed</strong></p>
 <ul class="simple">
@@ -251,8 +264,8 @@ installed for the <code class="docutils literal notranslate"><span class="pre">s
 <li><p>Integrated SASS for more maintainable and flexible styling.</p></li>
 </ul>
 </section>
-<section id="id24">
-<h2>0.1.2<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h2>
+<section id="id26">
+<h2>0.1.2<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h2>
 <p><em>2025-11-07</em></p>
 <p><strong>changed</strong></p>
 <ul class="simple">
@@ -264,32 +277,32 @@ installed for the <code class="docutils literal notranslate"><span class="pre">s
 <li><p>Removed the old, unused <cite>theme</cite> directory.</p></li>
 </ul>
 </section>
-<section id="id25">
-<h2>0.1.1<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h2>
+<section id="id27">
+<h2>0.1.1<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h2>
 <p><em>2025-11-07</em></p>
 <p><strong>fixed</strong></p>
 <ul class="simple">
 <li><p>Resolved build issues with the Sphinx documentation by removing outdated and conflicting files from the <cite>docsrc/modules</cite> directory. This ensures a clean and successful build process.</p></li>
 </ul>
 </section>
-<section id="id26">
-<h2>0.1.0<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h2>
+<section id="id28">
+<h2>0.1.0<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h2>
 <p><em>2025-11-07</em></p>
 <p><strong>removed</strong></p>
 <ul class="simple">
 <li><p>Removed the <cite>sphinxilator_theme</cite> and all its associated SCSS files, streamlining the project to focus on a single, unified theme provided by the <cite>publish</cite> tool. This change simplifies the theming architecture and removes legacy code.</p></li>
 </ul>
 </section>
-<section id="id27">
-<h2>0.0.4<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h2>
+<section id="id29">
+<h2>0.0.4<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h2>
 <p><em>2025-10-26</em></p>
 <p><strong>changed</strong></p>
 <ul class="simple">
 <li><p>…</p></li>
 </ul>
 </section>
-<section id="id28">
-<h2>0.0.3<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h2>
+<section id="id30">
+<h2>0.0.3<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h2>
 <p><em>2025-10-26</em></p>
 <p><strong>added</strong></p>
 <ul class="simple">
@@ -298,8 +311,8 @@ installed for the <code class="docutils literal notranslate"><span class="pre">s
 <li><p>Added breadcrumbs and previous/next buttons for improved navigation.</p></li>
 </ul>
 </section>
-<section id="id29">
-<h2>0.0.2<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h2>
+<section id="id31">
+<h2>0.0.2<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h2>
 <p><em>2025-10-26</em></p>
 <p><strong>added</strong></p>
 <ul class="simple">
