@@ -30,8 +30,7 @@ Key Features
 *   **Unified Theme**: A single, customizable theme for all PHOTON platform documentation.
 *   **Custom Components**: Reusable Sphinx components, such as custom directives and roles.
 *   **Centralized Configuration**: A global ``conf.py`` reducing boilerplate.
-*   **Grav Theme Conversion**: Tools to convert Grav themes into Jinja templates.
-*   **Extended Ablog Support**: Enhanced functionality for diverse content types.
+
 
 Latest Updates
 --------------
