@@ -15,6 +15,9 @@ unified system, making it easier to manage Sphinx projects. It supports
 project-specific settings, conversion of Grav themes into Jinja templates, and
 extends Ablog to support diverse content types.
 
+Our mission is to create tools for gathering, processing, and publishing content,
+with a vision of **"Simple HTML, State of the Art CSS"**.
+
 Key Features
 ------------
 
@@ -50,6 +53,9 @@ After installation, you can use the ``publish`` command to manage your documenta
 
    publish build  # build the documentation for a project
    publish test  # build and serve the documentation locally
+
+For detailed usage instructions, please refer to the full documentation in ``docsrc``
+or the built HTML output.
 
 Dependencies
 ------------
