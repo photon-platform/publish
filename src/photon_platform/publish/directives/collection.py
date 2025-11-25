@@ -420,6 +420,7 @@ def setup(app) -> dict:
     app.connect('env-updated', collect_metadata)
     app.connect('html-collect-pages', generate_taxonomy_pages)
     app.connect('html-page-context', build_nav_links)
+    app.add_js_file('js/collection_controls.js')
     return {
         'version': '0.1',
         'parallel_read_safe': True,

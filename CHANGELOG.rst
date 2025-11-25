@@ -1,6 +1,14 @@
 changelog
 =========
 
+0.2.25
+======
+
+- feat: Added interactive layout controls for collections (Cards, Banners, List).
+- feat: Implemented JavaScript-based collection switching with persistence.
+- style: Updated collection SCSS to support multiple layout modes.
+- refactor: Migrated documentation indices to use the ``collection`` directive.
+
 0.2.24
 ======
 

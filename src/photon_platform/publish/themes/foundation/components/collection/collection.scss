@@ -1,0 +1,183 @@
+.collection {
+    font-size: .9em;
+    display: grid;
+    gap: var(--fitz);
+
+    // Default Layout (Cards)
+    // This matches the default grid behavior
+    grid-template-columns: repeat(auto-fit, minmax(24em, 1fr));
+
+    &.layout-cards {
+        grid-template-columns: repeat(auto-fit, minmax(24em, 1fr));
+    }
+
+    &.layout-banners {
+        grid-template-columns: 1fr;
+    }
+
+    &.layout-list {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    >* {
+        background: var(--bg);
+        padding: var(--fitz);
+    }
+
+    >header {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .collection-controls {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        margin-bottom: var(--fitz);
+
+        button {
+            background: none;
+            border: 1px solid var(--text-muted);
+            color: var(--text-muted);
+            padding: 0.25rem;
+            cursor: pointer;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+
+            &:hover,
+            &.active {
+                background: var(--text-muted);
+                color: var(--bg);
+            }
+
+            svg {
+                display: block;
+            }
+        }
+    }
+
+    >article.excerpt {
+        container-type: inline-size;
+        container-name: excerpt;
+        display: flex;
+        flex-direction: column;
+        gap: var(--fitz);
+
+        // Ensure content doesn't overflow
+        min-width: 0;
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: var(--fitz);
+
+            figure {
+                width: 100%;
+                margin: 0;
+
+                img {
+                    width: 100%;
+                    height: auto;
+                    object-fit: cover;
+                    aspect-ratio: 16/9;
+                    border-radius: 4px;
+                }
+            }
+
+            section {
+                h2 {
+                    margin-top: 0;
+                    font-size: 1.2em;
+                }
+            }
+
+            // Container Query: Horizontal layout for wider containers
+            // Applies to .content based on article.excerpt width
+            @container excerpt (min-width: 35em) {
+                flex-direction: row;
+                align-items: flex-start;
+
+                figure {
+                    width: 30%;
+                    max-width: 15em;
+                    margin-right: var(--fitz);
+
+                    img {
+                        aspect-ratio: 4/3;
+                    }
+                }
+            }
+        }
+
+        footer {
+            margin-top: auto;
+            border-top: 1px solid var(--text-muted-alpha);
+            padding-top: var(--fitz-2);
+        }
+    }
+
+    // Specific overrides for List layout
+    &.layout-list>article.excerpt {
+        flex-direction: row;
+        align-items: center;
+        padding: var(--fitz-2);
+        border-bottom: 1px solid var(--text-muted-alpha);
+        gap: var(--fitz);
+
+        .content {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+
+            figure {
+                width: 3em;
+                height: 3em;
+                margin: 0;
+                margin-right: var(--fitz);
+                flex-shrink: 0;
+
+                img {
+                    aspect-ratio: 1;
+                    border-radius: 50%;
+                    height: 100%;
+                }
+            }
+
+            section {
+                flex: 1;
+                display: flex;
+                align-items: center;
+
+                h2 {
+                    font-size: 1em;
+                    margin: 0;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                blockquote {
+                    display: none;
+                }
+            }
+        }
+
+        footer {
+            margin: 0;
+            padding: 0;
+            border: none;
+            margin-left: var(--fitz);
+            font-size: 0.8em;
+            white-space: nowrap;
+        }
+    }
+}
