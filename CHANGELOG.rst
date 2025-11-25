@@ -1,6 +1,15 @@
 changelog
 =========
 
+0.2.24
+======
+
+- docs: comprehensive update to documentation structure and content.
+    - Added detailed usage guides for collections, taxonomy, code documentation, references, diagrams, and math.
+    - Refined mission statement and goals.
+    - Updated main index with key features and latest updates section.
+    - Added references section with inspirations and extensions.
+
 0.2.23
 ======
 
