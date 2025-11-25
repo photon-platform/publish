@@ -4,8 +4,5 @@
 refs
 ====
 
-.. toctree::
-   :maxdepth: 1
-
-   inspirations
-   extensions
+.. collection::
+   :type: doc
