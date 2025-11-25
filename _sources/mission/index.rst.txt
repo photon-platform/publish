@@ -4,17 +4,14 @@
 mission
 =======
 
-.. todo:: set mission statement and goals
+.. meta::
+    :description: The mission of Publish: Simple HTML, State of the Art CSS.
+    :keywords: mission, html, css, zen garden, foundation, theme
 
-.. contents::
-   :local:
-   :backlinks: none
+Our mission is to create tools for gathering, processing, and publishing content. We believe that content structures should be versatile, capable of being transformed into many form factors.
 
+We are capturing the vision of **"Simple HTML, State of the Art CSS"**.
 
-goals
------
-
-.. .. postlist:: 
-   :category: GOALS
-   :excerpts:
-
+.. collection::
+    :type: goal
+    :sort: order
