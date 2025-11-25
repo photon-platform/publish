@@ -7,8 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>publish.publish &mdash; Project name not set  documentation</title>
   <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../_static/css/styles.css?v=96db27da" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/styles.css?v=b3677a2d" />
   <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+  <link rel="stylesheet" href="../../_static/css/print.css" type="text/css" media="print" />
 </head>
 <body>
   <header>
@@ -30,10 +31,10 @@
           <a href="../../mission/index.html"  >mission</a>
         </li>
         <li>
-          <a href="../../modules/index.html"  >modules</a>
+          <a href="../../usage/index.html"  >usage</a>
         </li>
         <li>
-          <a href="../../usage/index.html"  >usage</a>
+          <a href="../../modules/index.html"  >modules</a>
         </li>
         <li>
           <a href="../../log/index.html"  >log</a>
@@ -100,19 +101,26 @@
         <span class="k">for</span> <span class="n">theme_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">themes_dir</span><span class="p">):</span>
             <span class="n">theme_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">themes_dir</span><span class="p">,</span> <span class="n">theme_name</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">theme_path</span><span class="p">):</span>
-                <span class="n">scss_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">theme_path</span><span class="p">,</span> <span class="s1">&#39;static&#39;</span><span class="p">,</span> <span class="s1">&#39;scss&#39;</span><span class="p">,</span> <span class="s1">&#39;styles.scss&#39;</span><span class="p">)</span>
+                <span class="n">scss_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">theme_path</span><span class="p">,</span> <span class="s1">&#39;static&#39;</span><span class="p">,</span> <span class="s1">&#39;scss&#39;</span><span class="p">)</span>
                 <span class="n">css_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">theme_path</span><span class="p">,</span> <span class="s1">&#39;static&#39;</span><span class="p">,</span> <span class="s1">&#39;css&#39;</span><span class="p">)</span>
-                <span class="n">css_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">css_dir</span><span class="p">,</span> <span class="s1">&#39;styles.css&#39;</span><span class="p">)</span>
 
-                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">scss_file</span><span class="p">):</span>
-                    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Compiling SASS for theme: </span><span class="si">{</span><span class="n">theme_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">scss_dir</span><span class="p">):</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">css_dir</span><span class="p">):</span>
                         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">css_dir</span><span class="p">)</span>
-
-                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">css_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">scss_file</span><span class="p">,</span> <span class="n">output_style</span><span class="o">=</span><span class="s1">&#39;expanded&#39;</span><span class="p">))</span>
+                    
+                    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">scss_dir</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.scss&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">):</span>
+                            <span class="n">scss_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">scss_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+                            <span class="n">css_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">css_dir</span><span class="p">,</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.scss&#39;</span><span class="p">,</span> <span class="s1">&#39;.css&#39;</span><span class="p">))</span>
+                            
+                            <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Compiling </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> for theme: </span><span class="si">{</span><span class="n">theme_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">css_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">scss_file</span><span class="p">,</span> <span class="n">output_style</span><span class="o">=</span><span class="s1">&#39;expanded&#39;</span><span class="p">))</span>
+                            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                                <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Error compiling </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">err</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  No SASS file found for theme: </span><span class="si">{</span><span class="n">theme_name</span><span class="si">}</span><span class="s2">, skipping.&quot;</span><span class="p">)</span>
+                    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  No SASS directory found for theme: </span><span class="si">{</span><span class="n">theme_name</span><span class="si">}</span><span class="s2">, skipping.&quot;</span><span class="p">)</span>
         <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;SASS compilation successful.&quot;</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error compiling SASS: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">err</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
