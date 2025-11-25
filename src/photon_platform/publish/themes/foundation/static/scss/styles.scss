@@ -1,6 +1,7 @@
 /* foundation ✴ Theme Components and Templates */
 
 // 1. Base styles (order is important)
+@import '_variables';
 @import 'fonts/index';
 @import 'color/index';
 @import '_common'; // Contains the %section-default placeholder

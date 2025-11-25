@@ -19,12 +19,12 @@ nav {
       // align-self: flex-end;
       text-align: right;
 
-      font-family: var(--font-icon);
+      font-family: $font-icon;
       content: 'v';
     }
 
     &:hover {
-      background: var(--color-key-lighter);
+      background: $color-key-lighter;
     }
   }
 
@@ -56,7 +56,7 @@ nav {
       // margin-left: var(--fitz-2);
 
       &:hover {
-        // background: var(--color-key);
+        // background: $color-key;
         // color: white;
       }
       + li {
@@ -71,17 +71,17 @@ nav {
     --offset: 1em;
     // line-height: 1.1;
     padding:  var(--fitz);
-    // padding-left: var(--offset);
+    // padding-left: $offset;
     flex-basis: 100%;
 
     &::before, &::after {
       padding-top: .1em;
       content: ' ';
       display: inline-block;
-      width: var(--offset);
-      flex: 0 0 var(--offset);
-      // margin-left: calc(var(--offset) * -1);
-      font-family: var(--font-icon);
+      width: $offset;
+      flex: 0 0 $offset;
+      // margin-left: calc($offset * -1);
+      font-family: $font-icon;
       text-align: center;
       
     }
@@ -99,7 +99,7 @@ nav {
     &[aria-current="true"] {
       font-weight: 700;
       &::after {
-        // content: var(--bullet);
+        // content: $bullet;
         // text-align: center;
       }
     }
@@ -108,7 +108,7 @@ nav {
   @media (min-width: 48em) {
     label {
       &::after {
-        font-family: var(--font-icon);
+        font-family: $font-icon;
         content: '^';
       }
     }

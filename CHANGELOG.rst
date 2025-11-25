@@ -1,6 +1,15 @@
 changelog
 =========
 
+0.2.23
+======
+
+- refactor(theme): Massive refinements to the foundation theme, including:
+    - streamlining SCSS imports and removing legacy files.
+    - consolidating font and element styles for better maintainability.
+    - implementing variable-based theming for consistent colors and fonts.
+    - removing unused SCSS partials (reset, normalize, etc.) in favor of a cleaner base.
+
 0.2.22
 ======
 

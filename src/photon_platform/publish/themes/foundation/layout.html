@@ -14,6 +14,7 @@
 {%- for css_file in css_files %}
   {{ css_tag(css_file) }}
 {%- endfor %}
+  <link rel="stylesheet" href="{{ pathto('_static/css/print.css', 1) }}" type="text/css" media="print" />
 </head>
 <body>
 {% include "components/site/header.html" %}

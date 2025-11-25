@@ -31,19 +31,26 @@ def build_sass() -> None:
         for theme_name in os.listdir(themes_dir):
             theme_path = os.path.join(themes_dir, theme_name)
             if os.path.isdir(theme_path):
-                scss_file = os.path.join(theme_path, 'static', 'scss', 'styles.scss')
+                scss_dir = os.path.join(theme_path, 'static', 'scss')
                 css_dir = os.path.join(theme_path, 'static', 'css')
-                css_file = os.path.join(css_dir, 'styles.css')
 
-                if os.path.exists(scss_file):
-                    click.echo(f"  Compiling SASS for theme: {theme_name}")
+                if os.path.exists(scss_dir):
                     if not os.path.exists(css_dir):
                         os.makedirs(css_dir)
-
-                    with open(css_file, 'w') as f:
-                        f.write(sass.compile(filename=scss_file, output_style='expanded'))
+                    
+                    for filename in os.listdir(scss_dir):
+                        if filename.endswith('.scss') and not filename.startswith('_'):
+                            scss_file = os.path.join(scss_dir, filename)
+                            css_file = os.path.join(css_dir, filename.replace('.scss', '.css'))
+                            
+                            click.echo(f"  Compiling {filename} for theme: {theme_name}")
+                            try:
+                                with open(css_file, 'w') as f:
+                                    f.write(sass.compile(filename=scss_file, output_style='expanded'))
+                            except Exception as e:
+                                click.echo(f"  Error compiling {filename}: {e}", err=True)
                 else:
-                    click.echo(f"  No SASS file found for theme: {theme_name}, skipping.")
+                    click.echo(f"  No SASS directory found for theme: {theme_name}, skipping.")
         click.echo("SASS compilation successful.")
     except Exception as e:
         click.echo(f"Error compiling SASS: {e}", err=True)
