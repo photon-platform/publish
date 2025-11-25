@@ -12,8 +12,7 @@ Overview
 
 This project integrates custom components, themes, and configurations into a
 unified system, making it easier to manage Sphinx projects. It supports
-project-specific settings, conversion of Grav themes into Jinja templates, and
-extends Ablog to support diverse content types.
+project-specific settings.
 
 Our mission is to create tools for gathering, processing, and publishing content,
 with a vision of **"Simple HTML, State of the Art CSS"**.
@@ -27,10 +26,8 @@ Key Features
   and roles, to simplify content creation.
 - **Centralized Configuration**: A global `conf.py` that can be imported into
   local configurations, reducing boilerplate and ensuring consistency.
-- **Grav Theme Conversion**: Tools to convert Grav themes into Jinja templates
-  compatible with Sphinx.
-- **Extended Ablog Support**: Enhanced Ablog functionality to support different
-  content types, such as events, tasks, and updates.
+
+
 - **Interactive Collection Layouts**: Users can dynamically switch between Cards, Banners, and List views for content collections, with persistent preferences.
 - **Streamlined Project Integration**: Provides a structured approach for integrating `publish` into existing and new Sphinx projects, ensuring consistency and efficiency in documentation deployment.
 - **Enhanced Article Navigation**: Styled article navigation buttons for improved prominence and theme consistency.
@@ -63,9 +60,18 @@ Dependencies
 **publish** depends on the following Python packages:
 
 - Sphinx
-- Ablog
-- click
+- Jinja2
+- MyST-Parser
+- sphinx-carousel
+- sphinxcontrib-jquery
+- sphinxcontrib-youtube
+- sphinx-revealjs
+- sphinxext-opengraph
 - libsass
+- click
+- sphinx-autoapi
+- matplotlib
+- graphviz
 
 Contributing
 ------------

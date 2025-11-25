@@ -4,7 +4,7 @@ A tool to streamline and enhance the Sphinx documentation framework.
 
 ## Overview
 
-Publish integrates custom components, themes, and configurations into a unified system for easier management of Sphinx projects. It supports dynamic project-specific settings and the conversion of Grav themes, and provides custom directives for flexible content listings.
+Publish integrates custom components, themes, and configurations into a unified system for easier management of Sphinx projects. It supports dynamic project-specific settings and provides custom directives for flexible content listings.
 
 ## Index
 
