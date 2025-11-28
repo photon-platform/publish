@@ -4,4 +4,4 @@
 modules
 =======
 
-.. include:: api/index.rst
+.. include:: api/photon_platform/publish/index.rst

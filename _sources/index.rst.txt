@@ -15,6 +15,7 @@ Our mission is to create tools for gathering, processing, and publishing content
 
    mission/index.rst
    usage/index.rst
+   standards/index.rst
    modules/index.rst
    log/index.rst
    refs/index.rst

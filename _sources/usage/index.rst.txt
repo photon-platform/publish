@@ -6,4 +6,3 @@ usage
 =====
 
 .. collection::
-   :type: doc

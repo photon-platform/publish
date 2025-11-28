@@ -1,0 +1,910 @@
+photon_platform.publish.directives.collection
+=============================================
+
+.. py:module:: photon_platform.publish.directives.collection
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   photon_platform.publish.directives.collection.PendingCollection
+   photon_platform.publish.directives.collection.CollectionDirective
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   photon_platform.publish.directives.collection.to_numeric
+   photon_platform.publish.directives.collection.process_collections
+   photon_platform.publish.directives.collection.collect_metadata
+   photon_platform.publish.directives.collection.generate_taxonomy_pages
+   photon_platform.publish.directives.collection.build_nav_links
+   photon_platform.publish.directives.collection.setup
+
+
+Module Contents
+---------------
+
+.. py:function:: to_numeric(value)
+
+   Converts a value to a numeric type if possible, trying int then float.
+
+
+.. py:class:: PendingCollection(rawsource='', *children, **attributes)
+
+   Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
+
+
+   A placeholder node for a collection that will be rendered
+   after all documents have been read and metadata is available.
+
+
+   .. py:attribute:: basic_attributes
+      :value: ('ids', 'classes', 'names', 'dupnames')
+
+
+      Tuple of attributes which are defined for every Element-derived class
+      instance and can be safely transferred to a different node.
+
+
+   .. py:attribute:: local_attributes
+      :value: ('backrefs',)
+
+
+      Tuple of class-specific attributes that should not be copied with the
+      standard attributes when replacing a node.
+
+      NOTE: Derived classes should override this value to prevent any of its
+      attributes being copied by adding to the value in its parent class.
+
+
+   .. py:attribute:: list_attributes
+      :value: ('ids', 'classes', 'names', 'dupnames', 'backrefs')
+
+
+      Tuple of attributes that are automatically initialized to empty lists
+      for all nodes.
+
+
+   .. py:attribute:: known_attributes
+      :value: ('ids', 'classes', 'names', 'dupnames', 'backrefs', 'source')
+
+
+      Tuple of attributes that are known to the Element base class.
+
+
+   .. py:attribute:: tagname
+      :value: None
+
+
+      The element generic identifier. If None, it is set as an instance
+      attribute to the name of the class.
+
+
+   .. py:attribute:: child_text_separator
+      :value: Multiline-String
+
+      .. raw:: html
+
+         <details><summary>Show Value</summary>
+
+      .. code-block:: python
+
+         """
+         
+         """
+
+      .. raw:: html
+
+         </details>
+
+
+
+      Separator for child nodes, used by `astext()` method.
+
+
+   .. py:attribute:: rawsource
+      :value: ''
+
+
+      The raw text from which this element was constructed.
+
+      NOTE: some elements do not set this value (default '').
+
+
+   .. py:attribute:: children
+      :value: []
+
+
+      List of child nodes (elements and/or `Text`).
+
+
+   .. py:attribute:: attributes
+
+      value}.
+
+      :type: Dictionary of attribute {name
+
+
+   .. py:method:: __repr__()
+
+
+   .. py:method:: shortrepr()
+
+
+   .. py:method:: __str__()
+
+
+   .. py:method:: starttag(quoteattr=None)
+
+
+   .. py:method:: endtag()
+
+
+   .. py:method:: emptytag()
+
+
+   .. py:method:: __len__()
+
+
+   .. py:method:: __contains__(key)
+
+
+   .. py:method:: __getitem__(key)
+
+
+   .. py:method:: __setitem__(key, item)
+
+
+   .. py:method:: __delitem__(key)
+
+
+   .. py:method:: __add__(other)
+
+
+   .. py:method:: __radd__(other)
+
+
+   .. py:method:: __iadd__(other)
+
+      Append a node or a list of nodes to `self.children`.
+
+
+
+   .. py:method:: astext()
+
+      Return a string representation of this Node.
+
+
+
+   .. py:method:: non_default_attributes()
+
+
+   .. py:method:: attlist()
+
+
+   .. py:method:: get(key, failobj=None)
+
+
+   .. py:method:: hasattr(attr)
+
+
+   .. py:method:: delattr(attr)
+
+
+   .. py:method:: setdefault(key, failobj=None)
+
+
+   .. py:attribute:: has_key
+
+
+   .. py:method:: get_language_code(fallback='')
+
+      Return node's language tag.
+
+      Look iteratively in self and parents for a class argument
+      starting with ``language-`` and return the remainder of it
+      (which should be a `BCP49` language tag) or the `fallback`.
+
+
+
+   .. py:method:: append(item)
+
+
+   .. py:method:: extend(item)
+
+
+   .. py:method:: insert(index, item)
+
+
+   .. py:method:: pop(i=-1)
+
+
+   .. py:method:: remove(item)
+
+
+   .. py:method:: index(item, start=0, stop=sys.maxsize)
+
+
+   .. py:method:: previous_sibling()
+
+      Return preceding sibling node or ``None``.
+
+
+
+   .. py:method:: is_not_default(key)
+
+
+   .. py:method:: update_basic_atts(dict_)
+
+      Update basic attributes ('ids', 'names', 'classes',
+      'dupnames', but not 'source') from node or dictionary `dict_`.
+
+
+
+   .. py:method:: append_attr_list(attr, values)
+
+      For each element in values, if it does not exist in self[attr], append
+      it.
+
+      NOTE: Requires self[attr] and values to be sequence type and the
+      former should specifically be a list.
+
+
+
+   .. py:method:: coerce_append_attr_list(attr, value)
+
+      First, convert both self[attr] and value to a non-string sequence
+      type; if either is not already a sequence, convert it to a list of one
+      element.  Then call append_attr_list.
+
+      NOTE: self[attr] and value both must not be None.
+
+
+
+   .. py:method:: replace_attr(attr, value, force=True)
+
+      If self[attr] does not exist or force is True or omitted, set
+      self[attr] to value, otherwise do nothing.
+
+
+
+   .. py:method:: copy_attr_convert(attr, value, replace=True)
+
+      If attr is an attribute of self, set self[attr] to
+      [self[attr], value], otherwise set self[attr] to value.
+
+      NOTE: replace is not used by this function and is kept only for
+            compatibility with the other copy functions.
+
+
+
+   .. py:method:: copy_attr_coerce(attr, value, replace)
+
+      If attr is an attribute of self and either self[attr] or value is a
+      list, convert all non-sequence values to a sequence of 1 element and
+      then concatenate the two sequence, setting the result to self[attr].
+      If both self[attr] and value are non-sequences and replace is True or
+      self[attr] is None, replace self[attr] with value. Otherwise, do
+      nothing.
+
+
+
+   .. py:method:: copy_attr_concatenate(attr, value, replace)
+
+      If attr is an attribute of self and both self[attr] and value are
+      lists, concatenate the two sequences, setting the result to
+      self[attr].  If either self[attr] or value are non-sequences and
+      replace is True or self[attr] is None, replace self[attr] with value.
+      Otherwise, do nothing.
+
+
+
+   .. py:method:: copy_attr_consistent(attr, value, replace)
+
+      If replace is True or self[attr] is None, replace self[attr] with
+      value.  Otherwise, do nothing.
+
+
+
+   .. py:method:: update_all_atts(dict_, update_fun=copy_attr_consistent, replace=True, and_source=False)
+
+      Updates all attributes from node or dictionary `dict_`.
+
+      Appends the basic attributes ('ids', 'names', 'classes',
+      'dupnames', but not 'source') and then, for all other attributes in
+      dict_, updates the same attribute in self.  When attributes with the
+      same identifier appear in both self and dict_, the two values are
+      merged based on the value of update_fun.  Generally, when replace is
+      True, the values in self are replaced or merged with the values in
+      dict_; otherwise, the values in self may be preserved or merged.  When
+      and_source is True, the 'source' attribute is included in the copy.
+
+      NOTE: When replace is False, and self contains a 'source' attribute,
+            'source' is not replaced even when dict_ has a 'source'
+            attribute, though it may still be merged into a list depending
+            on the value of update_fun.
+      NOTE: It is easier to call the update-specific methods then to pass
+            the update_fun method to this function.
+
+
+
+   .. py:method:: update_all_atts_consistantly(dict_, replace=True, and_source=False)
+
+      Updates all attributes from node or dictionary `dict_`.
+
+      Appends the basic attributes ('ids', 'names', 'classes',
+      'dupnames', but not 'source') and then, for all other attributes in
+      dict_, updates the same attribute in self.  When attributes with the
+      same identifier appear in both self and dict_ and replace is True, the
+      values in self are replaced with the values in dict_; otherwise, the
+      values in self are preserved.  When and_source is True, the 'source'
+      attribute is included in the copy.
+
+      NOTE: When replace is False, and self contains a 'source' attribute,
+            'source' is not replaced even when dict_ has a 'source'
+            attribute, though it may still be merged into a list depending
+            on the value of update_fun.
+
+
+
+   .. py:method:: update_all_atts_concatenating(dict_, replace=True, and_source=False)
+
+      Updates all attributes from node or dictionary `dict_`.
+
+      Appends the basic attributes ('ids', 'names', 'classes',
+      'dupnames', but not 'source') and then, for all other attributes in
+      dict_, updates the same attribute in self.  When attributes with the
+      same identifier appear in both self and dict_ whose values aren't each
+      lists and replace is True, the values in self are replaced with the
+      values in dict_; if the values from self and dict_ for the given
+      identifier are both of list type, then the two lists are concatenated
+      and the result stored in self; otherwise, the values in self are
+      preserved.  When and_source is True, the 'source' attribute is
+      included in the copy.
+
+      NOTE: When replace is False, and self contains a 'source' attribute,
+            'source' is not replaced even when dict_ has a 'source'
+            attribute, though it may still be merged into a list depending
+            on the value of update_fun.
+
+
+
+   .. py:method:: update_all_atts_coercion(dict_, replace=True, and_source=False)
+
+      Updates all attributes from node or dictionary `dict_`.
+
+      Appends the basic attributes ('ids', 'names', 'classes',
+      'dupnames', but not 'source') and then, for all other attributes in
+      dict_, updates the same attribute in self.  When attributes with the
+      same identifier appear in both self and dict_ whose values are both
+      not lists and replace is True, the values in self are replaced with
+      the values in dict_; if either of the values from self and dict_ for
+      the given identifier are of list type, then first any non-lists are
+      converted to 1-element lists and then the two lists are concatenated
+      and the result stored in self; otherwise, the values in self are
+      preserved.  When and_source is True, the 'source' attribute is
+      included in the copy.
+
+      NOTE: When replace is False, and self contains a 'source' attribute,
+            'source' is not replaced even when dict_ has a 'source'
+            attribute, though it may still be merged into a list depending
+            on the value of update_fun.
+
+
+
+   .. py:method:: update_all_atts_convert(dict_, and_source=False)
+
+      Updates all attributes from node or dictionary `dict_`.
+
+      Appends the basic attributes ('ids', 'names', 'classes',
+      'dupnames', but not 'source') and then, for all other attributes in
+      dict_, updates the same attribute in self.  When attributes with the
+      same identifier appear in both self and dict_ then first any non-lists
+      are converted to 1-element lists and then the two lists are
+      concatenated and the result stored in self; otherwise, the values in
+      self are preserved.  When and_source is True, the 'source' attribute
+      is included in the copy.
+
+      NOTE: When replace is False, and self contains a 'source' attribute,
+            'source' is not replaced even when dict_ has a 'source'
+            attribute, though it may still be merged into a list depending
+            on the value of update_fun.
+
+
+
+   .. py:method:: clear()
+
+
+   .. py:method:: replace(old, new)
+
+      Replace one child `Node` with another child or children.
+
+
+
+   .. py:method:: replace_self(new)
+
+      Replace `self` node with `new`, where `new` is a node or a
+      list of nodes.
+
+
+
+   .. py:method:: first_child_matching_class(childclass, start=0, end=sys.maxsize)
+
+      Return the index of the first child whose class exactly matches.
+
+      Parameters:
+
+      - `childclass`: A `Node` subclass to search for, or a tuple of `Node`
+        classes. If a tuple, any of the classes may match.
+      - `start`: Initial index to check.
+      - `end`: Initial index to *not* check.
+
+
+
+   .. py:method:: first_child_not_matching_class(childclass, start=0, end=sys.maxsize)
+
+      Return the index of the first child whose class does *not* match.
+
+      Parameters:
+
+      - `childclass`: A `Node` subclass to skip, or a tuple of `Node`
+        classes. If a tuple, none of the classes may match.
+      - `start`: Initial index to check.
+      - `end`: Initial index to *not* check.
+
+
+
+   .. py:method:: pformat(indent='    ', level=0)
+
+      Return an indented pseudo-XML representation, for test purposes.
+
+      Override in subclasses.
+
+
+
+   .. py:method:: copy()
+
+      Return a copy of self.
+
+
+
+   .. py:method:: deepcopy()
+
+      Return a deep copy of self (also copying children).
+
+
+
+   .. py:method:: set_class(name)
+
+      Add a new class to the "classes" attribute.
+
+
+
+   .. py:method:: note_referenced_by(name=None, id=None)
+
+      Note that this Element has been referenced by its name
+      `name` or id `id`.
+
+
+
+   .. py:method:: is_not_list_attribute(attr)
+      :classmethod:
+
+
+      Returns True if and only if the given attribute is NOT one of the
+      basic list attributes defined for all Elements.
+
+
+
+   .. py:method:: is_not_known_attribute(attr)
+      :classmethod:
+
+
+      Returns True if and only if the given attribute is NOT recognized by
+      this class.
+
+
+
+   .. py:attribute:: parent
+      :value: None
+
+
+      Back-reference to the Node immediately containing this Node.
+
+
+   .. py:attribute:: source
+      :value: None
+
+
+      Path or description of the input source which generated this Node.
+
+
+   .. py:attribute:: line
+      :value: None
+
+
+      The line number (1-based) of the beginning of this Node in `source`.
+
+
+   .. py:property:: document
+
+      Return the `document` root node of the tree containing this Node.
+
+
+   .. py:method:: __bool__()
+
+      Node instances are always true, even if they're empty.  A node is more
+      than a simple container.  Its boolean "truth" does not depend on
+      having one or more subnodes in the doctree.
+
+      Use `len()` to check node length.
+
+
+
+   .. py:method:: asdom(dom=None)
+
+      Return a DOM **fragment** representation of this Node.
+
+
+
+   .. py:method:: setup_child(child)
+
+
+   .. py:method:: walk(visitor)
+
+      Traverse a tree of `Node` objects, calling the
+      `dispatch_visit()` method of `visitor` when entering each
+      node.  (The `walkabout()` method is similar, except it also
+      calls the `dispatch_departure()` method before exiting each
+      node.)
+
+      This tree traversal supports limited in-place tree
+      modifications.  Replacing one node with one or more nodes is
+      OK, as is removing an element.  However, if the node removed
+      or replaced occurs after the current node, the old node will
+      still be traversed, and any new nodes will not.
+
+      Within ``visit`` methods (and ``depart`` methods for
+      `walkabout()`), `TreePruningException` subclasses may be raised
+      (`SkipChildren`, `SkipSiblings`, `SkipNode`, `SkipDeparture`).
+
+      Parameter `visitor`: A `NodeVisitor` object, containing a
+      ``visit`` implementation for each `Node` subclass encountered.
+
+      Return true if we should stop the traversal.
+
+
+
+   .. py:method:: walkabout(visitor)
+
+      Perform a tree traversal similarly to `Node.walk()` (which
+      see), except also call the `dispatch_departure()` method
+      before exiting each node.
+
+      Parameter `visitor`: A `NodeVisitor` object, containing a
+      ``visit`` and ``depart`` implementation for each `Node`
+      subclass encountered.
+
+      Return true if we should stop the traversal.
+
+
+
+   .. py:method:: traverse(condition=None, include_self=True, descend=True, siblings=False, ascend=False)
+
+      Return list of nodes following `self`.
+
+      For looping, Node.findall() is faster and more memory efficient.
+
+
+
+   .. py:method:: findall(condition=None, include_self=True, descend=True, siblings=False, ascend=False)
+
+      Return an iterator yielding nodes following `self`:
+
+      * self (if `include_self` is true)
+      * all descendants in tree traversal order (if `descend` is true)
+      * the following siblings (if `siblings` is true) and their
+        descendants (if also `descend` is true)
+      * the following siblings of the parent (if `ascend` is true) and
+        their descendants (if also `descend` is true), and so on.
+
+      If `condition` is not None, the iterator yields only nodes
+      for which ``condition(node)`` is true.  If `condition` is a
+      node class ``cls``, it is equivalent to a function consisting
+      of ``return isinstance(node, cls)``.
+
+      If `ascend` is true, assume `siblings` to be true as well.
+
+      If the tree structure is modified during iteration, the result
+      is undefined.
+
+      For example, given the following tree::
+
+          <paragraph>
+              <emphasis>      <--- emphasis.traverse() and
+                  <strong>    <--- strong.traverse() are called.
+                      Foo
+                  Bar
+              <reference name="Baz" refid="baz">
+                  Baz
+
+      Then tuple(emphasis.traverse()) equals ::
+
+          (<emphasis>, <strong>, <#text: Foo>, <#text: Bar>)
+
+      and list(strong.traverse(ascend=True) equals ::
+
+          [<strong>, <#text: Foo>, <#text: Bar>, <reference>, <#text: Baz>]
+
+
+
+   .. py:method:: next_node(condition=None, include_self=False, descend=True, siblings=False, ascend=False)
+
+      Return the first node in the iterator returned by findall(),
+      or None if the iterable is empty.
+
+      Parameter list is the same as of `findall()`.  Note that `include_self`
+      defaults to False, though.
+
+
+
+.. py:class:: CollectionDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`sphinx.util.docutils.SphinxDirective`
+
+
+   A base class for Sphinx directives.
+
+   This class provides helper methods for Sphinx directives.
+
+   .. versionadded:: 1.8
+
+   .. note:: The subclasses of this class might not work with docutils.
+             This class is strongly coupled with Sphinx.
+
+
+   .. py:attribute:: has_content
+      :value: False
+
+
+      May the directive have content?
+
+
+   .. py:attribute:: option_spec
+
+      Mapping of option names to validator functions.
+
+
+   .. py:method:: run()
+
+      Process the collection directive.
+
+      Instead of rendering immediately, we:
+      1. Discover all relevant files.
+      2. Add them to a hidden toctree so Sphinx knows about them (fixes "not in toctree" warnings).
+      3. Return a PendingCollection node to defer rendering until metadata is ready.
+
+
+
+   .. py:property:: env
+      :type: sphinx.environment.BuildEnvironment
+
+
+      Reference to the :class:`.BuildEnvironment` object.
+
+      .. versionadded:: 1.8
+
+
+   .. py:property:: config
+      :type: sphinx.config.Config
+
+
+      Reference to the :class:`.Config` object.
+
+      .. versionadded:: 1.8
+
+
+   .. py:method:: get_source_info() -> tuple[str, int]
+
+      Get source and line number.
+
+      .. versionadded:: 3.0
+
+
+
+   .. py:method:: set_source_info(node: docutils.nodes.Node) -> None
+
+      Set source and line number to the node.
+
+      .. versionadded:: 2.1
+
+
+
+   .. py:method:: get_location() -> str
+
+      Get current location info for logging.
+
+      .. versionadded:: 4.2
+
+
+
+   .. py:method:: parse_content_to_nodes(allow_section_headings: bool = False) -> list[docutils.nodes.Node]
+
+      Parse the directive's content into nodes.
+
+      :param allow_section_headings:
+          Are titles (sections) allowed in the directive's content?
+          Note that this option bypasses Docutils' usual checks on
+          doctree structure, and misuse of this option can lead to
+          an incoherent doctree. In Docutils, section nodes should
+          only be children of ``Structural`` nodes, which includes
+          ``document``, ``section``, and ``sidebar`` nodes.
+
+      .. versionadded:: 7.4
+
+
+
+   .. py:method:: parse_text_to_nodes(text: str = '', /, *, offset: int = -1, allow_section_headings: bool = False) -> list[docutils.nodes.Node]
+
+      Parse *text* into nodes.
+
+      :param text:
+          Text, in string form. ``StringList`` is also accepted.
+      :param allow_section_headings:
+          Are titles (sections) allowed in *text*?
+          Note that this option bypasses Docutils' usual checks on
+          doctree structure, and misuse of this option can lead to
+          an incoherent doctree. In Docutils, section nodes should
+          only be children of ``Structural`` nodes, which includes
+          ``document``, ``section``, and ``sidebar`` nodes.
+      :param offset:
+          The offset of the content.
+
+      .. versionadded:: 7.4
+
+
+
+   .. py:method:: parse_inline(text: str, *, lineno: int = -1) -> tuple[list[docutils.nodes.Node], list[docutils.nodes.system_message]]
+
+      Parse *text* as inline elements.
+
+      :param text:
+          The text to parse, which should be a single line or paragraph.
+          This cannot contain any structural elements (headings,
+          transitions, directives, etc).
+      :param lineno:
+          The line number where the interpreted text begins.
+      :returns:
+          A list of nodes (text and inline elements) and a list of system_messages.
+
+      .. versionadded:: 7.4
+
+
+
+   .. py:attribute:: required_arguments
+      :value: 0
+
+
+      Number of required directive arguments.
+
+
+   .. py:attribute:: optional_arguments
+      :value: 0
+
+
+      Number of optional arguments after the required arguments.
+
+
+   .. py:attribute:: final_argument_whitespace
+      :value: False
+
+
+      May the final argument contain whitespace?
+
+
+   .. py:attribute:: name
+
+
+   .. py:attribute:: arguments
+
+
+   .. py:attribute:: options
+
+
+   .. py:attribute:: content
+
+
+   .. py:attribute:: lineno
+
+
+   .. py:attribute:: content_offset
+
+
+   .. py:attribute:: block_text
+
+
+   .. py:attribute:: state
+
+
+   .. py:attribute:: state_machine
+
+
+   .. py:attribute:: reporter
+
+
+   .. py:method:: directive_error(level, message)
+
+      Return a DirectiveError suitable for being thrown as an exception.
+
+      Call "raise self.directive_error(level, message)" from within
+      a directive implementation to return one single system message
+      at level `level`, which automatically gets the directive block
+      and the line number added.
+
+      Preferably use the `debug`, `info`, `warning`, `error`, or `severe`
+      wrapper methods, e.g. ``self.error(message)`` to generate an
+      ERROR-level directive error.
+
+
+
+   .. py:method:: debug(message)
+
+
+   .. py:method:: info(message)
+
+
+   .. py:method:: warning(message)
+
+
+   .. py:method:: error(message)
+
+
+   .. py:method:: severe(message)
+
+
+   .. py:method:: assert_has_content()
+
+      Throw an ERROR-level DirectiveError if the directive doesn't
+      have contents.
+
+
+
+   .. py:method:: add_name(node)
+
+      Append self.options['name'] to node['names'] if it exists.
+
+      Also normalize the name string and register it as explicit target.
+
+
+
+.. py:function:: process_collections(app, doctree, fromdocname)
+
+   Resolve PendingCollection nodes into actual HTML content.
+   This runs on 'doctree-resolved', when all metadata is available.
+
+
+.. py:function:: collect_metadata(app, env)
+
+   Collect all tags and categories from document metadata.
+
+
+.. py:function:: generate_taxonomy_pages(app)
+
+   Dynamically generate pages for each tag and category.
+
+
+.. py:function:: build_nav_links(app, pagename, templatename, context, doctree)
+
+   Build navigation links and add tags/categories to the context.
+
+
+.. py:function:: setup(app)
+
+   Register directives and connect to Sphinx events.
+
+

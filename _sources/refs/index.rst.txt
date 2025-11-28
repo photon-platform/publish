@@ -5,4 +5,3 @@ refs
 ====
 
 .. collection::
-   :type: doc
