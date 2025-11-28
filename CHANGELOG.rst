@@ -1,6 +1,15 @@
 changelog
 =========
 
+0.2.26
+======
+
+- feat: Added dynamic AutoAPI configuration in ``global_conf.py`` that reads project structure from ``pyproject.toml``.
+- feat: Added ``--port`` option to the ``test`` command in the CLI to allow specifying the server port.
+- feat: Enabled ``sphinx.ext.napoleon`` for better support of Google and NumPy style docstrings.
+- docs: Introduced a new "Standards" section to the documentation.
+- config: Removed hardcoded ``html_theme`` from local ``conf.py``, relying on global defaults.
+
 0.2.25
 ======
 

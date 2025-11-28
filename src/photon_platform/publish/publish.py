@@ -108,7 +108,7 @@ def clean() -> None:
     else:
         click.echo("Build directory not found.")
 
-def test() -> None:
+def test(port: int = 8000) -> None:
     """Build and serve the documentation locally."""
     project_root = find_git_root()
     if not project_root:
@@ -117,7 +117,6 @@ def test() -> None:
 
     build()
 
-    port = 8000
     build_dir = os.path.join(project_root, "docs")
 
     if not os.path.isdir(build_dir):

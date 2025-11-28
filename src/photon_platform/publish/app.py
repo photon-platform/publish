@@ -16,8 +16,9 @@ def build():
     publish.build()
 
 @cli.command()
-def test():
+@click.option('--port', default=8000, help='Port to serve the documentation on.')
+def test(port):
     """Builds and serves the documentation locally."""
-    publish.test()
+    publish.test(port=port)
 
 

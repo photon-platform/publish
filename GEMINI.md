@@ -13,4 +13,5 @@ Publish integrates custom components, themes, and configurations into a unified 
 -   `directives/collection.py`: A custom directive for creating flexible, time-based content listings.
 -   `themes/photon/`: Contains the theme files for the Sphinx documentation.
 -   `themes/foundation/`: A new, composable theme that co-locates templates and styles, now with interactive collection controls.
+-   `docsrc/standards/`: Documentation for project standards and guidelines.
 -   `app.py`: The main `click`-based command-line interface.

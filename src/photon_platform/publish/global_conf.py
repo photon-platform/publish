@@ -37,6 +37,17 @@ def setup_globals(org: str, org_name: str, repo: str, repo_name: str) -> None:
             "blog_authors": {"phi": ("phi ARCHITECT", None)},
         }
     )
+    # Add exclusion for the main package index to avoid duplicates with modules/index.rst
+    # We assume the structure modules/api/<namespace>/<repo>/index.rst
+    # We use the 'include' variable parsed from pyproject.toml
+    if 'include' in globals() and include and include != '*':
+        # Construct path: modules/api/<include>/<repo>/index.rst
+        # e.g. modules/api/photon_platform/publish/index.rst
+        exclusion = f"modules/api/{include}/{repo}/index.rst"
+        if 'exclude_patterns' in globals():
+             # Check if it's already there to avoid duplicates if called multiple times
+             if exclusion not in exclude_patterns:
+                 exclude_patterns.append(exclusion)
     html_context.update(
         {
             "display_github": True,
@@ -67,7 +78,8 @@ extensions = [
     "sphinx.ext.graphviz",
     "sphinx.ext.mathjax",
     "sphinx.ext.todo",
-    "sphinx.ext.viewcode",
+    # "sphinx.ext.viewcode",
+    "sphinx.ext.napoleon",
     "sphinxcontrib.youtube",
     #  "sphinxcontrib.bibtex",
     "myst_parser",
@@ -87,15 +99,66 @@ extensions = [
 # autosummary_generate = True
 
 # AutoAPI options
-autoapi_dirs = ['../src']
+# AutoAPI options
+import tomllib
+
+# Dynamic AutoAPI Configuration
+# We walk up from the current working directory to find pyproject.toml
+# This allows global_conf.py to adapt to the project it's being used in.
+current_dir = os.getcwd()
+project_root = None
+pyproject_path = None
+include = None # Initialize include
+
+while current_dir != os.path.dirname(current_dir):
+    potential_path = os.path.join(current_dir, 'pyproject.toml')
+    if os.path.exists(potential_path):
+        project_root = current_dir
+        pyproject_path = potential_path
+        break
+    current_dir = os.path.dirname(current_dir)
+
+# Default fallback
+autoapi_dirs = [os.path.abspath('../src')]
+
+if project_root and pyproject_path:
+    try:
+        with open(pyproject_path, 'rb') as f:
+            pyproject_data = tomllib.load(f)
+        
+        # Extract package configuration
+        find_config = pyproject_data.get('tool', {}).get('setuptools', {}).get('packages', {}).get('find', {})
+        where = find_config.get('where', ['.'])[0]
+        include = find_config.get('include', ['*'])[0]
+        
+        src_path = os.path.join(project_root, where)
+        
+        # Add src to sys.path so that modules can be imported
+        if src_path not in sys.path:
+            sys.path.insert(0, src_path)
+            
+        # Determine autoapi_dirs
+        # If include is a specific package (not wildcard), point to it for namespace support
+        # This mimics the 'geometor' configuration: ../src/geometor
+        if include and '*' not in include:
+            autoapi_dirs = [os.path.join(src_path, include)]
+        else:
+            autoapi_dirs = [src_path]
+            
+    except Exception as e:
+        print(f"Warning: Error parsing pyproject.toml for AutoAPI config: {e}")
+
 autoapi_options = [
     'members',
     'undoc-members',
     'show-inheritance',
     'show-module-summary',
     'special-members',
+    'imported-members',
+    'inherited-members',
 ]
 autoapi_root = 'modules/api'
+autoapi_python_use_implicit_namespaces = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
