@@ -24,6 +24,14 @@ def to_numeric(value):
     return value
 
 
+class PendingCollection(nodes.General, nodes.Element):
+    """
+    A placeholder node for a collection that will be rendered
+    after all documents have been read and metadata is available.
+    """
+    pass
+
+
 class CollectionDirective(SphinxDirective):
     has_content = False
     option_spec = {
@@ -36,50 +44,109 @@ class CollectionDirective(SphinxDirective):
         'class': directives.unchanged,
     }
 
-    def run(self) -> list:
+    def run(self):
         """
-        Process the collection directive, discover and sort documents,
-        and render them using a Jinja2 template.
+        Process the collection directive.
+        
+        Instead of rendering immediately, we:
+        1. Discover all relevant files.
+        2. Add them to a hidden toctree so Sphinx knows about them (fixes "not in toctree" warnings).
+        3. Return a PendingCollection node to defer rendering until metadata is ready.
         """
         env = self.env
         
-        # Determine the template path based on the current theme
-        if env.app.config.html_theme == 'foundation':
-            default_template = 'components/collection/collection.html'
-        else:
-            default_template = '_macros/collection.html'
-
         collection_type = self.options.get('type')
         sort_key = self.options.get('sort')
         reverse = 'reverse' in self.options
-        template_name = self.options.get('template', default_template)
         limit = self.options.get('limit')
-        title = self.options.get('title')
-        collection_class = self.options.get('class', '')
-
+        
         # Discover files automatically, but not recursively deep
         current_dir = os.path.dirname(env.docname)
         walk_path = os.path.join(env.srcdir, current_dir)
         docnames = []
 
         # Process current directory
-        for filename in os.listdir(walk_path):
-            path = os.path.join(walk_path, filename)
-            if os.path.isfile(path) and filename.endswith('.rst'):
-                docname = os.path.splitext(os.path.relpath(path, env.srcdir))[0]
-                if docname != env.docname:
-                    docnames.append(docname)
+        if os.path.exists(walk_path):
+            for filename in os.listdir(walk_path):
+                path = os.path.join(walk_path, filename)
+                if os.path.isfile(path) and filename.endswith('.rst'):
+                    docname = os.path.splitext(os.path.relpath(path, env.srcdir))[0]
+                    if docname != env.docname:
+                        docnames.append(docname)
 
-        # Process immediate subdirectories
-        for item in os.listdir(walk_path):
-            path = os.path.join(walk_path, item)
-            if os.path.isdir(path):
-                for sub_filename in os.listdir(path):
-                    sub_path = os.path.join(path, sub_filename)
-                    if os.path.isfile(sub_path) and sub_filename.endswith('.rst'):
-                        docname = os.path.splitext(os.path.relpath(sub_path, env.srcdir))[0]
-                        if docname != env.docname:
-                            docnames.append(docname)
+            # Process immediate subdirectories
+            for item in os.listdir(walk_path):
+                path = os.path.join(walk_path, item)
+                if os.path.isdir(path):
+                    for sub_filename in os.listdir(path):
+                        sub_path = os.path.join(path, sub_filename)
+                        if os.path.isfile(sub_path) and sub_filename.endswith('.rst'):
+                            docname = os.path.splitext(os.path.relpath(sub_path, env.srcdir))[0]
+                            if docname != env.docname:
+                                docnames.append(docname)
+
+        # Best-effort sort for toctree (using currently available metadata)
+        # This ensures that if metadata IS available (e.g. subsequent builds),
+        # the navigation order is correct.
+        if sort_key:
+            def get_sort_val(docname):
+                meta = env.metadata.get(docname, {})
+                val = meta.get(sort_key)
+                if val:
+                    return to_numeric(val)
+                return 0
+            docnames.sort(key=get_sort_val, reverse=reverse)
+
+        # Create a toctree with ALL discovered items
+        # This ensures they are included in the build and not orphaned.
+        if not hasattr(self.env, 'photon_publish_collection_docnames'):
+            self.env.photon_publish_collection_docnames = set()
+
+        unique_toc_docnames = []
+        for docname in docnames:
+            if docname not in self.env.photon_publish_collection_docnames:
+                unique_toc_docnames.append(docname)
+                self.env.photon_publish_collection_docnames.add(docname)
+
+        toc = toctree()
+        toc['glob'] = False
+        toc['hidden'] = True
+        toc['includefiles'] = unique_toc_docnames
+        toc['entries'] = [(None, docname) for docname in unique_toc_docnames]
+
+        # Create PendingCollection node
+        pending = PendingCollection()
+        pending['docnames'] = docnames
+        pending['options'] = self.options
+        
+        return [pending, toc]
+
+
+def process_collections(app, doctree, fromdocname):
+    """
+    Resolve PendingCollection nodes into actual HTML content.
+    This runs on 'doctree-resolved', when all metadata is available.
+    """
+    env = app.env
+    builder = app.builder
+    
+    for node in doctree.traverse(PendingCollection):
+        options = node['options']
+        docnames = node['docnames']
+        
+        # Determine the template path based on the current theme
+        if app.config.html_theme == 'foundation':
+            default_template = 'components/collection/collection.html'
+        else:
+            default_template = '_macros/collection.html'
+
+        collection_type = options.get('type')
+        sort_key = options.get('sort')
+        reverse = 'reverse' in options
+        template_name = options.get('template', default_template)
+        limit = options.get('limit')
+        title = options.get('title')
+        collection_class = options.get('class', '')
 
         collection_items = []
         for docname in docnames:
@@ -95,25 +162,32 @@ class CollectionDirective(SphinxDirective):
                     }
                     item.update(meta)
 
-                    doctree = env.get_doctree(docname)
-                    
-                    # Find first paragraph or blockquote
-                    first_text = None
-                    for node in doctree.traverse(lambda n: isinstance(n, (nodes.paragraph, nodes.block_quote))):
-                        first_text = node
-                        break
-                    
-                    if first_text:
-                        item['excerpt_text'] = self.env.app.builder.render_partial(first_text)['html_body']
+                    # We need to load the doctree to get excerpt/figure
+                    # Since we are in doctree-resolved, the pickle should exist/be up to date
+                    try:
+                        item_doctree = env.get_doctree(docname)
+                    except Exception:
+                        # Fallback if doctree cannot be loaded
+                        item_doctree = None
 
-                    # Find first figure
-                    for node in doctree.traverse(nodes.figure):
-                        image_node = next(iter(node.traverse(nodes.image)), None)
-                        if image_node:
-                            item['excerpt_figure_filename'] = os.path.basename(image_node['uri'])
-                            item['excerpt_figure_alt'] = image_node.get('alt', '')
-                            item['excerpt_figure_width'] = node.get('width')
+                    if item_doctree:
+                        # Find first paragraph or blockquote
+                        first_text = None
+                        for n in item_doctree.traverse(lambda n: isinstance(n, (nodes.paragraph, nodes.block_quote))):
+                            first_text = n
                             break
+                        
+                        if first_text:
+                            item['excerpt_text'] = builder.render_partial(first_text)['html_body']
+
+                        # Find first figure
+                        for n in item_doctree.traverse(nodes.figure):
+                            image_node = next(iter(n.traverse(nodes.image)), None)
+                            if image_node:
+                                item['excerpt_figure_filename'] = os.path.basename(image_node['uri'])
+                                item['excerpt_figure_alt'] = image_node.get('alt', '')
+                                item['excerpt_figure_width'] = n.get('width')
+                                break
 
                     if 'tags' in item and isinstance(item['tags'], str):
                         item['tags'] = [tag.strip() for tag in item['tags'].split(',')]
@@ -129,8 +203,9 @@ class CollectionDirective(SphinxDirective):
 
         def pathto(otheruri, resource=False, baseuri=None):
             if resource:
-                return relative_uri(self.env.app.builder.get_target_uri(self.env.docname), otheruri)
-            return self.env.app.builder.get_relative_uri(self.env.docname, otheruri)
+                return relative_uri(builder.get_target_uri(fromdocname), otheruri)
+            return builder.get_relative_uri(fromdocname, otheruri)
+            
         context = {
             'collection': {
                 'title': title,
@@ -140,35 +215,12 @@ class CollectionDirective(SphinxDirective):
             'pathto': pathto,
         }
 
-        jinja_env = self.env.app.builder.templates.environment
+        jinja_env = builder.templates.environment
         template = jinja_env.get_template(template_name)
         html = template.render(context)
+        
+        node.replace_self(nodes.raw('', html, format='html'))
 
-        # Create a toctree with the sorted and limited items
-        # to ensure correct prev/next navigation.
-        # Also, ensure we don't add duplicate entries to the toctree
-        # across multiple collection directives.
-        if not hasattr(self.env, 'photon_publish_collection_docnames'):
-            self.env.photon_publish_collection_docnames = set()
-
-        toc_docnames = [item['docname'] for item in collection_items]
-
-        unique_toc_docnames = []
-        for docname in toc_docnames:
-            if docname not in self.env.photon_publish_collection_docnames:
-                unique_toc_docnames.append(docname)
-                self.env.photon_publish_collection_docnames.add(docname)
-
-        if not unique_toc_docnames:
-            return [nodes.raw('', html, format='html')]
-
-        toc = toctree()
-        toc['glob'] = False
-        toc['hidden'] = True
-        toc['includefiles'] = unique_toc_docnames
-        toc['entries'] = [(None, docname) for docname in unique_toc_docnames]
-
-        return [nodes.raw('', html, format='html'), toc]
 
 def collect_metadata(app, env):
     """Collect all tags and categories from document metadata."""
@@ -363,7 +415,7 @@ def generate_taxonomy_pages(app):
             }
             yield (f'types/{type_}', context, 'type_page.html')
 
-def build_nav_links(app, pagename: str, templatename: str, context: dict, doctree) -> None:
+def build_nav_links(app, pagename, templatename, context, doctree):
     """Build navigation links and add tags/categories to the context."""
     context['tags'] = sorted(list(app.env.all_tags)) if hasattr(app.env, 'all_tags') else []
     context['categories'] = sorted(list(app.env.all_categories)) if hasattr(app.env, 'all_categories') else []
@@ -414,12 +466,14 @@ def build_nav_links(app, pagename: str, templatename: str, context: dict, doctre
     recent_logs.sort(key=lambda x: x['date'], reverse=True)
     context['recent_logs'] = recent_logs[:5]
 
-def setup(app) -> dict:
+def setup(app):
     """Register directives and connect to Sphinx events."""
+    app.add_node(PendingCollection)
     app.add_directive("collection", CollectionDirective)
     app.connect('env-updated', collect_metadata)
     app.connect('html-collect-pages', generate_taxonomy_pages)
     app.connect('html-page-context', build_nav_links)
+    app.connect('doctree-resolved', process_collections)
     app.add_js_file('js/collection_controls.js')
     return {
         'version': '0.1',
