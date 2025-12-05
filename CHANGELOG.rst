@@ -1,6 +1,13 @@
 changelog
 =========
 
+0.2.27
+======
+
+- feat: Enabled ``sphinx.ext.viewcode`` to allow viewing source code directly from documentation.
+- style: Added specific styling for ``viewcode`` links to match the foundation theme.
+- conf: Updated intersphinx mapping for Python to version 3.13.
+
 0.2.26
 ======
 

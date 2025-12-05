@@ -2,6 +2,7 @@
 import os
 import sys
 from datetime import datetime
+import tomllib
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'directives')))
 
@@ -72,13 +73,13 @@ year = datetime.now().year
 extensions = [
     #  "sphinx.ext.autodoc",
     #  "sphinx.ext.autosummary",
-    "sphinx.ext.extlinks",
+    # "sphinx.ext.extlinks",
     "sphinx.ext.intersphinx",
     "sphinx.ext.githubpages",
     "sphinx.ext.graphviz",
     "sphinx.ext.mathjax",
     "sphinx.ext.todo",
-    # "sphinx.ext.viewcode",
+    "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
     "sphinxcontrib.youtube",
     #  "sphinxcontrib.bibtex",
@@ -100,7 +101,6 @@ extensions = [
 
 # AutoAPI options
 # AutoAPI options
-import tomllib
 
 # Dynamic AutoAPI Configuration
 # We walk up from the current working directory to find pyproject.toml
@@ -219,7 +219,7 @@ html_theme_options = {
 }
 
 intersphinx_mapping = {
-    "python": ("https://docs.python.org/3.9", None),
+    "python": ("https://docs.python.org/3.13", None),
     "sympy": ("https://docs.sympy.org/latest", None),
 }
 
