@@ -1,6 +1,12 @@
 changelog
 =========
 
+0.2.28
+======
+
+- feat: Added favicon support to the foundation theme layout.
+- style: Improved indentation in the foundation theme layout HTML.
+
 0.2.27
 ======
 
