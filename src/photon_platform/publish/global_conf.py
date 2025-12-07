@@ -79,7 +79,7 @@ extensions = [
     "sphinx.ext.graphviz",
     "sphinx.ext.mathjax",
     "sphinx.ext.todo",
-    "sphinx.ext.viewcode",
+    # "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
     "sphinxcontrib.youtube",
     #  "sphinxcontrib.bibtex",
@@ -155,10 +155,11 @@ autoapi_options = [
     'show-module-summary',
     'special-members',
     'imported-members',
-    'inherited-members',
+    # 'inherited-members',
 ]
 autoapi_root = 'modules/api'
 autoapi_python_use_implicit_namespaces = True
+autoapi_keep_files = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

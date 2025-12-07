@@ -5,6 +5,8 @@ from sphinx.util.osutil import relative_uri
 from docutils.parsers.rst import directives
 from docutils import nodes
 from sphinx.addnodes import toctree
+from typing import Dict, Any, List, Optional
+
 
 
 def to_numeric(value):
@@ -33,8 +35,8 @@ class PendingCollection(nodes.General, nodes.Element):
 
 
 class CollectionDirective(SphinxDirective):
-    has_content = False
-    option_spec = {
+    has_content: bool = False
+    option_spec: Dict[str, Any] = {
         'type': directives.unchanged,
         'sort': directives.unchanged,
         'reverse': directives.flag,
@@ -42,6 +44,7 @@ class CollectionDirective(SphinxDirective):
         'limit': directives.positive_int,
         'title': directives.unchanged,
         'class': directives.unchanged,
+        'hidden': directives.flag,
     }
 
     def run(self):
@@ -66,24 +69,15 @@ class CollectionDirective(SphinxDirective):
         docnames = []
 
         # Process current directory
+        # Process current directory and subdirectories recursively
         if os.path.exists(walk_path):
-            for filename in os.listdir(walk_path):
-                path = os.path.join(walk_path, filename)
-                if os.path.isfile(path) and filename.endswith('.rst'):
-                    docname = os.path.splitext(os.path.relpath(path, env.srcdir))[0]
-                    if docname != env.docname:
-                        docnames.append(docname)
-
-            # Process immediate subdirectories
-            for item in os.listdir(walk_path):
-                path = os.path.join(walk_path, item)
-                if os.path.isdir(path):
-                    for sub_filename in os.listdir(path):
-                        sub_path = os.path.join(path, sub_filename)
-                        if os.path.isfile(sub_path) and sub_filename.endswith('.rst'):
-                            docname = os.path.splitext(os.path.relpath(sub_path, env.srcdir))[0]
-                            if docname != env.docname:
-                                docnames.append(docname)
+            for root, dirs, files in os.walk(walk_path):
+                for filename in files:
+                    if filename.endswith('.rst'):
+                        path = os.path.join(root, filename)
+                        docname = os.path.splitext(os.path.relpath(path, env.srcdir))[0]
+                        if docname != env.docname:
+                            docnames.append(docname)
 
         # Best-effort sort for toctree (using currently available metadata)
         # This ensures that if metadata IS available (e.g. subsequent builds),
@@ -147,6 +141,11 @@ def process_collections(app, doctree, fromdocname):
         limit = options.get('limit')
         title = options.get('title')
         collection_class = options.get('class', '')
+        hidden = 'hidden' in options
+
+        if hidden:
+            node.replace_self([])
+            return
 
         collection_items = []
         for docname in docnames:
@@ -466,6 +465,102 @@ def build_nav_links(app, pagename, templatename, context, doctree):
     recent_logs.sort(key=lambda x: x['date'], reverse=True)
     context['recent_logs'] = recent_logs[:5]
 
+def peek_metadata(filepath):
+    """
+    Peek at the beginning of a file to extract navigation metadata.
+    This enables sorting before Sphinx has fully processed the environment.
+    """
+    meta = {}
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            # Read first 20 lines or 2KB, whichever comes first
+            # We only care about the initial field list.
+            head = f.read(2048)
+            lines = head.split('\n')[:20]
+            
+            for line in lines:
+                line = line.strip()
+                if not line:
+                    continue
+                # Simple field list parsing (e.g. :navigation: header)
+                if line.startswith(':') and ':' in line[1:]:
+                    parts = line[1:].split(':', 1)
+                    if len(parts) == 2:
+                        key = parts[0].strip()
+                        val = parts[1].strip()
+                        meta[key] = val
+                # Stop if we hit a section title or non-field-list content
+                # (A very rough heuristic: if it doesn't start with :, isn't a comment .., and isn't empty)
+                elif not line.startswith('..') and len(line) > 0:
+                    break
+    except Exception:
+        pass
+    return meta
+
+def inject_implicit_toctree(app, docname, source):
+    """
+    Inject a hidden toctree into the master document via source modification.
+    This runs before parsing, ensuring Sphinx correctly processes the toctree.
+    """
+    if docname != app.config.master_doc:
+        return
+
+    env = app.env
+    
+    header_docs = []
+    footer_docs = []
+    other_docs = []
+    
+    found_docs = set()
+    
+    # Recursively scan for all .rst files to include
+    for root, dirs, files in os.walk(env.srcdir):
+        for filename in files:
+            if filename.endswith('.rst'):
+                path = os.path.join(root, filename)
+                # relpath generally works relative to srcdir for source filenames
+                found_docname = os.path.splitext(os.path.relpath(path, env.srcdir))[0]
+                
+                # Exclude master doc to avoid circular inclusion
+                if found_docname == docname:
+                    continue
+                    
+                if found_docname not in found_docs:
+                    found_docs.add(found_docname)
+                    
+                    # Peek at metadata for sorting
+                    meta = peek_metadata(path)
+                    nav = meta.get('navigation')
+                    order_val = to_numeric(meta.get('order', 999))
+                    
+                    item = {'docname': found_docname, 'order': order_val}
+                    
+                    if nav == 'header':
+                        header_docs.append(item)
+                    elif nav == 'footer':
+                        footer_docs.append(item)
+                    else:
+                        other_docs.append(item)
+
+    # Sort buckets
+    header_docs.sort(key=lambda x: x['order'])
+    footer_docs.sort(key=lambda x: x['order'])
+    other_docs.sort(key=lambda x: x['docname']) # Alphabetical for others
+
+    # Combine all docs
+    # Order: Header -> Footer -> Others
+    final_docnames = [x['docname'] for x in header_docs] + \
+                     [x['docname'] for x in footer_docs] + \
+                     [x['docname'] for x in other_docs]
+
+    if final_docnames:
+        # Inject ReST for a hidden toctree
+        toctree_rst = "\n\n.. toctree::\n   :hidden:\n\n"
+        for d in final_docnames:
+            toctree_rst += f"   {d}\n"
+        
+        source[0] += toctree_rst
+
 def setup(app):
     """Register directives and connect to Sphinx events."""
     app.add_node(PendingCollection)
@@ -473,6 +568,7 @@ def setup(app):
     app.connect('env-updated', collect_metadata)
     app.connect('html-collect-pages', generate_taxonomy_pages)
     app.connect('html-page-context', build_nav_links)
+    app.connect('source-read', inject_implicit_toctree)
     app.connect('doctree-resolved', process_collections)
     app.add_js_file('js/collection_controls.js')
     return {
