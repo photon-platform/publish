@@ -2,17 +2,20 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>photon_platform.publish.directives.collection &mdash; Project name not set  documentation</title>
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=b9bf8c56" />
+  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=bc127b54" />
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="../../../../../../_static/css/print.css" type="text/css" media="print" />
+  <link rel="icon" href="../../../../../../_static/favicon.ico" />
 </head>
+
 <body>
-  <header>
+    <header>
     <div class="logo">
       <a href="../../../../../../index.html">
         <img src="../../../../../../_static/logo.png" class="logo" alt="Logo"/>
@@ -31,10 +34,10 @@
           <a href="../../../../../../mission/index.html"  >mission</a>
         </li>
         <li>
-          <a href="../../../../../index.html"  >modules</a>
+          <a href="../../../../../../usage/index.html"  >usage</a>
         </li>
         <li>
-          <a href="../../../../../../usage/index.html"  >usage</a>
+          <a href="../../../../../index.html"  >modules</a>
         </li>
         <li>
           <a href="../../../../../../log/index.html"  >log</a>
@@ -47,7 +50,7 @@
     <div class="motto"></div>
   </header>
   <main>
-
+    
     <article>
       <div class="content">
       <nav class="breadcrumbs">
@@ -101,6 +104,12 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.build_nav_links" title="photon_platform.publish.directives.collection.build_nav_links"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_nav_links</span></code></a>(app, pagename, templatename, context, ...)</p></td>
 <td><p>Build navigation links and add tags/categories to the context.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.peek_metadata" title="photon_platform.publish.directives.collection.peek_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peek_metadata</span></code></a>(filepath)</p></td>
+<td><p>Peek at the beginning of a file to extract navigation metadata.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.inject_implicit_toctree" title="photon_platform.publish.directives.collection.inject_implicit_toctree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inject_implicit_toctree</span></code></a>(app, docname, source)</p></td>
+<td><p>Inject a hidden toctree into the master document via source modification.</p></td>
+</tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.setup" title="photon_platform.publish.directives.collection.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(app)</p></td>
 <td><p>Register directives and connect to Sphinx events.</p></td>
 </tr>
@@ -121,638 +130,6 @@
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.General</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.Element</span></code></p>
 <p>A placeholder node for a collection that will be rendered
 after all documents have been read and metadata is available.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.basic_attributes">
-<span class="sig-name descname"><span class="pre">basic_attributes</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('ids',</span> <span class="pre">'classes',</span> <span class="pre">'names',</span> <span class="pre">'dupnames')</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.basic_attributes" title="Link to this definition">¶</a></dt>
-<dd><p>Tuple of attributes which are defined for every Element-derived class
-instance and can be safely transferred to a different node.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.local_attributes">
-<span class="sig-name descname"><span class="pre">local_attributes</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('backrefs',)</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.local_attributes" title="Link to this definition">¶</a></dt>
-<dd><p>Tuple of class-specific attributes that should not be copied with the
-standard attributes when replacing a node.</p>
-<p>NOTE: Derived classes should override this value to prevent any of its
-attributes being copied by adding to the value in its parent class.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.list_attributes">
-<span class="sig-name descname"><span class="pre">list_attributes</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('ids',</span> <span class="pre">'classes',</span> <span class="pre">'names',</span> <span class="pre">'dupnames',</span> <span class="pre">'backrefs')</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.list_attributes" title="Link to this definition">¶</a></dt>
-<dd><p>Tuple of attributes that are automatically initialized to empty lists
-for all nodes.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.known_attributes">
-<span class="sig-name descname"><span class="pre">known_attributes</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('ids',</span> <span class="pre">'classes',</span> <span class="pre">'names',</span> <span class="pre">'dupnames',</span> <span class="pre">'backrefs',</span> <span class="pre">'source')</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.known_attributes" title="Link to this definition">¶</a></dt>
-<dd><p>Tuple of attributes that are known to the Element base class.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.tagname">
-<span class="sig-name descname"><span class="pre">tagname</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.tagname" title="Link to this definition">¶</a></dt>
-<dd><p>The element generic identifier. If None, it is set as an instance
-attribute to the name of the class.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.child_text_separator">
-<span class="sig-name descname"><span class="pre">child_text_separator</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Multiline-String</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.child_text_separator" title="Link to this definition">¶</a></dt>
-<dd><details><summary>Show Value</summary><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
-</pre></div>
-</div>
-</details><p>Separator for child nodes, used by <cite>astext()</cite> method.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.rawsource">
-<span class="sig-name descname"><span class="pre">rawsource</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.rawsource" title="Link to this definition">¶</a></dt>
-<dd><p>The raw text from which this element was constructed.</p>
-<p>NOTE: some elements do not set this value (default ‘’).</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.children">
-<span class="sig-name descname"><span class="pre">children</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.children" title="Link to this definition">¶</a></dt>
-<dd><p>List of child nodes (elements and/or <cite>Text</cite>).</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.attributes">
-<span class="sig-name descname"><span class="pre">attributes</span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.attributes" title="Link to this definition">¶</a></dt>
-<dd><p>value}.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dictionary of attribute {name</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.__repr__">
-<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.__repr__" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.shortrepr">
-<span class="sig-name descname"><span class="pre">shortrepr</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.shortrepr" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.__str__">
-<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.__str__" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.starttag">
-<span class="sig-name descname"><span class="pre">starttag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quoteattr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.starttag" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.endtag">
-<span class="sig-name descname"><span class="pre">endtag</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.endtag" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.emptytag">
-<span class="sig-name descname"><span class="pre">emptytag</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.emptytag" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.__len__">
-<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.__len__" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.__contains__">
-<span class="sig-name descname"><span class="pre">__contains__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.__contains__" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.__getitem__">
-<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.__getitem__" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.__setitem__">
-<span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.__setitem__" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.__delitem__">
-<span class="sig-name descname"><span class="pre">__delitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.__delitem__" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.__add__">
-<span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.__add__" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.__radd__">
-<span class="sig-name descname"><span class="pre">__radd__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.__radd__" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.__iadd__">
-<span class="sig-name descname"><span class="pre">__iadd__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.__iadd__" title="Link to this definition">¶</a></dt>
-<dd><p>Append a node or a list of nodes to <cite>self.children</cite>.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.astext">
-<span class="sig-name descname"><span class="pre">astext</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.astext" title="Link to this definition">¶</a></dt>
-<dd><p>Return a string representation of this Node.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.non_default_attributes">
-<span class="sig-name descname"><span class="pre">non_default_attributes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.non_default_attributes" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.attlist">
-<span class="sig-name descname"><span class="pre">attlist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.attlist" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.get">
-<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">failobj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.get" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.hasattr">
-<span class="sig-name descname"><span class="pre">hasattr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.hasattr" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.delattr">
-<span class="sig-name descname"><span class="pre">delattr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.delattr" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.setdefault">
-<span class="sig-name descname"><span class="pre">setdefault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">failobj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.setdefault" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.has_key">
-<span class="sig-name descname"><span class="pre">has_key</span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.has_key" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.get_language_code">
-<span class="sig-name descname"><span class="pre">get_language_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.get_language_code" title="Link to this definition">¶</a></dt>
-<dd><p>Return node’s language tag.</p>
-<p>Look iteratively in self and parents for a class argument
-starting with <code class="docutils literal notranslate"><span class="pre">language-</span></code> and return the remainder of it
-(which should be a <cite>BCP49</cite> language tag) or the <cite>fallback</cite>.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.append">
-<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.append" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.extend">
-<span class="sig-name descname"><span class="pre">extend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.extend" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.insert">
-<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.insert" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.pop">
-<span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.pop" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.remove">
-<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.remove" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.index">
-<span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">sys.maxsize</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.index" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.previous_sibling">
-<span class="sig-name descname"><span class="pre">previous_sibling</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.previous_sibling" title="Link to this definition">¶</a></dt>
-<dd><p>Return preceding sibling node or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.is_not_default">
-<span class="sig-name descname"><span class="pre">is_not_default</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.is_not_default" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.update_basic_atts">
-<span class="sig-name descname"><span class="pre">update_basic_atts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.update_basic_atts" title="Link to this definition">¶</a></dt>
-<dd><p>Update basic attributes (‘ids’, ‘names’, ‘classes’,
-‘dupnames’, but not ‘source’) from node or dictionary <cite>dict_</cite>.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.append_attr_list">
-<span class="sig-name descname"><span class="pre">append_attr_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.append_attr_list" title="Link to this definition">¶</a></dt>
-<dd><p>For each element in values, if it does not exist in self[attr], append
-it.</p>
-<p>NOTE: Requires self[attr] and values to be sequence type and the
-former should specifically be a list.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.coerce_append_attr_list">
-<span class="sig-name descname"><span class="pre">coerce_append_attr_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.coerce_append_attr_list" title="Link to this definition">¶</a></dt>
-<dd><p>First, convert both self[attr] and value to a non-string sequence
-type; if either is not already a sequence, convert it to a list of one
-element.  Then call append_attr_list.</p>
-<p>NOTE: self[attr] and value both must not be None.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.replace_attr">
-<span class="sig-name descname"><span class="pre">replace_attr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.replace_attr" title="Link to this definition">¶</a></dt>
-<dd><p>If self[attr] does not exist or force is True or omitted, set
-self[attr] to value, otherwise do nothing.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.copy_attr_convert">
-<span class="sig-name descname"><span class="pre">copy_attr_convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.copy_attr_convert" title="Link to this definition">¶</a></dt>
-<dd><p>If attr is an attribute of self, set self[attr] to
-[self[attr], value], otherwise set self[attr] to value.</p>
-<dl class="simple">
-<dt>NOTE: replace is not used by this function and is kept only for</dt><dd><p>compatibility with the other copy functions.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.copy_attr_coerce">
-<span class="sig-name descname"><span class="pre">copy_attr_coerce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.copy_attr_coerce" title="Link to this definition">¶</a></dt>
-<dd><p>If attr is an attribute of self and either self[attr] or value is a
-list, convert all non-sequence values to a sequence of 1 element and
-then concatenate the two sequence, setting the result to self[attr].
-If both self[attr] and value are non-sequences and replace is True or
-self[attr] is None, replace self[attr] with value. Otherwise, do
-nothing.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.copy_attr_concatenate">
-<span class="sig-name descname"><span class="pre">copy_attr_concatenate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.copy_attr_concatenate" title="Link to this definition">¶</a></dt>
-<dd><p>If attr is an attribute of self and both self[attr] and value are
-lists, concatenate the two sequences, setting the result to
-self[attr].  If either self[attr] or value are non-sequences and
-replace is True or self[attr] is None, replace self[attr] with value.
-Otherwise, do nothing.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.copy_attr_consistent">
-<span class="sig-name descname"><span class="pre">copy_attr_consistent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.copy_attr_consistent" title="Link to this definition">¶</a></dt>
-<dd><p>If replace is True or self[attr] is None, replace self[attr] with
-value.  Otherwise, do nothing.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.update_all_atts">
-<span class="sig-name descname"><span class="pre">update_all_atts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_fun</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">copy_attr_consistent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">and_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.update_all_atts" title="Link to this definition">¶</a></dt>
-<dd><p>Updates all attributes from node or dictionary <cite>dict_</cite>.</p>
-<p>Appends the basic attributes (‘ids’, ‘names’, ‘classes’,
-‘dupnames’, but not ‘source’) and then, for all other attributes in
-<a href="#id1"><span class="problematic" id="id2">dict_</span></a>, updates the same attribute in self.  When attributes with the
-same identifier appear in both self and <a href="#id3"><span class="problematic" id="id4">dict_</span></a>, the two values are
-merged based on the value of update_fun.  Generally, when replace is
-True, the values in self are replaced or merged with the values in
-<a href="#id5"><span class="problematic" id="id6">dict_</span></a>; otherwise, the values in self may be preserved or merged.  When
-and_source is True, the ‘source’ attribute is included in the copy.</p>
-<dl class="simple">
-<dt>NOTE: When replace is False, and self contains a ‘source’ attribute,</dt><dd><p>‘source’ is not replaced even when <a href="#id7"><span class="problematic" id="id8">dict_</span></a> has a ‘source’
-attribute, though it may still be merged into a list depending
-on the value of update_fun.</p>
-</dd>
-<dt>NOTE: It is easier to call the update-specific methods then to pass</dt><dd><p>the update_fun method to this function.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.update_all_atts_consistantly">
-<span class="sig-name descname"><span class="pre">update_all_atts_consistantly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">and_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.update_all_atts_consistantly" title="Link to this definition">¶</a></dt>
-<dd><p>Updates all attributes from node or dictionary <cite>dict_</cite>.</p>
-<p>Appends the basic attributes (‘ids’, ‘names’, ‘classes’,
-‘dupnames’, but not ‘source’) and then, for all other attributes in
-<a href="#id9"><span class="problematic" id="id10">dict_</span></a>, updates the same attribute in self.  When attributes with the
-same identifier appear in both self and <a href="#id11"><span class="problematic" id="id12">dict_</span></a> and replace is True, the
-values in self are replaced with the values in <a href="#id13"><span class="problematic" id="id14">dict_</span></a>; otherwise, the
-values in self are preserved.  When and_source is True, the ‘source’
-attribute is included in the copy.</p>
-<dl class="simple">
-<dt>NOTE: When replace is False, and self contains a ‘source’ attribute,</dt><dd><p>‘source’ is not replaced even when <a href="#id15"><span class="problematic" id="id16">dict_</span></a> has a ‘source’
-attribute, though it may still be merged into a list depending
-on the value of update_fun.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.update_all_atts_concatenating">
-<span class="sig-name descname"><span class="pre">update_all_atts_concatenating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">and_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.update_all_atts_concatenating" title="Link to this definition">¶</a></dt>
-<dd><p>Updates all attributes from node or dictionary <cite>dict_</cite>.</p>
-<p>Appends the basic attributes (‘ids’, ‘names’, ‘classes’,
-‘dupnames’, but not ‘source’) and then, for all other attributes in
-<a href="#id17"><span class="problematic" id="id18">dict_</span></a>, updates the same attribute in self.  When attributes with the
-same identifier appear in both self and <a href="#id19"><span class="problematic" id="id20">dict_</span></a> whose values aren’t each
-lists and replace is True, the values in self are replaced with the
-values in <a href="#id21"><span class="problematic" id="id22">dict_</span></a>; if the values from self and <a href="#id23"><span class="problematic" id="id24">dict_</span></a> for the given
-identifier are both of list type, then the two lists are concatenated
-and the result stored in self; otherwise, the values in self are
-preserved.  When and_source is True, the ‘source’ attribute is
-included in the copy.</p>
-<dl class="simple">
-<dt>NOTE: When replace is False, and self contains a ‘source’ attribute,</dt><dd><p>‘source’ is not replaced even when <a href="#id25"><span class="problematic" id="id26">dict_</span></a> has a ‘source’
-attribute, though it may still be merged into a list depending
-on the value of update_fun.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.update_all_atts_coercion">
-<span class="sig-name descname"><span class="pre">update_all_atts_coercion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">and_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.update_all_atts_coercion" title="Link to this definition">¶</a></dt>
-<dd><p>Updates all attributes from node or dictionary <cite>dict_</cite>.</p>
-<p>Appends the basic attributes (‘ids’, ‘names’, ‘classes’,
-‘dupnames’, but not ‘source’) and then, for all other attributes in
-<a href="#id27"><span class="problematic" id="id28">dict_</span></a>, updates the same attribute in self.  When attributes with the
-same identifier appear in both self and <a href="#id29"><span class="problematic" id="id30">dict_</span></a> whose values are both
-not lists and replace is True, the values in self are replaced with
-the values in <a href="#id31"><span class="problematic" id="id32">dict_</span></a>; if either of the values from self and <a href="#id33"><span class="problematic" id="id34">dict_</span></a> for
-the given identifier are of list type, then first any non-lists are
-converted to 1-element lists and then the two lists are concatenated
-and the result stored in self; otherwise, the values in self are
-preserved.  When and_source is True, the ‘source’ attribute is
-included in the copy.</p>
-<dl class="simple">
-<dt>NOTE: When replace is False, and self contains a ‘source’ attribute,</dt><dd><p>‘source’ is not replaced even when <a href="#id35"><span class="problematic" id="id36">dict_</span></a> has a ‘source’
-attribute, though it may still be merged into a list depending
-on the value of update_fun.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.update_all_atts_convert">
-<span class="sig-name descname"><span class="pre">update_all_atts_convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">and_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.update_all_atts_convert" title="Link to this definition">¶</a></dt>
-<dd><p>Updates all attributes from node or dictionary <cite>dict_</cite>.</p>
-<p>Appends the basic attributes (‘ids’, ‘names’, ‘classes’,
-‘dupnames’, but not ‘source’) and then, for all other attributes in
-<a href="#id37"><span class="problematic" id="id38">dict_</span></a>, updates the same attribute in self.  When attributes with the
-same identifier appear in both self and <a href="#id39"><span class="problematic" id="id40">dict_</span></a> then first any non-lists
-are converted to 1-element lists and then the two lists are
-concatenated and the result stored in self; otherwise, the values in
-self are preserved.  When and_source is True, the ‘source’ attribute
-is included in the copy.</p>
-<dl class="simple">
-<dt>NOTE: When replace is False, and self contains a ‘source’ attribute,</dt><dd><p>‘source’ is not replaced even when <a href="#id41"><span class="problematic" id="id42">dict_</span></a> has a ‘source’
-attribute, though it may still be merged into a list depending
-on the value of update_fun.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.clear">
-<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.clear" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.replace">
-<span class="sig-name descname"><span class="pre">replace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.replace" title="Link to this definition">¶</a></dt>
-<dd><p>Replace one child <cite>Node</cite> with another child or children.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.replace_self">
-<span class="sig-name descname"><span class="pre">replace_self</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.replace_self" title="Link to this definition">¶</a></dt>
-<dd><p>Replace <cite>self</cite> node with <cite>new</cite>, where <cite>new</cite> is a node or a
-list of nodes.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.first_child_matching_class">
-<span class="sig-name descname"><span class="pre">first_child_matching_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">childclass</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">sys.maxsize</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.first_child_matching_class" title="Link to this definition">¶</a></dt>
-<dd><p>Return the index of the first child whose class exactly matches.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li><p><cite>childclass</cite>: A <cite>Node</cite> subclass to search for, or a tuple of <cite>Node</cite>
-classes. If a tuple, any of the classes may match.</p></li>
-<li><p><cite>start</cite>: Initial index to check.</p></li>
-<li><p><cite>end</cite>: Initial index to <em>not</em> check.</p></li>
-</ul>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.first_child_not_matching_class">
-<span class="sig-name descname"><span class="pre">first_child_not_matching_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">childclass</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">sys.maxsize</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.first_child_not_matching_class" title="Link to this definition">¶</a></dt>
-<dd><p>Return the index of the first child whose class does <em>not</em> match.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li><p><cite>childclass</cite>: A <cite>Node</cite> subclass to skip, or a tuple of <cite>Node</cite>
-classes. If a tuple, none of the classes may match.</p></li>
-<li><p><cite>start</cite>: Initial index to check.</p></li>
-<li><p><cite>end</cite>: Initial index to <em>not</em> check.</p></li>
-</ul>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.pformat">
-<span class="sig-name descname"><span class="pre">pformat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span>&#160;&#160;&#160; <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.pformat" title="Link to this definition">¶</a></dt>
-<dd><p>Return an indented pseudo-XML representation, for test purposes.</p>
-<p>Override in subclasses.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.copy">
-<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.copy" title="Link to this definition">¶</a></dt>
-<dd><p>Return a copy of self.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.deepcopy">
-<span class="sig-name descname"><span class="pre">deepcopy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.deepcopy" title="Link to this definition">¶</a></dt>
-<dd><p>Return a deep copy of self (also copying children).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.set_class">
-<span class="sig-name descname"><span class="pre">set_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.set_class" title="Link to this definition">¶</a></dt>
-<dd><p>Add a new class to the “classes” attribute.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.note_referenced_by">
-<span class="sig-name descname"><span class="pre">note_referenced_by</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.note_referenced_by" title="Link to this definition">¶</a></dt>
-<dd><p>Note that this Element has been referenced by its name
-<cite>name</cite> or id <cite>id</cite>.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.is_not_list_attribute">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_not_list_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.is_not_list_attribute" title="Link to this definition">¶</a></dt>
-<dd><p>Returns True if and only if the given attribute is NOT one of the
-basic list attributes defined for all Elements.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.is_not_known_attribute">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_not_known_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.is_not_known_attribute" title="Link to this definition">¶</a></dt>
-<dd><p>Returns True if and only if the given attribute is NOT recognized by
-this class.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.parent">
-<span class="sig-name descname"><span class="pre">parent</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.parent" title="Link to this definition">¶</a></dt>
-<dd><p>Back-reference to the Node immediately containing this Node.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.source">
-<span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.source" title="Link to this definition">¶</a></dt>
-<dd><p>Path or description of the input source which generated this Node.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.line">
-<span class="sig-name descname"><span class="pre">line</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.line" title="Link to this definition">¶</a></dt>
-<dd><p>The line number (1-based) of the beginning of this Node in <cite>source</cite>.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.document">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">document</span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.document" title="Link to this definition">¶</a></dt>
-<dd><p>Return the <cite>document</cite> root node of the tree containing this Node.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.__bool__">
-<span class="sig-name descname"><span class="pre">__bool__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.__bool__" title="Link to this definition">¶</a></dt>
-<dd><p>Node instances are always true, even if they’re empty.  A node is more
-than a simple container.  Its boolean “truth” does not depend on
-having one or more subnodes in the doctree.</p>
-<p>Use <cite>len()</cite> to check node length.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.asdom">
-<span class="sig-name descname"><span class="pre">asdom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.asdom" title="Link to this definition">¶</a></dt>
-<dd><p>Return a DOM <strong>fragment</strong> representation of this Node.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.setup_child">
-<span class="sig-name descname"><span class="pre">setup_child</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">child</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.setup_child" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.walk">
-<span class="sig-name descname"><span class="pre">walk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">visitor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.walk" title="Link to this definition">¶</a></dt>
-<dd><p>Traverse a tree of <cite>Node</cite> objects, calling the
-<cite>dispatch_visit()</cite> method of <cite>visitor</cite> when entering each
-node.  (The <cite>walkabout()</cite> method is similar, except it also
-calls the <cite>dispatch_departure()</cite> method before exiting each
-node.)</p>
-<p>This tree traversal supports limited in-place tree
-modifications.  Replacing one node with one or more nodes is
-OK, as is removing an element.  However, if the node removed
-or replaced occurs after the current node, the old node will
-still be traversed, and any new nodes will not.</p>
-<p>Within <code class="docutils literal notranslate"><span class="pre">visit</span></code> methods (and <code class="docutils literal notranslate"><span class="pre">depart</span></code> methods for
-<cite>walkabout()</cite>), <cite>TreePruningException</cite> subclasses may be raised
-(<cite>SkipChildren</cite>, <cite>SkipSiblings</cite>, <cite>SkipNode</cite>, <cite>SkipDeparture</cite>).</p>
-<p>Parameter <cite>visitor</cite>: A <cite>NodeVisitor</cite> object, containing a
-<code class="docutils literal notranslate"><span class="pre">visit</span></code> implementation for each <cite>Node</cite> subclass encountered.</p>
-<p>Return true if we should stop the traversal.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.walkabout">
-<span class="sig-name descname"><span class="pre">walkabout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">visitor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.walkabout" title="Link to this definition">¶</a></dt>
-<dd><p>Perform a tree traversal similarly to <cite>Node.walk()</cite> (which
-see), except also call the <cite>dispatch_departure()</cite> method
-before exiting each node.</p>
-<p>Parameter <cite>visitor</cite>: A <cite>NodeVisitor</cite> object, containing a
-<code class="docutils literal notranslate"><span class="pre">visit</span></code> and <code class="docutils literal notranslate"><span class="pre">depart</span></code> implementation for each <cite>Node</cite>
-subclass encountered.</p>
-<p>Return true if we should stop the traversal.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.traverse">
-<span class="sig-name descname"><span class="pre">traverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">condition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_self</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">siblings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.traverse" title="Link to this definition">¶</a></dt>
-<dd><p>Return list of nodes following <cite>self</cite>.</p>
-<p>For looping, Node.findall() is faster and more memory efficient.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.findall">
-<span class="sig-name descname"><span class="pre">findall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">condition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_self</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">siblings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.findall" title="Link to this definition">¶</a></dt>
-<dd><p>Return an iterator yielding nodes following <cite>self</cite>:</p>
-<ul class="simple">
-<li><p>self (if <cite>include_self</cite> is true)</p></li>
-<li><p>all descendants in tree traversal order (if <cite>descend</cite> is true)</p></li>
-<li><p>the following siblings (if <cite>siblings</cite> is true) and their
-descendants (if also <cite>descend</cite> is true)</p></li>
-<li><p>the following siblings of the parent (if <cite>ascend</cite> is true) and
-their descendants (if also <cite>descend</cite> is true), and so on.</p></li>
-</ul>
-<p>If <cite>condition</cite> is not None, the iterator yields only nodes
-for which <code class="docutils literal notranslate"><span class="pre">condition(node)</span></code> is true.  If <cite>condition</cite> is a
-node class <code class="docutils literal notranslate"><span class="pre">cls</span></code>, it is equivalent to a function consisting
-of <code class="docutils literal notranslate"><span class="pre">return</span> <span class="pre">isinstance(node,</span> <span class="pre">cls)</span></code>.</p>
-<p>If <cite>ascend</cite> is true, assume <cite>siblings</cite> to be true as well.</p>
-<p>If the tree structure is modified during iteration, the result
-is undefined.</p>
-<p>For example, given the following tree:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">paragraph</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="n">emphasis</span><span class="o">&gt;</span>      <span class="o">&lt;---</span> <span class="n">emphasis</span><span class="o">.</span><span class="n">traverse</span><span class="p">()</span> <span class="ow">and</span>
-        <span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span>    <span class="o">&lt;---</span> <span class="n">strong</span><span class="o">.</span><span class="n">traverse</span><span class="p">()</span> <span class="n">are</span> <span class="n">called</span><span class="o">.</span>
-            <span class="n">Foo</span>
-        <span class="n">Bar</span>
-    <span class="o">&lt;</span><span class="n">reference</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Baz&quot;</span> <span class="n">refid</span><span class="o">=</span><span class="s2">&quot;baz&quot;</span><span class="o">&gt;</span>
-        <span class="n">Baz</span>
-</pre></div>
-</div>
-<p>Then tuple(emphasis.traverse()) equals</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">&lt;</span><span class="n">emphasis</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="c1">#text: Foo&gt;, &lt;#text: Bar&gt;)</span>
-</pre></div>
-</div>
-<p>and list(strong.traverse(ascend=True) equals</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="c1">#text: Foo&gt;, &lt;#text: Bar&gt;, &lt;reference&gt;, &lt;#text: Baz&gt;]</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection.next_node">
-<span class="sig-name descname"><span class="pre">next_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">condition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_self</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">siblings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection.next_node" title="Link to this definition">¶</a></dt>
-<dd><p>Return the first node in the iterator returned by findall(),
-or None if the iterable is empty.</p>
-<p>Parameter list is the same as of <cite>findall()</cite>.  Note that <cite>include_self</cite>
-defaults to False, though.</p>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -771,13 +148,13 @@ This class is strongly coupled with Sphinx.</p>
 </div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.has_content">
-<span class="sig-name descname"><span class="pre">has_content</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.has_content" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">has_content</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.has_content" title="Link to this definition">¶</a></dt>
 <dd><p>May the directive have content?</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.option_spec">
-<span class="sig-name descname"><span class="pre">option_spec</span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.option_spec" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">option_spec</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.option_spec" title="Link to this definition">¶</a></dt>
 <dd><p>Mapping of option names to validator functions.</p>
 </dd></dl>
 
@@ -789,235 +166,6 @@ This class is strongly coupled with Sphinx.</p>
 1. Discover all relevant files.
 2. Add them to a hidden toctree so Sphinx knows about them (fixes “not in toctree” warnings).
 3. Return a PendingCollection node to defer rendering until metadata is ready.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.env">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">env</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sphinx.environment.BuildEnvironment</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.env" title="Link to this definition">¶</a></dt>
-<dd><p>Reference to the <code class="xref py py-class docutils literal notranslate"><span class="pre">BuildEnvironment</span></code> object.</p>
-<div class="versionadded">
-<p><span class="versionmodified added">Added in version 1.8.</span></p>
-</div>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.config">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">sphinx.config.Config</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.config" title="Link to this definition">¶</a></dt>
-<dd><p>Reference to the <code class="xref py py-class docutils literal notranslate"><span class="pre">Config</span></code> object.</p>
-<div class="versionadded">
-<p><span class="versionmodified added">Added in version 1.8.</span></p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.get_source_info">
-<span class="sig-name descname"><span class="pre">get_source_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#tuple" title="(in Python v3.9)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.get_source_info" title="Link to this definition">¶</a></dt>
-<dd><p>Get source and line number.</p>
-<div class="versionadded">
-<p><span class="versionmodified added">Added in version 3.0.</span></p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.set_source_info">
-<span class="sig-name descname"><span class="pre">set_source_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">docutils.nodes.Node</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.9/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.set_source_info" title="Link to this definition">¶</a></dt>
-<dd><p>Set source and line number to the node.</p>
-<div class="versionadded">
-<p><span class="versionmodified added">Added in version 2.1.</span></p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.get_location">
-<span class="sig-name descname"><span class="pre">get_location</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.get_location" title="Link to this definition">¶</a></dt>
-<dd><p>Get current location info for logging.</p>
-<div class="versionadded">
-<p><span class="versionmodified added">Added in version 4.2.</span></p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.parse_content_to_nodes">
-<span class="sig-name descname"><span class="pre">parse_content_to_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">allow_section_headings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><span class="pre">docutils.nodes.Node</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.parse_content_to_nodes" title="Link to this definition">¶</a></dt>
-<dd><p>Parse the directive’s content into nodes.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>allow_section_headings</strong> – Are titles (sections) allowed in the directive’s content?
-Note that this option bypasses Docutils’ usual checks on
-doctree structure, and misuse of this option can lead to
-an incoherent doctree. In Docutils, section nodes should
-only be children of <code class="docutils literal notranslate"><span class="pre">Structural</span></code> nodes, which includes
-<code class="docutils literal notranslate"><span class="pre">document</span></code>, <code class="docutils literal notranslate"><span class="pre">section</span></code>, and <code class="docutils literal notranslate"><span class="pre">sidebar</span></code> nodes.</p>
-</dd>
-</dl>
-<div class="versionadded">
-<p><span class="versionmodified added">Added in version 7.4.</span></p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.parse_text_to_nodes">
-<span class="sig-name descname"><span class="pre">parse_text_to_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_section_headings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><span class="pre">docutils.nodes.Node</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.parse_text_to_nodes" title="Link to this definition">¶</a></dt>
-<dd><p>Parse <em>text</em> into nodes.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>text</strong> – Text, in string form. <code class="docutils literal notranslate"><span class="pre">StringList</span></code> is also accepted.</p></li>
-<li><p><strong>allow_section_headings</strong> – Are titles (sections) allowed in <em>text</em>?
-Note that this option bypasses Docutils’ usual checks on
-doctree structure, and misuse of this option can lead to
-an incoherent doctree. In Docutils, section nodes should
-only be children of <code class="docutils literal notranslate"><span class="pre">Structural</span></code> nodes, which includes
-<code class="docutils literal notranslate"><span class="pre">document</span></code>, <code class="docutils literal notranslate"><span class="pre">section</span></code>, and <code class="docutils literal notranslate"><span class="pre">sidebar</span></code> nodes.</p></li>
-<li><p><strong>offset</strong> – The offset of the content.</p></li>
-</ul>
-</dd>
-</dl>
-<div class="versionadded">
-<p><span class="versionmodified added">Added in version 7.4.</span></p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.parse_inline">
-<span class="sig-name descname"><span class="pre">parse_inline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#tuple" title="(in Python v3.9)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><span class="pre">docutils.nodes.Node</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><span class="pre">docutils.nodes.system_message</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.parse_inline" title="Link to this definition">¶</a></dt>
-<dd><p>Parse <em>text</em> as inline elements.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>text</strong> – The text to parse, which should be a single line or paragraph.
-This cannot contain any structural elements (headings,
-transitions, directives, etc).</p></li>
-<li><p><strong>lineno</strong> – The line number where the interpreted text begins.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list of nodes (text and inline elements) and a list of system_messages.</p>
-</dd>
-</dl>
-<div class="versionadded">
-<p><span class="versionmodified added">Added in version 7.4.</span></p>
-</div>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.required_arguments">
-<span class="sig-name descname"><span class="pre">required_arguments</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.required_arguments" title="Link to this definition">¶</a></dt>
-<dd><p>Number of required directive arguments.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.optional_arguments">
-<span class="sig-name descname"><span class="pre">optional_arguments</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.optional_arguments" title="Link to this definition">¶</a></dt>
-<dd><p>Number of optional arguments after the required arguments.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.final_argument_whitespace">
-<span class="sig-name descname"><span class="pre">final_argument_whitespace</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.final_argument_whitespace" title="Link to this definition">¶</a></dt>
-<dd><p>May the final argument contain whitespace?</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.name" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.arguments">
-<span class="sig-name descname"><span class="pre">arguments</span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.arguments" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.options">
-<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.options" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.content">
-<span class="sig-name descname"><span class="pre">content</span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.content" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.lineno">
-<span class="sig-name descname"><span class="pre">lineno</span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.lineno" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.content_offset">
-<span class="sig-name descname"><span class="pre">content_offset</span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.content_offset" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.block_text">
-<span class="sig-name descname"><span class="pre">block_text</span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.block_text" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.state">
-<span class="sig-name descname"><span class="pre">state</span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.state" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.state_machine">
-<span class="sig-name descname"><span class="pre">state_machine</span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.state_machine" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.reporter">
-<span class="sig-name descname"><span class="pre">reporter</span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.reporter" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.directive_error">
-<span class="sig-name descname"><span class="pre">directive_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.directive_error" title="Link to this definition">¶</a></dt>
-<dd><p>Return a DirectiveError suitable for being thrown as an exception.</p>
-<p>Call “raise self.directive_error(level, message)” from within
-a directive implementation to return one single system message
-at level <cite>level</cite>, which automatically gets the directive block
-and the line number added.</p>
-<p>Preferably use the <cite>debug</cite>, <cite>info</cite>, <cite>warning</cite>, <cite>error</cite>, or <cite>severe</cite>
-wrapper methods, e.g. <code class="docutils literal notranslate"><span class="pre">self.error(message)</span></code> to generate an
-ERROR-level directive error.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.debug">
-<span class="sig-name descname"><span class="pre">debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.debug" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.info">
-<span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.info" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.warning">
-<span class="sig-name descname"><span class="pre">warning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.warning" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.error">
-<span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.error" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.severe">
-<span class="sig-name descname"><span class="pre">severe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.severe" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.assert_has_content">
-<span class="sig-name descname"><span class="pre">assert_has_content</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.assert_has_content" title="Link to this definition">¶</a></dt>
-<dd><p>Throw an ERROR-level DirectiveError if the directive doesn’t
-have contents.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.add_name">
-<span class="sig-name descname"><span class="pre">add_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.add_name" title="Link to this definition">¶</a></dt>
-<dd><p>Append self.options[‘name’] to node[‘names’] if it exists.</p>
-<p>Also normalize the name string and register it as explicit target.</p>
 </dd></dl>
 
 </dd></dl>
@@ -1048,6 +196,20 @@ This runs on ‘doctree-resolved’, when all metadata is available.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.peek_metadata">
+<span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">peek_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.peek_metadata" title="Link to this definition">¶</a></dt>
+<dd><p>Peek at the beginning of a file to extract navigation metadata.
+This enables sorting before Sphinx has fully processed the environment.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.inject_implicit_toctree">
+<span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">inject_implicit_toctree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.inject_implicit_toctree" title="Link to this definition">¶</a></dt>
+<dd><p>Inject a hidden toctree into the master document via source modification.
+This runs before parsing, ensuring Sphinx correctly processes the toctree.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.setup">
 <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.setup" title="Link to this definition">¶</a></dt>
 <dd><p>Register directives and connect to Sphinx events.</p>
@@ -1072,7 +234,7 @@ This runs on ‘doctree-resolved’, when all metadata is available.</p>
 
   </main>
 
-<div class="asides">
+  <div class="asides">
     <aside>
         <h3>Search</h3>
 <div role="search">
@@ -1130,13 +292,14 @@ This runs on ‘doctree-resolved’, when all metadata is available.</p>
 </aside>
 
 </div>
-<footer>
+  <footer>
     <div class="footer-nav">
     <ul>
         <li><a href="../../../../../../about.html">About</a></li>
         <li><a href="../../../../../../connect.html">Connect</a></li>
         <li><a href="../../../../../../changelog.html">Changelog</a></li>
         <li><a href="../../../../../../glossary.html">Glossary</a></li>
+        <li><a href="../../../../../../orphan.html">Orphan Page</a></li>
     </ul>
 </div>
     <hr/>
@@ -1146,14 +309,15 @@ This runs on ‘doctree-resolved’, when all metadata is available.</p>
         </p>
     </div>
 </footer>
-
+  
   <script src="../../../../../../_static/jquery.js?v=5d32c60e"></script>
   <script src="../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
   <script src="../../../../../../_static/documentation_options.js?v=5929fcd5"></script>
   <script src="../../../../../../_static/doctools.js?v=9bcbadda"></script>
   <script src="../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
   <script src="../../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>
-
+  
 
 </body>
+
 </html>

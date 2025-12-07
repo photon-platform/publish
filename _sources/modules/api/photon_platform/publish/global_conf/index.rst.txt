@@ -27,6 +27,7 @@ Attributes
    photon_platform.publish.global_conf.autoapi_options
    photon_platform.publish.global_conf.autoapi_root
    photon_platform.publish.global_conf.autoapi_python_use_implicit_namespaces
+   photon_platform.publish.global_conf.autoapi_keep_files
    photon_platform.publish.global_conf.templates_path
    photon_platform.publish.global_conf.source_suffix
    photon_platform.publish.global_conf.master_doc
@@ -71,7 +72,7 @@ Module Contents
 .. py:data:: year
 
 .. py:data:: extensions
-   :value: ['sphinx.ext.extlinks', 'sphinx.ext.intersphinx', 'sphinx.ext.githubpages',...
+   :value: ['sphinx.ext.intersphinx', 'sphinx.ext.githubpages', 'sphinx.ext.graphviz',...
 
 
 .. py:data:: current_dir
@@ -103,6 +104,10 @@ Module Contents
 
 
 .. py:data:: autoapi_python_use_implicit_namespaces
+   :value: True
+
+
+.. py:data:: autoapi_keep_files
    :value: True
 
 

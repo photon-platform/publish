@@ -9,21 +9,24 @@ PHOTON • publish
 
 Our mission is to create tools for gathering, processing, and publishing content, with a vision of **"Simple HTML, State of the Art CSS"**.
 
-.. toctree::
-   :hidden:
-   :maxdepth: 2
+.. 
 
-   mission/index.rst
-   usage/index.rst
-   standards/index.rst
-   modules/index.rst
-   log/index.rst
-   refs/index.rst
-   glossary.rst
-   connect.rst
-   todos.rst
-   changelog.rst
-   about.rst
+.. .. toctree::
+..    :hidden:
+..    :maxdepth: 2
+.. 
+..    mission/index.rst
+..    usage/index.rst
+..    standards/index.rst
+..    modules/index.rst
+..    log/index.rst
+..    refs/index.rst
+..    glossary.rst
+..    connect.rst
+..    todos.rst
+..    changelog.rst
+
+.. about.rst
 
 Key Features
 ------------
@@ -33,16 +36,6 @@ Key Features
 *   **Centralized Configuration**: A global ``conf.py`` reducing boilerplate.
 
 
-Latest Updates
---------------
-
-Check out our latest development logs:
-
-.. collection::
-   :type: log
-   :limit: 5
-   :sort: date
-   :reverse:
 
 Indices
 -------
