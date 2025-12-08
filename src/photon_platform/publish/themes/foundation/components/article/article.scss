@@ -1,4 +1,3 @@
-
 article {
   padding: var(--fitz-2);
   margin: var(--fitz);
@@ -6,7 +5,7 @@ article {
   display: flex;
   flex-flow: column nowrap;
 
-  > * {
+  >* {
     padding: var(--fitz-2);
     // margin: var(--fitz);
     margin: 0;
@@ -23,23 +22,23 @@ article {
   @media (min-width: 96em) {
     flex-flow: row wrap;
 
-    > .content {
+    >.content {
       flex: 1 1 calc(100% - var(--col));
       order: 1;
     }
 
-    > figure {
+    >figure {
       flex: 1 1 var(--col);
       order: 2;
     }
 
-    > .gallery {
+    >.gallery {
       flex: 1 1 var(--col);
       order: 4;
     }
 
-    > footer {
-      flex: 1 1 var(--col);
+    >footer {
+      // flex: 1 1 var(--col);
       order: 5;
       flex-flow: column nowrap;
       justify-content: flex-start;
@@ -47,12 +46,14 @@ article {
   }
 
   @media (min-width: 108em) {
-    > .content {
+    >.content {
       flex: 1 1 calc(100% - var(--col-2));
     }
 
-    > figure, > .gallery, > footer {
-      flex: 0 0 var(--col-2);
+    >figure,
+    >.gallery,
+    >footer {
+      // flex: 0 0 var(--col-2);
     }
   }
 }

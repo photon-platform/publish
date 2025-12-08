@@ -1,6 +1,13 @@
 changelog
 =========
 
+0.2.30
+======
+
+- style: Refined collection layouts with dedicated styles for cards, banners, and lists in ``_collection-layouts.scss``.
+- style: Improved article card visual hierarchy and responsiveness.
+- style: Updated main article layout to better handle flex behavior across breakpoints.
+
 0.2.29
 ======
 
