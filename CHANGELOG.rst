@@ -1,6 +1,12 @@
 changelog
 =========
 
+0.2.29
+======
+
+- style: Added dedicated SCSS for API documentation (`_api.scss`) to improve readability of parameters and return types.
+- style: Updated code block styling in `_code.scss` for better contrast and layout.
+
 0.2.28
 ======
 
