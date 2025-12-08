@@ -26,6 +26,17 @@ def to_numeric(value):
     return value
 
 
+def safe_numeric(value, default=999):
+    """
+    Safely converts a value to a numeric type for sorting.
+    Returns default if conversion fails.
+    """
+    res = to_numeric(value)
+    if isinstance(res, (int, float)):
+        return res
+    return default
+
+
 class PendingCollection(nodes.General, nodes.Element):
     """
     A placeholder node for a collection that will be rendered
@@ -293,7 +304,7 @@ def generate_taxonomy_pages(app):
                             
                             articles.append(item)
             
-            articles.sort(key=lambda x: to_numeric(x.get('number', 0)), reverse=True) # Sort by 'number' descending
+            articles.sort(key=lambda x: safe_numeric(x.get('number', 0)), reverse=True) # Sort by 'number' descending
 
             context = {
                 'collection': {
@@ -349,7 +360,7 @@ def generate_taxonomy_pages(app):
                             
                             articles.append(item)
             
-            articles.sort(key=lambda x: to_numeric(x.get('number', 0)), reverse=True) # Sort by 'number' descending
+            articles.sort(key=lambda x: safe_numeric(x.get('number', 0)), reverse=True) # Sort by 'number' descending
 
             context = {
                 'collection': {
@@ -402,7 +413,7 @@ def generate_taxonomy_pages(app):
                         
                         articles.append(item)
             
-            articles.sort(key=lambda x: to_numeric(x.get('number', 0)), reverse=True) # Sort by 'number' descending
+            articles.sort(key=lambda x: safe_numeric(x.get('number', 0)), reverse=True) # Sort by 'number' descending
 
             context = {
                 'collection': {
@@ -456,10 +467,10 @@ def build_nav_links(app, pagename, templatename, context, doctree):
                     'date': meta.get('date', ''),
                 })
 
-    header_nav_list.sort(key=lambda x: to_numeric(x['order']))
+    header_nav_list.sort(key=lambda x: safe_numeric(x['order']))
     context['header_nav_list'] = header_nav_list
 
-    footer_nav_list.sort(key=lambda x: to_numeric(x['order']))
+    footer_nav_list.sort(key=lambda x: safe_numeric(x['order']))
     context['footer_nav_list'] = footer_nav_list
 
     recent_logs.sort(key=lambda x: x['date'], reverse=True)
@@ -531,7 +542,7 @@ def inject_implicit_toctree(app, docname, source):
                     # Peek at metadata for sorting
                     meta = peek_metadata(path)
                     nav = meta.get('navigation')
-                    order_val = to_numeric(meta.get('order', 999))
+                    order_val = safe_numeric(meta.get('order', 999))
                     
                     item = {'docname': found_docname, 'order': order_val}
                     

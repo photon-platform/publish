@@ -1,6 +1,11 @@
 changelog
 =========
 
+0.2.31
+======
+
+- fix: Implemented robust numerical sorting for collections and navigation to prevent type errors when metadata contains non-numeric values.
+
 0.2.30
 ======
 
