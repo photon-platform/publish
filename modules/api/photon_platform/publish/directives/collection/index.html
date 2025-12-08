@@ -34,10 +34,10 @@
           <a href="../../../../../../mission/index.html"  >mission</a>
         </li>
         <li>
-          <a href="../../../../../../usage/index.html"  >usage</a>
+          <a href="../../../../../index.html"  >modules</a>
         </li>
         <li>
-          <a href="../../../../../index.html"  >modules</a>
+          <a href="../../../../../../usage/index.html"  >usage</a>
         </li>
         <li>
           <a href="../../../../../../log/index.html"  >log</a>
@@ -92,25 +92,28 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.to_numeric" title="photon_platform.publish.directives.collection.to_numeric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_numeric</span></code></a>(value)</p></td>
 <td><p>Converts a value to a numeric type if possible, trying int then float.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.process_collections" title="photon_platform.publish.directives.collection.process_collections"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_collections</span></code></a>(app, doctree, fromdocname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.safe_numeric" title="photon_platform.publish.directives.collection.safe_numeric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">safe_numeric</span></code></a>(value[, default])</p></td>
+<td><p>Safely converts a value to a numeric type for sorting.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.process_collections" title="photon_platform.publish.directives.collection.process_collections"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_collections</span></code></a>(app, doctree, fromdocname)</p></td>
 <td><p>Resolve PendingCollection nodes into actual HTML content.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.collect_metadata" title="photon_platform.publish.directives.collection.collect_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">collect_metadata</span></code></a>(app, env)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.collect_metadata" title="photon_platform.publish.directives.collection.collect_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">collect_metadata</span></code></a>(app, env)</p></td>
 <td><p>Collect all tags and categories from document metadata.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.generate_taxonomy_pages" title="photon_platform.publish.directives.collection.generate_taxonomy_pages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_taxonomy_pages</span></code></a>(app)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.generate_taxonomy_pages" title="photon_platform.publish.directives.collection.generate_taxonomy_pages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_taxonomy_pages</span></code></a>(app)</p></td>
 <td><p>Dynamically generate pages for each tag and category.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.build_nav_links" title="photon_platform.publish.directives.collection.build_nav_links"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_nav_links</span></code></a>(app, pagename, templatename, context, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.build_nav_links" title="photon_platform.publish.directives.collection.build_nav_links"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_nav_links</span></code></a>(app, pagename, templatename, context, ...)</p></td>
 <td><p>Build navigation links and add tags/categories to the context.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.peek_metadata" title="photon_platform.publish.directives.collection.peek_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peek_metadata</span></code></a>(filepath)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.peek_metadata" title="photon_platform.publish.directives.collection.peek_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peek_metadata</span></code></a>(filepath)</p></td>
 <td><p>Peek at the beginning of a file to extract navigation metadata.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.inject_implicit_toctree" title="photon_platform.publish.directives.collection.inject_implicit_toctree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inject_implicit_toctree</span></code></a>(app, docname, source)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.inject_implicit_toctree" title="photon_platform.publish.directives.collection.inject_implicit_toctree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inject_implicit_toctree</span></code></a>(app, docname, source)</p></td>
 <td><p>Inject a hidden toctree into the master document via source modification.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.setup" title="photon_platform.publish.directives.collection.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(app)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.setup" title="photon_platform.publish.directives.collection.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(app)</p></td>
 <td><p>Register directives and connect to Sphinx events.</p></td>
 </tr>
 </tbody>
@@ -122,6 +125,13 @@
 <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.to_numeric">
 <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">to_numeric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.to_numeric" title="Link to this definition">¶</a></dt>
 <dd><p>Converts a value to a numeric type if possible, trying int then float.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.safe_numeric">
+<span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">safe_numeric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">999</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.safe_numeric" title="Link to this definition">¶</a></dt>
+<dd><p>Safely converts a value to a numeric type for sorting.
+Returns default if conversion fails.</p>
 </dd></dl>
 
 <dl class="py class">
