@@ -140,10 +140,8 @@ def process_collections(app, doctree, fromdocname):
         docnames = node['docnames']
         
         # Determine the template path based on the current theme
-        if app.config.html_theme == 'foundation':
-            default_template = 'components/collection/collection.html'
-        else:
-            default_template = '_macros/collection.html'
+        # Determine the template path based on the current theme
+        default_template = 'components/collection/collection.html'
 
         collection_type = options.get('type')
         sort_key = options.get('sort')

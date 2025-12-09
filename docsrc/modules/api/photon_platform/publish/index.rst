@@ -7,7 +7,7 @@ photon_platform.publish
 
    ``photon_platform.publish``
 
-   - templates and styles for the PHOTON theme
+   - templates and styles for the Foundation theme
    - custom directives for processing collections
 
 

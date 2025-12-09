@@ -1,6 +1,12 @@
 changelog
 =========
 
+0.2.34
+======
+
+- removed: Deleted the deprecated `photon` theme and legacy `build_sass.py` script.
+- refactor: Standardized on the `foundation` theme, removing conditional theme logic from `collection.py`.
+
 0.2.33
 ======
 

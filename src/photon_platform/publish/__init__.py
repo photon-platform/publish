@@ -1,7 +1,7 @@
 """
 ``photon_platform.publish``
 
-- templates and styles for the PHOTON theme
+- templates and styles for the Foundation theme
 - custom directives for processing collections
 """
 import os
@@ -9,7 +9,7 @@ import os
 __author__ = "PHOTON platform"
 __maintainer__ = "PHOTON platform"
 __email__ = "github@phiarchitect.com"
-__version__ = "0.2.33"
+__version__ = "0.2.34"
 __licence__ = "MIT"
 
 def get_path() -> str:
