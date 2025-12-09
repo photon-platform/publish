@@ -1,6 +1,12 @@
 changelog
 =========
 
+0.2.33
+======
+
+- fix: Updated collection card grid layout to use smaller minimum column width (16em).
+- docs: Added documentation for ``safe_numeric`` function.
+
 0.2.32
 ======
 

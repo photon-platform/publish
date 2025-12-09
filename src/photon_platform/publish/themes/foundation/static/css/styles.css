@@ -1197,7 +1197,7 @@ article.excerpt .more {
 }
 
 .collection.layout-cards {
-  grid-template-columns: repeat(auto-fit, minmax(24em, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(16em, 1fr));
 }
 
 .collection.layout-banners {

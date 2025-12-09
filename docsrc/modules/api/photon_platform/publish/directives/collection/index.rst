@@ -19,6 +19,7 @@ Functions
 .. autoapisummary::
 
    photon_platform.publish.directives.collection.to_numeric
+   photon_platform.publish.directives.collection.safe_numeric
    photon_platform.publish.directives.collection.process_collections
    photon_platform.publish.directives.collection.collect_metadata
    photon_platform.publish.directives.collection.generate_taxonomy_pages
@@ -34,6 +35,12 @@ Module Contents
 .. py:function:: to_numeric(value)
 
    Converts a value to a numeric type if possible, trying int then float.
+
+
+.. py:function:: safe_numeric(value, default=999)
+
+   Safely converts a value to a numeric type for sorting.
+   Returns default if conversion fails.
 
 
 .. py:class:: PendingCollection(rawsource='', *children, **attributes)
