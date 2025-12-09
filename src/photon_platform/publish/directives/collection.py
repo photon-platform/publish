@@ -74,33 +74,62 @@ class CollectionDirective(SphinxDirective):
         reverse = 'reverse' in self.options
         limit = self.options.get('limit')
         
-        # Discover files automatically, but not recursively deep
-        current_dir = os.path.dirname(env.docname)
-        walk_path = os.path.join(env.srcdir, current_dir)
         docnames = []
 
-        # Process current directory
-        # Process current directory and subdirectories recursively
-        if os.path.exists(walk_path):
-            for root, dirs, files in os.walk(walk_path):
+        if collection_type == 'header':
+            # Scan GLOBAL source directory for header items
+            # We must use peek_metadata because env.metadata might not be populated yet
+            # for files we haven't read.
+            for root, dirs, files in os.walk(env.srcdir):
+                # Filter out excluded directories
+                dirs[:] = [d for d in dirs if d not in ['.git', '__pycache__', '.doctrees', '_static', '_templates']]
+                
                 for filename in files:
                     if filename.endswith('.rst'):
                         path = os.path.join(root, filename)
                         docname = os.path.splitext(os.path.relpath(path, env.srcdir))[0]
-                        if docname != env.docname:
-                            docnames.append(docname)
+                        
+                        if docname == env.docname:
+                            continue
 
-        # Best-effort sort for toctree (using currently available metadata)
-        # This ensures that if metadata IS available (e.g. subsequent builds),
-        # the navigation order is correct.
-        if sort_key:
-            def get_sort_val(docname):
-                meta = env.metadata.get(docname, {})
-                val = meta.get(sort_key)
-                if val:
-                    return to_numeric(val)
-                return 0
-            docnames.sort(key=get_sort_val, reverse=reverse)
+                        meta = peek_metadata(path)
+                        if meta.get('navigation') == 'header':
+                            order = safe_numeric(meta.get('order', 999))
+                            docnames.append((docname, order))
+            
+            # Sort by order
+            docnames.sort(key=lambda x: x[1])
+            docnames = [d[0] for d in docnames]
+
+        else:
+            # Standard behavior: Scan LOCAL directory
+            current_dir = os.path.dirname(env.docname)
+            walk_path = os.path.join(env.srcdir, current_dir)
+            
+            if os.path.exists(walk_path):
+                for root, dirs, files in os.walk(walk_path):
+                    for filename in files:
+                        if filename.endswith('.rst'):
+                            path = os.path.join(root, filename)
+                            docname = os.path.splitext(os.path.relpath(path, env.srcdir))[0]
+                            if docname != env.docname:
+                                docnames.append(docname)
+            
+            # Best-effort sort for toctree
+            if sort_key:
+                def get_sort_val(docname):
+                    meta = env.metadata.get(docname, {})
+                    val = meta.get(sort_key)
+                    if val:
+                        return to_numeric(val)
+                    # Try peek if metadata is missing (first run)
+                    path = os.path.join(env.srcdir, docname + '.rst')
+                    if os.path.exists(path):
+                         early_meta = peek_metadata(path)
+                         if sort_key in early_meta:
+                             return to_numeric(early_meta[sort_key])
+                    return 0
+                docnames.sort(key=get_sort_val, reverse=reverse)
 
         # Create a toctree with ALL discovered items
         # This ensures they are included in the build and not orphaned.
@@ -506,69 +535,63 @@ def peek_metadata(filepath):
         pass
     return meta
 
-def inject_implicit_toctree(app, docname, source):
+
+
+def inject_root_navigation(app, docname, source):
     """
-    Inject a hidden toctree into the master document via source modification.
-    This runs before parsing, ensuring Sphinx correctly processes the toctree.
+    Automatically inject a hidden toctree into the master document (Root).
+    This includes any document with :navigation: header or :navigation: footer.
     """
     if docname != app.config.master_doc:
         return
 
     env = app.env
-    
     header_docs = []
     footer_docs = []
-    other_docs = []
-    
-    found_docs = set()
-    
-    # Recursively scan for all .rst files to include
+
+    # Recursively scan docsrc (srcdir) for header/footer items
     for root, dirs, files in os.walk(env.srcdir):
+        # Exclude dot-directories and standard Sphinx folders
+        dirs[:] = [d for d in dirs if not d.startswith('.')]
+        if '_static' in dirs: dirs.remove('_static')
+        if '_templates' in dirs: dirs.remove('_templates')
+
         for filename in files:
             if filename.endswith('.rst'):
                 path = os.path.join(root, filename)
-                # relpath generally works relative to srcdir for source filenames
                 found_docname = os.path.splitext(os.path.relpath(path, env.srcdir))[0]
                 
-                # Exclude master doc to avoid circular inclusion
+                # Exclude master doc itself
                 if found_docname == docname:
                     continue
-                    
-                if found_docname not in found_docs:
-                    found_docs.add(found_docname)
-                    
-                    # Peek at metadata for sorting
-                    meta = peek_metadata(path)
-                    nav = meta.get('navigation')
+                
+                meta = peek_metadata(path)
+                nav = meta.get('navigation')
+                
+                if nav == 'header' or nav == 'footer':
                     order_val = safe_numeric(meta.get('order', 999))
-                    
                     item = {'docname': found_docname, 'order': order_val}
                     
                     if nav == 'header':
                         header_docs.append(item)
                     elif nav == 'footer':
                         footer_docs.append(item)
-                    else:
-                        other_docs.append(item)
 
-    # Sort buckets
+    # Sort
     header_docs.sort(key=lambda x: x['order'])
     footer_docs.sort(key=lambda x: x['order'])
-    other_docs.sort(key=lambda x: x['docname']) # Alphabetical for others
-
-    # Combine all docs
-    # Order: Header -> Footer -> Others
+    
+    # Combine (Header first, then Footer)
     final_docnames = [x['docname'] for x in header_docs] + \
-                     [x['docname'] for x in footer_docs] + \
-                     [x['docname'] for x in other_docs]
+                     [x['docname'] for x in footer_docs]
 
     if final_docnames:
-        # Inject ReST for a hidden toctree
         toctree_rst = "\n\n.. toctree::\n   :hidden:\n\n"
         for d in final_docnames:
             toctree_rst += f"   {d}\n"
         
         source[0] += toctree_rst
+
 
 def setup(app):
     """Register directives and connect to Sphinx events."""
@@ -577,7 +600,7 @@ def setup(app):
     app.connect('env-updated', collect_metadata)
     app.connect('html-collect-pages', generate_taxonomy_pages)
     app.connect('html-page-context', build_nav_links)
-    app.connect('source-read', inject_implicit_toctree)
+    app.connect('source-read', inject_root_navigation)
     app.connect('doctree-resolved', process_collections)
     app.add_js_file('js/collection_controls.js')
     return {

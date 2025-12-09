@@ -1,6 +1,13 @@
 changelog
 =========
 
+0.2.35
+======
+
+- refactor: Automated root navigation injection in `collection.py`, allowing header and footer items to be automatically discovered and added to the site hierarchy.
+- refactor: Removed the implicit global toctree injection in favor of proper recursive collection directives for sub-sections.
+- docs: Updated root `index.rst` to be cleaner, removing manual collection directives.
+
 0.2.34
 ======
 
