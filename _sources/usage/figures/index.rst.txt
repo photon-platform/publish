@@ -1,6 +1,5 @@
 :order: 3 
 
-.. figure:: square.png
 
 
 Using Images
