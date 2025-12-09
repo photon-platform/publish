@@ -5,6 +5,7 @@ changelog
 ======
 
 - fix: Updated collection card grid layout to use smaller minimum column width (16em).
+- style: Refined collection figure sizing and alignment for cards, banners, and lists (enforcing square aspect ratios and centering).
 - docs: Added documentation for ``safe_numeric`` function.
 
 0.2.32

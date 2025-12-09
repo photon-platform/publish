@@ -9,6 +9,59 @@
 
     &.layout-cards {
         grid-template-columns: repeat(auto-fit, minmax(16em, 1fr));
+
+        >article.excerpt {
+
+            // Center vertically and horizontally
+            .content {
+                justify-content: center;
+                align-items: center; // Center children horizontally (flex-col)
+                text-align: center;
+
+                figure {
+                    margin: 0 auto;
+                    // Enforce 14em square
+                    width: 14em;
+                    height: 14em;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    a {
+                        display: flex;
+                        width: 100%;
+                        height: 100%;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    img {
+                        max-width: 100%;
+                        max-height: 100%;
+                        width: auto;
+                        height: auto;
+                        // ensure it fits
+                        object-fit: contain;
+                    }
+                }
+
+                section {
+                    width: 100%; // Ensure it takes full width for text centering to matter if needed, or let it shrink
+                    text-align: center;
+
+                    blockquote {
+                        border-left: none;
+                        padding-left: 0;
+                        margin-left: 0;
+                        margin-right: 0;
+                    }
+                }
+            }
+
+            footer {
+                text-align: center;
+            }
+        }
     }
 
     &.layout-banners {
@@ -86,8 +139,7 @@
                 img {
                     width: 100%;
                     height: auto;
-                    object-fit: cover;
-                    aspect-ratio: 16/9;
+                    // Removed crop forcing
                     border-radius: 4px;
                 }
             }
@@ -101,17 +153,40 @@
 
             // Container Query: Horizontal layout for wider containers
             // Applies to .content based on article.excerpt width
+            // This effectively handles "Banners" usually or wide cards
             @container excerpt (min-width: 35em) {
                 flex-direction: row;
                 align-items: flex-start;
+                text-align: left; // Reset in case it was centered by card layout
 
                 figure {
-                    width: 30%;
-                    max-width: 15em;
+                    // Usage for Banners/Wide Layouts
+                    // Enforce 10em square
+                    width: 10em;
+                    height: 10em;
+                    // max-width: none; // Reset card max-width
                     margin-right: var(--fitz);
+                    flex-shrink: 0;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    a {
+                        display: flex;
+                        width: 100%;
+                        height: 100%;
+                        align-items: center;
+                        justify-content: center;
+                    }
 
                     img {
-                        aspect-ratio: 4/3;
+                        // Reset card max-height restriction if needed or keep auto
+                        max-width: 100%;
+                        max-height: 100%;
+                        width: auto;
+                        height: auto;
+                        object-fit: contain;
                     }
                 }
             }
@@ -137,18 +212,35 @@
             align-items: center;
             justify-content: space-between;
             width: 100%;
+            text-align: left;
 
             figure {
-                width: 3em;
-                height: 3em;
+                // Enforce 5em square
+                width: 5em;
+                height: 5em;
                 margin: 0;
                 margin-right: var(--fitz);
                 flex-shrink: 0;
 
-                img {
-                    aspect-ratio: 1;
-                    border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                a {
+                    display: flex;
+                    width: 100%;
                     height: 100%;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                img {
+                    max-width: 100%;
+                    max-height: 100%;
+                    width: auto;
+                    height: auto;
+                    object-fit: contain;
+                    border-radius: 4px;
                 }
             }
 
