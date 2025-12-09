@@ -1,6 +1,11 @@
 changelog
 =========
 
+0.2.32
+======
+
+- fix: Added margin-bottom to highlighted code blocks to prevent visual crowding.
+
 0.2.31
 ======
 
