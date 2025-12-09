@@ -25,7 +25,7 @@ Functions
    photon_platform.publish.directives.collection.generate_taxonomy_pages
    photon_platform.publish.directives.collection.build_nav_links
    photon_platform.publish.directives.collection.peek_metadata
-   photon_platform.publish.directives.collection.inject_implicit_toctree
+   photon_platform.publish.directives.collection.inject_root_navigation
    photon_platform.publish.directives.collection.setup
 
 
@@ -119,10 +119,10 @@ Module Contents
    This enables sorting before Sphinx has fully processed the environment.
 
 
-.. py:function:: inject_implicit_toctree(app, docname, source)
+.. py:function:: inject_root_navigation(app, docname, source)
 
-   Inject a hidden toctree into the master document via source modification.
-   This runs before parsing, ensuring Sphinx correctly processes the toctree.
+   Automatically inject a hidden toctree into the master document (Root).
+   This includes any document with :navigation: header or :navigation: footer.
 
 
 .. py:function:: setup(app)

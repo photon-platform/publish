@@ -110,8 +110,8 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.peek_metadata" title="photon_platform.publish.directives.collection.peek_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peek_metadata</span></code></a>(filepath)</p></td>
 <td><p>Peek at the beginning of a file to extract navigation metadata.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.inject_implicit_toctree" title="photon_platform.publish.directives.collection.inject_implicit_toctree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inject_implicit_toctree</span></code></a>(app, docname, source)</p></td>
-<td><p>Inject a hidden toctree into the master document via source modification.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.inject_root_navigation" title="photon_platform.publish.directives.collection.inject_root_navigation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inject_root_navigation</span></code></a>(app, docname, source)</p></td>
+<td><p>Automatically inject a hidden toctree into the master document (Root).</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.setup" title="photon_platform.publish.directives.collection.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(app)</p></td>
 <td><p>Register directives and connect to Sphinx events.</p></td>
@@ -213,10 +213,10 @@ This enables sorting before Sphinx has fully processed the environment.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.inject_implicit_toctree">
-<span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">inject_implicit_toctree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.inject_implicit_toctree" title="Link to this definition">¶</a></dt>
-<dd><p>Inject a hidden toctree into the master document via source modification.
-This runs before parsing, ensuring Sphinx correctly processes the toctree.</p>
+<dt class="sig sig-object py" id="photon_platform.publish.directives.collection.inject_root_navigation">
+<span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">inject_root_navigation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.inject_root_navigation" title="Link to this definition">¶</a></dt>
+<dd><p>Automatically inject a hidden toctree into the master document (Root).
+This includes any document with :navigation: header or :navigation: footer.</p>
 </dd></dl>
 
 <dl class="py function">
