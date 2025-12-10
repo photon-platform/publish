@@ -56,7 +56,7 @@ def visit_picture_node(self, node):
     img_atts = {
         'src': fallback_src,
         'alt': node.get('alt', ''),
-        'width': '800', # Implicit max width from specs
+        # 'width': '800', # Implicit max width from specs
         # 'height': ... # We'd need to calculate this content-dependently to prevent CLS
     }
     

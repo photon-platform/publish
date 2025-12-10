@@ -1,6 +1,11 @@
 changelog
 =========
 
+0.3.1
+=====
+
+- fix: Removed hardcoded width from `visit_picture_node` in `images/directive.py` to allow CSS to control image sizing.
+
 0.3.0
 =====
 
