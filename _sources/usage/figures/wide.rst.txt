@@ -1,4 +1,4 @@
-.. figure:: wide.png
+.. picture:: wide.png
 
 
 wide

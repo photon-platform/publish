@@ -4,6 +4,14 @@ photon_platform.publish.directives.collection
 .. py:module:: photon_platform.publish.directives.collection
 
 
+Attributes
+----------
+
+.. autoapisummary::
+
+   photon_platform.publish.directives.collection.picture_node
+
+
 Classes
 -------
 
@@ -31,6 +39,10 @@ Functions
 
 Module Contents
 ---------------
+
+.. py:data:: picture_node
+   :value: None
+
 
 .. py:function:: to_numeric(value)
 
