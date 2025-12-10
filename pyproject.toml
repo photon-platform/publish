@@ -14,6 +14,7 @@ classifiers = [
 ]
 dependencies = [
     "sphinx",
+    "Pillow",
     "jinja2",
     "myst_parser",
     "sphinx-carousel",

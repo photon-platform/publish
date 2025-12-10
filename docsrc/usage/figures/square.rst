@@ -1,4 +1,5 @@
-.. figure:: square.png
+.. picture:: square.png
+
 
 square
 ======

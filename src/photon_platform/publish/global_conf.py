@@ -94,6 +94,7 @@ extensions = [
     "sphinx_carousel.carousel",
     "sphinxcontrib.jquery",
     "photon_platform.publish.directives.collection",
+    "photon_platform.publish.images",
     "autoapi.extension",
 ]
 

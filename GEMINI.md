@@ -12,5 +12,6 @@ Publish integrates custom components, themes, and configurations into a unified 
 -   `global_conf.py`: A global `conf.py` that can be imported into local configurations.
 -   `directives/collection.py`: A custom directive for creating flexible, time-based content listings.
 -   `themes/foundation/`: The specialized theme for the PHOTON platform, co-locating templates and styles.
+-   `images/`: Package for handling responsive image processing and directives.
 -   `docsrc/standards/`: Documentation for project standards and guidelines.
 -   `app.py`: The main `click`-based command-line interface.

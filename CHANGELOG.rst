@@ -1,6 +1,16 @@
 changelog
 =========
 
+0.3.0
+=====
+
+- feat: Implemented comprehensive Featured Image System.
+    - Added `.. picture::` directive for responsive, optimized WebP images with fallback.
+    - Implemented automatic thumbnail generation and caching.
+    - Integrated featured images with `collection` directive for rich article lists.
+    - Support for "Banner", "Card", and "List" layouts with optimized thumbnails.
+    - Images wrap in links to full-size originals.
+
 0.2.35
 ======
 

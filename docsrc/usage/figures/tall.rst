@@ -1,4 +1,4 @@
-.. figure:: tall.png
+.. picture:: tall.png
 
 tall
 ====

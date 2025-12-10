@@ -6,6 +6,10 @@ from docutils.parsers.rst import directives
 from docutils import nodes
 from sphinx.addnodes import toctree
 from typing import Dict, Any, List, Optional
+try:
+    from photon_platform.publish.images import picture_node
+except ImportError:
+    picture_node = None
 
 
 
@@ -217,14 +221,31 @@ def process_collections(app, doctree, fromdocname):
                         if first_text:
                             item['excerpt_text'] = builder.render_partial(first_text)['html_body']
 
-                        # Find first figure
-                        for n in item_doctree.traverse(nodes.figure):
-                            image_node = next(iter(n.traverse(nodes.image)), None)
-                            if image_node:
-                                item['excerpt_figure_filename'] = os.path.basename(image_node['uri'])
-                                item['excerpt_figure_alt'] = image_node.get('alt', '')
-                                item['excerpt_figure_width'] = n.get('width')
-                                break
+                        # Check for explicitly set featured image (from .. picture::)
+                        if 'featured_image' in meta:
+                             item['excerpt_figure_filename'] = meta['featured_image']
+                             # We might want to store alt text in metadata too if needed, but for now filename is key
+                        
+                        # Fallback: Find first figure/picture if no featured image
+                        if not item['excerpt_figure_filename']:
+                            # Check for picture_node first (custom)
+                            if picture_node:
+                                for n in item_doctree.traverse(picture_node):
+                                    if 'main_src' in n:
+                                        item['excerpt_figure_filename'] = n['main_src']
+                                        item['excerpt_figure_alt'] = n.get('alt', '')
+                                        # picture_node doesn't enforce width in the same way, or it's implicitly 800
+                                        break
+                            
+                            # Check for standard figure if still not found
+                            if not item['excerpt_figure_filename']:
+                                for n in item_doctree.traverse(nodes.figure):
+                                    image_node = next(iter(n.traverse(nodes.image)), None)
+                                    if image_node:
+                                        item['excerpt_figure_filename'] = os.path.basename(image_node['uri'])
+                                        item['excerpt_figure_alt'] = image_node.get('alt', '')
+                                        item['excerpt_figure_width'] = n.get('width')
+                                        break
 
                     if 'tags' in item and isinstance(item['tags'], str):
                         item['tags'] = [tag.strip() for tag in item['tags'].split(',')]

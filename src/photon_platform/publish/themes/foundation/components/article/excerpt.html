@@ -1,21 +1,21 @@
-        <article class="excerpt">
-          <div class="content">
-            {% if article.excerpt_figure_filename %}
-              <figure{% if article.excerpt_figure_width %} style="width: {{ article.excerpt_figure_width }};"{% endif %}>
-                <a href="{{ pathto(article.docname) }}">
-                  <img src="{{ pathto('_images/' ~ article.excerpt_figure_filename, 1) }}" alt="{{ article.excerpt_figure_alt }}">
-                </a>
-              </figure>
-            {% endif %}
-            <section>
-              <h2><a href="{{ pathto(article.docname) }}">{{ article.title }}</a></h2>
-              {% if article.excerpt_text %}
-                <blockquote>{{ article.excerpt_text|safe }}</blockquote>
-              {% endif %}
-            </section>
-          </div>
-          <footer>
-{% set meta = article %}
-{% include "components/article/_nav_meta.html" %}
-          </footer>
-        </article>
+<article class="excerpt">
+  <div class="content">
+    {% if article.excerpt_figure_filename %}
+    <figure{% if article.excerpt_figure_width %} style="width: {{ article.excerpt_figure_width }};" {% endif %}>
+      <a href="{{ pathto(article.docname) }}">
+        <img src="{{ pathto(article.excerpt_figure_filename, 1) }}" alt="{{ article.excerpt_figure_alt }}">
+      </a>
+      </figure>
+      {% endif %}
+      <section>
+        <h2><a href="{{ pathto(article.docname) }}">{{ article.title }}</a></h2>
+        {% if article.excerpt_text %}
+        <blockquote>{{ article.excerpt_text|safe }}</blockquote>
+        {% endif %}
+      </section>
+  </div>
+  <footer>
+    {% set meta = article %}
+    {% include "components/article/_nav_meta.html" %}
+  </footer>
+</article>
