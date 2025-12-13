@@ -9,6 +9,12 @@
         // Ensure items stretch to fill grid height
         align-items: start;
 
+        >header {
+            order: -1;
+            grid-column: 1 / -1;
+            width: 100%;
+        }
+
         >article {
             // height: 100%;
             // Ensure card mixin styles are applied if conditional
