@@ -4,7 +4,7 @@
 Automated Publishing
 ====================
 
-We create tools for gathering, processing, and publishing content.
+    We create tools for gathering, processing, and publishing content.
 
 *   **Automated Indexing:** Taxonomies and collections are generated automatically.
 *   **Multi-Format Publishing:** The same content can be published as a website, a PDF, an ebook, or a slide deck.
