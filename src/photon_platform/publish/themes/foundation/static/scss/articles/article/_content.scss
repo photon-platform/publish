@@ -40,11 +40,14 @@
     // margin: 2em;
   }
 
-  > blockquote {
+  blockquote {
     // padding: var(--fitz-2);
     // border-left: 1px solid $color-key;
     // padding-left: var(--fitz);
     // line-height: 1.7;
+    background: #222;
+    font-size: 1.2em;
+
     > blockquote {
       font-style: italic;
       list-style-type: '~';

@@ -20,4 +20,4 @@ jobs:
       uses: photon-platform/action-deploy-sphinx-gh-pages@v18
       with:
         modules_repo_urls: 'https://github.com/photon-platform/publish.git'
-        python_version: '3.12'  
+        python_version: '3.13'  

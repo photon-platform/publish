@@ -1439,7 +1439,7 @@ article.excerpt .more {
 }
 
 header {
-  grid-area: header;
+  /* grid-area: header; */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1457,7 +1457,7 @@ header .org-repo {
 }
 
 footer {
-  grid-area: footer;
+  /* grid-area: footer; */
 }
 
 nav {

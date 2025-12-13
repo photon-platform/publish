@@ -62,7 +62,7 @@ Package Contents
 
 
 .. py:data:: __version__
-   :value: '0.2.35'
+   :value: '0.3.1'
 
 
 .. py:data:: __licence__
