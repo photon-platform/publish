@@ -1,6 +1,13 @@
 changelog
 =========
 
+0.3.2
+=====
+
+- fix: Forced section collection headers to the top of the layout using CSS `order: -1` and `grid-column: 1 / -1`.
+- refactor: Reorganized todos documentation into a dedicated `docsrc/todos` directory.
+- style: Updates to foundation theme styles and mission goals.
+
 0.3.1
 =====
 
