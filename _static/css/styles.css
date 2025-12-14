@@ -818,6 +818,8 @@ dl.py dd {
 }
 
 article {
+  container-type: inline-size;
+  container-name: article;
   padding: var(--fitz-2);
   margin: var(--fitz);
   display: flex;
@@ -954,7 +956,12 @@ article > .content p {
   margin-bottom: var(--fitz);
 }
 
-article > .content h1, article > .content > h2, article > .content > h3, article > .content > h4, article > .content > h5, article > .content > h6 {
+article > .content h1,
+article > .content > h2,
+article > .content > h3,
+article > .content > h4,
+article > .content > h5,
+article > .content > h6 {
   margin-top: var(--fitz-2);
 }
 
@@ -972,7 +979,8 @@ article > .content > .summary {
   font-size: 1.1em;
 }
 
-article > .content > .summary ul, article > .content > .summary li {
+article > .content > .summary ul,
+article > .content > .summary li {
   margin: var(--fitz);
 }
 
@@ -980,13 +988,30 @@ article > .content a {
   display: inline;
 }
 
-article > .content > blockquote > blockquote {
+article > .content blockquote {
+  padding: var(--fitz-2);
+  margin-bottom: var(--fitz);
+  background: #000;
+  border: none;
+  font-size: 1.2em;
+}
+
+article > .content blockquote > *:last-child {
+  margin-bottom: 0;
+}
+
+article > .content blockquote > *:last-child > *:last-child {
+  margin-bottom: 0;
+}
+
+article > .content blockquote > blockquote {
   font-style: italic;
   list-style-type: '~';
   padding-top: .5em;
+  font-size: 1em;
 }
 
-article > .content > blockquote > ul {
+article > .content blockquote > ul {
   font-style: italic;
   list-style-type: square;
   padding-top: .5em;
@@ -1090,7 +1115,7 @@ article > .gallery.modal > .list > figure > img {
   object-fit: contain;
 }
 
-@media (min-width: 96em) {
+@container article (min-width: 60em) {
   article {
     flex-flow: row wrap;
   }
@@ -1113,7 +1138,7 @@ article > .gallery.modal > .list > figure > img {
   }
 }
 
-@media (min-width: 108em) {
+@container article (min-width: 80em) {
   article > .content {
     flex: 1 1 calc(100% - var(--col-2));
   }
@@ -1167,8 +1192,10 @@ article.excerpt > .content > section h2 {
 
 article.excerpt > .content > section blockquote {
   margin: 0;
-  font-size: 0.9em;
+  font-size: 1.1em;
   line-height: 1.4;
+  font-weight: normal;
+  border: none;
 }
 
 article.excerpt > footer {
@@ -1234,13 +1261,6 @@ article.excerpt .more {
 .collection.layout-cards > article.excerpt .content section {
   width: 100%;
   text-align: center;
-}
-
-.collection.layout-cards > article.excerpt .content section blockquote {
-  border-left: none;
-  padding-left: 0;
-  margin-left: 0;
-  margin-right: 0;
 }
 
 .collection.layout-cards > article.excerpt footer {
@@ -1439,21 +1459,41 @@ article.excerpt .more {
 }
 
 header {
-  /* grid-area: header; */
+  container-type: inline-size;
+  container-name: header;
   display: flex;
-  justify-content: space-between;
+  flex-flow: column nowrap;
+  gap: var(--fitz);
+  justify-content: center;
   align-items: center;
 }
 
 header .logo {
   display: flex;
+  flex-flow: column nowrap;
   align-items: center;
-  gap: 1rem;
+  gap: var(--fitz-half);
+  text-align: center;
 }
 
 header .org-repo {
   font-size: 1.2rem;
   font-weight: bold;
+  display: flex;
+  gap: var(--fitz-half);
+  justify-content: center;
+}
+
+@container header (min-width: 40em) {
+  header {
+    flex-flow: row nowrap;
+    justify-content: space-between;
+  }
+  header .logo {
+    flex-flow: row nowrap;
+    text-align: left;
+    gap: 1rem;
+  }
 }
 
 footer {
