@@ -1,8 +1,7 @@
-
-> .content {
+>.content {
   grid-area: content;
 
-  > * + * {
+  >*+* {
     margin-top: var(--fitz);
   }
 
@@ -10,7 +9,12 @@
     margin-bottom: var(--fitz);
   }
 
-  h1, > h2, > h3, > h4, > h5, > h6 {
+  h1,
+  >h2,
+  >h3,
+  >h4,
+  >h5,
+  >h6 {
     margin-top: var(--fitz-2);
   }
 
@@ -18,8 +22,8 @@
     border-bottom: 1px solid $color-key;
     margin-bottom: var(--fitz-2);
   }
-    
-  > .summary {
+
+  >.summary {
     // background: var(--color-2-light);
     border-top: 1px solid $color-key;
     padding-top: var(--fitz-2);
@@ -27,7 +31,9 @@
     padding-bottom: var(--fitz-2);
     margin-bottom: var(--fitz-2);
     font-size: 1.1em;
-    ul, li {
+
+    ul,
+    li {
       margin: var(--fitz);
     }
   }
@@ -36,22 +42,37 @@
     display: inline;
   }
 
-  > ul, ol {
+  >ul,
+  ol {
     // margin: 2em;
   }
 
-  > blockquote {
-    // padding: var(--fitz-2);
+  blockquote {
+    padding: var(--fitz-2);
+    margin-bottom: var(--fitz);
     // border-left: 1px solid $color-key;
     // padding-left: var(--fitz);
     // line-height: 1.7;
-    > blockquote {
+    background: #000; // Strictly darker than body ($bg-color #1a1a1a)
+    border: none;
+    font-size: 1.2em;
+
+    >*:last-child {
+      margin-bottom: 0;
+
+      >*:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    >blockquote {
       font-style: italic;
       list-style-type: '~';
       padding-top: .5em;
-      // font-size: .9em;
+      font-size: 1em; // Reset or keep relative
     }
-    > ul {
+
+    >ul {
       font-style: italic;
       list-style-type: square;
       padding-top: .5em;

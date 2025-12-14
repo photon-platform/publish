@@ -20,6 +20,13 @@ $bullet: '✴';
 $fitz: .5em;
 $col: 18em;
 
+// Breakpoints
+$bp-small: 40em;
+$bp-medium: 60em;
+$bp-large: 80em;
+$bp-xlarge: 96em;
+$bp-xxlarge: 108em;
+
 // Legacy/Mapped Variables
 $color-key: $link-color;
 $color-key-dark: darken($color-key, 10%);

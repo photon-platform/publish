@@ -5,14 +5,14 @@ article.excerpt {
   display: flex;
   flex-flow: column nowrap;
 
-  > .content {
+  >.content {
     display: flex;
     flex-flow: row-reverse nowrap;
     align-items: flex-start;
     gap: var(--fitz);
     margin-bottom: var(--fitz-half);
 
-    > figure {
+    >figure {
       flex: 0 0 8em;
       max-width: 8em;
       height: 6em;
@@ -32,7 +32,7 @@ article.excerpt {
       }
     }
 
-    > section {
+    >section {
       flex: 1;
 
       h2 {
@@ -43,13 +43,15 @@ article.excerpt {
 
       blockquote {
         margin: 0;
-        font-size: 0.9em;
+        font-size: 1.1em; // Match heading size (h2 is 1.1em)
         line-height: 1.4;
+        font-weight: normal;
+        border: none;
       }
     }
   }
 
-  > footer {
+  >footer {
     display: flex;
     justify-content: flex-end;
 

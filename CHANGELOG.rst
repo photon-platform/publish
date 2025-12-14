@@ -1,6 +1,15 @@
 changelog
 =========
 
+
+0.3.3
+=====
+
+- refactor: Major SCSS architecture cleanup, including removal of legacy files and standardization of breakpoints.
+- style: Refined Blockquotes with strictly darker background, removed borders, and adjusted font size to 1.1em.
+- fix: Resolved navigational responsiveness issues by reverting to standard media queries in `nav.scss`.
+- style: Updated `article.scss` to use Container Queries for robust component-level layouts.
+
 0.3.2
 =====
 
