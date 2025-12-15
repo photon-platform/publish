@@ -1,3 +1,2 @@
-"""
-Custom Sphinx directives for the publish tool.
+"""Custom Sphinx directives for the publish tool.
 """

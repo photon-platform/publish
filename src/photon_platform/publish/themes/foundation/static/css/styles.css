@@ -629,6 +629,7 @@ dl.py dt.sig .sig-prename {
 
 dl.py dt.sig .sig-name {
   font-weight: bold;
+  color: var(--color-warning);
 }
 
 dl.py dt.sig .sig-param {

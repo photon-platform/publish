@@ -1,5 +1,4 @@
-"""
-Core publishing functions.
+"""Core publishing functions.
 """
 import os
 import shutil

@@ -1,12 +1,13 @@
+"""Directive for creating content collections."""
+
 import os
 import re
-from functools import partial
 from sphinx.util.docutils import SphinxDirective
 from sphinx.util.osutil import relative_uri
 from docutils.parsers.rst import directives
 from docutils import nodes
 from sphinx.addnodes import toctree
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 try:
     from photon_platform.publish.images import picture_node
 except ImportError:
@@ -14,9 +15,15 @@ except ImportError:
 
 
 
-def to_numeric(value):
-    """
-    Converts a value to a numeric type if possible, trying int then float.
+def to_numeric(value: Any) -> int | float | Any:
+    """Convert a value to a numeric type if possible, trying int then float.
+
+    Args:
+        value: The value to convert.
+
+    Returns:
+        The converted numeric value, or the original value if conversion fails.
+
     """
     if isinstance(value, (int, float)):
         return value
@@ -31,10 +38,16 @@ def to_numeric(value):
     return value
 
 
-def safe_numeric(value, default=999):
-    """
-    Safely converts a value to a numeric type for sorting.
-    Returns default if conversion fails.
+def safe_numeric(value: Any, default: int | float = 999) -> int | float:
+    """Safely convert a value to a numeric type for sorting.
+
+    Args:
+        value: The value to convert.
+        default: The default value to return if conversion fails.
+
+    Returns:
+        The converted numeric value or the default.
+
     """
     res = to_numeric(value)
     if isinstance(res, (int, float)):
@@ -43,14 +56,17 @@ def safe_numeric(value, default=999):
 
 
 class PendingCollection(nodes.General, nodes.Element):
+    """A placeholder node for a collection.
+
+    This node will be rendered after all documents have been read and metadata is available.
     """
-    A placeholder node for a collection that will be rendered
-    after all documents have been read and metadata is available.
-    """
+
     pass
 
 
 class CollectionDirective(SphinxDirective):
+    """Directive to insert a collection of articles."""
+
     has_content: bool = False
     option_spec: Dict[str, Any] = {
         'type': directives.unchanged,
@@ -63,21 +79,24 @@ class CollectionDirective(SphinxDirective):
         'hidden': directives.flag,
     }
 
-    def run(self):
-        """
-        Process the collection directive.
-        
-        Instead of rendering immediately, we:
-        1. Discover all relevant files.
-        2. Add them to a hidden toctree so Sphinx knows about them (fixes "not in toctree" warnings).
-        3. Return a PendingCollection node to defer rendering until metadata is ready.
+
+    def run(self) -> List[nodes.Node]:
+        """Process the collection directive.
+
+        Instead of rendering immediately, this method:
+        1. Discovers all relevant files.
+        2. Adds them to a hidden toctree so Sphinx knows about them (fixes "not in toctree" warnings).
+        3. Returns a PendingCollection node to defer rendering until metadata is ready.
+
+        Returns:
+            A list containing the PendingCollection node and a hidden toctree node.
+
         """
         env = self.env
         
         collection_type = self.options.get('type')
         sort_key = self.options.get('sort')
         reverse = 'reverse' in self.options
-        limit = self.options.get('limit')
         
         docnames = []
 
@@ -161,10 +180,16 @@ class CollectionDirective(SphinxDirective):
         return [pending, toc]
 
 
-def process_collections(app, doctree, fromdocname):
-    """
-    Resolve PendingCollection nodes into actual HTML content.
+def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> None:
+    """Resolve PendingCollection nodes into actual HTML content.
+
     This runs on 'doctree-resolved', when all metadata is available.
+
+    Args:
+        app: The Sphinx application instance.
+        doctree: The document tree.
+        fromdocname: The document name.
+
     """
     env = app.env
     builder = app.builder
@@ -281,8 +306,14 @@ def process_collections(app, doctree, fromdocname):
         node.replace_self(nodes.raw('', html, format='html'))
 
 
-def collect_metadata(app, env):
-    """Collect all tags and categories from document metadata."""
+def collect_metadata(app: Any, env: Any) -> None:
+    """Collect all tags and categories from document metadata.
+
+    Args:
+        app: The Sphinx application instance.
+        env: The build environment.
+
+    """
     env.all_tags = set()
     env.all_categories = set()
     env.all_types = set()
@@ -306,8 +337,16 @@ def collect_metadata(app, env):
         if 'type' in meta:
             env.all_types.add(meta['type'])
 
-def generate_taxonomy_pages(app):
-    """Dynamically generate pages for each tag and category."""
+def generate_taxonomy_pages(app: Any) -> Any:
+    """Dynamically generate pages for each tag and category.
+
+    Args:
+        app: The Sphinx application instance.
+
+    Yields:
+        Tuple containing context, template name, and output path for each page.
+
+    """
     env = app.env
     if hasattr(env, 'all_tags'):
         for tag in env.all_tags:
@@ -480,8 +519,19 @@ def generate_taxonomy_pages(app):
             }
             yield (f'types/{type_}', context, 'type_page.html')
 
-def build_nav_links(app, pagename, templatename, context, doctree):
-    """Build navigation links and add tags/categories to the context."""
+def build_nav_links(
+    app: Any, pagename: str, templatename: str, context: Dict[str, Any], doctree: nodes.document
+) -> None:
+    """Build navigation links and add tags/categories to the context.
+
+    Args:
+        app: The Sphinx application instance.
+        pagename: The name of the page.
+        templatename: The name of the template.
+        context: The context for rendering.
+        doctree: The document tree.
+
+    """
     context['tags'] = sorted(list(app.env.all_tags)) if hasattr(app.env, 'all_tags') else []
     context['categories'] = sorted(list(app.env.all_categories)) if hasattr(app.env, 'all_categories') else []
     context['types'] = sorted(list(app.env.all_types)) if hasattr(app.env, 'all_types') else []
@@ -531,10 +581,17 @@ def build_nav_links(app, pagename, templatename, context, doctree):
     recent_logs.sort(key=lambda x: x['date'], reverse=True)
     context['recent_logs'] = recent_logs[:5]
 
-def peek_metadata(filepath):
-    """
-    Peek at the beginning of a file to extract navigation metadata.
+def peek_metadata(filepath: str) -> Dict[str, str]:
+    """Peek at the beginning of a file to extract navigation metadata.
+
     This enables sorting before Sphinx has fully processed the environment.
+
+    Args:
+        filepath: The path to the file to peek at.
+
+    Returns:
+        A dictionary containing the extracted metadata.
+
     """
     meta = {}
     try:
@@ -565,10 +622,16 @@ def peek_metadata(filepath):
 
 
 
-def inject_root_navigation(app, docname, source):
-    """
-    Automatically inject a hidden toctree into the master document (Root).
+def inject_root_navigation(app: Any, docname: str, source: List[str]) -> None:
+    """Automatically inject a hidden toctree into the master document (Root).
+
     This includes any document with :navigation: header or :navigation: footer.
+
+    Args:
+        app: The Sphinx application instance.
+        docname: The name of the document.
+        source: The list of source strings (mutable).
+
     """
     if docname != app.config.master_doc:
         return
@@ -581,8 +644,10 @@ def inject_root_navigation(app, docname, source):
     for root, dirs, files in os.walk(env.srcdir):
         # Exclude dot-directories and standard Sphinx folders
         dirs[:] = [d for d in dirs if not d.startswith('.')]
-        if '_static' in dirs: dirs.remove('_static')
-        if '_templates' in dirs: dirs.remove('_templates')
+        if '_static' in dirs:
+            dirs.remove('_static')
+        if '_templates' in dirs:
+            dirs.remove('_templates')
 
         for filename in files:
             if filename.endswith('.rst'):
@@ -621,8 +686,16 @@ def inject_root_navigation(app, docname, source):
         source[0] += toctree_rst
 
 
-def setup(app):
-    """Register directives and connect to Sphinx events."""
+def setup(app: Any) -> Dict[str, Any]:
+    """Register directives and connect to Sphinx events.
+
+    Args:
+        app: The Sphinx application instance.
+
+    Returns:
+        A dictionary containing extension metadata.
+
+    """
     app.add_node(PendingCollection)
     app.add_directive("collection", CollectionDirective)
     app.connect('env-updated', collect_metadata)

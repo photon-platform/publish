@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.6] - 2025-12-15
+
+### Changed
+- **Documentation**: enforced Google-style docstrings and added comprehensive type hints to `directives/collection.py`, `images/directive.py`, `images/processor.py` and `images/__init__.py`.
+- **Workflow**: updated `code-docs-check` workflow to include separated checks for Type Hints and Docstrings with auto-fix capabilities, plus a final general check.
+
 ## [0.3.5] - 2025-12-15
 
 ### Changed

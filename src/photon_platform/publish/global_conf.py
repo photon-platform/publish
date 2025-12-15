@@ -10,14 +10,14 @@ html_context = {}
 
 
 def setup_globals(org: str, org_name: str, repo: str, repo_name: str) -> None:
-    """
-    Set up global variables for the Sphinx configuration.
+    """Set up global variables for the Sphinx configuration.
 
     Args:
         org: The GitHub organization or username.
         org_name: The display name of the organization.
         repo: The GitHub repository name.
         repo_name: The display name of the repository.
+
     """
     globals().update(
         {

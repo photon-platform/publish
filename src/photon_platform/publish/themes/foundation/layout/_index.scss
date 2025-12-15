@@ -24,11 +24,6 @@ body {
   @import 'asides/index';
   @import 'asides/search';
 
-  // --- Responsive Grid Layout ---
-
-  // Mobile first (default is flex column)
-
-  // Tablet / Landscape Phone
   @media (min-width: 48em) and (orientation: landscape) {
     display: grid;
     grid-template-areas:

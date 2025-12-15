@@ -1,17 +1,28 @@
+"""Directives for image processing."""
+
+import os
+from typing import Any, List
+
 from docutils import nodes
-from docutils.parsers.rst import Directive, directives
+from docutils.parsers.rst import directives
 from sphinx.util.docutils import SphinxDirective
 from sphinx.util.osutil import relative_uri
 from .processor import ImageProcessor
-import os
 
 class picture_node(nodes.General, nodes.Element):
+    """Custom node for containing responsive picture elements."""
+
     pass
 
-def visit_picture_node(self, node):
-    """
-    HTML visitor for picture_node.
+def visit_picture_node(self: Any, node: nodes.Element) -> None:
+    """HTML visitor for picture_node.
+
     Renders a standard <figure> with nested <picture> element.
+
+    Args:
+        self: The translator instance.
+        node: The picture_node being visited.
+
     """
     atts = {}
     # docutils 'starttag' expects 'class' in atts to be a string, not a list.
@@ -77,11 +88,19 @@ def visit_picture_node(self, node):
     
     raise nodes.SkipNode # We handled the whole subtree
 
-def depart_picture_node(self, node):
+def depart_picture_node(self: Any, node: nodes.Element) -> None:
+    """Departure visitor for picture_node.
+
+    Args:
+        self: The translator instance.
+        node: The picture_node being visited.
+
+    """
     pass
 
 class PictureDirective(SphinxDirective):
-    
+    """Directive for inserting responsive pictures."""
+
     required_arguments = 1
     optional_arguments = 0
     final_argument_whitespace = True
@@ -91,7 +110,13 @@ class PictureDirective(SphinxDirective):
         'caption': directives.unchanged,
     }
 
-    def run(self):
+    def run(self) -> List[nodes.Node]:
+        """Process the picture directive.
+
+        Returns:
+            A list containing the picture_node.
+
+        """
         # File path from argument
         image_path_arg = self.arguments[0]
         

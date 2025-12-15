@@ -1,16 +1,22 @@
-from PIL import Image, ImageOps
+"""Image processing logic."""
+
+from typing import Any, Dict
+
+from PIL import Image
 import hashlib
-import os
 import shutil
 from pathlib import Path
 
 class ImageProcessor:
-    """
-    Handles image processing including resizing, format conversion (WebP),
-    and caching.
-    """
-    
-    def __init__(self, app):
+    """Handles image processing including resizing, format conversion (WebP), and caching."""
+
+    def __init__(self, app: Any) -> None:
+        """Initialize the ImageProcessor.
+
+        Args:
+            app: The Sphinx application instance.
+
+        """
         self.app = app
         self.srcdir = Path(app.srcdir)
         self.outdir = Path(app.outdir)
@@ -21,20 +27,32 @@ class ImageProcessor:
         
         self.ensure_dirs()
 
-    def ensure_dirs(self):
+    def ensure_dirs(self) -> None:
+        """Ensure that the cache and final image directories exist."""
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.final_images_dir.mkdir(parents=True, exist_ok=True)
 
-    def get_image_hash(self, source_path, width, options):
-        """
-        Generate a unique hash based on file content and processing options.
+    def get_image_hash(self, source_path: Path, width: int, options: str) -> str:
+        """Generate a unique hash based on file content and processing options.
+
+        Args:
+            source_path: Path to the source image.
+            width: Width of the resized image.
+            options: String representation of processing options.
+
+        Returns:
+            The SHA256 hash of the image and options.
+
         """
         hasher = hashlib.sha256()
         
         # Hash file content
         with open(source_path, 'rb') as f:
-            while chunk := f.read(8192):
+            chunk = f.read(8192)
+            while chunk:
                 hasher.update(chunk)
+                chunk = f.read(8192)
+
                 
         # Hash parameters
         params = f"{width}-{options}".encode('utf-8')
@@ -42,12 +60,12 @@ class ImageProcessor:
         
         return hasher.hexdigest()
 
-    def process_image(self, rel_source_path, options=None):
-        """
-        Main entry point to process an image.
+    def process_image(self, rel_source_path: str, options: dict = None) -> Dict[str, str]:
+        """Process an image generating variants.
         
         Returns:
             dict: Paths to the processed 'main' and 'thumb' images relative to output root.
+
         """
         options = options or {}
         
@@ -104,10 +122,8 @@ class ImageProcessor:
             
         return results
 
-    def _generate_variant(self, source_path, output_path, spec):
-        """
-        Actual Pillow processing logic.
-        """
+    def _generate_variant(self, source_path: Path, output_path: Path, spec: Dict[str, Any]) -> None:
+        """Process the image using Pillow."""
         with Image.open(source_path) as img:
             # Handle RGBA for WebP. If preserving transparency, RGBA is fine.
             # Convert palette mode to RGBA/RGB

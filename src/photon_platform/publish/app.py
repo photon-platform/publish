@@ -1,6 +1,5 @@
 
-"""
-Command-line interface for the publish tool.
+"""Command-line interface for the publish tool.
 """
 import click
 from . import publish
