@@ -1,7 +1,7 @@
 nav.breadcrumbs {
   padding: 0.5em 0;
   margin-bottom: 1em;
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
@@ -9,7 +9,7 @@ nav.breadcrumbs {
 
   a {
     text-decoration: none;
-    color: $link-color;
+    color: var(--link-color);
     display: inline;
     --offset: 0;
 
@@ -20,6 +20,6 @@ nav.breadcrumbs {
 
   span {
     margin: 0 0.5em;
-    color: $text-color;
+    color: var(--text-color);
   }
 }

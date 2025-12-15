@@ -3,7 +3,7 @@
 
 button,
 input {
-  font-family: $font-primary;
+  font-family: var(--font-primary);
   font-size: 100%;
   line-height: 1.15;
   overflow: visible;
@@ -27,9 +27,8 @@ button {
 }
 
 // Basic text input styling (mostly used by search input override)
-input[type=text],
-input[type=search] {
-  --bg: $color-key-lighter;
+input[type=text] {
+  --bg: var(--color-key-lighter);
 
   display: block;
   padding: .4em;
@@ -48,8 +47,43 @@ input[type=search] {
     color: var(--color);
   }
   &::placeholder {
-  --color: $color-key-dark;
+  --color: var(--color-key-dark);
   }
+}
+
+input[type=search] {
+  --bg: var(--color-key-lighter);
+
+  display: block;
+  padding: .4em;
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  box-shadow: none;
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  width: 100%;
+
+  // Focus state
+  &:focus {
+    border-color: var(--link-color);
+    box-shadow: 0 0 0 3px var(--color-key-light);
+    outline: none;
+  }
+}
+
+// Checkboxes and Radios
+input[type="checkbox"],
+input[type="radio"] {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+  --color: var(--color-key-dark);
+}
+
+// Form groups
+.form-group {
+  margin-bottom: 1rem;
 }
 
 // Submit button
@@ -60,34 +94,71 @@ input[type=submit] {
   border: 0 none;
   border-radius: .5em;
 
-  color: $color-key-lighter;
-  background: $color-key;
+  color: var(--color-key-lighter);
+  background: var(--color-key);
   padding: .5em;
   margin: .5em 0;
   text-decoration: none;
   &:hover {
-    background: $color-key-light;
+    background: var(--link-hover-color);
   }
 }
 
+// Labels
 label {
   display: block;
   font-weight: bold;
-  font-family: $font-primary;
+  font-family: var(--font-primary);
+  margin-bottom: 0.5rem;
+  color: var(--color-key-lighter);
+  background: var(--link-color);
+}
+
+// Initial state for inputs
+input,
+textarea,
+select {
+  &:invalid {
+    background: var(--color-key-light);
+    border-color: var(--color-danger);
+  }
+}
+
+// Validation styles
+input:valid {
+    border-color: var(--color-success);
+}
+
+input:invalid {
+    border-color: var(--color-danger);
 }
 
 button {
   border: 0 none;
   border-radius: .5em;
 
-  color: $color-key-lighter;
-  background: $color-key;
+  color: var(--color-key-lighter);
+  background: var(--color-key);
   padding: .5em;
   margin: .5em;
   text-decoration: none;
 
   &:hover {
-    background: $color-key-light;
+    background: var(--color-key-light);
     text-decoration: none;
+  }
+}
+
+// Button styles (if form related)
+button[type="submit"] {
+  color: var(--color-key-lighter);
+  background: var(--link-color);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 3px;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--color-key-light);
   }
 }

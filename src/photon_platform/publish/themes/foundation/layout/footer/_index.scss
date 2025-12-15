@@ -7,35 +7,24 @@
     align-items: center;
     // width: 100%;
     padding-top: 1em;
-    border-top: 1px solid $border-color;
+    border-top: 1px solid var(--border-color);
     margin-top: 1em;
+    padding: 1em 0;
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--link-hover-color);
+    text-decoration: none;
+    border-color: var(--link-hover-color);
+    
+    // margin: 2rem 0;             /* top and bottom margin */
+    padding: .5rem 1rem;       /* padding inside the footer */
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
     hr {
       display: none;
     }
 
-    .rst-footer-buttons {
-      display: flex;
-      gap: 1em;
-      margin-left: auto; // Pushes buttons to the right
-
-      .btn {
-        color: $link-color;
-        border: 1px solid $border-color;
-        padding: 0.5em 1em;
-        border-radius: 0.25em;
-        text-decoration: none;
-        white-space: nowrap;
-
-        &:hover {
-          color: $link-hover-color;
-          background: $bg-alt-color;
-          border-color: $link-hover-color;
-        }
-
-        .fa {
-          display: none;
-        }
-      }
-    }
   }

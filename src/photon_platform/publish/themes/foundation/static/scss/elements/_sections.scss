@@ -1,5 +1,5 @@
 section, header, footer, main, .asides {
-  background: $bg-alt-color;
+  background: var(--bg-alt-color);
   margin: var(--fitz);
   padding: var(--fitz);
 }

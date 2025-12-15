@@ -19,12 +19,12 @@ nav {
       display: block;
       text-align: right;
       font-size: 1rem; // Restore font size for icon
-      font-family: $font-icon;
+      font-family: var(--font-icon);
       content: '≡'; // Hamburger icon
     }
 
     &:hover {
-      background: $color-key-lighter;
+      background: var(--color-key-lighter);
     }
   }
 
@@ -69,9 +69,9 @@ nav {
       padding-top: .1em;
       content: ' ';
       display: inline-block;
-      width: $offset;
-      flex: 0 0 $offset;
-      font-family: $font-icon;
+      width: var(--offset);
+      flex: 0 0 var(--offset);
+      font-family: var(--font-icon);
       text-align: center;
 
     }
