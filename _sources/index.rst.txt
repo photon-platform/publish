@@ -1,9 +1,7 @@
 PHOTON • publish
 ================
 
-.. image:: _static/logo.png
-   :align: center
-   :alt: PHOTON publish logo
+.. picture:: _static/logo.png
 
 **Publish** is a consolidated repository designed to streamline and enhance the Sphinx documentation framework.
 

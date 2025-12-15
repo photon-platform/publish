@@ -1,9 +1,9 @@
-
+/* elements/blockquotes *****************************/
 blockquote {
   display: block;
   padding: var(--fitz-2) ;
   // font-size: 1.2em;
-  border-left: 1px solid $color-key-dark;
+  // border-left: 1px solid $color-key-dark;
 
   // left vertical rule
   &::before {

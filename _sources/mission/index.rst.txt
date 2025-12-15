@@ -6,6 +6,7 @@ mission
 
     provide tools to model classical geometric constructions
 
-.. collection::
+.. collection:: 
+    :title: Goals
     :type: goal
     :sort: order
