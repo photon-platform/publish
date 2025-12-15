@@ -1,0 +1,7 @@
+    <div class="footer-nav">
+      <ul>
+{%- for p in footer_nav_list %}
+        <li><a href="{{ pathto(p.docname) }}">{{ p.title }}</a></li>
+{%- endfor %}
+      </ul>
+    </div>

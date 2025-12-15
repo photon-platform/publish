@@ -2,6 +2,16 @@ changelog
 =========
 
 
+0.3.4
+=====
+
+- fix: Resolved `TemplateNotFound` errors by updating template include paths.
+- refactor: Cleaned up CSS by archiving unused form styles and optimizing SCSS imports.
+- fix: Corrected search input visibility ensuring proper contrast.
+- fix: Removed erroneous `<main>` tag wrapping from article excerpts.
+- feat: Enhanced header responsiveness with a mobile hamburger menu and improved desktop alignment.
+- style: Centered breadcrumbs navigation and refined header visual details (removed bullets).
+
 0.3.3
 =====
 

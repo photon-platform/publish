@@ -1,0 +1,20 @@
+>main {
+  display: flex;
+  flex-flow: column nowrap;
+
+  >header {}
+
+  >article {
+    padding: var(--fitz-2);
+
+    >figure {}
+  }
+
+
+
+  >section.form {
+    form {
+      // width: 100%;
+    }
+  }
+}

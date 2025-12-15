@@ -1,0 +1,25 @@
+nav.breadcrumbs {
+  padding: 0.5em 0;
+  margin-bottom: 1em;
+  border-bottom: 1px solid $border-color;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+
+  a {
+    text-decoration: none;
+    color: $link-color;
+    display: inline;
+    --offset: 0;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  span {
+    margin: 0 0.5em;
+    color: $text-color;
+  }
+}

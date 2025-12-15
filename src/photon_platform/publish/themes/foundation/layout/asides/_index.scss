@@ -1,0 +1,8 @@
+  > .asides {
+    grid-area: asides;
+
+    > aside {
+      padding: var(--fitz);
+      margin: var(--fitz);
+    }
+  }

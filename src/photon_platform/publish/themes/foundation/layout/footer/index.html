@@ -1,0 +1,13 @@
+  <footer>
+{%- if footer_nav_list %}
+{% include "layout/footer/nav.html" %}
+{%- endif %}
+    <hr />
+    <div role="contentinfo">
+      <p>
+{%- if show_copyright %}
+        &copy; Copyright {{ copyright }}.
+{%- endif %}
+      </p>
+    </div>
+  </footer>

@@ -5,7 +5,7 @@
         <h1>{{ collection.title }}</h1>
     </header>
     {% for article in collection.articles %}
-    {% include "components/article/excerpt.html" %}
+    {% include "article/excerpt.html" %}
     {% endfor %}
 </section>
 {% endblock %}

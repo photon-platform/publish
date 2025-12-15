@@ -1,0 +1,99 @@
+article {
+  container-type: inline-size;
+  container-name: article;
+
+  padding: var(--fitz-2);
+  margin: var(--fitz);
+
+  display: flex;
+  flex-flow: column nowrap;
+
+  >* {
+    padding: var(--fitz-2);
+    // margin: var(--fitz);
+    margin: 0;
+    // background: var(--bg);
+  }
+
+  @import '_nav';
+  @import '_figure';
+  @import '_header';
+  @import '_content';
+  @import '_footer';
+  @import '_gallery';
+
+  // Switch to row layout when article has enough width (Container Query)
+  @container article (min-width: 60em) {
+    flex-flow: row wrap;
+
+    >.content {
+      flex: 1 1 calc(100% - var(--col));
+      order: 1;
+    }
+
+    >figure {
+      flex: 1 1 var(--col);
+      order: 2;
+    }
+
+    >.gallery {
+      flex: 1 1 var(--col);
+      order: 4;
+    }
+
+    >footer {
+      // flex: 1 1 var(--col);
+      order: 5;
+      flex-flow: column nowrap;
+      justify-content: flex-start;
+    }
+  }
+
+  @container article (min-width: 80em) {
+    >.content {
+      flex: 1 1 calc(100% - var(--col-2));
+    }
+
+
+  }
+}
+
+/* article {
+
+  @media (min-width: 96em) {
+    flex-flow: row wrap;
+
+    > .content {
+      flex: 1 1 calc(100% - var(--col));
+      order: 1;
+    }
+
+    > figure {
+      flex: 1 1 var(--col);
+      order: 2;
+    }
+
+    > .gallery {
+      flex: 1 1 var(--col);
+      order: 4;
+    }
+
+    > footer {
+      flex: 1 1 var(--col);
+      order: 5;
+      flex-flow: column nowrap;
+      justify-content: flex-start;
+    }
+  }
+
+  @media (min-width: 108em) {
+    > .content {
+      flex: 1 1 calc(100% - var(--col-2));
+    }
+
+    > figure, > .gallery, > footer {
+      flex: 0 0 var(--col-2);
+    }
+  }
+}
+*/

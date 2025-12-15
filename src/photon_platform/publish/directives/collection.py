@@ -1,4 +1,5 @@
 import os
+import re
 from functools import partial
 from sphinx.util.docutils import SphinxDirective
 from sphinx.util.osutil import relative_uri
@@ -174,7 +175,7 @@ def process_collections(app, doctree, fromdocname):
         
         # Determine the template path based on the current theme
         # Determine the template path based on the current theme
-        default_template = 'components/collection/collection.html'
+        default_template = 'collection/index.html'
 
         collection_type = options.get('type')
         sort_key = options.get('sort')
@@ -445,7 +446,10 @@ def generate_taxonomy_pages(app):
                             break
                         
                         if first_text:
-                            item['excerpt_text'] = app.builder.render_partial(first_text)['html_body']
+                            html = app.builder.render_partial(first_text)['html_body']
+                            html = re.sub(r'<main[^>]*>', '', html)
+                            html = re.sub(r'</main>', '', html)
+                            item['excerpt_text'] = html
 
                         # Find first figure
                         first_figure = None
@@ -457,7 +461,10 @@ def generate_taxonomy_pages(app):
                             break
 
                         if first_figure:
-                            item['excerpt_figure'] = app.builder.render_partial(first_figure)['html_body']
+                            html = app.builder.render_partial(first_figure)['html_body']
+                            html = re.sub(r'<main[^>]*>', '', html)
+                            html = re.sub(r'</main>', '', html)
+                            item['excerpt_figure'] = html
                         
                         articles.append(item)
             

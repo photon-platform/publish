@@ -1,0 +1,73 @@
+/* layout *****************************/
+
+:root {
+  --fitz: #{$fitz};
+  --fitz-2: calc(var(--fitz) * 2);
+  --fitz-half: calc(var(--fitz) / 2);
+
+  --col: #{$col};
+  --col-2: calc(var(--col) * 2);
+  --col-3: calc(var(--col) * 3);
+}
+
+html {
+  height: 100%;
+  max-width: 100%;
+  color: $text-color;
+  background: $bg-color;
+  font-family: $font-primary;
+  font-weight: 400;
+  line-height: 1.35;
+  text-align: left;
+}
+
+body {
+  background-color: $bg-color;
+  padding: var(--fitz-half);
+
+  @import 'header/index';
+  @import 'main/index';
+  @import 'footer/index';
+  // @import 'nav/index';
+  @import 'asides/index';
+  @import 'asides/search';
+
+  // --- Responsive Grid Layout ---
+
+  // Mobile first (default is flex column)
+
+  // Tablet / Landscape Phone
+  @media (min-width: 48em) and (orientation: landscape) {
+    display: grid;
+    grid-template-areas:
+        " header main "
+        " asides main "
+        " asides footer ";
+    grid-template-columns: 16em 1fr;
+    grid-template-rows: auto 1fr auto;
+
+    > header {
+      flex-flow: column nowrap;
+      align-items: stretch;
+      justify-content: flex-start;
+      > nav {
+        flex-flow: column nowrap;
+        align-items: stretch;
+        justify-content: flex-start;
+      }
+    }
+
+    > .asides {
+      flex-flow: column nowrap;
+      align-items: stretch;
+    }
+  }
+
+  // Desktop
+  @media (min-width: 72em) and (orientation: landscape) {
+    grid-template-areas:
+        " header main asides"
+        " footer main asides";
+    grid-template-columns: var(--col) 1fr var(--col);
+  }
+}
