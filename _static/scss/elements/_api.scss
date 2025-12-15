@@ -2,7 +2,7 @@
 
 dl.py {
   dt.sig {
-    font-family: $font-code;
+    font-family: var(--font-code);
     font-size: 0; // Hide text nodes (commas, spaces)
 
     // Reset font-size for child elements
@@ -11,7 +11,8 @@ dl.py {
     }
 
     .sig-prename {
-      color: #888;
+      display: none;
+      color: var(--color-muted);
     }
 
     .sig-name {
@@ -36,7 +37,7 @@ dl.py {
 
   // Property decorator styling
   em.property {
-    color: #e74c3c; // Lighter red (consistent intensity with standard blue links)
+    color: var(--color-property); // Lighter red (consistent intensity with standard blue links)
     font-style: normal; // usually em is italic, reset if desired, or keep
   }
 
