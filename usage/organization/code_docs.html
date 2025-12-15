@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Code Documentation &mdash; Project name not set  documentation</title>
   <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../_static/css/styles.css?v=759a83f8" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/styles.css?v=38c7a96b" />
   <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="../../_static/css/print.css" type="text/css" media="print" />
   <link rel="icon" href="../../_static/favicon.ico" />
@@ -96,6 +96,7 @@
           <dt class="sig sig-object py">
           <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">CollectionDirective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_machine</span></span></em><span class="sig-paren">)</span></dt>
           <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SphinxDirective</span></code></p>
+          <p>Directive to insert a collection of articles.</p>
           <dl class="py attribute">
           <dt class="sig sig-object py">
           <span class="sig-name descname"><span class="pre">has_content</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em></dt>
@@ -110,12 +111,17 @@
 
           <dl class="py method">
           <dt class="sig sig-object py">
-          <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+          <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Node</span><span class="p"><span class="pre">]</span></span></span></span></dt>
           <dd><p>Process the collection directive.</p>
-          <p>Instead of rendering immediately, we:
-          1. Discover all relevant files.
-          2. Add them to a hidden toctree so Sphinx knows about them (fixes “not in toctree” warnings).
-          3. Return a PendingCollection node to defer rendering until metadata is ready.</p>
+          <p>Instead of rendering immediately, this method:
+          1. Discovers all relevant files.
+          2. Adds them to a hidden toctree so Sphinx knows about them (fixes “not in toctree” warnings).
+          3. Returns a PendingCollection node to defer rendering until metadata is ready.</p>
+          <dl class="field-list simple">
+          <dt class="field-odd">Returns<span class="colon">:</span></dt>
+          <dd class="field-odd"><p>A list containing the PendingCollection node and a hidden toctree node.</p>
+          </dd>
+          </dl>
           </dd></dl>
 
           </dd></dl>
@@ -179,8 +185,8 @@
         <li><a href="../../about.html">About</a></li>
         <li><a href="../../connect.html">Connect</a></li>
         <li><a href="../../changelog.html">Changelog</a></li>
-        <li><a href="../../todos/index.html">todos</a></li>
         <li><a href="../../glossary.html">Glossary</a></li>
+        <li><a href="../../todos/index.html">todos</a></li>
         <li><a href="../../orphan.html">Orphan Page</a></li>
       </ul>
     </div>

@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>photon_platform.publish.directives.collection &mdash; Project name not set  documentation</title>
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=759a83f8" />
+  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=38c7a96b" />
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="../../../../../../_static/css/print.css" type="text/css" media="print" />
   <link rel="icon" href="../../../../../../_static/favicon.ico" />
@@ -71,6 +71,7 @@
       <div class="content">
         <section id="module-photon_platform.publish.directives.collection">
           <span id="photon-platform-publish-directives-collection"></span><h1>photon_platform.publish.directives.collection<a class="headerlink" href="#module-photon_platform.publish.directives.collection" title="Link to this heading">¶</a></h1>
+          <p>Directive for creating content collections.</p>
           <section id="attributes">
           <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
           <table class="autosummary longtable docutils align-default">
@@ -86,10 +87,10 @@
           <table class="autosummary longtable docutils align-default">
           <tbody>
           <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.PendingCollection" title="photon_platform.publish.directives.collection.PendingCollection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PendingCollection</span></code></a></p></td>
-          <td><p>A placeholder node for a collection that will be rendered</p></td>
+          <td><p>A placeholder node for a collection.</p></td>
           </tr>
           <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.CollectionDirective" title="photon_platform.publish.directives.collection.CollectionDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CollectionDirective</span></code></a></p></td>
-          <td><p>A base class for Sphinx directives.</p></td>
+          <td><p>Directive to insert a collection of articles.</p></td>
           </tr>
           </tbody>
           </table>
@@ -98,31 +99,31 @@
           <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
           <table class="autosummary longtable docutils align-default">
           <tbody>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.to_numeric" title="photon_platform.publish.directives.collection.to_numeric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_numeric</span></code></a>(value)</p></td>
-          <td><p>Converts a value to a numeric type if possible, trying int then float.</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.to_numeric" title="photon_platform.publish.directives.collection.to_numeric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_numeric</span></code></a>(→ int | float | Any)</p></td>
+          <td><p>Convert a value to a numeric type if possible, trying int then float.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.safe_numeric" title="photon_platform.publish.directives.collection.safe_numeric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">safe_numeric</span></code></a>(value[, default])</p></td>
-          <td><p>Safely converts a value to a numeric type for sorting.</p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.safe_numeric" title="photon_platform.publish.directives.collection.safe_numeric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">safe_numeric</span></code></a>(→ int | float)</p></td>
+          <td><p>Safely convert a value to a numeric type for sorting.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.process_collections" title="photon_platform.publish.directives.collection.process_collections"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_collections</span></code></a>(app, doctree, fromdocname)</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.process_collections" title="photon_platform.publish.directives.collection.process_collections"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_collections</span></code></a>(→ None)</p></td>
           <td><p>Resolve PendingCollection nodes into actual HTML content.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.collect_metadata" title="photon_platform.publish.directives.collection.collect_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">collect_metadata</span></code></a>(app, env)</p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.collect_metadata" title="photon_platform.publish.directives.collection.collect_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">collect_metadata</span></code></a>(→ None)</p></td>
           <td><p>Collect all tags and categories from document metadata.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.generate_taxonomy_pages" title="photon_platform.publish.directives.collection.generate_taxonomy_pages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_taxonomy_pages</span></code></a>(app)</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.generate_taxonomy_pages" title="photon_platform.publish.directives.collection.generate_taxonomy_pages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_taxonomy_pages</span></code></a>(→ Any)</p></td>
           <td><p>Dynamically generate pages for each tag and category.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.build_nav_links" title="photon_platform.publish.directives.collection.build_nav_links"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_nav_links</span></code></a>(app, pagename, templatename, context, ...)</p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.build_nav_links" title="photon_platform.publish.directives.collection.build_nav_links"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_nav_links</span></code></a>(→ None)</p></td>
           <td><p>Build navigation links and add tags/categories to the context.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.peek_metadata" title="photon_platform.publish.directives.collection.peek_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peek_metadata</span></code></a>(filepath)</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.peek_metadata" title="photon_platform.publish.directives.collection.peek_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peek_metadata</span></code></a>(→ Dict[str, str])</p></td>
           <td><p>Peek at the beginning of a file to extract navigation metadata.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.inject_root_navigation" title="photon_platform.publish.directives.collection.inject_root_navigation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inject_root_navigation</span></code></a>(app, docname, source)</p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.inject_root_navigation" title="photon_platform.publish.directives.collection.inject_root_navigation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inject_root_navigation</span></code></a>(→ None)</p></td>
           <td><p>Automatically inject a hidden toctree into the master document (Root).</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.setup" title="photon_platform.publish.directives.collection.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(app)</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.setup" title="photon_platform.publish.directives.collection.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(→ Dict[str, Any])</p></td>
           <td><p>Register directives and connect to Sphinx events.</p></td>
           </tr>
           </tbody>
@@ -137,39 +138,48 @@
 
           <dl class="py function">
           <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.to_numeric">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">to_numeric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.to_numeric" title="Link to this definition">¶</a></dt>
-          <dd><p>Converts a value to a numeric type if possible, trying int then float.</p>
+          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">to_numeric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Any</span></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.to_numeric" title="Link to this definition">¶</a></dt>
+          <dd><p>Convert a value to a numeric type if possible, trying int then float.</p>
+          <dl class="field-list simple">
+          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+          <dd class="field-odd"><p><strong>value</strong> – The value to convert.</p>
+          </dd>
+          <dt class="field-even">Returns<span class="colon">:</span></dt>
+          <dd class="field-even"><p>The converted numeric value, or the original value if conversion fails.</p>
+          </dd>
+          </dl>
           </dd></dl>
 
           <dl class="py function">
           <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.safe_numeric">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">safe_numeric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">999</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.safe_numeric" title="Link to this definition">¶</a></dt>
-          <dd><p>Safely converts a value to a numeric type for sorting.
-          Returns default if conversion fails.</p>
+          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">safe_numeric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">999</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.safe_numeric" title="Link to this definition">¶</a></dt>
+          <dd><p>Safely convert a value to a numeric type for sorting.</p>
+          <dl class="field-list simple">
+          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+          <dd class="field-odd"><ul class="simple">
+          <li><p><strong>value</strong> – The value to convert.</p></li>
+          <li><p><strong>default</strong> – The default value to return if conversion fails.</p></li>
+          </ul>
+          </dd>
+          <dt class="field-even">Returns<span class="colon">:</span></dt>
+          <dd class="field-even"><p>The converted numeric value or the default.</p>
+          </dd>
+          </dl>
           </dd></dl>
 
           <dl class="py class">
           <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.PendingCollection">
           <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">PendingCollection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rawsource</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">children</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attributes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.PendingCollection" title="Link to this definition">¶</a></dt>
           <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.General</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.Element</span></code></p>
-          <p>A placeholder node for a collection that will be rendered
-          after all documents have been read and metadata is available.</p>
+          <p>A placeholder node for a collection.</p>
+          <p>This node will be rendered after all documents have been read and metadata is available.</p>
           </dd></dl>
 
           <dl class="py class">
           <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective">
           <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">CollectionDirective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_machine</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective" title="Link to this definition">¶</a></dt>
           <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">sphinx.util.docutils.SphinxDirective</span></code></p>
-          <p>A base class for Sphinx directives.</p>
-          <p>This class provides helper methods for Sphinx directives.</p>
-          <div class="versionadded">
-          <p><span class="versionmodified added">Added in version 1.8.</span></p>
-          </div>
-          <div class="admonition note">
-          <p class="admonition-title">Note</p>
-          <p>The subclasses of this class might not work with docutils.
-          This class is strongly coupled with Sphinx.</p>
-          </div>
+          <p>Directive to insert a collection of articles.</p>
           <dl class="py attribute">
           <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.has_content">
           <span class="sig-name descname"><span class="pre">has_content</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.has_content" title="Link to this definition">¶</a></dt>
@@ -184,59 +194,125 @@
 
           <dl class="py method">
           <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.CollectionDirective.run">
-          <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.run" title="Link to this definition">¶</a></dt>
+          <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">docutils.nodes.Node</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.CollectionDirective.run" title="Link to this definition">¶</a></dt>
           <dd><p>Process the collection directive.</p>
-          <p>Instead of rendering immediately, we:
-          1. Discover all relevant files.
-          2. Add them to a hidden toctree so Sphinx knows about them (fixes “not in toctree” warnings).
-          3. Return a PendingCollection node to defer rendering until metadata is ready.</p>
+          <p>Instead of rendering immediately, this method:
+          1. Discovers all relevant files.
+          2. Adds them to a hidden toctree so Sphinx knows about them (fixes “not in toctree” warnings).
+          3. Returns a PendingCollection node to defer rendering until metadata is ready.</p>
+          <dl class="field-list simple">
+          <dt class="field-odd">Returns<span class="colon">:</span></dt>
+          <dd class="field-odd"><p>A list containing the PendingCollection node and a hidden toctree node.</p>
+          </dd>
+          </dl>
           </dd></dl>
 
           </dd></dl>
 
           <dl class="py function">
           <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.process_collections">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">process_collections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doctree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromdocname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.process_collections" title="Link to this definition">¶</a></dt>
-          <dd><p>Resolve PendingCollection nodes into actual HTML content.
-          This runs on ‘doctree-resolved’, when all metadata is available.</p>
+          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">process_collections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doctree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">docutils.nodes.document</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromdocname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.process_collections" title="Link to this definition">¶</a></dt>
+          <dd><p>Resolve PendingCollection nodes into actual HTML content.</p>
+          <p>This runs on ‘doctree-resolved’, when all metadata is available.</p>
+          <dl class="field-list simple">
+          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+          <dd class="field-odd"><ul class="simple">
+          <li><p><strong>app</strong> – The Sphinx application instance.</p></li>
+          <li><p><strong>doctree</strong> – The document tree.</p></li>
+          <li><p><strong>fromdocname</strong> – The document name.</p></li>
+          </ul>
+          </dd>
+          </dl>
           </dd></dl>
 
           <dl class="py function">
           <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.collect_metadata">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">collect_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.collect_metadata" title="Link to this definition">¶</a></dt>
+          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">collect_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.collect_metadata" title="Link to this definition">¶</a></dt>
           <dd><p>Collect all tags and categories from document metadata.</p>
+          <dl class="field-list simple">
+          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+          <dd class="field-odd"><ul class="simple">
+          <li><p><strong>app</strong> – The Sphinx application instance.</p></li>
+          <li><p><strong>env</strong> – The build environment.</p></li>
+          </ul>
+          </dd>
+          </dl>
           </dd></dl>
 
           <dl class="py function">
           <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.generate_taxonomy_pages">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">generate_taxonomy_pages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.generate_taxonomy_pages" title="Link to this definition">¶</a></dt>
+          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">generate_taxonomy_pages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.generate_taxonomy_pages" title="Link to this definition">¶</a></dt>
           <dd><p>Dynamically generate pages for each tag and category.</p>
+          <dl class="field-list simple">
+          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+          <dd class="field-odd"><p><strong>app</strong> – The Sphinx application instance.</p>
+          </dd>
+          <dt class="field-even">Yields<span class="colon">:</span></dt>
+          <dd class="field-even"><p>Tuple containing context, template name, and output path for each page.</p>
+          </dd>
+          </dl>
           </dd></dl>
 
           <dl class="py function">
           <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.build_nav_links">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">build_nav_links</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pagename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">templatename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doctree</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.build_nav_links" title="Link to this definition">¶</a></dt>
+          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">build_nav_links</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pagename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">templatename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doctree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">docutils.nodes.document</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.build_nav_links" title="Link to this definition">¶</a></dt>
           <dd><p>Build navigation links and add tags/categories to the context.</p>
+          <dl class="field-list simple">
+          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+          <dd class="field-odd"><ul class="simple">
+          <li><p><strong>app</strong> – The Sphinx application instance.</p></li>
+          <li><p><strong>pagename</strong> – The name of the page.</p></li>
+          <li><p><strong>templatename</strong> – The name of the template.</p></li>
+          <li><p><strong>context</strong> – The context for rendering.</p></li>
+          <li><p><strong>doctree</strong> – The document tree.</p></li>
+          </ul>
+          </dd>
+          </dl>
           </dd></dl>
 
           <dl class="py function">
           <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.peek_metadata">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">peek_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.peek_metadata" title="Link to this definition">¶</a></dt>
-          <dd><p>Peek at the beginning of a file to extract navigation metadata.
-          This enables sorting before Sphinx has fully processed the environment.</p>
+          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">peek_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.peek_metadata" title="Link to this definition">¶</a></dt>
+          <dd><p>Peek at the beginning of a file to extract navigation metadata.</p>
+          <p>This enables sorting before Sphinx has fully processed the environment.</p>
+          <dl class="field-list simple">
+          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+          <dd class="field-odd"><p><strong>filepath</strong> – The path to the file to peek at.</p>
+          </dd>
+          <dt class="field-even">Returns<span class="colon">:</span></dt>
+          <dd class="field-even"><p>A dictionary containing the extracted metadata.</p>
+          </dd>
+          </dl>
           </dd></dl>
 
           <dl class="py function">
           <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.inject_root_navigation">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">inject_root_navigation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.inject_root_navigation" title="Link to this definition">¶</a></dt>
-          <dd><p>Automatically inject a hidden toctree into the master document (Root).
-          This includes any document with :navigation: header or :navigation: footer.</p>
+          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">inject_root_navigation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.inject_root_navigation" title="Link to this definition">¶</a></dt>
+          <dd><p>Automatically inject a hidden toctree into the master document (Root).</p>
+          <p>This includes any document with :navigation: header or :navigation: footer.</p>
+          <dl class="field-list simple">
+          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+          <dd class="field-odd"><ul class="simple">
+          <li><p><strong>app</strong> – The Sphinx application instance.</p></li>
+          <li><p><strong>docname</strong> – The name of the document.</p></li>
+          <li><p><strong>source</strong> – The list of source strings (mutable).</p></li>
+          </ul>
+          </dd>
+          </dl>
           </dd></dl>
 
           <dl class="py function">
           <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.setup">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.setup" title="Link to this definition">¶</a></dt>
+          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.setup" title="Link to this definition">¶</a></dt>
           <dd><p>Register directives and connect to Sphinx events.</p>
+          <dl class="field-list simple">
+          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+          <dd class="field-odd"><p><strong>app</strong> – The Sphinx application instance.</p>
+          </dd>
+          <dt class="field-even">Returns<span class="colon">:</span></dt>
+          <dd class="field-even"><p>A dictionary containing extension metadata.</p>
+          </dd>
+          </dl>
           </dd></dl>
 
           </section>
@@ -298,8 +374,8 @@
         <li><a href="../../../../../../about.html">About</a></li>
         <li><a href="../../../../../../connect.html">Connect</a></li>
         <li><a href="../../../../../../changelog.html">Changelog</a></li>
-        <li><a href="../../../../../../todos/index.html">todos</a></li>
         <li><a href="../../../../../../glossary.html">Glossary</a></li>
+        <li><a href="../../../../../../todos/index.html">todos</a></li>
         <li><a href="../../../../../../orphan.html">Orphan Page</a></li>
       </ul>
     </div>

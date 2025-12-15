@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>photon_platform.publish.images.directive &mdash; Project name not set  documentation</title>
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=759a83f8" />
+  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=38c7a96b" />
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="../../../../../../_static/css/print.css" type="text/css" media="print" />
   <link rel="icon" href="../../../../../../_static/favicon.ico" />
@@ -71,15 +71,16 @@
       <div class="content">
         <section id="module-photon_platform.publish.images.directive">
           <span id="photon-platform-publish-images-directive"></span><h1>photon_platform.publish.images.directive<a class="headerlink" href="#module-photon_platform.publish.images.directive" title="Link to this heading">¶</a></h1>
+          <p>Directives for image processing.</p>
           <section id="classes">
           <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
           <table class="autosummary longtable docutils align-default">
           <tbody>
           <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.images.directive.picture_node" title="photon_platform.publish.images.directive.picture_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">picture_node</span></code></a></p></td>
-          <td><p><cite>Element</cite> is the superclass to all specific elements.</p></td>
+          <td><p>Custom node for containing responsive picture elements.</p></td>
           </tr>
           <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.images.directive.PictureDirective" title="photon_platform.publish.images.directive.PictureDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PictureDirective</span></code></a></p></td>
-          <td><p>A base class for Sphinx directives.</p></td>
+          <td><p>Directive for inserting responsive pictures.</p></td>
           </tr>
           </tbody>
           </table>
@@ -88,11 +89,11 @@
           <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
           <table class="autosummary longtable docutils align-default">
           <tbody>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.images.directive.visit_picture_node" title="photon_platform.publish.images.directive.visit_picture_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_picture_node</span></code></a>(self, node)</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.images.directive.visit_picture_node" title="photon_platform.publish.images.directive.visit_picture_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_picture_node</span></code></a>(→ None)</p></td>
           <td><p>HTML visitor for picture_node.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.images.directive.depart_picture_node" title="photon_platform.publish.images.directive.depart_picture_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_picture_node</span></code></a>(self, node)</p></td>
-          <td><p></p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.images.directive.depart_picture_node" title="photon_platform.publish.images.directive.depart_picture_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_picture_node</span></code></a>(→ None)</p></td>
+          <td><p>Departure visitor for picture_node.</p></td>
           </tr>
           </tbody>
           </table>
@@ -103,78 +104,43 @@
           <dt class="sig sig-object py" id="photon_platform.publish.images.directive.picture_node">
           <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.images.directive.</span></span><span class="sig-name descname"><span class="pre">picture_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rawsource</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">children</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attributes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.images.directive.picture_node" title="Link to this definition">¶</a></dt>
           <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.General</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.Element</span></code></p>
-          <p><cite>Element</cite> is the superclass to all specific elements.</p>
-          <p>Elements contain attributes and child nodes.
-          They can be described as a cross between a list and a dictionary.</p>
-          <p>Elements emulate dictionaries for external <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> attributes, indexing by
-          attribute name (a string). To set the attribute ‘att’ to ‘value’, do:</p>
-          <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">element</span><span class="p">[</span><span class="s1">&#39;att&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;value&#39;</span>
-          </pre></div>
-          </div>
-          <aside class="footnote-list brackets">
-          <aside class="footnote brackets" id="id2" role="doc-footnote">
-          <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-          <p>External attributes correspond to the XML element attributes.
-          From its <cite>Node</cite> superclass, Element also inherits “internal”
-          class attributes that are accessed using the standard syntax, e.g.
-          <code class="docutils literal notranslate"><span class="pre">element.parent</span></code>.</p>
-          </aside>
-          </aside>
-          <p>There are two special attributes: ‘ids’ and ‘names’.  Both are
-          lists of unique identifiers: ‘ids’ conform to the regular expression
-          <code class="docutils literal notranslate"><span class="pre">[a-z](-?[a-z0-9]+)*</span></code> (see the make_id() function for rationale and
-          details). ‘names’ serve as user-friendly interfaces to IDs; they are
-          case- and whitespace-normalized (see the fully_normalize_name() function).</p>
-          <p>Elements emulate lists for child nodes (element nodes and/or text
-          nodes), indexing by integer.  To get the first child node, use:</p>
-          <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-          </pre></div>
-          </div>
-          <p>to iterate over the child nodes (without descending), use:</p>
-          <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">element</span><span class="p">:</span>
-              <span class="o">...</span>
-          </pre></div>
-          </div>
-          <p>Elements may be constructed using the <code class="docutils literal notranslate"><span class="pre">+=</span></code> operator.  To add one new
-          child node to element, do:</p>
-          <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">element</span> <span class="o">+=</span> <span class="n">node</span>
-          </pre></div>
-          </div>
-          <p>This is equivalent to <code class="docutils literal notranslate"><span class="pre">element.append(node)</span></code>.</p>
-          <p>To add a list of multiple child nodes at once, use the same <code class="docutils literal notranslate"><span class="pre">+=</span></code>
-          operator:</p>
-          <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">element</span> <span class="o">+=</span> <span class="p">[</span><span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">]</span>
-          </pre></div>
-          </div>
-          <p>This is equivalent to <code class="docutils literal notranslate"><span class="pre">element.extend([node1,</span> <span class="pre">node2])</span></code>.</p>
+          <p>Custom node for containing responsive picture elements.</p>
           </dd></dl>
 
           <dl class="py function">
           <dt class="sig sig-object py" id="photon_platform.publish.images.directive.visit_picture_node">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.images.directive.</span></span><span class="sig-name descname"><span class="pre">visit_picture_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.images.directive.visit_picture_node" title="Link to this definition">¶</a></dt>
-          <dd><p>HTML visitor for picture_node.
-          Renders a standard &lt;figure&gt; with nested &lt;picture&gt; element.</p>
+          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.images.directive.</span></span><span class="sig-name descname"><span class="pre">visit_picture_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">docutils.nodes.Element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.images.directive.visit_picture_node" title="Link to this definition">¶</a></dt>
+          <dd><p>HTML visitor for picture_node.</p>
+          <p>Renders a standard &lt;figure&gt; with nested &lt;picture&gt; element.</p>
+          <dl class="field-list simple">
+          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+          <dd class="field-odd"><ul class="simple">
+          <li><p><strong>self</strong> – The translator instance.</p></li>
+          <li><p><strong>node</strong> – The picture_node being visited.</p></li>
+          </ul>
+          </dd>
+          </dl>
           </dd></dl>
 
           <dl class="py function">
           <dt class="sig sig-object py" id="photon_platform.publish.images.directive.depart_picture_node">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.images.directive.</span></span><span class="sig-name descname"><span class="pre">depart_picture_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.images.directive.depart_picture_node" title="Link to this definition">¶</a></dt>
-          <dd></dd></dl>
+          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.images.directive.</span></span><span class="sig-name descname"><span class="pre">depart_picture_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">docutils.nodes.Element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.images.directive.depart_picture_node" title="Link to this definition">¶</a></dt>
+          <dd><p>Departure visitor for picture_node.</p>
+          <dl class="field-list simple">
+          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+          <dd class="field-odd"><ul class="simple">
+          <li><p><strong>self</strong> – The translator instance.</p></li>
+          <li><p><strong>node</strong> – The picture_node being visited.</p></li>
+          </ul>
+          </dd>
+          </dl>
+          </dd></dl>
 
           <dl class="py class">
           <dt class="sig sig-object py" id="photon_platform.publish.images.directive.PictureDirective">
           <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.images.directive.</span></span><span class="sig-name descname"><span class="pre">PictureDirective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_machine</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.images.directive.PictureDirective" title="Link to this definition">¶</a></dt>
           <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">sphinx.util.docutils.SphinxDirective</span></code></p>
-          <p>A base class for Sphinx directives.</p>
-          <p>This class provides helper methods for Sphinx directives.</p>
-          <div class="versionadded">
-          <p><span class="versionmodified added">Added in version 1.8.</span></p>
-          </div>
-          <div class="admonition note">
-          <p class="admonition-title">Note</p>
-          <p>The subclasses of this class might not work with docutils.
-          This class is strongly coupled with Sphinx.</p>
-          </div>
+          <p>Directive for inserting responsive pictures.</p>
           <dl class="py attribute">
           <dt class="sig sig-object py" id="photon_platform.publish.images.directive.PictureDirective.required_arguments">
           <span class="sig-name descname"><span class="pre">required_arguments</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#photon_platform.publish.images.directive.PictureDirective.required_arguments" title="Link to this definition">¶</a></dt>
@@ -201,8 +167,14 @@
 
           <dl class="py method">
           <dt class="sig sig-object py" id="photon_platform.publish.images.directive.PictureDirective.run">
-          <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.images.directive.PictureDirective.run" title="Link to this definition">¶</a></dt>
-          <dd></dd></dl>
+          <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">docutils.nodes.Node</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.images.directive.PictureDirective.run" title="Link to this definition">¶</a></dt>
+          <dd><p>Process the picture directive.</p>
+          <dl class="field-list simple">
+          <dt class="field-odd">Returns<span class="colon">:</span></dt>
+          <dd class="field-odd"><p>A list containing the picture_node.</p>
+          </dd>
+          </dl>
+          </dd></dl>
 
           </dd></dl>
 
@@ -265,8 +237,8 @@
         <li><a href="../../../../../../about.html">About</a></li>
         <li><a href="../../../../../../connect.html">Connect</a></li>
         <li><a href="../../../../../../changelog.html">Changelog</a></li>
-        <li><a href="../../../../../../todos/index.html">todos</a></li>
         <li><a href="../../../../../../glossary.html">Glossary</a></li>
+        <li><a href="../../../../../../todos/index.html">todos</a></li>
         <li><a href="../../../../../../orphan.html">Orphan Page</a></li>
       </ul>
     </div>
