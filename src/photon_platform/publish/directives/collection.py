@@ -180,6 +180,27 @@ class CollectionDirective(SphinxDirective):
         return [pending, toc]
 
 
+def render_node_html(builder: Any, node: nodes.Node) -> str:
+    """Render a docutils node to an HTML fragment string.
+
+    Compatible with Sphinx <9 (which included 'html_body' and 'fragment')
+    and Sphinx >=9 (which returns only 'fragment' and 'title').
+
+    Args:
+        builder: The Sphinx HTML builder instance.
+        node: The docutils node to render.
+
+    Returns:
+        The rendered HTML string.
+
+    """
+    parts = builder.render_partial(node)
+    html = parts.get('fragment') or parts.get('html_body', '')
+    html = re.sub(r'<main[^>]*>', '', html)
+    html = re.sub(r'</main>', '', html)
+    return html.strip()
+
+
 def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> None:
     """Resolve PendingCollection nodes into actual HTML content.
 
@@ -245,7 +266,7 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
                             break
                         
                         if first_text:
-                            item['excerpt_text'] = builder.render_partial(first_text)['html_body']
+                            item['excerpt_text'] = render_node_html(builder, first_text)
 
                         # Check for explicitly set featured image (from .. picture::)
                         if 'featured_image' in meta:
@@ -379,7 +400,7 @@ def generate_taxonomy_pages(app: Any) -> Any:
                                 break
                             
                             if first_text:
-                                item['excerpt_text'] = app.builder.render_partial(first_text)['html_body']
+                                item['excerpt_text'] = render_node_html(app.builder, first_text)
 
                             # Find first figure
                             for node in doctree.traverse(nodes.figure):
@@ -435,7 +456,7 @@ def generate_taxonomy_pages(app: Any) -> Any:
                                 break
                             
                             if first_text:
-                                item['excerpt_text'] = app.builder.render_partial(first_text)['html_body']
+                                item['excerpt_text'] = render_node_html(app.builder, first_text)
 
                             # Find first figure
                             for node in doctree.traverse(nodes.figure):
@@ -485,10 +506,7 @@ def generate_taxonomy_pages(app: Any) -> Any:
                             break
                         
                         if first_text:
-                            html = app.builder.render_partial(first_text)['html_body']
-                            html = re.sub(r'<main[^>]*>', '', html)
-                            html = re.sub(r'</main>', '', html)
-                            item['excerpt_text'] = html
+                            item['excerpt_text'] = render_node_html(app.builder, first_text)
 
                         # Find first figure
                         first_figure = None
@@ -500,10 +518,7 @@ def generate_taxonomy_pages(app: Any) -> Any:
                             break
 
                         if first_figure:
-                            html = app.builder.render_partial(first_figure)['html_body']
-                            html = re.sub(r'<main[^>]*>', '', html)
-                            html = re.sub(r'</main>', '', html)
-                            item['excerpt_figure'] = html
+                            item['excerpt_figure'] = render_node_html(app.builder, first_figure)
                         
                         articles.append(item)
             

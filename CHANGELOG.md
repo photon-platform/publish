@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.7] - 2026-10-09
+
+### Fixed
+- **Sphinx 9 Compatibility**: fixed `KeyError: 'html_body'` in `collection.py` by introducing `render_node_html` compatible with both Sphinx <9 and Sphinx >=9.
+
 ## [0.3.6] - 2025-12-15
 
 ### Changed

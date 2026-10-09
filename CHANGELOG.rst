@@ -2,6 +2,12 @@ changelog
 =========
 
 
+0.3.7
+=====
+
+- fix: Support Sphinx 9+ partial rendering (`render_partial`) without `'html_body'`.
+
+
 0.3.4
 =====
 

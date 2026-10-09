@@ -33,6 +33,7 @@ Functions
 
    photon_platform.publish.directives.collection.to_numeric
    photon_platform.publish.directives.collection.safe_numeric
+   photon_platform.publish.directives.collection.render_node_html
    photon_platform.publish.directives.collection.process_collections
    photon_platform.publish.directives.collection.collect_metadata
    photon_platform.publish.directives.collection.generate_taxonomy_pages
@@ -111,6 +112,19 @@ Module Contents
 
       :returns: A list containing the PendingCollection node and a hidden toctree node.
 
+
+
+.. py:function:: render_node_html(builder: Any, node: docutils.nodes.Node) -> str
+
+   Render a docutils node to an HTML fragment string.
+
+   Compatible with Sphinx <9 (which included 'html_body' and 'fragment')
+   and Sphinx >=9 (which returns only 'fragment' and 'title').
+
+   :param builder: The Sphinx HTML builder instance.
+   :param node: The docutils node to render.
+
+   :returns: The rendered HTML string.
 
 
 .. py:function:: process_collections(app: Any, doctree: docutils.nodes.document, fromdocname: str) -> None
