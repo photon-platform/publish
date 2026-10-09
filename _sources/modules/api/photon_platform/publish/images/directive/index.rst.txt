@@ -30,7 +30,7 @@ Functions
 Module Contents
 ---------------
 
-.. py:class:: picture_node(rawsource='', *children, **attributes)
+.. py:class:: picture_node(rawsource: str = '', *children, **attributes: Any)
 
    Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
 

@@ -34,10 +34,10 @@
           <a href="../../mission/index.html"  >mission</a>
         </li>
         <li>
-          <a href="../index.html"  >usage</a>
+          <a href="../../modules/index.html"  >modules</a>
         </li>
         <li>
-          <a href="../../modules/index.html"  >modules</a>
+          <a href="../index.html"  >usage</a>
         </li>
         <li>
           <a href="../../log/index.html"  >log</a>
@@ -62,7 +62,7 @@
              <a href="structure.html" title="Structure &amp; Vision" >Prev</a>
           </div>
           <div class="next">
-            <a href="../../modules/index.html" title="modules" >Next</a>
+            <a href="taxonomy.html" title="Taxonomy &amp; Indexes" >Next</a>
           </div>
         </nav>
       </header>
@@ -75,7 +75,7 @@
           <p>We recommend using the <strong>Google Style</strong> docstrings for clarity and readability.</p>
           <p>Example:</p>
           <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">connect_to_database</span><span class="p">(</span><span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-          <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+          <span class="w">    </span><span class="sd">"""</span>
           <span class="sd">    Connects to the database server.</span>
 
           <span class="sd">    Args:</span>
@@ -84,7 +84,7 @@
 
           <span class="sd">    Returns:</span>
           <span class="sd">        bool: True if connection was successful, False otherwise.</span>
-          <span class="sd">    &quot;&quot;&quot;</span>
+          <span class="sd">    """</span>
               <span class="k">pass</span>
           </pre></div>
           </div>
@@ -94,18 +94,18 @@
           <p>Here is the documentation for the <code class="docutils literal notranslate"><span class="pre">CollectionDirective</span></code> class in this project, automatically extracted from the source code:</p>
           <dl class="py class">
           <dt class="sig sig-object py">
-          <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">CollectionDirective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_machine</span></span></em><span class="sig-paren">)</span></dt>
+          <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">CollectionDirective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_machine</span></span></em><span class="sig-paren">)</span></dt>
           <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SphinxDirective</span></code></p>
           <p>Directive to insert a collection of articles.</p>
           <dl class="py attribute">
           <dt class="sig sig-object py">
-          <span class="sig-name descname"><span class="pre">has_content</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em></dt>
+          <span class="sig-name descname"><span class="pre">has_content</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span></dt>
           <dd><p>May the directive have content?</p>
           </dd></dl>
 
           <dl class="py attribute">
           <dt class="sig sig-object py">
-          <span class="sig-name descname"><span class="pre">option_spec</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'class':</span> <span class="pre">&lt;function</span> <span class="pre">unchanged&gt;,</span> <span class="pre">'hidden':</span> <span class="pre">&lt;function</span> <span class="pre">flag&gt;,</span> <span class="pre">'limit':</span> <span class="pre">&lt;function</span> <span class="pre">positive_int&gt;,</span> <span class="pre">'reverse':</span> <span class="pre">&lt;function</span> <span class="pre">flag&gt;,</span> <span class="pre">'sort':</span> <span class="pre">&lt;function</span> <span class="pre">unchanged&gt;,</span> <span class="pre">'template':</span> <span class="pre">&lt;function</span> <span class="pre">unchanged&gt;,</span> <span class="pre">'title':</span> <span class="pre">&lt;function</span> <span class="pre">unchanged&gt;,</span> <span class="pre">'type':</span> <span class="pre">&lt;function</span> <span class="pre">unchanged&gt;}</span></em></dt>
+          <span class="sig-name descname"><span class="pre">option_spec</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'class':</span> <span class="pre">&lt;function</span> <span class="pre">unchanged&gt;,</span> <span class="pre">'hidden':</span> <span class="pre">&lt;function</span> <span class="pre">flag&gt;,</span> <span class="pre">'limit':</span> <span class="pre">&lt;function</span> <span class="pre">positive_int&gt;,</span> <span class="pre">'reverse':</span> <span class="pre">&lt;function</span> <span class="pre">flag&gt;,</span> <span class="pre">'sort':</span> <span class="pre">&lt;function</span> <span class="pre">unchanged&gt;,</span> <span class="pre">'template':</span> <span class="pre">&lt;function</span> <span class="pre">unchanged&gt;,</span> <span class="pre">'title':</span> <span class="pre">&lt;function</span> <span class="pre">unchanged&gt;,</span> <span class="pre">'type':</span> <span class="pre">&lt;function</span> <span class="pre">unchanged&gt;}</span></span></dt>
           <dd><p>Mapping of option names to validator functions.</p>
           </dd></dl>
 
@@ -137,7 +137,7 @@
              <a href="structure.html" title="Structure &amp; Vision" >Prev</a>
           </div>
           <div class="next">
-            <a href="../../modules/index.html" title="modules" >Next</a>
+            <a href="taxonomy.html" title="Taxonomy &amp; Indexes" >Next</a>
           </div>
         </nav>
       </footer>
@@ -185,8 +185,8 @@
         <li><a href="../../about.html">About</a></li>
         <li><a href="../../connect.html">Connect</a></li>
         <li><a href="../../changelog.html">Changelog</a></li>
-        <li><a href="../../glossary.html">Glossary</a></li>
         <li><a href="../../todos/index.html">todos</a></li>
+        <li><a href="../../glossary.html">Glossary</a></li>
         <li><a href="../../orphan.html">Orphan Page</a></li>
       </ul>
     </div>
@@ -201,8 +201,8 @@
   <script src="../../_static/jquery.js?v=5d32c60e"></script>
   <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
   <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-  <script src="../../_static/doctools.js?v=9bcbadda"></script>
-  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+  <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../_static/js/collection_controls.js?v=b6b5297a"></script>
 
 </body>
