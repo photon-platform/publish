@@ -43,10 +43,10 @@ Package Contents
 
 .. py:class:: PictureDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
 
-   Bases: :py:obj:`sphinx.util.docutils.SphinxDirective`
+   Bases: :py:obj:`docutils.parsers.rst.Directive`
 
 
-   Directive for inserting responsive pictures.
+   Directive for inserting responsive pictures and interactive SVG figures.
 
 
    .. py:attribute:: required_arguments
@@ -75,15 +75,22 @@ Package Contents
       Mapping of option names to validator functions.
 
 
+   .. py:property:: env
+      :type: Any
+
+
+      Return the Sphinx BuildEnvironment if running inside Sphinx, else None.
+
+
    .. py:method:: run() -> List[docutils.nodes.Node]
 
-      Process the picture directive.
+      Process the picture directive in either Sphinx or standalone Docutils mode.
 
       :returns: A list containing the picture_node.
 
 
 
-.. py:class:: picture_node(rawsource='', *children, **attributes)
+.. py:class:: picture_node(rawsource: str = '', *children, **attributes: Any)
 
    Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
 
@@ -95,7 +102,9 @@ Package Contents
 
    HTML visitor for picture_node.
 
-   Renders a standard <figure> with nested <picture> element.
+   Renders a standard <figure> with nested <picture> element for raster images,
+   or a clean <figure class="photon-picture photon-svg"><img .../></figure> for SVGs
+   and standalone Docutils rendering.
 
    :param self: The translator instance.
    :param node: The picture_node being visited.

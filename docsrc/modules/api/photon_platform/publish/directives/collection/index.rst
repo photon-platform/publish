@@ -69,7 +69,7 @@ Module Contents
    :returns: The converted numeric value or the default.
 
 
-.. py:class:: PendingCollection(rawsource='', *children, **attributes)
+.. py:class:: PendingCollection(rawsource: str = '', *children, **attributes: Any)
 
    Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
 
@@ -106,9 +106,10 @@ Module Contents
       Process the collection directive.
 
       Instead of rendering immediately, this method:
-      1. Discovers all relevant files.
-      2. Adds them to a hidden toctree so Sphinx knows about them (fixes "not in toctree" warnings).
-      3. Returns a PendingCollection node to defer rendering until metadata is ready.
+      1. Discovers all relevant files respecting the Container Boundary Rule.
+      2. Filters by :type: early before claiming documents in the toctree.
+      3. Adds them to a hidden toctree so Sphinx knows about them (fixes "not in toctree" warnings).
+      4. Returns a PendingCollection node to defer rendering until metadata is ready.
 
       :returns: A list containing the PendingCollection node and a hidden toctree node.
 

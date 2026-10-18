@@ -3,6 +3,7 @@
 from .directive import PictureDirective, picture_node, visit_picture_node, depart_picture_node
 from typing import Any, Dict
 
+
 def setup(app: Any) -> Dict[str, Any]:
     """Register directives and nodes.
 
@@ -13,5 +14,10 @@ def setup(app: Any) -> Dict[str, Any]:
         Extension metadata.
 
     """
-    app.add_node(picture_node, html=(visit_picture_node, depart_picture_node))
-    app.add_directive('picture', PictureDirective)
+    app.add_node(picture_node, html=(visit_picture_node, depart_picture_node), override=True)
+    app.add_directive('picture', PictureDirective, override=True)
+    return {
+        'version': '0.1',
+        'parallel_read_safe': True,
+        'parallel_write_safe': True,
+    }

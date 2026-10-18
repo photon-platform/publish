@@ -24,6 +24,8 @@ Submodules
    /modules/api/photon_platform/publish/global_conf/index
    /modules/api/photon_platform/publish/images/index
    /modules/api/photon_platform/publish/publish/index
+   /modules/api/photon_platform/publish/roles/index
+   /modules/api/photon_platform/publish/rst_renderer/index
 
 
 Attributes

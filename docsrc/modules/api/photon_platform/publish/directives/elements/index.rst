@@ -1,0 +1,483 @@
+photon_platform.publish.directives.elements
+===========================================
+
+.. py:module:: photon_platform.publish.directives.elements
+
+.. autoapi-nested-parse::
+
+   Semantic directives for classical mathematical and philosophical texts (Elements, Pacioli, Hoenen).
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   photon_platform.publish.directives.elements.enunciation_node
+   photon_platform.publish.directives.elements.assertion_node
+   photon_platform.publish.directives.elements.subclause_node
+   photon_platform.publish.directives.elements.qed_node
+   photon_platform.publish.directives.elements.porism_node
+   photon_platform.publish.directives.elements.lemma_node
+   photon_platform.publish.directives.elements.scholium_node
+   photon_platform.publish.directives.elements.folio_node
+   photon_platform.publish.directives.elements.DualModeDirective
+   photon_platform.publish.directives.elements.EnunciationDirective
+   photon_platform.publish.directives.elements.AssertionDirective
+   photon_platform.publish.directives.elements.SubclauseDirective
+   photon_platform.publish.directives.elements.QedDirective
+   photon_platform.publish.directives.elements.PorismDirective
+   photon_platform.publish.directives.elements.LemmaDirective
+   photon_platform.publish.directives.elements.ScholiumDirective
+   photon_platform.publish.directives.elements.FolioDirective
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   photon_platform.publish.directives.elements.parse_justification_arg
+   photon_platform.publish.directives.elements.format_justification_html
+   photon_platform.publish.directives.elements.record_dependency
+   photon_platform.publish.directives.elements.visit_enunciation_node
+   photon_platform.publish.directives.elements.depart_enunciation_node
+   photon_platform.publish.directives.elements.visit_assertion_node
+   photon_platform.publish.directives.elements.depart_assertion_node
+   photon_platform.publish.directives.elements.visit_subclause_node
+   photon_platform.publish.directives.elements.depart_subclause_node
+   photon_platform.publish.directives.elements.visit_qed_node
+   photon_platform.publish.directives.elements.depart_qed_node
+   photon_platform.publish.directives.elements.visit_porism_node
+   photon_platform.publish.directives.elements.depart_porism_node
+   photon_platform.publish.directives.elements.visit_lemma_node
+   photon_platform.publish.directives.elements.depart_lemma_node
+   photon_platform.publish.directives.elements.visit_scholium_node
+   photon_platform.publish.directives.elements.depart_scholium_node
+   photon_platform.publish.directives.elements.visit_folio_node
+   photon_platform.publish.directives.elements.depart_folio_node
+   photon_platform.publish.directives.elements.register_standalone_directives
+   photon_platform.publish.directives.elements.setup
+
+
+Module Contents
+---------------
+
+.. py:function:: parse_justification_arg(raw_arg: str) -> Tuple[str, Optional[str]]
+
+   Parse a justification string into (display_text, target_id).
+
+   Supports forms:
+   - ``[Def. 15] <I.def.15>`` -> ``("[Def. 15]", "I.def.15")``
+   - ``[Def. 15]`` -> ``("[Def. 15]", None)``
+   - ``I.def.15`` -> ``("[I.def.15]", "I.def.15")``
+
+
+.. py:function:: format_justification_html(display: str, target: Optional[str] = None) -> str
+
+   Render a <span class="justification"> HTML fragment.
+
+
+.. py:function:: record_dependency(env: Any, target: Optional[str]) -> None
+
+   Record a logical dependency target in the Sphinx build environment.
+
+
+.. py:class:: enunciation_node(rawsource: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
+
+
+   AST node for an enunciation (protasis) block.
+
+
+.. py:class:: assertion_node(rawsource: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
+
+
+   AST node for a centered proof step / assertion with optional justification.
+
+
+.. py:class:: subclause_node(rawsource: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
+
+
+   AST node for an indented proof sub-clause with optional justification.
+
+
+.. py:class:: qed_node(rawsource: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
+
+
+   AST node for a conclusion sign-off (Q.E.D. / Q.E.F.).
+
+
+.. py:class:: porism_node(rawsource: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
+
+
+   AST node for a corollary / porism block.
+
+
+.. py:class:: lemma_node(rawsource: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
+
+
+   AST node for a lemma block.
+
+
+.. py:class:: scholium_node(rawsource: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
+
+
+   AST node for a scholium block.
+
+
+.. py:class:: folio_node(rawsource: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
+
+
+   AST node for a diplomatic folio transition milestone.
+
+
+.. py:function:: visit_enunciation_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for enunciation_node.
+
+
+.. py:function:: depart_enunciation_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for enunciation_node.
+
+
+.. py:function:: visit_assertion_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for assertion_node.
+
+
+.. py:function:: depart_assertion_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for assertion_node.
+
+
+.. py:function:: visit_subclause_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for subclause_node.
+
+
+.. py:function:: depart_subclause_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for subclause_node.
+
+
+.. py:function:: visit_qed_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for qed_node.
+
+
+.. py:function:: depart_qed_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for qed_node.
+
+
+.. py:function:: visit_porism_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for porism_node.
+
+
+.. py:function:: depart_porism_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for porism_node.
+
+
+.. py:function:: visit_lemma_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for lemma_node.
+
+
+.. py:function:: depart_lemma_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for lemma_node.
+
+
+.. py:function:: visit_scholium_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for scholium_node.
+
+
+.. py:function:: depart_scholium_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for scholium_node.
+
+
+.. py:function:: visit_folio_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for folio_node.
+
+
+.. py:function:: depart_folio_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for folio_node.
+
+
+.. py:class:: DualModeDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`docutils.parsers.rst.Directive`
+
+
+   Base directive class compatible with both Sphinx and standalone Docutils.
+
+
+   .. py:property:: env
+      :type: Any
+
+
+      Return the Sphinx BuildEnvironment if running inside Sphinx, else None.
+
+
+.. py:class:: EnunciationDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`DualModeDirective`
+
+
+   Directive for proposition enunciations (protasis): ``.. enunciation::``.
+
+
+   .. py:attribute:: has_content
+      :value: True
+
+
+      May the directive have content?
+
+
+   .. py:attribute:: required_arguments
+      :value: 0
+
+
+      Number of required directive arguments.
+
+
+   .. py:attribute:: optional_arguments
+      :value: 0
+
+
+      Number of optional arguments after the required arguments.
+
+
+   .. py:attribute:: option_spec
+
+      Mapping of option names to validator functions.
+
+
+   .. py:method:: run() -> List[docutils.nodes.Node]
+
+      Parse enunciation body and register excerpt in Sphinx metadata if available.
+
+
+
+.. py:class:: AssertionDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`DualModeDirective`
+
+
+   Directive for proof steps / assertions: ``.. assertion:: [optional_justification]``.
+
+
+   .. py:attribute:: node_class
+
+
+   .. py:attribute:: has_content
+      :value: True
+
+
+      May the directive have content?
+
+
+   .. py:attribute:: required_arguments
+      :value: 0
+
+
+      Number of required directive arguments.
+
+
+   .. py:attribute:: optional_arguments
+      :value: 1
+
+
+      Number of optional arguments after the required arguments.
+
+
+   .. py:attribute:: final_argument_whitespace
+      :value: True
+
+
+      May the final argument contain whitespace?
+
+
+   .. py:attribute:: option_spec
+
+      Mapping of option names to validator functions.
+
+
+   .. py:method:: run() -> List[docutils.nodes.Node]
+
+      Parse assertion body, optional justification argument, and record dependency.
+
+
+
+.. py:class:: SubclauseDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`AssertionDirective`
+
+
+   Directive for indented proof sub-clauses: ``.. subclause:: [optional_justification]``.
+
+
+   .. py:attribute:: node_class
+
+
+.. py:class:: QedDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`DualModeDirective`
+
+
+   Directive for proof conclusions: ``.. qed:: [optional_label]``.
+
+
+   .. py:attribute:: has_content
+      :value: True
+
+
+      May the directive have content?
+
+
+   .. py:attribute:: required_arguments
+      :value: 0
+
+
+      Number of required directive arguments.
+
+
+   .. py:attribute:: optional_arguments
+      :value: 1
+
+
+      Number of optional arguments after the required arguments.
+
+
+   .. py:attribute:: final_argument_whitespace
+      :value: True
+
+
+      May the final argument contain whitespace?
+
+
+   .. py:attribute:: option_spec
+
+      Mapping of option names to validator functions.
+
+
+   .. py:method:: run() -> List[docutils.nodes.Node]
+
+      Parse Q.E.D. / Q.E.F. conclusion block.
+
+
+
+.. py:class:: PorismDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`_SemanticBlockDirective`
+
+
+   Directive for corollaries / porisms: ``.. porism:: [optional_title]``.
+
+
+   .. py:attribute:: node_class
+
+
+.. py:class:: LemmaDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`_SemanticBlockDirective`
+
+
+   Directive for lemmas: ``.. lemma:: [optional_title]``.
+
+
+   .. py:attribute:: node_class
+
+
+.. py:class:: ScholiumDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`_SemanticBlockDirective`
+
+
+   Directive for scholia: ``.. scholium:: [optional_title]``.
+
+
+   .. py:attribute:: node_class
+
+
+.. py:class:: FolioDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`DualModeDirective`
+
+
+   Directive for folio transition milestones: ``.. folio:: <folio_id>``.
+
+
+   .. py:attribute:: has_content
+      :value: False
+
+
+      May the directive have content?
+
+
+   .. py:attribute:: required_arguments
+      :value: 1
+
+
+      Number of required directive arguments.
+
+
+   .. py:attribute:: optional_arguments
+      :value: 0
+
+
+      Number of optional arguments after the required arguments.
+
+
+   .. py:attribute:: final_argument_whitespace
+      :value: False
+
+
+      May the final argument contain whitespace?
+
+
+   .. py:attribute:: option_spec
+
+      Mapping of option names to validator functions.
+
+
+   .. py:method:: run() -> List[docutils.nodes.Node]
+
+      Create folio milestone node.
+
+
+
+.. py:function:: register_standalone_directives() -> None
+
+   Register directives and HTML node visitors with standalone Docutils.
+
+
+.. py:function:: setup(app: Any) -> Dict[str, Any]
+
+   Register elements directives and nodes with Sphinx.
+
+

@@ -1,0 +1,139 @@
+photon_platform.publish.roles.geometry
+======================================
+
+.. py:module:: photon_platform.publish.roles.geometry
+
+.. autoapi-nested-parse::
+
+   Semantic roles for geometric elements (:g:), justifications (:just:), and diplomatic line numbers (:line:).
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   photon_platform.publish.roles.geometry.geom_ref_node
+   photon_platform.publish.roles.geometry.just_ref_node
+   photon_platform.publish.roles.geometry.line_num_node
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   photon_platform.publish.roles.geometry.escape_data_ref_attr
+   photon_platform.publish.roles.geometry.parse_geom_role_text
+   photon_platform.publish.roles.geometry.visit_geom_ref_node
+   photon_platform.publish.roles.geometry.depart_geom_ref_node
+   photon_platform.publish.roles.geometry.visit_just_ref_node
+   photon_platform.publish.roles.geometry.depart_just_ref_node
+   photon_platform.publish.roles.geometry.visit_line_num_node
+   photon_platform.publish.roles.geometry.depart_line_num_node
+   photon_platform.publish.roles.geometry.g_role
+   photon_platform.publish.roles.geometry.just_role
+   photon_platform.publish.roles.geometry.line_role
+   photon_platform.publish.roles.geometry.register_standalone_roles
+   photon_platform.publish.roles.geometry.setup
+
+
+Module Contents
+---------------
+
+.. py:function:: escape_data_ref_attr(value: str) -> str
+
+   Escape a Geometor data-ref attribute value, ensuring < and > are encoded as &lt; and &gt;.
+
+
+.. py:function:: parse_geom_role_text(raw_content: str) -> Tuple[str, str]
+
+   Parse :g: role content ``display <target>`` or bare ``target`` into ``(display, target)``.
+
+   Handles targets that themselves contain angle brackets, such as:
+   - ``$AB$ <0255.g1:/ A B />`` -> ``("$AB$", "0255.g1:/ A B /")``
+   - ``$ABC$ <0255.g1:< A B C >>`` -> ``("$ABC$", "0255.g1:< A B C >")``
+   - ``$A$ <0309.g1:< K A G )>`` -> ``("$A$", "0309.g1:< K A G )")``
+   - ``0255.g1:/ A B /`` -> ``("$AB$", "0255.g1:/ A B /")``
+
+
+.. py:class:: geom_ref_node(rawsource: str = '', text: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.Inline`, :py:obj:`docutils.nodes.TextElement`
+
+
+   Inline AST node for geometric entity references (:g:).
+
+
+.. py:class:: just_ref_node(rawsource: str = '', text: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.Inline`, :py:obj:`docutils.nodes.TextElement`
+
+
+   Inline AST node for marginal/step justifications (:just:).
+
+
+.. py:class:: line_num_node(rawsource: str = '', text: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.Inline`, :py:obj:`docutils.nodes.TextElement`
+
+
+   Inline AST node for diplomatic line numbers (:line:).
+
+
+.. py:function:: visit_geom_ref_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for geom_ref_node.
+
+
+.. py:function:: depart_geom_ref_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for geom_ref_node.
+
+
+.. py:function:: visit_just_ref_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for just_ref_node.
+
+
+.. py:function:: depart_just_ref_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for just_ref_node.
+
+
+.. py:function:: visit_line_num_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for line_num_node.
+
+
+.. py:function:: depart_line_num_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for line_num_node.
+
+
+.. py:function:: g_role(name: str, rawtext: str, text: str, lineno: int, inliner: Any, options: Optional[Dict[str, Any]] = None, content: Optional[List[str]] = None) -> Tuple[List[docutils.nodes.Node], List[docutils.nodes.system_message]]
+
+   Role `:g:` for interactive geometric references.
+
+
+.. py:function:: just_role(name: str, rawtext: str, text: str, lineno: int, inliner: Any, options: Optional[Dict[str, Any]] = None, content: Optional[List[str]] = None) -> Tuple[List[docutils.nodes.Node], List[docutils.nodes.system_message]]
+
+   Role `:just:` for proposition step justifications and dependency recording.
+
+
+.. py:function:: line_role(name: str, rawtext: str, text: str, lineno: int, inliner: Any, options: Optional[Dict[str, Any]] = None, content: Optional[List[str]] = None) -> Tuple[List[docutils.nodes.Node], List[docutils.nodes.system_message]]
+
+   Role `:line:` for diplomatic line numbers.
+
+
+.. py:function:: register_standalone_roles() -> None
+
+   Register roles and HTML node visitors with standalone Docutils.
+
+
+.. py:function:: setup(app: Any) -> Dict[str, Any]
+
+   Register geometry roles and nodes with Sphinx.
+
+

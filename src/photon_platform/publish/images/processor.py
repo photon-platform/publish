@@ -85,6 +85,25 @@ class ImageProcessor:
 
         # Calculate relative path of the source directory from srcdir
         rel_dir = abs_source_path.parent.relative_to(self.srcdir)
+
+        if abs_source_path.suffix.lower() == '.svg':
+            dest_dir = self.outdir / rel_dir
+            dest_dir.mkdir(parents=True, exist_ok=True)
+            original_dest_path = dest_dir / abs_source_path.name
+            if not original_dest_path.exists() or original_dest_path.stat().st_mtime < abs_source_path.stat().st_mtime:
+                shutil.copy2(abs_source_path, original_dest_path)
+
+            images_dest_path = self.final_images_dir / abs_source_path.name
+            if not images_dest_path.exists() or images_dest_path.stat().st_mtime < abs_source_path.stat().st_mtime:
+                shutil.copy2(abs_source_path, images_dest_path)
+
+            svg_rel = (rel_dir / abs_source_path.name).as_posix()
+            return {
+                'main': svg_rel,
+                'thumb': svg_rel,
+                'original': svg_rel,
+                'is_svg': True,
+            }
         
         for variant, spec in specs.items():
             img_hash = self.get_image_hash(abs_source_path, spec['width'], str(spec))
