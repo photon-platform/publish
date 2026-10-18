@@ -9,7 +9,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{{ title|striptags|e }} &mdash; {{ docstitle|e }}</title>
+  <title>{{ title|striptags|e }} &mdash; {{ (book_title if is_book_page and book_title else docstitle)|e }}</title>
 {%- for css_file in css_files %}
   {{ css_tag(css_file) }}
 {%- endfor %}
@@ -17,9 +17,9 @@
   <link rel="icon" href="{{ pathto('_static/favicon.ico', 1) }}" />
 </head>
 
-<body>
+<body{% if is_book_page %} class="is-book-page book-theme-{{ book_theme|default('classical-serif') }}"{% endif %}{% if folio %} data-folio="{{ folio }}"{% endif %}>
 {% include "layout/header/index.html" %}
-  <main>
+  <main{% if is_book_page %} class="book-main"{% endif %}>
 {%- block body %}{% endblock %}
   </main>
 {% include "layout/asides/index.html" %}

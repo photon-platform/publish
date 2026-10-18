@@ -77,6 +77,8 @@ class CollectionDirective(SphinxDirective):
         'title': directives.unchanged,
         'class': directives.unchanged,
         'hidden': directives.flag,
+        'depth': directives.positive_int,
+        'recursive': directives.flag,
     }
 
 
@@ -84,9 +86,10 @@ class CollectionDirective(SphinxDirective):
         """Process the collection directive.
 
         Instead of rendering immediately, this method:
-        1. Discovers all relevant files.
-        2. Adds them to a hidden toctree so Sphinx knows about them (fixes "not in toctree" warnings).
-        3. Returns a PendingCollection node to defer rendering until metadata is ready.
+        1. Discovers all relevant files respecting the Container Boundary Rule.
+        2. Filters by :type: early before claiming documents in the toctree.
+        3. Adds them to a hidden toctree so Sphinx knows about them (fixes "not in toctree" warnings).
+        4. Returns a PendingCollection node to defer rendering until metadata is ready.
 
         Returns:
             A list containing the PendingCollection node and a hidden toctree node.
@@ -97,8 +100,20 @@ class CollectionDirective(SphinxDirective):
         collection_type = self.options.get('type')
         sort_key = self.options.get('sort')
         reverse = 'reverse' in self.options
+        max_depth = self.options.get('depth', 1)
+        recursive = 'recursive' in self.options
         
         docnames = []
+        excluded_dirs = {'.git', '__pycache__', '.doctrees', '_static', '_templates'}
+
+        def get_early_meta(docname: str) -> Dict[str, Any]:
+            meta = dict(env.metadata.get(docname, {}))
+            path = os.path.join(env.srcdir, docname + '.rst')
+            if os.path.exists(path):
+                early_meta = peek_metadata(path)
+                for k, v in early_meta.items():
+                    meta.setdefault(k, v)
+            return meta
 
         if collection_type == 'header':
             # Scan GLOBAL source directory for header items
@@ -106,7 +121,7 @@ class CollectionDirective(SphinxDirective):
             # for files we haven't read.
             for root, dirs, files in os.walk(env.srcdir):
                 # Filter out excluded directories
-                dirs[:] = [d for d in dirs if d not in ['.git', '__pycache__', '.doctrees', '_static', '_templates']]
+                dirs[:] = [d for d in dirs if d not in excluded_dirs and not d.startswith('.')]
                 
                 for filename in files:
                     if filename.endswith('.rst'):
@@ -126,36 +141,65 @@ class CollectionDirective(SphinxDirective):
             docnames = [d[0] for d in docnames]
 
         else:
-            # Standard behavior: Scan LOCAL directory
+            # Standard behavior: Scan LOCAL directory respecting the Container Boundary Rule
             current_dir = os.path.dirname(env.docname)
             walk_path = os.path.join(env.srcdir, current_dir)
             
             if os.path.exists(walk_path):
+                # Track container depth (number of index.rst container boundaries from walk_path)
+                container_depths: Dict[str, int] = {os.path.abspath(walk_path): 1}
+
                 for root, dirs, files in os.walk(walk_path):
-                    for filename in files:
+                    abs_root = os.path.abspath(root)
+                    cur_depth = container_depths.get(abs_root, 1)
+
+                    dirs[:] = sorted(
+                        d for d in dirs if d not in excluded_dirs and not d.startswith('.')
+                    )
+
+                    # Include direct .rst files in current directory
+                    for filename in sorted(files):
                         if filename.endswith('.rst'):
                             path = os.path.join(root, filename)
                             docname = os.path.splitext(os.path.relpath(path, env.srcdir))[0]
-                            if docname != env.docname:
+                            if docname != env.docname and docname not in docnames:
                                 docnames.append(docname)
-            
+
+                    # Inspect subdirectories for sub-container boundaries (index.rst)
+                    for d in list(dirs):
+                        sub_dir_path = os.path.abspath(os.path.join(root, d))
+                        sub_index_path = os.path.join(sub_dir_path, 'index.rst')
+                        if os.path.exists(sub_index_path):
+                            if not recursive and cur_depth >= max_depth:
+                                sub_docname = os.path.splitext(
+                                    os.path.relpath(sub_index_path, env.srcdir)
+                                )[0]
+                                if sub_docname != env.docname and sub_docname not in docnames:
+                                    docnames.append(sub_docname)
+                                # Prune sub-container so os.walk does not bleed its children into parent
+                                dirs.remove(d)
+                            else:
+                                container_depths[sub_dir_path] = cur_depth + 1
+                        else:
+                            container_depths[sub_dir_path] = cur_depth
+
+            # Filter by :type: early before claiming docnames in toctree
+            if collection_type:
+                docnames = [
+                    d for d in docnames
+                    if get_early_meta(d).get('type') == collection_type
+                ]
+
             # Best-effort sort for toctree
             if sort_key:
-                def get_sort_val(docname):
-                    meta = env.metadata.get(docname, {})
-                    val = meta.get(sort_key)
-                    if val:
-                        return to_numeric(val)
-                    # Try peek if metadata is missing (first run)
-                    path = os.path.join(env.srcdir, docname + '.rst')
-                    if os.path.exists(path):
-                         early_meta = peek_metadata(path)
-                         if sort_key in early_meta:
-                             return to_numeric(early_meta[sort_key])
+                def get_sort_val(docname: str) -> Any:
+                    meta = get_early_meta(docname)
+                    if sort_key in meta and meta[sort_key] is not None:
+                        return to_numeric(meta[sort_key])
                     return 0
                 docnames.sort(key=get_sort_val, reverse=reverse)
 
-        # Create a toctree with ALL discovered items
+        # Create a toctree with discovered items matching this collection
         # This ensures they are included in the build and not orphaned.
         if not hasattr(self.env, 'photon_publish_collection_docnames'):
             self.env.photon_publish_collection_docnames = set()

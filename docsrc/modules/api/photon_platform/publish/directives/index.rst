@@ -16,5 +16,6 @@ Submodules
    :maxdepth: 1
 
    /modules/api/photon_platform/publish/directives/collection/index
+   /modules/api/photon_platform/publish/directives/elements/index
 
 

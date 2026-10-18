@@ -655,6 +655,452 @@ dl.py dd {
   margin-left: 0;
 }
 
+/* =========================================================================
+   Geometor Interactive Diagrams & Classical Scriptorium Typography
+   ========================================================================= */
+/* "Website in a Website" Book Codex Layout & Reading Pane */
+article.book-layout,
+article.book-reading-pane {
+  max-width: 72ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.book-reading-pane .book-content,
+.folio-book-page {
+  font-family: 'EB Garamond', Georgia, Cambria, 'Times New Roman', serif;
+  line-height: 1.65;
+  hyphens: auto;
+  text-rendering: optimizeLegibility;
+}
+
+.book-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-bottom: 1px solid rgba(113, 113, 122, 0.25);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.book-header-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding: 0.4rem 0.65rem;
+  border-radius: 6px;
+  background: rgba(113, 113, 122, 0.08);
+  font-size: 0.85rem;
+}
+
+.book-header-identity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.book-portal-link {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.78rem;
+  opacity: 0.75;
+  text-decoration: none;
+}
+
+.book-portal-link:hover {
+  opacity: 1;
+}
+
+.book-header-sep {
+  opacity: 0.45;
+}
+
+.book-title-link {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+
+.book-subtitle {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.book-header-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.book-badge {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.72rem;
+  padding: 0.12rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid rgba(113, 113, 122, 0.35);
+  background: rgba(113, 113, 122, 0.1);
+}
+
+.book-badge.canonical-badge {
+  font-weight: 700;
+}
+
+/* Sticky Multi-Track Switcher Bar (Hoenen / Euclid / Pacioli) */
+.track-nav,
+div.track-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem 0.5rem;
+  padding: 0.45rem 0.75rem;
+  margin: 0.35rem 0 1rem 0;
+  border-top: 1px solid rgba(113, 113, 122, 0.25);
+  border-bottom: 1px solid rgba(113, 113, 122, 0.25);
+  background: rgba(24, 24, 27, 0.92);
+  backdrop-filter: blur(6px);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.track-nav p {
+  margin: 0 !important;
+  text-indent: 0 !important;
+}
+
+.track-nav .track-item,
+.track-nav a {
+  text-decoration: none;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.track-nav .track-item.is-active,
+.track-nav strong {
+  font-weight: 700;
+  border-bottom: 2px solid currentColor;
+}
+
+.track-nav .track-sep {
+  opacity: 0.5;
+}
+
+/* Classical Proposition & Proof Structural Blocks */
+.enunciation {
+  font-style: italic;
+  text-indent: 1.75em;
+  margin-top: 0.5em;
+  margin-bottom: 0.75em;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.assertion {
+  text-align: center !important;
+  text-indent: 0 !important;
+  margin-top: 0.35em;
+  margin-bottom: 0.35em;
+  clear: both;
+}
+
+.sub-clause {
+  text-indent: 3.5em !important;
+  margin-top: 0.15em;
+  margin-bottom: 0.15em;
+  text-align: left;
+}
+
+.justification {
+  float: right;
+  text-indent: 0 !important;
+  font-style: normal;
+  font-size: 0.95em;
+  letter-spacing: 0.02em;
+}
+
+.qed {
+  text-align: right;
+  text-indent: 0 !important;
+  margin-top: 0.6em;
+  margin-bottom: 0.6em;
+  padding-right: 1.5em;
+  font-style: normal;
+}
+
+.porism,
+.lemma,
+.scholium {
+  margin: 0.75em 0;
+  padding-left: 1em;
+  border-left: 2px solid rgba(113, 113, 122, 0.35);
+}
+
+.porism-title,
+.lemma-title,
+.scholium-title {
+  font-weight: 700;
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.25em;
+}
+
+.folio-milestone {
+  font-size: 0.75em;
+  color: #71717a;
+  text-align: right;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  margin: 0.4em 0;
+  clear: both;
+}
+
+sup.line-num {
+  font-size: 0.75em;
+  line-height: 0;
+  vertical-align: baseline;
+  position: relative;
+  top: -0.4em;
+  color: #71717a;
+  margin-right: 0.15em;
+}
+
+/* Responsive Side-by-Side / Floating Diagram Layouts */
+figure.photon-picture.diagram-right,
+figure.photon-svg.diagram-right {
+  float: right;
+  clear: right;
+  margin: 0.25em 0 1.25em 1.5em;
+  max-width: 50%;
+}
+
+@media (max-width: 640px) {
+  figure.photon-picture.diagram-right,
+  figure.photon-svg.diagram-right,
+  .euclid-figure-container {
+    float: none;
+    max-width: 100%;
+    margin: 0.75em auto;
+  }
+}
+
+/* Interactive Geometric Text References */
+.geom-ref,
+.geom-interactive-ref,
+.katex.geom-interactive-ref {
+  cursor: pointer;
+  position: relative;
+  border-bottom: 1.5px dotted rgba(220, 38, 38, 0.45);
+  border-radius: 2px;
+  padding: 0 1px;
+  transition: all 0.15s ease-in-out;
+}
+
+.geom-ref:hover,
+.geom-interactive-ref:hover,
+.katex.geom-interactive-ref:hover {
+  border-bottom: 1.5px solid #dc2626 !important;
+}
+
+/* Active Highlight: Turning text RED without glow */
+.geom-highlight-text,
+.geom-highlight-text *,
+.katex.geom-highlight-text,
+.katex.geom-highlight-text * {
+  color: #dc2626 !important;
+  background-color: rgba(239, 68, 68, 0.08) !important;
+  border-radius: 3px;
+  transition: color 0.1s ease-in-out, background-color 0.1s ease-in-out;
+}
+
+/* Hidden/Toggleable Semantic Overlay Elements in SVG */
+svg.euclid-graphic .geom-overlay,
+svg.euclid-graphic #highlights > * {
+  opacity: 0;
+  transition: opacity 0.12s ease, stroke 0.12s ease, fill-opacity 0.12s ease;
+}
+
+/* Active Highlight in SVG: Change color to RED without glow or overstroke */
+svg.euclid-graphic [data-ref]:hover,
+svg.euclid-graphic .highlight,
+svg.euclid-graphic .geom-highlight-active {
+  opacity: 1 !important;
+  stroke: #ef4444 !important;
+  stroke-opacity: 1 !important;
+  filter: none !important;
+  cursor: pointer;
+  transition: opacity 0.1s ease, stroke 0.1s ease;
+}
+
+svg.euclid-graphic polygon:hover,
+svg.euclid-graphic polygon.highlight,
+svg.euclid-graphic polygon.geom-highlight-active,
+svg.euclid-graphic path.polygon.geom-highlight-active,
+svg.euclid-graphic path.geom-polygon.geom-highlight-active,
+svg.euclid-graphic path.wedge.geom-highlight-active,
+svg.euclid-graphic path.angle.geom-highlight-active {
+  opacity: 1 !important;
+  fill: #ef4444 !important;
+  fill-opacity: 0.22 !important;
+  stroke: #ef4444 !important;
+  stroke-opacity: 1 !important;
+  stroke-width: 1.5px !important;
+  filter: none !important;
+}
+
+svg.euclid-graphic circle.geom-point:hover,
+svg.euclid-graphic circle.point:hover,
+svg.euclid-graphic #points circle:hover,
+svg.euclid-graphic circle.geom-point.geom-highlight-active,
+svg.euclid-graphic circle.point.geom-highlight-active,
+svg.euclid-graphic #points circle.geom-highlight-active {
+  opacity: 1 !important;
+  fill: #ef4444 !important;
+  fill-opacity: 1 !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+  filter: none !important;
+}
+
+svg.euclid-graphic text:hover,
+svg.euclid-graphic text.highlight,
+svg.euclid-graphic text.geom-highlight-active,
+svg.euclid-graphic text.geom-highlight-active *,
+svg.euclid-graphic text.geom-highlight-active tspan,
+svg.euclid-graphic text.geom-label.geom-highlight-active,
+svg.euclid-graphic text.label.geom-highlight-active {
+  opacity: 1 !important;
+  fill: #ef4444 !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+  filter: none !important;
+}
+
+/* Secondary highlight for endpoints/labels when a segment, angle, or polygon is hovered */
+svg.euclid-graphic .geom-highlight-secondary {
+  opacity: 1 !important;
+  stroke: #ef4444 !important;
+  filter: none !important;
+  transition: opacity 0.1s ease, stroke 0.1s ease, fill 0.1s ease;
+}
+
+svg.euclid-graphic text.geom-highlight-secondary,
+svg.euclid-graphic text.geom-highlight-secondary tspan,
+svg.euclid-graphic tspan.geom-highlight-secondary {
+  opacity: 1 !important;
+  fill: #ef4444 !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+  filter: none !important;
+}
+
+svg.euclid-graphic circle.geom-point.geom-highlight-secondary,
+svg.euclid-graphic circle.point.geom-highlight-secondary,
+svg.euclid-graphic #points circle.geom-highlight-secondary {
+  opacity: 1 !important;
+  fill: #ef4444 !important;
+  fill-opacity: 1 !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+  filter: none !important;
+}
+
+/* Inline Figure Wrapper in Book Page */
+.euclid-figure-container {
+  float: right;
+  clear: right;
+  margin: 0.25em 0 1.25em 1.5em;
+  max-width: 52%;
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.08);
+  user-select: none;
+  transition: max-width 0.2s ease;
+}
+
+.euclid-figure-container:hover {
+  border-color: #cbd5e1;
+}
+
+.euclid-figure-container .figure-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #f4f4f5;
+}
+
+.euclid-figure-container .figure-btn {
+  font-size: 10px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #71717a;
+  background: transparent;
+  transition: all 0.15s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.euclid-figure-container .figure-btn:hover {
+  color: #18181b;
+  background: #f4f4f5;
+}
+
+.euclid-figure-container .figure-btn.active {
+  color: #047857;
+  background: #ecfdf5;
+  font-weight: 600;
+}
+
+.euclid-figure-container.python-mode {
+  min-width: 340px;
+  max-width: 62%;
+}
+
+.euclid-figure-container .figure-svg-wrapper svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.euclid-figure-container .figure-python-wrapper {
+  background: #09090b;
+  color: #e4e4e7;
+  border-radius: 6px;
+  border: 1px solid #27272a;
+  padding: 8px 10px;
+  max-height: 300px;
+  overflow: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10.5px;
+  line-height: 1.5;
+  text-align: left;
+  user-select: text;
+}
+
+.euclid-figure-container .figure-caption {
+  font-size: 11px;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-style: italic;
+  color: #71717a;
+  text-align: center;
+  margin-top: 6px;
+}
+
 article {
   container-type: inline-size;
   container-name: article;
