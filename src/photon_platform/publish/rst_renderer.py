@@ -6,13 +6,21 @@ import html
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
-from docutils import nodes, utils
-from docutils.core import publish_parts
-from docutils.parsers.rst import roles
+try:
+    from docutils import nodes, utils
+    from docutils.core import publish_parts
+    from docutils.parsers.rst import roles
+    from photon_platform.publish.directives.elements import register_standalone_directives
+    from photon_platform.publish.images.directive import register_standalone_picture
+    from photon_platform.publish.roles.geometry import register_standalone_roles
 
-from photon_platform.publish.directives.elements import register_standalone_directives
-from photon_platform.publish.images.directive import register_standalone_picture
-from photon_platform.publish.roles.geometry import register_standalone_roles
+    _HAS_DOCUTILS = True
+except ImportError:
+    nodes = None  # type: ignore[assignment]
+    utils = None  # type: ignore[assignment]
+    publish_parts = None  # type: ignore[assignment]
+    roles = None  # type: ignore[assignment]
+    _HAS_DOCUTILS = False
 
 _REGISTERED = False
 
@@ -38,7 +46,7 @@ def _standalone_ref_role(
     inliner: Any,
     options: Optional[Dict[str, Any]] = None,
     content: Optional[List[str]] = None,
-) -> Tuple[List[nodes.Node], List[nodes.system_message]]:
+) -> Tuple[List[Any], List[Any]]:
     """Fallback :ref: and :term: role for standalone Docutils preview."""
     restored = utils.unescape(text, restore_backslashes=True).strip()
     match = re.match(r"^(.+?)\s+<([^>]+)>$", restored)
@@ -56,13 +64,12 @@ def _standalone_ref_role(
 def ensure_standalone_extensions() -> None:
     """Ensure all publish directives and roles are registered with Docutils."""
     global _REGISTERED
-    if _REGISTERED:
+    if _REGISTERED or not _HAS_DOCUTILS:
         return
     register_standalone_directives()
     register_standalone_roles()
     register_standalone_picture()
-    for role_name in ("ref", "term"):
-        roles.register_local_role(role_name, _standalone_ref_role)
+    roles.register_local_role("ref", _standalone_ref_role)
     _REGISTERED = True
 
 
@@ -103,7 +110,7 @@ def parse_rst_metadata(rst_text: str) -> Tuple[Dict[str, Any], str]:
         idx += 1
 
     metadata: Dict[str, Any] = {}
-    field_re = re.compile(r"^:([A-Za-z0-9_.-]+):\s*(.*)$")
+    field_re = re.compile(r"^:([A-Za-z0-9_.-]+):(?:[ \t]+(.*)|$)$")
 
     last_key: Optional[str] = None
     in_field_list = False
@@ -113,20 +120,13 @@ def parse_rst_metadata(rst_text: str) -> Tuple[Dict[str, Any], str]:
         stripped = line.strip()
 
         if not stripped:
-            # Blank line: check if the next non-blank line continues the top field list
-            lookahead = idx + 1
-            while lookahead < n and not lines[lookahead].strip():
-                lookahead += 1
-            if in_field_list and lookahead < n and field_re.match(lines[lookahead]):
-                idx = lookahead
-                continue
             break
 
         match = field_re.match(line)
         if match:
             in_field_list = True
             key = match.group(1).strip()
-            val = match.group(2).strip()
+            val = (match.group(2) or "").strip()
             metadata[key] = val
             last_key = key
             idx += 1
@@ -193,17 +193,59 @@ def _protect_math_segments(rst_body: str) -> Tuple[str, Dict[str, str]]:
     return protected, placeholders
 
 
+def _fallback_render_rst(body_rst: str) -> str:
+    """Minimal fallback HTML renderer when Docutils is not installed in the current environment."""
+    out_lines: List[str] = []
+    for line in body_rst.splitlines():
+        m = re.match(r"^\.\.\s+(?:picture|image|figure)::\s+(\S+)", line.strip())
+        if m:
+            src = html.escape(m.group(1), quote=True)
+            out_lines.append(f'<figure class="picture"><img src="{src}" alt="{src}"></figure>')
+        elif line.strip():
+            out_lines.append(f"<p>{html.escape(line)}</p>")
+    return "\n".join(out_lines)
+
+
+def _normalize_standalone_rst(rst_body: str) -> str:
+    """Normalize standalone folio RST before passing to Docutils.
+
+    1. Convert ``[#fN]_`` and ``.. [#fN]`` to explicit ``[N]_`` and ``.. [N]`` so
+       each folio displays its actual printed footnote number (e.g. 7, 8) instead
+       of restarting at 1 on every page.
+    2. Escape initial name/title abbreviations at the start of a paragraph
+       (e.g. ``F. Klein``, ``S. Thomas``, ``P. HOENEN``, ``cl. Poincaré``) when not
+       followed by a section underline, preventing Docutils from parsing the initial
+       as an ``<ol>`` list marker.
+    """
+    rst_body = re.sub(r"\[#f(\d+)\]_", r"[\1]_", rst_body)
+    rst_body = re.sub(r"^(\.\.\s+)\[#f(\d+)\]", r"\1[\2]", rst_body, flags=re.M)
+
+    lines = rst_body.splitlines()
+    adornment_re = re.compile(r"^([=!~^\"'`#*+\-_])\1{2,}\s*$")
+    abbrev_re = re.compile(r"^(\s*)([A-Z]|cl|cf|cfr)\.\s+(?=[A-Z*«\":])")
+    for i, line in enumerate(lines):
+        next_line = lines[i + 1].strip() if i + 1 < len(lines) else ""
+        if next_line and adornment_re.match(next_line):
+            continue
+        lines[i] = abbrev_re.sub(r"\1\2\\. ", line)
+    return "\n".join(lines)
+
+
 def render_rst_html(rst_text: str) -> str:
     """Render extended Scriptorium RST source to an HTML5 fragment string in memory."""
     if not rst_text or not rst_text.strip():
         return ""
 
-    ensure_standalone_extensions()
     _, body_rst = parse_rst_metadata(rst_text)
     if not body_rst.strip():
         return ""
 
-    protected_rst, math_placeholders = _protect_math_segments(body_rst)
+    if not _HAS_DOCUTILS:
+        return _fallback_render_rst(body_rst)
+
+    ensure_standalone_extensions()
+    normalized_rst = _normalize_standalone_rst(body_rst)
+    protected_rst, math_placeholders = _protect_math_segments(normalized_rst)
 
     settings_overrides = {
         "doctitle_xform": False,
@@ -225,3 +267,8 @@ def render_rst_html(rst_text: str) -> str:
         html_out = html_out.replace(token, html.escape(math_str, quote=False))
 
     return html_out.strip()
+
+
+# Backwards-compatible aliases used by folio_review
+parse_rst_frontmatter = parse_rst_metadata
+render_rst_to_html = render_rst_html

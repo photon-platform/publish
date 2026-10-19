@@ -148,6 +148,171 @@ def just_role(
     return [node], []
 
 
+def format_inline_emphasis_html(text: str) -> str:
+    """Escape HTML and convert ``**bold**`` and ``*italic*`` spans into ``<strong>`` and ``<em>``."""
+    parts = re.split(r"(\*\*[^*\n]+\*\*|\*[^*\n]+\*)", text)
+    out: List[str] = []
+    for part in parts:
+        if len(part) >= 4 and part.startswith("**") and part.endswith("**"):
+            out.append(f"<strong>{html.escape(part[2:-2], quote=False)}</strong>")
+        elif len(part) >= 2 and part.startswith("*") and part.endswith("*"):
+            out.append(f"<em>{html.escape(part[1:-1], quote=False)}</em>")
+        else:
+            out.append(html.escape(part, quote=False))
+    return "".join(out)
+
+
+def parse_display_target(raw_content: str) -> Tuple[str, str]:
+    """Parse ``display <target>`` or bare ``display`` into ``(display, target)``."""
+    text = (raw_content or "").strip()
+    match = re.match(r"^(.+?)\s+<([^>]+)>$", text)
+    if match:
+        return match.group(1).strip(), match.group(2).strip()
+    slug = re.sub(r"[^a-z0-9:._-]+", "-", text.lower()).strip("-")
+    return text, slug
+
+
+class cite_ref_node(nodes.Inline, nodes.TextElement):
+    """Inline AST node for bibliographic/locus citations (:cite:)."""
+
+
+class term_ref_node(nodes.Inline, nodes.TextElement):
+    """Inline AST node for foreign/glossary terms (:term:)."""
+
+
+class person_ref_node(nodes.Inline, nodes.TextElement):
+    """Inline AST node for historical/scholarly person references (:person:)."""
+
+
+def visit_cite_ref_node(self: Any, node: nodes.Element) -> None:
+    """HTML visitor for cite_ref_node."""
+    display = str(node.get("display", node.astext()))
+    target = str(node.get("ref_target", ""))
+    esc_target = html.escape(target, quote=True)
+    inner_html = format_inline_emphasis_html(display)
+    self.body.append(
+        f'<span class="citation-ref" data-cite="{esc_target}" title="Citation: {esc_target}">{inner_html}</span>'
+    )
+    raise nodes.SkipNode
+
+
+def depart_cite_ref_node(self: Any, node: nodes.Element) -> None:
+    """HTML departure visitor for cite_ref_node."""
+    pass
+
+
+def visit_term_ref_node(self: Any, node: nodes.Element) -> None:
+    """HTML visitor for term_ref_node."""
+    display = str(node.get("display", node.astext()))
+    target = str(node.get("ref_target", ""))
+    esc_target = html.escape(target, quote=True)
+    inner_html = format_inline_emphasis_html(display)
+    self.body.append(
+        f'<span class="glossary-term" data-term="{esc_target}" title="Term: {esc_target}">{inner_html}</span>'
+    )
+    raise nodes.SkipNode
+
+
+def depart_term_ref_node(self: Any, node: nodes.Element) -> None:
+    """HTML departure visitor for term_ref_node."""
+    pass
+
+
+def visit_person_ref_node(self: Any, node: nodes.Element) -> None:
+    """HTML visitor for person_ref_node."""
+    display = str(node.get("display", node.astext()))
+    target = str(node.get("ref_target", ""))
+    esc_target = html.escape(target, quote=True)
+    inner_html = format_inline_emphasis_html(display)
+    self.body.append(
+        f'<span class="person-ref" data-person="{esc_target}" title="Person: {esc_target}">{inner_html}</span>'
+    )
+    raise nodes.SkipNode
+
+
+def depart_person_ref_node(self: Any, node: nodes.Element) -> None:
+    """HTML departure visitor for person_ref_node."""
+    pass
+
+
+def cite_role(
+    name: str,
+    rawtext: str,
+    text: str,
+    lineno: int,
+    inliner: Any,
+    options: Optional[Dict[str, Any]] = None,
+    content: Optional[List[str]] = None,
+) -> Tuple[List[nodes.Node], List[nodes.system_message]]:
+    """Role `:cite:` for bibliographic and locus citations."""
+    restored = utils.unescape(text, restore_backslashes=True).strip()
+    display, target = parse_display_target(restored)
+    node = cite_ref_node(rawtext, display)
+    node["display"] = display
+    node["ref_target"] = target
+
+    env = getattr(inliner.document.settings, "env", None)
+    if env is not None and hasattr(env, "metadata") and hasattr(env, "docname"):
+        doc_meta = env.metadata.setdefault(env.docname, {})
+        cites = doc_meta.setdefault("citations", [])
+        if target and target not in cites:
+            cites.append(target)
+
+    return [node], []
+
+
+def term_role(
+    name: str,
+    rawtext: str,
+    text: str,
+    lineno: int,
+    inliner: Any,
+    options: Optional[Dict[str, Any]] = None,
+    content: Optional[List[str]] = None,
+) -> Tuple[List[nodes.Node], List[nodes.system_message]]:
+    """Role `:term:` for glossary and foreign philosophical/mathematical terms."""
+    restored = utils.unescape(text, restore_backslashes=True).strip()
+    display, target = parse_display_target(restored)
+    node = term_ref_node(rawtext, display)
+    node["display"] = display
+    node["ref_target"] = target
+
+    env = getattr(inliner.document.settings, "env", None)
+    if env is not None and hasattr(env, "metadata") and hasattr(env, "docname"):
+        doc_meta = env.metadata.setdefault(env.docname, {})
+        terms = doc_meta.setdefault("terms", [])
+        if target and target not in terms:
+            terms.append(target)
+
+    return [node], []
+
+
+def person_role(
+    name: str,
+    rawtext: str,
+    text: str,
+    lineno: int,
+    inliner: Any,
+    options: Optional[Dict[str, Any]] = None,
+    content: Optional[List[str]] = None,
+) -> Tuple[List[nodes.Node], List[nodes.system_message]]:
+    """Role `:person:` for historical mathematicians, philosophers, and commentators."""
+    restored = utils.unescape(text, restore_backslashes=True).strip()
+    display, target = parse_display_target(restored)
+    node = person_ref_node(rawtext, display)
+    node["display"] = display
+    node["ref_target"] = target
+
+    env = getattr(inliner.document.settings, "env", None)
+    if env is not None and hasattr(env, "metadata") and hasattr(env, "docname"):
+        doc_meta = env.metadata.setdefault(env.docname, {})
+        persons = doc_meta.setdefault("persons", [])
+        if target and target not in persons:
+            persons.append(target)
+
+    return [node], []
+
+
 def line_role(
     name: str,
     rawtext: str,
@@ -168,12 +333,18 @@ _ROLE_NODE_VISITORS = [
     (geom_ref_node, visit_geom_ref_node, depart_geom_ref_node),
     (just_ref_node, visit_just_ref_node, depart_just_ref_node),
     (line_num_node, visit_line_num_node, depart_line_num_node),
+    (cite_ref_node, visit_cite_ref_node, depart_cite_ref_node),
+    (term_ref_node, visit_term_ref_node, depart_term_ref_node),
+    (person_ref_node, visit_person_ref_node, depart_person_ref_node),
 ]
 
 _ROLES = {
     "g": g_role,
     "just": just_role,
     "line": line_role,
+    "cite": cite_role,
+    "term": term_role,
+    "person": person_role,
 }
 
 
@@ -190,12 +361,16 @@ def register_standalone_roles() -> None:
 
 
 def setup(app: Any) -> Dict[str, Any]:
-    """Register geometry roles and nodes with Sphinx."""
+    """Register geometry and scholarly roles and nodes with Sphinx."""
     register_standalone_roles()
     for node_cls, visit_fn, depart_fn in _ROLE_NODE_VISITORS:
         app.add_node(node_cls, html=(visit_fn, depart_fn), override=True)
     for role_name, role_fn in _ROLES.items():
-        app.add_role(role_name, role_fn, override=True)
+        if role_name == "term":
+            # In Sphinx, allow custom :term: or standard glossary role
+            app.add_role(role_name, role_fn, override=True)
+        else:
+            app.add_role(role_name, role_fn, override=True)
 
     return {
         "version": "0.1",

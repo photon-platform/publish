@@ -241,3 +241,13 @@ autodoc_default_options = {
 }
 
 html_permalinks = True
+
+# Fixed RST underline-character to heading-level (h1..h6) mapping across all pages
+rst_fixed_section_levels = {
+    "=": 1,
+    "-": 2,
+    "~": 3,
+    "^": 4,
+    '"': 5,
+    "'": 6,
+}

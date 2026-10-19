@@ -421,8 +421,92 @@ _DIRECTIVES = {
 }
 
 
+from docutils.parsers.rst import states as rst_states
+
+FIXED_SECTION_LEVELS: Dict[str, int] = {
+    "=": 1,
+    "-": 2,
+    "~": 3,
+    "^": 4,
+    '"': 5,
+    "'": 6,
+    "#": 1,
+    "*": 2,
+    "+": 3,
+}
+
+_FIXED_LEVELS_INSTALLED = False
+_ORIG_CHECK_SUBSECTION = rst_states.RSTState.check_subsection
+_ORIG_NEW_SUBSECTION = rst_states.RSTState.new_subsection
+_ORIG_SECTION_TITLE_TAGS = BaseHTMLTranslator.section_title_tags
+
+
+def _fixed_check_subsection(self: Any, source: str, style: Any, lineno: int) -> bool:
+    """Resolve section hierarchy using fixed underline character levels instead of per-page order."""
+    char = style[-1] if isinstance(style, tuple) else str(style)
+    fixed_level = FIXED_SECTION_LEVELS.get(char)
+    if fixed_level is None:
+        self.memo._current_fixed_level = None
+        self.memo._current_adornment_char = None
+        return _ORIG_CHECK_SUBSECTION(self, source, style, lineno)
+
+    self.memo._current_fixed_level = fixed_level
+    self.memo._current_adornment_char = char
+
+    while isinstance(self.parent, nodes.section) and self.parent.get("fixed_level", 0) >= fixed_level:
+        self.parent = self.parent.parent
+
+    self.memo.section_level = len(self.parent.section_hierarchy())
+    if style not in self.memo.title_styles:
+        self.memo.title_styles.append(style)
+    return True
+
+
+def _fixed_new_subsection(self: Any, title: str, lineno: int, messages: List[Any]) -> None:
+    """Attach fixed_level and adornment_char metadata to newly created section nodes."""
+    _ORIG_NEW_SUBSECTION(self, title, lineno, messages)
+    fixed_level = getattr(self.memo, "_current_fixed_level", None)
+    adornment_char = getattr(self.memo, "_current_adornment_char", None)
+    if fixed_level is not None and isinstance(self.parent, nodes.section):
+        self.parent["fixed_level"] = fixed_level
+        self.parent["adornment_char"] = adornment_char
+        cls_name = f"level-{fixed_level}"
+        if cls_name not in self.parent["classes"]:
+            self.parent["classes"].append(cls_name)
+
+
+def _fixed_section_title_tags(self: Any, node: nodes.Element) -> Tuple[str, str]:
+    """Emit <h1..h6> tag matching the section's fixed underline character level."""
+    fixed_level = node.parent.get("fixed_level") if isinstance(node.parent, nodes.section) else None
+    if fixed_level is not None:
+        saved_sec = self.section_level
+        saved_init = self.initial_header_level
+        try:
+            self.section_level = int(fixed_level)
+            self.initial_header_level = 1
+            return _ORIG_SECTION_TITLE_TAGS(self, node)
+        finally:
+            self.section_level = saved_sec
+            self.initial_header_level = saved_init
+    return _ORIG_SECTION_TITLE_TAGS(self, node)
+
+
+def install_fixed_section_levels(custom_levels: Optional[Dict[str, int]] = None) -> None:
+    """Install fixed underline-character to heading-level mapping into Docutils and Sphinx."""
+    global _FIXED_LEVELS_INSTALLED
+    if custom_levels:
+        FIXED_SECTION_LEVELS.update(custom_levels)
+    if _FIXED_LEVELS_INSTALLED:
+        return
+    rst_states.RSTState.check_subsection = _fixed_check_subsection  # type: ignore[method-assign]
+    rst_states.RSTState.new_subsection = _fixed_new_subsection  # type: ignore[method-assign]
+    BaseHTMLTranslator.section_title_tags = _fixed_section_title_tags  # type: ignore[method-assign]
+    _FIXED_LEVELS_INSTALLED = True
+
+
 def register_standalone_directives() -> None:
-    """Register directives and HTML node visitors with standalone Docutils."""
+    """Register directives, fixed section levels, and HTML node visitors with standalone Docutils."""
+    install_fixed_section_levels()
     for name, directive_cls in _DIRECTIVES.items():
         directives.register_directive(name, directive_cls)
 
@@ -433,8 +517,13 @@ def register_standalone_directives() -> None:
 
 
 def setup(app: Any) -> Dict[str, Any]:
-    """Register elements directives and nodes with Sphinx."""
+    """Register elements directives, fixed section levels, and nodes with Sphinx."""
     register_standalone_directives()
+    app.add_config_value("rst_fixed_section_levels", dict(FIXED_SECTION_LEVELS), "env")
+    app.connect(
+        "config-inited",
+        lambda _app, config: install_fixed_section_levels(getattr(config, "rst_fixed_section_levels", None)),
+    )
     for node_cls, visit_fn, depart_fn in _NODE_VISITORS:
         app.add_node(node_cls, html=(visit_fn, depart_fn), override=True)
     for name, directive_cls in _DIRECTIVES.items():

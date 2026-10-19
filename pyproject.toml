@@ -27,6 +27,8 @@ dependencies = [
     "sphinx-autoapi",
     "matplotlib",
     "graphviz",
+    "flask",
+    "pyyaml",
 
     #  "sphinxcontrib.bibtex",
 ]

@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Folio Review{% endblock %} | {{ project_title or 'PHOTON Publish' }}</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            },
+            parchment: {
+              50: '#fbfaf7',
+              100: '#f6f4ee',
+              200: '#ebe6db',
+              800: '#292524',
+              900: '#1c1917',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- KaTeX for Math Rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Google Fonts: EB Garamond -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    .dark ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(100, 116, 139, 0.4);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(100, 116, 139, 0.6);
+    }
+
+    /* Classical Book Typography & Page Simulation */
+    .folio-book-page {
+      width: 100%;
+      max-width: var(--folio-width, 540px);
+      margin-left: auto;
+      margin-right: auto;
+      font-size: var(--folio-font-size, 15px);
+      line-height: 1.55;
+      font-family: 'EB Garamond', Georgia, Cambria, 'Times New Roman', serif;
+      hyphens: auto;
+      text-rendering: optimizeLegibility;
+      transition: max-width 0.2s ease, font-size 0.2s ease;
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e4e4e7;
+    }
+
+    /* Enforce pure black ink contrast across all elements inside the book page */
+    .folio-book-page,
+    .folio-book-page p,
+    .folio-book-page h1,
+    .folio-book-page h2,
+    .folio-book-page h3,
+    .folio-book-page h4,
+    .folio-book-page h5,
+    .folio-book-page h6,
+    .folio-book-page li,
+    .folio-book-page strong,
+    .folio-book-page b,
+    .folio-book-page em,
+    .folio-book-page i,
+    .folio-book-page td,
+    .folio-book-page th,
+    .folio-book-page .katex,
+    .folio-book-page .katex-display,
+    .folio-book-page .katex * {
+      color: #000000 !important;
+    }
+
+    .folio-book-page.book-indent p {
+      text-indent: 1.75em;
+      margin-top: 0;
+      margin-bottom: 0.25em;
+      text-align: justify;
+      text-justify: inter-word;
+    }
+
+    .folio-book-page.book-indent h1 + p,
+    .folio-book-page.book-indent h2 + p {
+      text-indent: 0;
+    }
+
+    .folio-book-page.block-indent p {
+      text-indent: 0;
+      margin-top: 0;
+      margin-bottom: 0.75em;
+      text-align: left;
+    }
+
+    .folio-book-page h1,
+    .folio-book-page h2,
+    .folio-book-page h3,
+    .folio-book-page h4,
+    .folio-book-page h5,
+    .folio-book-page h6 {
+      font-family: 'EB Garamond', Georgia, serif;
+      color: #000000 !important;
+    }
+
+    /* Level 1 (===): Chapter / Document Title */
+    .folio-book-page h1 {
+      text-indent: 0 !important;
+      font-size: 1.35em;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-align: center;
+      margin-top: 1.25em;
+      margin-bottom: 0.6em;
+      text-transform: uppercase;
+    }
+
+    /* Level 2 (---): Major Section (§ 1. ...) or Part / Subtitle */
+    .folio-book-page h2 {
+      text-indent: 0 !important;
+      font-size: 1.12em;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-align: center;
+      margin-top: 1.1em;
+      margin-bottom: 0.5em;
+    }
+
+    /* Level 3 (~~~): Numbered Subsection (1. *...*, 2. *...*) */
+    .folio-book-page h3 {
+      text-indent: 1.75em !important;
+      font-size: 1.03em;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      text-align: left;
+      margin-top: 0.9em;
+      margin-bottom: 0.35em;
+    }
+
+    /* Level 4 (^^^): Lettered Sub-subsection (A) *...*, B) *...*) */
+    .folio-book-page h4 {
+      text-indent: 1.75em !important;
+      font-size: 1.0em;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      text-align: left;
+      margin-top: 0.75em;
+      margin-bottom: 0.3em;
+    }
+
+    /* Level 5 ("""): Minor Sub-heading */
+    .folio-book-page h5 {
+      text-indent: 1.75em !important;
+      font-size: 0.98em;
+      font-weight: 400;
+      text-align: left;
+      margin-top: 0.6em;
+      margin-bottom: 0.25em;
+    }
+
+    /* Proposition Structural Typography & Classical Heath Layout */
+    .folio-book-page .center,
+    .folio-book-page .assertion,
+    .folio-book-page .center p,
+    .folio-book-page .assertion p,
+    .folio-book-page .center .line-block,
+    .folio-book-page .assertion .line-block,
+    .folio-book-page .center .line,
+    .folio-book-page .assertion .line {
+      text-align: center !important;
+      text-indent: 0 !important;
+    }
+
+    .folio-book-page .center,
+    .folio-book-page .assertion {
+      margin-top: 0.35em;
+      margin-bottom: 0.35em;
+      clear: both;
+    }
+
+    .folio-book-page .center p,
+    .folio-book-page .assertion p {
+      margin: 0;
+    }
+
+    .folio-book-page .justification {
+      float: right;
+      text-indent: 0 !important;
+      font-style: normal;
+      font-size: 0.95em;
+      letter-spacing: 0.02em;
+    }
+
+    .folio-book-page .sub-clause {
+      text-indent: 3.5em !important;
+      margin-top: 0.15em;
+      margin-bottom: 0.15em;
+      text-align: left;
+    }
+
+    .folio-book-page .sub-clause p,
+    .folio-book-page .sub-clause .line {
+      text-indent: 3.5em !important;
+      text-align: left !important;
+      margin: 0;
+    }
+
+    .folio-book-page .enunciation,
+    .folio-book-page .enunciation p {
+      font-style: italic;
+      text-indent: 1.75em;
+      margin-top: 0.5em;
+      margin-bottom: 0.75em;
+      text-align: justify;
+      text-justify: inter-word;
+    }
+
+    .folio-book-page .qed,
+    .folio-book-page .qed p,
+    .folio-book-page .qed .line-block,
+    .folio-book-page .qed .line {
+      text-align: right !important;
+      text-indent: 0 !important;
+      font-style: normal;
+    }
+
+    .folio-book-page .qed {
+      margin-top: 0.6em;
+      margin-bottom: 0.6em;
+      padding-right: 1.5em;
+    }
+
+    .folio-book-page .qed p {
+      margin: 0;
+    }
+
+    .folio-book-page .line-block {
+      margin-top: 0.15em;
+      margin-bottom: 0.15em;
+    }
+
+    .folio-book-page > .line-block > .line,
+    .folio-book-page section > .line-block > .line {
+      text-indent: 1.75em;
+      text-align: left;
+    }
+
+    .folio-book-page sup {
+      font-size: 0.75em;
+      line-height: 0;
+      vertical-align: baseline;
+      position: relative;
+      top: -0.4em;
+    }
+
+    .folio-book-page ol,
+    .folio-book-page ul {
+      text-indent: 0 !important;
+      padding-left: 1.75em;
+      margin: 0.5em 0;
+    }
+
+    .folio-book-page li {
+      margin-bottom: 0.35em;
+      text-align: justify;
+      text-justify: inter-word;
+    }
+
+    .folio-book-page li > p {
+      text-indent: 0 !important;
+      display: inline;
+    }
+
+    .folio-book-page blockquote {
+      font-size: 0.90em;
+      line-height: 1.40;
+      margin: 0.65em 0.35em;
+      padding: 0;
+      border-left: none !important;
+      font-style: normal;
+      color: #000000 !important;
+    }
+
+    .folio-book-page.book-indent blockquote p {
+      text-indent: 1.5em;
+      margin-top: 0;
+      margin-bottom: 0.2em;
+      text-align: justify;
+      text-justify: inter-word;
+    }
+
+    .folio-book-page.block-indent blockquote p {
+      text-indent: 0;
+      margin-top: 0;
+      margin-bottom: 0.5em;
+      text-align: left;
+    }
+
+    /* Semantic Glossary (:term:), Bibliographic Citation (:cite:), & Person (:person:) Roles */
+    .folio-book-page .glossary-term {
+      border-bottom: 1px dotted rgba(180, 83, 9, 0.55);
+      cursor: help;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+    .folio-book-page .glossary-term:hover {
+      background-color: rgba(245, 158, 11, 0.12);
+      border-bottom-color: #b45309;
+    }
+
+    .folio-book-page .citation-ref {
+      border-bottom: 1px dashed rgba(37, 99, 235, 0.45);
+      cursor: help;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+    .folio-book-page .citation-ref:hover {
+      background-color: rgba(59, 130, 246, 0.08);
+      border-bottom-color: #2563eb;
+    }
+
+    .folio-book-page .person-ref {
+      border-bottom: 1px dotted rgba(5, 150, 105, 0.55);
+      cursor: help;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+    .folio-book-page .person-ref:hover {
+      background-color: rgba(16, 185, 129, 0.10);
+      border-bottom-color: #059669;
+    }
+
+    /* Floating Graphics on the Right (Classical Proposition Layout) */
+    .folio-book-page p:has(> img),
+    .folio-book-page figure.picture {
+      text-indent: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    .folio-book-page figure.picture figcaption {
+      display: none;
+    }
+
+    .folio-book-page img {
+      float: right;
+      clear: right;
+      margin: 0.25em 0 1em 1.5em;
+      max-width: 50%;
+      height: auto;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+    }
+
+    .folio-book-page figure {
+      float: right;
+      clear: right;
+      margin: 0.25em 0 1em 1.5em;
+      max-width: 50%;
+      text-align: center;
+    }
+
+    .folio-book-page figure img {
+      float: none;
+      margin: 0 auto;
+      max-width: 100%;
+    }
+
+    .folio-book-page figcaption {
+      font-size: 0.85em;
+      color: #000000 !important;
+      margin-top: 0.35em;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* Clear floating figures before major section dividers & headings */
+    .folio-book-page h1,
+    .folio-book-page h2,
+    .folio-book-page h3,
+    .folio-book-page h4,
+    .folio-book-page hr,
+    .folio-book-page .footnotes,
+    .folio-book-page aside.footnote-list {
+      clear: both;
+    }
+
+    .folio-book-page hr {
+      border: none;
+      border-top: 1px solid #d4d4d8;
+      margin: 1.5em 0;
+      clear: both;
+    }
+
+    .folio-book-page::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .folio-book-page table {
+      border-collapse: collapse;
+      margin: 1.25em auto;
+      color: #000000 !important;
+    }
+
+    .folio-book-page th,
+    .folio-book-page td {
+      border: 1px solid #000000 !important;
+      padding: 5px 10px;
+      color: #000000 !important;
+    }
+
+    /* Inline Footnote Callout Superscripts */
+    .folio-book-page a.footnote-reference,
+    .folio-book-page a[role="doc-noteref"] {
+      font-size: 0.76em;
+      vertical-align: super;
+      line-height: 0;
+      text-decoration: none;
+      font-weight: 600;
+      color: #000000 !important;
+      padding: 0 1px;
+    }
+    .folio-book-page a.footnote-reference .fn-bracket,
+    .folio-book-page a[role="doc-noteref"] .fn-bracket {
+      display: none;
+    }
+
+    /* Bottom Footnote Apparatus (Docutils HTML5 aside.footnote-list & legacy .footnotes) */
+    .folio-book-page .footnotes,
+    .folio-book-page aside.footnote-list {
+      border-top: 1px solid #71717a !important;
+      margin-top: 1.35em;
+      padding-top: 0.55em;
+      font-size: 0.84em;
+      line-height: 1.35;
+      color: #000000 !important;
+    }
+
+    .folio-book-page .footnotes hr {
+      display: none;
+    }
+
+    .folio-book-page .footnotes p {
+      text-indent: 1.25em;
+    }
+
+    .folio-book-page aside.footnote {
+      margin-top: 0;
+      margin-bottom: 0.22em;
+      text-align: justify;
+      text-justify: inter-word;
+      text-indent: 1.25em;
+    }
+
+    .folio-book-page aside.footnote > span.label {
+      display: inline;
+      font-size: 0.82em;
+      vertical-align: super;
+      line-height: 0;
+      margin-right: 0.2em;
+      font-weight: 600;
+    }
+
+    .folio-book-page aside.footnote > span.label .fn-bracket {
+      display: none;
+    }
+
+    .folio-book-page aside.footnote > span.label a {
+      text-decoration: none;
+      color: #000000 !important;
+    }
+
+    .folio-book-page aside.footnote > p {
+      display: inline;
+      text-indent: 0 !important;
+      margin: 0;
+    }
+
+    .folio-book-page aside.footnote > p + p {
+      display: block;
+      text-indent: 1.25em !important;
+      margin-top: 0.15em;
+    }
+  </style>
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="h-full bg-slate-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col font-sans transition-colors duration-200">
+
+  <!-- Top Navigation Header -->
+  <header class="bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 shrink-0 sticky top-0 z-30">
+    <div class="px-4 py-2.5 flex items-center justify-between">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center space-x-3">
+        <a href="/" class="flex items-center space-x-2 text-zinc-900 dark:text-white font-bold tracking-tight hover:opacity-80 transition-opacity">
+          <div class="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white shadow-sm font-serif text-lg font-bold">
+            {% if 'Euclid' in (project_title or '') %}Ε{% elif 'Pacioli' in (project_title or '') %}Φ{% elif 'Hoenen' in (project_title or '') %}Η{% else %}Φ{% endif %}
+          </div>
+          <div class="flex items-center flex-wrap gap-1.5">
+            <span class="text-base font-semibold">{{ project_title or 'GEOMETOR' }}</span>
+            {% if edition_label %}
+              <span class="text-xs px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 font-mono font-medium">{{ edition_label }}</span>
+            {% endif %}
+            <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 font-mono font-medium">Folio Review</span>
+          </div>
+        </a>
+
+        {% block nav_breadcrumbs %}{% endblock %}
+      </div>
+
+      <!-- Action Items & Tools -->
+      <div class="flex items-center space-x-2.5">
+        {% block header_actions %}{% endblock %}
+
+        <!-- Shortcuts Help Modal Button -->
+        <button onclick="toggleShortcutsModal()" title="Keyboard Shortcuts (?)" class="p-2 rounded-lg text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+          <i data-lucide="keyboard" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Dark/Light Mode Toggle -->
+        <button id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Theme" class="p-2 rounded-lg text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+          <i data-lucide="moon" class="w-4 h-4 hidden dark:inline"></i>
+          <i data-lucide="sun" class="w-4 h-4 inline dark:hidden"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Content Body -->
+  <main class="flex-1 overflow-hidden flex flex-col min-h-0">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Shortcuts Modal -->
+  <div id="shortcutsModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-2xl max-w-md w-full p-6 text-zinc-900 dark:text-zinc-100">
+      <div class="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-zinc-800">
+        <h3 class="text-lg font-bold flex items-center gap-2">
+          <i data-lucide="command" class="w-5 h-5 text-emerald-500"></i>
+          Keyboard Shortcuts
+        </h3>
+        <button onclick="toggleShortcutsModal()" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="mt-4 space-y-2.5 text-sm">
+        <div class="flex justify-between items-center py-1">
+          <span class="text-zinc-600 dark:text-zinc-400">Previous Folio</span>
+          <kbd class="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 font-mono text-xs border border-zinc-300 dark:border-zinc-700">h / k / [ / ←</kbd>
+        </div>
+        <div class="flex justify-between items-center py-1">
+          <span class="text-zinc-600 dark:text-zinc-400">Next Folio</span>
+          <kbd class="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 font-mono text-xs border border-zinc-300 dark:border-zinc-700">l / j / ] / →</kbd>
+        </div>
+        <div class="flex justify-between items-center py-1">
+          <span class="text-zinc-600 dark:text-zinc-400">Switch Right Pane Tabs</span>
+          <kbd class="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 font-mono text-xs border border-zinc-300 dark:border-zinc-700">1, 2, 3, 4</kbd>
+        </div>
+        <div class="flex justify-between items-center py-1">
+          <span class="text-zinc-600 dark:text-zinc-400">Toggle Bounding Box Overlays</span>
+          <kbd class="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 font-mono text-xs border border-zinc-300 dark:border-zinc-700">b</kbd>
+        </div>
+        <div class="flex justify-between items-center py-1">
+          <span class="text-zinc-600 dark:text-zinc-400">Invert Folio Scan</span>
+          <kbd class="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 font-mono text-xs border border-zinc-300 dark:border-zinc-700">i</kbd>
+        </div>
+        <div class="flex justify-between items-center py-1">
+          <span class="text-zinc-600 dark:text-zinc-400">Reset Scan Zoom / Fit</span>
+          <kbd class="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 font-mono text-xs border border-zinc-300 dark:border-zinc-700">f</kbd>
+        </div>
+        <div class="flex justify-between items-center py-1">
+          <span class="text-zinc-600 dark:text-zinc-400">Save Review / Checklist</span>
+          <kbd class="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 font-mono text-xs border border-zinc-300 dark:border-zinc-700">Ctrl + S</kbd>
+        </div>
+        <div class="flex justify-between items-center py-1">
+          <span class="text-zinc-600 dark:text-zinc-400">Toggle Shortcuts Help</span>
+          <kbd class="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 font-mono text-xs border border-zinc-300 dark:border-zinc-700">?</kbd>
+        </div>
+      </div>
+      <div class="mt-6 text-center">
+        <button onclick="toggleShortcutsModal()" class="px-4 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-xs font-medium hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Base Scripts -->
+  <script>
+    // Theme Management
+    function initTheme() {
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+    function toggleTheme() {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.theme = 'light';
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.theme = 'dark';
+      }
+      lucide.createIcons();
+    }
+    initTheme();
+
+    // Shortcuts Modal
+    function toggleShortcutsModal() {
+      const modal = document.getElementById('shortcutsModal');
+      modal.classList.toggle('hidden');
+    }
+
+    // Toast Notifications
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      
+      const colors = {
+        success: 'bg-emerald-600 text-white',
+        error: 'bg-rose-600 text-white',
+        warning: 'bg-amber-600 text-white',
+        info: 'bg-zinc-800 text-white dark:bg-zinc-100 dark:text-zinc-900',
+      };
+
+      toast.className = `px-4 py-2.5 rounded-lg shadow-lg text-sm font-medium transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto flex items-center gap-2 ${colors[type] || colors.info}`;
+      toast.innerHTML = message;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Global Key Listener for Modal
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '?' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+        e.preventDefault();
+        toggleShortcutsModal();
+      } else if (e.key === 'Escape') {
+        const modal = document.getElementById('shortcutsModal');
+        if (!modal.classList.contains('hidden')) {
+          modal.classList.add('hidden');
+        }
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+  </script>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,2573 @@
+{% extends "base.html" %}
+
+{% block title %}Folio {{ folio.folio }} ({{ folio.volume_label }}){% endblock %}
+
+{% block extra_head %}
+<style>
+  /* Interactive Geometric Text References */
+  .folio-book-page .geom-interactive-ref,
+  .folio-book-page .katex.geom-interactive-ref {
+    cursor: pointer;
+    position: relative;
+    border-bottom: 1.5px dotted rgba(220, 38, 38, 0.45);
+    border-radius: 2px;
+    padding: 0 1px;
+    transition: all 0.15s ease-in-out;
+  }
+  .folio-book-page .geom-interactive-ref:hover,
+  .folio-book-page .katex.geom-interactive-ref:hover {
+    border-bottom: 1.5px solid #dc2626 !important;
+  }
+
+  /* Active Highlight: Turning text RED without glow */
+  .folio-book-page .geom-highlight-text,
+  .folio-book-page .geom-highlight-text *,
+  .folio-book-page .katex.geom-highlight-text,
+  .folio-book-page .katex.geom-highlight-text *,
+  .geom-highlight-text,
+  .geom-highlight-text * {
+    color: #dc2626 !important;
+    background-color: rgba(239, 68, 68, 0.08) !important;
+    border-radius: 3px;
+    transition: color 0.1s ease-in-out, background-color 0.1s ease-in-out;
+  }
+
+  /* Hidden/Toggleable Semantic Overlay Elements in SVG */
+  svg.euclid-graphic .geom-overlay,
+  svg.euclid-graphic #highlights > * {
+    opacity: 0;
+    transition: opacity 0.12s ease, stroke 0.12s ease, fill-opacity 0.12s ease;
+  }
+
+  /* Active Highlight in SVG: Change color to RED without glow or overstroke */
+  svg.euclid-graphic [data-ref]:hover,
+  svg.euclid-graphic .highlight,
+  svg.euclid-graphic .geom-highlight-active {
+    opacity: 1 !important;
+    stroke: #ef4444 !important;
+    stroke-opacity: 1 !important;
+    filter: none !important;
+    cursor: pointer;
+    transition: opacity 0.1s ease, stroke 0.1s ease;
+  }
+
+  svg.euclid-graphic polygon:hover,
+  svg.euclid-graphic polygon.highlight,
+  svg.euclid-graphic polygon.geom-highlight-active,
+  svg.euclid-graphic path.polygon.geom-highlight-active,
+  svg.euclid-graphic path.geom-polygon.geom-highlight-active,
+  svg.euclid-graphic path.wedge.geom-highlight-active,
+  svg.euclid-graphic path.angle.geom-highlight-active {
+    opacity: 1 !important;
+    fill: #ef4444 !important;
+    fill-opacity: 0.22 !important;
+    stroke: #ef4444 !important;
+    stroke-opacity: 1 !important;
+    stroke-width: 1.5px !important;
+    filter: none !important;
+  }
+
+  svg.euclid-graphic circle.geom-point:hover,
+  svg.euclid-graphic circle.point:hover,
+  svg.euclid-graphic #points circle:hover,
+  svg.euclid-graphic circle.geom-point.geom-highlight-active,
+  svg.euclid-graphic circle.point.geom-highlight-active,
+  svg.euclid-graphic #points circle.geom-highlight-active {
+    opacity: 1 !important;
+    fill: #ef4444 !important;
+    fill-opacity: 1 !important;
+    stroke: none !important;
+    stroke-width: 0 !important;
+    filter: none !important;
+  }
+
+  svg.euclid-graphic text:hover,
+  svg.euclid-graphic text.highlight,
+  svg.euclid-graphic text.geom-highlight-active,
+  svg.euclid-graphic text.geom-highlight-Active *,
+  svg.euclid-graphic text.geom-highlight-active tspan,
+  svg.euclid-graphic text.geom-label.geom-highlight-active,
+  svg.euclid-graphic text.label.geom-highlight-active {
+    opacity: 1 !important;
+    fill: #ef4444 !important;
+    stroke: none !important;
+    stroke-width: 0 !important;
+    filter: none !important;
+  }
+
+  /* Secondary highlight for endpoints/labels when a segment, angle, or polygon is hovered */
+  svg.euclid-graphic .geom-highlight-secondary {
+    opacity: 1 !important;
+    stroke: #ef4444 !important;
+    filter: none !important;
+    transition: opacity 0.1s ease, stroke 0.1s ease, fill 0.1s ease;
+  }
+  svg.euclid-graphic text.geom-highlight-secondary,
+  svg.euclid-graphic text.geom-highlight-secondary tspan,
+  svg.euclid-graphic tspan.geom-highlight-secondary {
+    opacity: 1 !important;
+    fill: #ef4444 !important;
+    stroke: none !important;
+    stroke-width: 0 !important;
+    filter: none !important;
+  }
+  svg.euclid-graphic circle.geom-point.geom-highlight-secondary,
+  svg.euclid-graphic circle.point.geom-highlight-secondary,
+  svg.euclid-graphic #points circle.geom-highlight-secondary {
+    opacity: 1 !important;
+    fill: #ef4444 !important;
+    fill-opacity: 1 !important;
+    stroke: none !important;
+    stroke-width: 0 !important;
+    filter: none !important;
+  }
+
+  /* Inline Figure Wrapper in Book Page */
+  .euclid-figure-container {
+    float: right;
+    clear: right;
+    margin: 0.25em 0 1.25em 1.5em;
+    max-width: 52%;
+    background: #ffffff;
+    border: 1px solid #e4e4e7;
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.08);
+    user-select: none;
+  }
+  .euclid-figure-container:hover {
+    border-color: #cbd5e1;
+  }
+  .euclid-figure-container .figure-svg-wrapper svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+  .euclid-figure-container .figure-caption {
+    font-size: 11px;
+    font-family: 'EB Garamond', Georgia, serif;
+    font-style: italic;
+    color: #71717a;
+    text-align: center;
+    margin-top: 6px;
+  }
+
+  /* Pygments gruvbox-dark syntax highlighting (matching photon-platform/publish) */
+  {{ (folio.pygments_css or "")|safe }}
+  div.highlight {
+    background: #1d2021 !important;
+    color: #ebdbb2;
+    padding: 0.85rem 1rem;
+    border-radius: 0 0 8px 8px;
+    overflow: auto;
+    font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  div.highlight pre {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    white-space: pre;
+  }
+</style>
+{% endblock %}
+
+{% block nav_breadcrumbs %}
+<div class="hidden sm:flex items-center space-x-1.5 text-xs text-zinc-400">
+  <span>/</span>
+  <a href="/?volume={{ folio.volume }}" class="hover:text-zinc-600 dark:hover:text-zinc-200">{{ folio.volume.replace('volume_', 'Vol ') }}</a>
+  <span>/</span>
+  <span class="text-zinc-500 font-mono">{{ folio.section_path }}</span>
+  <span>/</span>
+  <span class="font-mono font-bold text-zinc-900 dark:text-zinc-100">Folio {{ folio.folio }}</span>
+  <span class="text-zinc-400 font-mono">(p. {{ folio.page }})</span>
+</div>
+{% endblock %}
+
+{% block header_actions %}
+<!-- Navigation Buttons -->
+<div class="flex items-center bg-zinc-100 dark:bg-zinc-800 rounded-lg p-0.5 border border-zinc-200 dark:border-zinc-700">
+  {% if prev_folio %}
+    <a href="/folio/{{ prev_folio.volume }}/{{ prev_folio.folio }}" id="prevFolioLink" title="Previous Folio (h, k, [ or Left Arrow)" class="px-2.5 py-1 text-xs font-medium rounded-md hover:bg-white dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 transition-colors flex items-center gap-1">
+      <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
+      <span class="font-mono">{{ prev_folio.folio }}</span>
+    </a>
+  {% else %}
+    <span class="px-2.5 py-1 text-xs text-zinc-400 cursor-not-allowed flex items-center gap-1">
+      <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
+    </span>
+  {% endif %}
+
+  <!-- Quick Jump Input -->
+  <div class="px-1">
+    <input type="text" id="jumpInput" placeholder="Jump..." value="{{ folio.folio }}" onkeydown="handleJumpKey(event)" class="w-16 text-center text-xs py-0.5 px-1 rounded bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 font-mono focus:outline-none focus:ring-1 focus:ring-emerald-500 text-zinc-800 dark:text-zinc-200">
+  </div>
+
+  {% if next_folio %}
+    <a href="/folio/{{ next_folio.volume }}/{{ next_folio.folio }}" id="nextFolioLink" title="Next Folio (l, j, ] or Right Arrow)" class="px-2.5 py-1 text-xs font-medium rounded-md hover:bg-white dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 transition-colors flex items-center gap-1">
+      <span class="font-mono">{{ next_folio.folio }}</span>
+      <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+    </a>
+  {% else %}
+    <span class="px-2.5 py-1 text-xs text-zinc-400 cursor-not-allowed flex items-center gap-1">
+      <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+    </span>
+  {% endif %}
+</div>
+
+<!-- Review Status Header Dropdown -->
+<select id="headerStatusSelect" onchange="quickUpdateStatus(this.value)" class="text-xs font-medium py-1 px-2.5 rounded-lg border focus:outline-none transition-colors
+  {% if review.status == 'verified' %}
+    bg-emerald-50 text-emerald-800 border-emerald-300 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800
+  {% elif review.status == 'needs_fix' %}
+    bg-amber-50 text-amber-800 border-amber-300 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800
+  {% elif review.status == 'flagged' %}
+    bg-rose-50 text-rose-800 border-rose-300 dark:bg-rose-950 dark:text-rose-300 dark:border-rose-800
+  {% else %}
+    bg-zinc-100 text-zinc-700 border-zinc-300 dark:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700
+  {% endif %}">
+  <option value="unreviewed" {% if review.status == 'unreviewed' %}selected{% endif %}>○ Unreviewed</option>
+  <option value="verified" {% if review.status == 'verified' %}selected{% endif %}>✓ Verified</option>
+  <option value="needs_fix" {% if review.status == 'needs_fix' %}selected{% endif %}>⚠ Needs Fix</option>
+  <option value="flagged" {% if review.status == 'flagged' %}selected{% endif %}>⚑ Flagged</option>
+</select>
+{% endblock %}
+
+{% block content %}
+<div class="flex-1 flex overflow-hidden min-h-0 divide-x divide-zinc-200 dark:divide-zinc-800" id="workspaceContainer">
+
+  <!-- LEFT PANE: Scan Viewer -->
+  <div class="w-1/2 flex flex-col bg-zinc-900/90 relative select-none" id="leftPane">
+    
+    <!-- Scan Toolbar -->
+    <div class="bg-zinc-900/95 border-b border-zinc-800 px-3 py-2 flex items-center justify-between text-xs text-zinc-300 shrink-0 z-20">
+      
+      <!-- Zoom Controls -->
+      <div class="flex items-center gap-1">
+        <button onclick="zoomScan(0.2)" title="Zoom In (+)" class="p-1.5 rounded hover:bg-zinc-800 text-zinc-300 hover:text-white transition-colors">
+          <i data-lucide="zoom-in" class="w-4 h-4"></i>
+        </button>
+        <button onclick="zoomScan(-0.2)" title="Zoom Out (-)" class="p-1.5 rounded hover:bg-zinc-800 text-zinc-300 hover:text-white transition-colors">
+          <i data-lucide="zoom-out" class="w-4 h-4"></i>
+        </button>
+        <button onclick="resetZoom()" title="Fit Full Page (f)" class="px-2 py-1 rounded hover:bg-zinc-800 text-zinc-300 hover:text-white font-mono transition-colors">
+          Fit Page
+        </button>
+        {% if folio.graphics and folio.graphics|length > 0 %}
+          <button onclick="fitFirstGraphic()" title="Fit First Figure (z)" class="px-2 py-1 rounded hover:bg-zinc-800 text-emerald-400 hover:text-emerald-300 font-mono transition-colors">
+            Fit Fig
+          </button>
+        {% endif %}
+        <button onclick="setActualSize()" title="100% Scale" class="px-2 py-1 rounded hover:bg-zinc-800 text-zinc-300 hover:text-white font-mono transition-colors">
+          1:1
+        </button>
+        <span id="zoomLevelDisplay" class="font-mono text-[11px] text-zinc-400 ml-1">100%</span>
+      </div>
+
+      <!-- Overlays & Invert -->
+      <div class="flex items-center gap-2">
+        <!-- Bounding Box Toggle -->
+        <button id="bboxToggleBtn" onclick="toggleBboxOverlay()" title="Toggle Bounding Boxes (b)" class="px-2.5 py-1 rounded flex items-center gap-1.5 transition-colors bg-emerald-950/80 text-emerald-300 border border-emerald-800">
+          <i data-lucide="box-select" class="w-3.5 h-3.5"></i>
+          <span>BBoxes ({{ folio.graphics|length }})</span>
+        </button>
+
+        <!-- Invert Scan Toggle -->
+        <button id="invertScanBtn" onclick="toggleInvertScan()" title="Invert Scan (i)" class="p-1.5 rounded hover:bg-zinc-800 text-zinc-300 hover:text-white transition-colors">
+          <i data-lucide="contrast" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Mouse Coordinate Readout -->
+        <div class="font-mono text-[11px] text-zinc-400 bg-zinc-800/80 px-2 py-0.5 rounded border border-zinc-700/60 hidden md:block" id="coordHud">
+          X: 0, Y: 0
+        </div>
+      </div>
+    </div>
+
+    <!-- Scan Canvas Container (Pan & Zoom Viewport) -->
+    <div class="flex-1 overflow-hidden relative cursor-grab active:cursor-grabbing bg-zinc-950" id="scanViewport">
+      <div id="scanWrapper" class="absolute top-0 left-0 origin-top-left transition-transform duration-75">
+        <!-- Folio Scan Image -->
+        <img id="folioScanImg" 
+             src="/media/{{ folio.scan_rel_path }}" 
+             alt="Folio {{ folio.folio }}" 
+             class="max-w-none block shadow-2xl transition-all duration-200 select-none pointer-events-none">
+
+        <!-- SVG Bounding Box Overlay -->
+        <svg id="bboxSvgOverlay" 
+             class="absolute top-0 left-0 w-full h-full pointer-events-none" 
+             style="display: block;">
+          {% for g in folio.graphics %}
+            {% if g.bbox and g.bbox|length == 4 %}
+              <g class="bbox-group pointer-events-auto cursor-pointer" 
+                 id="bbox-group-{{ g.id }}" 
+                 onclick="selectGraphic('{{ g.id }}')">
+                <!-- Rectangle -->
+                <rect x="{{ g.bbox[0] }}" y="{{ g.bbox[1] }}" width="{{ g.bbox[2] }}" height="{{ g.bbox[3] }}"
+                      class="bbox-rect stroke-emerald-400 fill-emerald-500/20 stroke-2 hover:fill-amber-400/30 hover:stroke-amber-400 transition-colors"
+                      id="rect-{{ g.id }}"></rect>
+                <!-- Label Tag -->
+                <rect x="{{ g.bbox[0] }}" y="{{ g.bbox[1] - 22 if g.bbox[1] >= 22 else g.bbox[1] }}" width="36" height="20" rx="3"
+                      class="fill-emerald-600/90"></rect>
+                <text x="{{ g.bbox[0] + 6 }}" y="{{ g.bbox[1] - 7 if g.bbox[1] >= 22 else g.bbox[1] + 15 }}"
+                      class="fill-white font-mono text-xs font-bold">{{ g.id }}</text>
+              </g>
+            {% endif %}
+          {% endfor %}
+        </svg>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT PANE: Workbench & Vetting Tabs -->
+  <div class="w-1/2 flex flex-col bg-white dark:bg-zinc-900 overflow-hidden" id="rightPane">
+    
+    <!-- Tab Navigation -->
+    <div class="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/60 px-4 shrink-0">
+      <nav class="flex space-x-1" aria-label="Tabs">
+        <!-- Tab 1: Transcription -->
+        <button onclick="switchTab('transcription')" id="tabBtn-transcription" class="px-3.5 py-2.5 text-xs font-medium border-b-2 border-emerald-500 text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+          <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+          <span>Transcription</span>
+          {% if folio.has_md %}
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+          {% else %}
+            <span class="text-[10px] text-zinc-400">(missing)</span>
+          {% endif %}
+        </button>
+
+        <!-- Tab 2: Notes -->
+        <button onclick="switchTab('notes')" id="tabBtn-notes" class="px-3.5 py-2.5 text-xs font-medium border-b-2 border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200 flex items-center gap-1.5">
+          <i data-lucide="sticky-note" class="w-3.5 h-3.5"></i>
+          <span>Notes</span>
+          {% if folio.has_notes %}
+            <span class="w-1.5 h-1.5 rounded-full bg-violet-500"></span>
+          {% else %}
+            <span class="text-[10px] text-zinc-400">(missing)</span>
+          {% endif %}
+        </button>
+
+        <!-- Tab 3: Graphics -->
+        <button onclick="switchTab('graphics')" id="tabBtn-graphics" class="px-3.5 py-2.5 text-xs font-medium border-b-2 border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200 flex items-center gap-1.5">
+          <i data-lucide="image" class="w-3.5 h-3.5"></i>
+          <span>Graphics</span>
+          {% if folio.graphics_count > 0 %}
+            <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-mono">{{ folio.graphics_count }}</span>
+          {% endif %}
+        </button>
+
+        <!-- Tab 4: Vetting & Checklist -->
+        <button onclick="switchTab('vetting')" id="tabBtn-vetting" class="px-3.5 py-2.5 text-xs font-medium border-b-2 border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200 flex items-center gap-1.5">
+          <i data-lucide="check-square" class="w-3.5 h-3.5"></i>
+          <span>Vetting</span>
+          <span id="tabVettingBadge" class="w-2 h-2 rounded-full 
+            {% if review.status == 'verified' %}bg-emerald-500
+            {% elif review.status == 'needs_fix' %}bg-amber-500
+            {% elif review.status == 'flagged' %}bg-rose-500
+            {% else %}bg-zinc-400{% endif %}"></span>
+        </button>
+      </nav>
+
+      <!-- Frontmatter Pills -->
+      <div class="text-[11px] text-zinc-400 font-mono hidden lg:flex items-center gap-2">
+        {% if folio.frontmatter.title %}
+          <span class="truncate max-w-[200px]" title="{{ folio.frontmatter.title }}">{{ folio.frontmatter.title }}</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Tab Content Panes -->
+    <div class="flex-1 overflow-y-auto p-5 space-y-4">
+
+      <!-- ==================== TAB 1: TRANSCRIPTION ==================== -->
+      <div id="tabContent-transcription" class="space-y-4">
+        
+        <!-- Header Card with Typographic Controls -->
+        <div class="bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 rounded-lg p-2.5 text-xs flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-3">
+            <div><span class="text-zinc-400">Book:</span> <span class="font-medium font-serif">{{ folio.frontmatter.book or folio.book }}</span></div>
+            <div><span class="text-zinc-400">Section:</span> <span class="font-medium font-mono">{{ folio.frontmatter.section or folio.section_path }}</span></div>
+            <div><span class="text-zinc-400">Page:</span> <span class="font-medium font-mono">{{ folio.page }}</span></div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <!-- Typographic Controls to Match Scan -->
+            <div class="flex items-center gap-1 bg-white dark:bg-zinc-800 rounded border border-zinc-200 dark:border-zinc-700 px-1.5 py-0.5">
+              <!-- Font Size -->
+              <button onclick="changeFontSize(-1)" title="Smaller font (A-)" class="px-1 py-0.5 rounded text-[11px] font-serif hover:bg-zinc-100 dark:hover:bg-zinc-700 font-bold">A-</button>
+              <span id="fontSizeDisplay" class="text-[10px] font-mono text-zinc-400 px-0.5">15px</span>
+              <button onclick="changeFontSize(1)" title="Larger font (A+)" class="px-1 py-0.5 rounded text-[11px] font-serif hover:bg-zinc-100 dark:hover:bg-zinc-700 font-bold">A+</button>
+
+              <span class="w-px h-3 bg-zinc-200 dark:bg-zinc-700 mx-0.5"></span>
+
+              <!-- Width Selector -->
+              <select id="widthSelect" onchange="changeColumnWidth(this.value)" class="text-[11px] bg-transparent focus:outline-none text-zinc-700 dark:text-zinc-300">
+                <option value="540px">Book (540px)</option>
+                <option value="480px">Narrow (480px)</option>
+                <option value="600px">Medium (600px)</option>
+                <option value="100%">Full Width</option>
+              </select>
+
+              <span class="w-px h-3 bg-zinc-200 dark:bg-zinc-700 mx-0.5"></span>
+
+              <!-- Indent Toggle -->
+              <button onclick="toggleParagraphIndent()" id="indentBtn" title="Toggle Paragraph Indent Style" class="px-1.5 py-0.5 rounded text-[11px] font-medium text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700">
+                Indent
+              </button>
+            </div>
+
+            <!-- View Modes -->
+            <div class="flex items-center gap-1 bg-white dark:bg-zinc-800 rounded border border-zinc-200 dark:border-zinc-700 p-0.5">
+              <button onclick="setMdView('rendered')" id="mdBtn-rendered" class="px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Rendered</button>
+              <button onclick="setMdView('raw')" id="mdBtn-raw" class="px-2 py-0.5 rounded text-[11px] font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900">Raw</button>
+              <button onclick="setMdView('edit')" id="mdBtn-edit" class="px-2 py-0.5 rounded text-[11px] font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900">Edit</button>
+            </div>
+          </div>
+        </div>
+
+        {% if folio.has_md and folio.md_content %}
+          <!-- Rendered View (Book Page Simulation) -->
+          <div class="bg-zinc-200/50 dark:bg-zinc-950/70 rounded-xl p-4 sm:p-8 overflow-x-auto flex justify-center border border-zinc-200 dark:border-zinc-800">
+            <div id="mdView-rendered" class="folio-book-page book-indent bg-white text-black border border-zinc-200 rounded-lg p-6 sm:p-12 shadow-sm">
+              {{ folio.md_html|safe }}
+            </div>
+          </div>
+
+          <!-- Raw View -->
+          <div id="mdView-raw" class="hidden">
+            <pre class="bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 font-mono text-xs overflow-x-auto whitespace-pre-wrap leading-relaxed text-zinc-800 dark:text-zinc-200">{{ folio.md_content }}</pre>
+          </div>
+
+          <!-- Edit View -->
+          <div id="mdView-edit" class="hidden space-y-3">
+            <textarea id="mdEditTextarea" rows="18" class="w-full font-mono text-xs p-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 leading-relaxed">{{ folio.md_content }}</textarea>
+            <div class="flex justify-end gap-2">
+              <button onclick="setMdView('rendered')" class="px-3 py-1.5 text-xs rounded-lg border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800">Cancel</button>
+              <button onclick="saveEditedText('md')" class="px-3.5 py-1.5 text-xs font-medium rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1.5 shadow-sm">
+                <i data-lucide="save" class="w-3.5 h-3.5"></i>
+                Save {{ 'RST' if folio.transcription_format == 'rst' else 'Markdown' }} to Disk
+              </button>
+            </div>
+          </div>
+        {% else %}
+          <div class="bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-xl p-8 text-center text-amber-800 dark:text-amber-300 space-y-2">
+            <i data-lucide="file-question" class="w-8 h-8 mx-auto text-amber-500"></i>
+            <div class="font-bold text-sm">Transcription File Not Found</div>
+            <div class="text-xs text-amber-600 dark:text-amber-400">
+              No transcription file exists yet at <code class="font-mono">{{ folio.md_file_name or (folio.folio ~ '.rst') }}</code>. Transcription may be in progress.
+            </div>
+          </div>
+        {% endif %}
+
+      </div>
+
+      <!-- ==================== TAB 2: NOTES ==================== -->
+      <div id="tabContent-notes" class="hidden space-y-4">
+        
+        <div class="bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 rounded-lg p-3 text-xs flex items-center justify-between">
+          <span class="text-zinc-500">Transcription Notes File: <code class="font-mono text-zinc-800 dark:text-zinc-200">{{ folio.notes_file_name or (folio.folio ~ '.notes.rst') }}</code></span>
+          <div class="flex items-center gap-1 bg-white dark:bg-zinc-800 rounded border border-zinc-200 dark:border-zinc-700 p-0.5">
+            <button onclick="setNotesView('rendered')" id="notesBtn-rendered" class="px-2 py-0.5 rounded text-[11px] font-medium bg-violet-100 text-violet-800 dark:bg-violet-950 dark:text-violet-300">Rendered</button>
+            <button onclick="setNotesView('raw')" id="notesBtn-raw" class="px-2 py-0.5 rounded text-[11px] font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900">Raw</button>
+            <button onclick="setNotesView('edit')" id="notesBtn-edit" class="px-2 py-0.5 rounded text-[11px] font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900">Edit</button>
+          </div>
+        </div>
+
+        {% if folio.has_notes and folio.notes_content %}
+          <!-- Rendered Notes View (Book Page Simulation) -->
+          <div class="bg-zinc-200/50 dark:bg-zinc-950/70 rounded-xl p-4 sm:p-8 overflow-x-auto flex justify-center border border-zinc-200 dark:border-zinc-800">
+            <div id="notesView-rendered" class="folio-book-page book-indent bg-white text-black border border-zinc-200 rounded-lg p-6 sm:p-12 shadow-sm">
+              {{ folio.notes_html|safe }}
+            </div>
+          </div>
+
+          <!-- Raw Notes -->
+          <div id="notesView-raw" class="hidden">
+            <pre class="bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 font-mono text-xs overflow-x-auto whitespace-pre-wrap leading-relaxed text-zinc-800 dark:text-zinc-200">{{ folio.notes_content }}</pre>
+          </div>
+
+          <!-- Edit Notes -->
+          <div id="notesView-edit" class="hidden space-y-3">
+            <textarea id="notesEditTextarea" rows="18" class="w-full font-mono text-xs p-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-500 leading-relaxed">{{ folio.notes_content }}</textarea>
+            <div class="flex justify-end gap-2">
+              <button onclick="setNotesView('rendered')" class="px-3 py-1.5 text-xs rounded-lg border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800">Cancel</button>
+              <button onclick="saveEditedText('notes')" class="px-3.5 py-1.5 text-xs font-medium rounded-lg bg-violet-600 hover:bg-violet-700 text-white flex items-center gap-1.5 shadow-sm">
+                <i data-lucide="save" class="w-3.5 h-3.5"></i>
+                Save Notes to Disk
+              </button>
+            </div>
+          </div>
+        {% else %}
+          <div class="bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 rounded-xl p-8 text-center text-zinc-500 space-y-2">
+            <i data-lucide="file-plus" class="w-8 h-8 mx-auto text-zinc-400"></i>
+            <div class="font-bold text-sm">No Transcription Notes Yet</div>
+            <div class="text-xs text-zinc-400">
+              No notes file found at <code class="font-mono">{{ folio.notes_file_name or (folio.folio ~ '.notes.rst') }}</code>.
+            </div>
+          </div>
+        {% endif %}
+
+      </div>
+
+      <!-- ==================== TAB 3: GRAPHICS ==================== -->
+      <div id="tabContent-graphics" class="hidden space-y-5">
+        
+        <div class="flex items-center justify-between pb-2 border-b border-zinc-200 dark:border-zinc-800">
+          <div>
+            <h4 class="text-sm font-bold flex items-center gap-2">
+              <span>Extracted Figures & Calibration</span>
+              <span class="font-mono text-xs font-normal text-zinc-500">({{ folio.graphics|length }} defined)</span>
+            </h4>
+            <div class="text-xs text-zinc-500">Defined in <code class="font-mono">{{ folio.folio }}.json</code></div>
+          </div>
+          
+          <button onclick="extractGraphicsNow()" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 flex items-center gap-1.5 transition-colors">
+            <i data-lucide="scissors" class="w-3.5 h-3.5"></i>
+            Re-Extract Crops
+          </button>
+        </div>
+
+        {% if folio.graphics and folio.graphics|length > 0 %}
+          <div class="space-y-6">
+            {% for g in folio.graphics %}
+              <div class="bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 space-y-3 transition-colors" id="graphic-card-{{ g.id }}">
+                <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-zinc-200 dark:border-zinc-800">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded font-mono font-bold text-xs bg-emerald-600 text-white">{{ g.id }}</span>
+                    <span class="text-xs font-semibold">{{ g.caption }}</span>
+                    
+                    {% if g.svg_exists %}
+                      <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1">
+                        <i data-lucide="sparkles" class="w-3 h-3 text-emerald-600"></i> SVG Ready
+                      </span>
+                    {% else %}
+                      <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700 flex items-center gap-1">
+                        <i data-lucide="clock" class="w-3 h-3 text-zinc-400"></i> SVG Pending
+                      </span>
+                    {% endif %}
+                  </div>
+
+                  <div class="flex items-center gap-2">
+                    <!-- Transcription Format Status & Toggle -->
+                    {% if g.in_md_format == 'svg' %}
+                      <span class="px-2 py-0.5 rounded text-[11px] font-medium bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-800 flex items-center gap-1">
+                        <i data-lucide="file-check-2" class="w-3 h-3 text-blue-500"></i> Used in {{ (folio.transcription_format or 'rst')|upper }}
+                      </span>
+                      <button onclick="setGraphicFormat('{{ g.id }}', 'png')" class="text-[11px] text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 underline">
+                        Use PNG
+                      </button>
+                    {% elif g.in_md_format == 'png' %}
+                      <span class="px-2 py-0.5 rounded text-[11px] font-medium bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800 flex items-center gap-1">
+                        <i data-lucide="image" class="w-3 h-3 text-amber-500"></i> PNG in {{ (folio.transcription_format or 'rst')|upper }}
+                      </span>
+                      {% if g.svg_exists %}
+                        <button onclick="setGraphicFormat('{{ g.id }}', 'svg')" class="px-2.5 py-0.5 rounded text-[11px] font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm flex items-center gap-1 transition-colors">
+                          <i data-lucide="arrow-right-left" class="w-3 h-3"></i> Switch {{ (folio.transcription_format or 'rst')|upper }} to SVG
+                        </button>
+                      {% endif %}
+                    {% endif %}
+
+                    <button onclick="focusOnGraphicBbox('{{ g.id }}', {{ g.bbox }})" class="text-xs text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1 ml-2">
+                      <i data-lucide="crosshair" class="w-3.5 h-3.5"></i>
+                      Highlight on Scan
+                    </button>
+                  </div>
+                </div>
+
+                {% set default_code_tab = 'py' if (g.py_exists or not g.svg_exists) else 'svg' %}
+                <!-- 2-Column Layout: Left Stacked Visuals (SVG on Top, PNG Below) | Right Code Panel (Python / SVG Switcher) -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 pt-1">
+                  <!-- Left Column: Stacked Visuals (Vector SVG on Top, Scan Crop PNG Below) -->
+                  <div class="lg:col-span-5 flex flex-col gap-3">
+                    <!-- Top Box: Vector SVG Preview -->
+                    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-3 text-center space-y-2 shadow-sm">
+                      <div class="flex items-center justify-between text-[11px] font-medium">
+                        <span class="text-zinc-800 dark:text-zinc-200 font-semibold flex items-center gap-1">
+                          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-emerald-600"></i> Vector SVG (.svg)
+                        </span>
+                        <div class="flex items-center gap-2">
+                          {% if g.svg_exists %}
+                            <span class="text-[10px] font-mono text-emerald-600 font-semibold">{{ g.svg_file }}</span>
+                            <a href="/media/{{ folio.media_dir or (folio.volume ~ '/' ~ folio.section_path if folio.section_path else folio.volume) }}/{{ g.svg_file }}" target="_blank" class="px-1.5 py-0.5 text-[10px] font-medium rounded bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 flex items-center gap-1 transition-colors">
+                              <i data-lucide="external-link" class="w-3 h-3"></i> Open
+                            </a>
+                          {% else %}
+                            <span class="text-[10px] text-zinc-400">None</span>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {% if g.svg_exists and g.svg_content %}
+                        <div class="flex items-center justify-center min-h-[140px] bg-white rounded p-2 border border-zinc-200 dark:border-zinc-700 shadow-inner overflow-hidden" id="tab3-svg-{{ g.id }}">
+                          {{ g.svg_content|safe }}
+                        </div>
+                      {% elif g.svg_exists %}
+                        <div class="flex items-center justify-center min-h-[140px] bg-white rounded p-2 border border-zinc-200 dark:border-zinc-700 shadow-inner overflow-hidden">
+                          <img src="/media/{{ folio.media_dir or (folio.volume ~ '/' ~ folio.section_path if folio.section_path else folio.volume) }}/{{ g.svg_file }}?v={{ range(100, 999)|random }}" alt="{{ g.id }} SVG" class="max-h-56 object-contain">
+                        </div>
+                      {% else %}
+                        <div class="min-h-[140px] flex flex-col items-center justify-center bg-zinc-50 dark:bg-zinc-800/40 rounded border border-dashed border-zinc-300 dark:border-zinc-700 p-4 text-xs text-zinc-400">
+                          <i data-lucide="image-plus" class="w-6 h-6 mb-1 text-zinc-400"></i>
+                          <span>No SVG created yet</span>
+                          <button onclick="openSvgEditor('{{ g.id }}')" class="mt-2 px-2.5 py-1 text-[11px] font-medium rounded bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1 transition-colors">
+                            <i data-lucide="plus" class="w-3 h-3"></i> Add SVG
+                          </button>
+                        </div>
+                      {% endif %}
+                    </div>
+
+                    <!-- Bottom Box: Scan Crop PNG -->
+                    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-3 text-center space-y-2 shadow-sm">
+                      <div class="flex items-center justify-between text-[11px] font-medium">
+                        <span class="text-zinc-600 dark:text-zinc-300 font-semibold flex items-center gap-1">
+                          <i data-lucide="image" class="w-3.5 h-3.5 text-zinc-400"></i> Scan Crop (Woodcut)
+                        </span>
+                        <span class="text-[10px] font-mono text-zinc-400">{{ g.file }}</span>
+                      </div>
+                      {% if g.file_exists %}
+                        <div class="flex items-center justify-center min-h-[140px] bg-white rounded p-2 border border-zinc-100 dark:border-zinc-800">
+                          <img src="/media/{{ folio.media_dir or (folio.volume ~ '/' ~ folio.section_path if folio.section_path else folio.volume) }}/{{ g.file }}" alt="{{ g.id }}" class="max-h-56 object-contain">
+                        </div>
+                      {% else %}
+                        <div class="min-h-[140px] flex flex-col items-center justify-center bg-amber-50 dark:bg-amber-950/30 rounded border border-dashed border-amber-300 dark:border-amber-800 p-4 text-xs text-amber-600 dark:text-amber-400">
+                          <i data-lucide="alert-triangle" class="w-5 h-5 mb-1 text-amber-500"></i>
+                          <span>Crop file missing</span>
+                          <code class="text-[10px] mt-1">{{ g.file }}</code>
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <!-- Right Column: Code Panel (Python / SVG Switcher with publish gruvbox-dark Highlighter) -->
+                  <div class="lg:col-span-7 flex flex-col">
+                    <div class="bg-[#1d2021] border border-zinc-800 rounded-lg overflow-hidden flex flex-col flex-1 shadow-sm" data-active-code-tab="{{ default_code_tab }}" id="codePanel-{{ g.id }}">
+                      <!-- Code Panel Header Bar -->
+                      <div class="px-3 py-2 bg-zinc-900 border-b border-zinc-800 flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-1 bg-zinc-950 p-0.5 rounded-md border border-zinc-800">
+                          <button type="button" id="codeTabBtn-py-{{ g.id }}" onclick="switchGraphicCodeTab('{{ g.id }}', 'py')" class="px-2.5 py-1 rounded text-[11px] font-mono font-semibold flex items-center gap-1.5 transition-colors {% if default_code_tab == 'py' %}bg-amber-500/20 text-amber-300 border border-amber-500/40{% else %}text-zinc-400 hover:text-zinc-200 border border-transparent{% endif %}">
+                            <i data-lucide="terminal" class="w-3 h-3"></i>
+                            <span>Python ({{ g.py_file }})</span>
+                          </button>
+                          <button type="button" id="codeTabBtn-svg-{{ g.id }}" onclick="switchGraphicCodeTab('{{ g.id }}', 'svg')" class="px-2.5 py-1 rounded text-[11px] font-mono font-semibold flex items-center gap-1.5 transition-colors {% if default_code_tab == 'svg' %}bg-emerald-500/20 text-emerald-300 border border-emerald-500/40{% else %}text-zinc-400 hover:text-zinc-200 border border-transparent{% endif %}">
+                            <i data-lucide="code" class="w-3 h-3"></i>
+                            <span>SVG ({{ g.svg_file }})</span>
+                          </button>
+                        </div>
+
+                        <div class="flex items-center gap-1.5">
+                          <button type="button" onclick="copyGraphicCode('{{ g.id }}')" class="px-2.5 py-1 text-[11px] font-medium rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 flex items-center gap-1 transition-colors">
+                            <i data-lucide="copy" class="w-3 h-3"></i> Copy
+                          </button>
+                          <button type="button" onclick="editGraphicCode('{{ g.id }}')" class="px-2.5 py-1 text-[11px] font-medium rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 flex items-center gap-1 transition-colors">
+                            <i data-lucide="edit-3" class="w-3 h-3"></i> Edit
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- Code Panel Body: Python Pane -->
+                      <div id="codePane-py-{{ g.id }}" class="flex-1 flex flex-col {% if default_code_tab != 'py' %}hidden{% endif %}">
+                        {% if g.py_exists and g.py_highlighted_html %}
+                          <div class="max-h-[460px] overflow-auto select-text text-left flex-1">
+                            {{ g.py_highlighted_html|safe }}
+                          </div>
+                        {% else %}
+                          <div class="min-h-[240px] flex-1 flex flex-col items-center justify-center p-6 text-xs text-zinc-400">
+                            <i data-lucide="file-code" class="w-6 h-6 mb-1.5 text-zinc-500"></i>
+                            <span>No Python construction script yet (<code class="font-mono text-[11px] text-zinc-300">{{ g.py_file }}</code>)</span>
+                            <button type="button" onclick="openPyEditor('{{ g.id }}')" class="mt-3 px-3 py-1.5 text-[11px] font-semibold rounded bg-amber-600 hover:bg-amber-700 text-white flex items-center gap-1 transition-colors">
+                              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Python Script
+                            </button>
+                          </div>
+                        {% endif %}
+                      </div>
+
+                      <!-- Code Panel Body: SVG Pane -->
+                      <div id="codePane-svg-{{ g.id }}" class="flex-1 flex flex-col {% if default_code_tab != 'svg' %}hidden{% endif %}">
+                        {% if g.svg_exists and g.svg_highlighted_html %}
+                          <div class="max-h-[460px] overflow-auto select-text text-left flex-1">
+                            {{ g.svg_highlighted_html|safe }}
+                          </div>
+                        {% else %}
+                          <div class="min-h-[240px] flex-1 flex flex-col items-center justify-center p-6 text-xs text-zinc-400">
+                            <i data-lucide="code" class="w-6 h-6 mb-1.5 text-zinc-500"></i>
+                            <span>No SVG markup created yet (<code class="font-mono text-[11px] text-zinc-300">{{ g.svg_file }}</code>)</span>
+                            <button type="button" onclick="openSvgEditor('{{ g.id }}')" class="mt-3 px-3 py-1.5 text-[11px] font-semibold rounded bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1 transition-colors">
+                              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add SVG
+                            </button>
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bounding Box Form / Calibration -->
+                <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-3 text-xs space-y-2">
+                  <div class="flex items-center justify-between text-zinc-500">
+                    <span class="font-medium">Bounding Box & Calibration</span>
+                    <span class="font-mono text-[11px]">[x, y, width, height]</span>
+                  </div>
+                  <div class="grid grid-cols-5 gap-2 items-center">
+                    <div>
+                      <label class="block text-[10px] text-zinc-400 mb-0.5">X (px)</label>
+                      <input type="number" id="bbox-x-{{ g.id }}" value="{{ g.bbox[0] if g.bbox else 0 }}" class="w-full text-xs font-mono p-1 rounded border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800">
+                    </div>
+                    <div>
+                      <label class="block text-[10px] text-zinc-400 mb-0.5">Y (px)</label>
+                      <input type="number" id="bbox-y-{{ g.id }}" value="{{ g.bbox[1] if g.bbox else 0 }}" class="w-full text-xs font-mono p-1 rounded border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800">
+                    </div>
+                    <div>
+                      <label class="block text-[10px] text-zinc-400 mb-0.5">Width (px)</label>
+                      <input type="number" id="bbox-w-{{ g.id }}" value="{{ g.bbox[2] if g.bbox else 0 }}" class="w-full text-xs font-mono p-1 rounded border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800">
+                    </div>
+                    <div>
+                      <label class="block text-[10px] text-zinc-400 mb-0.5">Height (px)</label>
+                      <input type="number" id="bbox-h-{{ g.id }}" value="{{ g.bbox[3] if g.bbox else 0 }}" class="w-full text-xs font-mono p-1 rounded border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800">
+                    </div>
+                    <div class="pt-4">
+                      <button onclick="updateGraphicBbox('{{ g.id }}')" class="w-full py-1 text-xs font-medium rounded bg-emerald-600 hover:bg-emerald-700 text-white transition-colors">
+                        Recalibrate
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 rounded-xl p-8 text-center text-zinc-500 space-y-2">
+            <i data-lucide="image-off" class="w-8 h-8 mx-auto text-zinc-400"></i>
+            <div class="font-bold text-sm">No Graphics Defined</div>
+            <div class="text-xs text-zinc-400">
+              This folio is currently marked as text-only with an empty graphics array in <code class="font-mono">{{ folio.folio }}.json</code>.
+            </div>
+          </div>
+        {% endif %}
+
+      </div>
+
+      <!-- ==================== TAB 4: VETTING & CHECKLIST ==================== -->
+      <div id="tabContent-vetting" class="hidden space-y-5">
+        
+        <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 space-y-4 shadow-sm">
+          <div class="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-zinc-800">
+            <h4 class="text-sm font-bold flex items-center gap-2">
+              <i data-lucide="clipboard-check" class="w-4 h-4 text-emerald-500"></i>
+              Folio Vetting & Quality Assurance
+            </h4>
+            <span class="text-xs text-zinc-400">Folio {{ folio.folio }}</span>
+          </div>
+
+          <!-- Status Selection Radios -->
+          <div>
+            <label class="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-2">Review Status</label>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              
+              <label class="flex items-center gap-2 p-2.5 rounded-lg border cursor-pointer transition-colors
+                {% if review.status == 'unreviewed' %}border-zinc-400 bg-zinc-50 dark:bg-zinc-800{% else %}border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50{% endif %}">
+                <input type="radio" name="reviewStatusRadio" value="unreviewed" {% if review.status == 'unreviewed' %}checked{% endif %} class="text-zinc-600 focus:ring-zinc-500">
+                <span class="text-xs font-medium text-zinc-700 dark:text-zinc-300">○ Unreviewed</span>
+              </label>
+
+              <label class="flex items-center gap-2 p-2.5 rounded-lg border cursor-pointer transition-colors
+                {% if review.status == 'verified' %}border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/40{% else %}border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50{% endif %}">
+                <input type="radio" name="reviewStatusRadio" value="verified" {% if review.status == 'verified' %}checked{% endif %} class="text-emerald-600 focus:ring-emerald-500">
+                <span class="text-xs font-medium text-emerald-800 dark:text-emerald-300">✓ Verified</span>
+              </label>
+
+              <label class="flex items-center gap-2 p-2.5 rounded-lg border cursor-pointer transition-colors
+                {% if review.status == 'needs_fix' %}border-amber-500 bg-amber-50/50 dark:bg-amber-950/40{% else %}border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50{% endif %}">
+                <input type="radio" name="reviewStatusRadio" value="needs_fix" {% if review.status == 'needs_fix' %}checked{% endif %} class="text-amber-600 focus:ring-amber-500">
+                <span class="text-xs font-medium text-amber-800 dark:text-amber-300">⚠ Needs Fix</span>
+              </label>
+
+              <label class="flex items-center gap-2 p-2.5 rounded-lg border cursor-pointer transition-colors
+                {% if review.status == 'flagged' %}border-rose-500 bg-rose-50/50 dark:bg-rose-950/40{% else %}border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50{% endif %}">
+                <input type="radio" name="reviewStatusRadio" value="flagged" {% if review.status == 'flagged' %}checked{% endif %} class="text-rose-600 focus:ring-rose-500">
+                <span class="text-xs font-medium text-rose-800 dark:text-rose-300">⚑ Flagged</span>
+              </label>
+
+            </div>
+          </div>
+
+          <!-- Vetting Checklist -->
+          <div class="pt-2">
+            <label class="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-2">Vetting Checklist</label>
+            <div class="space-y-2 bg-zinc-50 dark:bg-zinc-800/40 rounded-lg p-3 border border-zinc-200 dark:border-zinc-800 text-xs">
+              
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" id="check-transcription" {% if review.checklist.transcription_verified %}checked{% endif %} class="rounded text-emerald-600 focus:ring-emerald-500">
+                <span>Transcription text accurately matches original folio scan</span>
+              </label>
+
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" id="check-math" {% if review.checklist.math_verified %}checked{% endif %} class="rounded text-emerald-600 focus:ring-emerald-500">
+                <span>Greek characters, mathematical letters, and formulas rendered accurately</span>
+              </label>
+
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" id="check-notes" {% if review.checklist.notes_verified %}checked{% endif %} class="rounded text-emerald-600 focus:ring-emerald-500">
+                <span>Transcription notes complete, summary & continuity verified</span>
+              </label>
+
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" id="check-graphics" {% if review.checklist.graphics_verified %}checked{% endif %} class="rounded text-emerald-600 focus:ring-emerald-500">
+                <span>Figures bounding boxes capture diagrams cleanly without clipping labels or lines</span>
+              </label>
+
+            </div>
+          </div>
+
+          <!-- Review Notes / Issue Log -->
+          <div class="pt-2">
+            <label class="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1">Issue Log & Review Notes</label>
+            <textarea id="reviewNotesInput" rows="4" placeholder="Log any typos, missing characters, bounding box clipping issues, or transcription questions..." class="w-full text-xs p-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500">{{ review.notes }}</textarea>
+          </div>
+
+          <!-- Save Actions -->
+          <div class="pt-3 flex items-center justify-between border-t border-zinc-100 dark:border-zinc-800">
+            <div class="text-[11px] text-zinc-400">
+              {% if review.updated_at %}
+                Last updated: <span class="font-mono">{{ review.updated_at[:19].replace('T', ' ') }}</span> by <span class="font-medium">{{ review.reviewer }}</span>
+              {% else %}
+                Not yet reviewed
+              {% endif %}
+            </div>
+            
+            <button onclick="saveReview()" class="px-4 py-2 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-2 shadow-sm transition-colors">
+              <i data-lucide="check" class="w-4 h-4"></i>
+              Save Vetting Record (Ctrl+S)
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+<!-- SVG Editor Modal -->
+<div id="svgEditorModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+    <div class="px-6 py-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i data-lucide="code" class="w-5 h-5 text-emerald-600"></i>
+        <h3 class="font-bold text-sm">SVG Source Editor</h3>
+        <span id="svgModalGidBadge" class="font-mono text-xs px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 font-semibold text-emerald-600">g1</span>
+      </div>
+      <button onclick="closeSvgEditor()" class="p-1 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <div class="p-6 flex-1 flex flex-col min-h-0 space-y-3">
+      <div class="flex items-center justify-between text-xs text-zinc-500">
+        <span>Edit or paste SVG XML markup (white background & black lines):</span>
+        <button onclick="insertStandardSvgTemplate()" class="text-xs text-emerald-600 dark:text-emerald-400 font-medium hover:underline flex items-center gap-1">
+          <i data-lucide="wand-2" class="w-3.5 h-3.5"></i> Insert Standard Template
+        </button>
+      </div>
+
+      <textarea id="svgEditorTextarea" class="w-full flex-1 min-h-[360px] font-mono text-xs p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500" spellcheck="false" placeholder="<svg ...>...</svg>"></textarea>
+    </div>
+
+    <div class="px-6 py-4 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-zinc-900/50">
+      <span class="text-xs text-zinc-400">Writes directly to <code class="font-mono text-zinc-600 dark:text-zinc-300" id="svgModalFilenameLabel">{{ folio.folio }}.g1.svg</code></span>
+      <div class="flex items-center gap-2">
+        <button onclick="closeSvgEditor()" class="px-4 py-2 text-xs font-medium rounded-lg border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+          Cancel
+        </button>
+        <button onclick="saveSvgSource()" class="px-4 py-2 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1.5 shadow-sm transition-colors">
+          <i data-lucide="save" class="w-4 h-4"></i> Save SVG to Disk
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Python Construction Editor Modal -->
+<div id="pyEditorModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+    <div class="px-6 py-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i data-lucide="terminal" class="w-5 h-5 text-amber-500"></i>
+        <h3 class="font-bold text-sm">Python Construction Script (<code class="font-mono">geometor.model</code>)</h3>
+        <span id="pyModalGidBadge" class="font-mono text-xs px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 font-semibold text-amber-500">g1</span>
+      </div>
+      <button onclick="closePyEditor()" class="p-1 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <div class="p-6 flex-1 flex flex-col min-h-0 space-y-3">
+      <div class="flex items-center justify-between text-xs text-zinc-500">
+        <span>Edit programmatic <code class="font-mono">geometor.model</code> construction script:</span>
+      </div>
+
+      <textarea id="pyEditorTextarea" class="w-full flex-1 min-h-[380px] font-mono text-xs p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-950 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-amber-500" spellcheck="false" placeholder="from geometor.model import *"></textarea>
+    </div>
+
+    <div class="px-6 py-4 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-zinc-900/50">
+      <span class="text-xs text-zinc-400">Writes directly to <code class="font-mono text-zinc-600 dark:text-zinc-300" id="pyModalFilenameLabel">{{ folio.folio }}.g1.py</code></span>
+      <div class="flex items-center gap-2">
+        <button onclick="closePyEditor()" class="px-4 py-2 text-xs font-medium rounded-lg border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+          Cancel
+        </button>
+        <button onclick="savePySource()" class="px-4 py-2 text-xs font-bold rounded-lg bg-amber-600 hover:bg-amber-700 text-white flex items-center gap-1.5 shadow-sm transition-colors">
+          <i data-lucide="save" class="w-4 h-4"></i> Save Python Script
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const VOLUME_ID = "{{ folio.volume }}";
+  const FOLIO_ID = "{{ folio.folio }}";
+  const RAW_MD = {{ (folio.md_content or "")|tojson }};
+  const RAW_NOTES = {{ (folio.notes_content or "")|tojson }};
+  const FOLIO_GRAPHICS = {{ (folio.graphics or [])|tojson }};
+  const GRAPHICS_DATA = FOLIO_GRAPHICS;
+  const FOLIO_SECTION_PATH = {{ (folio.section_path or "")|tojson }};
+  let currentEditingGid = null;
+
+  function openSvgEditor(gid) {
+    currentEditingGid = gid;
+    const g = (GRAPHICS_DATA || []).find(item => item.id === gid);
+    const badge = document.getElementById('svgModalGidBadge');
+    if (badge) badge.innerText = gid;
+    const fnLabel = document.getElementById('svgModalFilenameLabel');
+    if (fnLabel) fnLabel.innerText = `${FOLIO_ID}.${gid}.svg`;
+
+    const textarea = document.getElementById('svgEditorTextarea');
+    if (textarea) textarea.value = (g && g.svg_content) ? g.svg_content : '';
+    const modal = document.getElementById('svgEditorModal');
+    if (modal) modal.classList.remove('hidden');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function closeSvgEditor() {
+    const modal = document.getElementById('svgEditorModal');
+    if (modal) modal.classList.add('hidden');
+    currentEditingGid = null;
+  }
+
+  function openPyEditor(gid) {
+    currentEditingGid = gid;
+    const g = (GRAPHICS_DATA || []).find(item => item.id === gid);
+    const badge = document.getElementById('pyModalGidBadge');
+    if (badge) badge.innerText = gid;
+    const fnLabel = document.getElementById('pyModalFilenameLabel');
+    if (fnLabel) fnLabel.innerText = `${FOLIO_ID}.${gid}.py`;
+
+    const textarea = document.getElementById('pyEditorTextarea');
+    if (textarea) textarea.value = (g && g.py_content) ? g.py_content : '';
+    const modal = document.getElementById('pyEditorModal');
+    if (modal) modal.classList.remove('hidden');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function closePyEditor() {
+    const modal = document.getElementById('pyEditorModal');
+    if (modal) modal.classList.add('hidden');
+    currentEditingGid = null;
+  }
+
+  async function copyPySource(gid) {
+    const g = (GRAPHICS_DATA || []).find(item => item.id === gid);
+    if (!g || !g.py_content) {
+      showToast('No Python code available to copy', 'error');
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(g.py_content);
+      showToast(`Copied ${FOLIO_ID}.${gid}.py to clipboard!`, 'success');
+    } catch (e) {
+      showToast('Failed to copy to clipboard', 'error');
+    }
+  }
+
+  async function copySvgSource(gid) {
+    const g = (GRAPHICS_DATA || []).find(item => item.id === gid);
+    if (!g || !g.svg_content) {
+      showToast('No SVG code available to copy', 'error');
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(g.svg_content);
+      showToast(`Copied ${FOLIO_ID}.${gid}.svg to clipboard!`, 'success');
+    } catch (e) {
+      showToast('Failed to copy to clipboard', 'error');
+    }
+  }
+
+  function switchGraphicCodeTab(gid, tab) {
+    const panel = document.getElementById(`codePanel-${gid}`);
+    if (panel) panel.setAttribute('data-active-code-tab', tab);
+
+    const pyPane = document.getElementById(`codePane-py-${gid}`);
+    const svgPane = document.getElementById(`codePane-svg-${gid}`);
+    const pyBtn = document.getElementById(`codeTabBtn-py-${gid}`);
+    const svgBtn = document.getElementById(`codeTabBtn-svg-${gid}`);
+
+    if (pyPane) pyPane.classList.toggle('hidden', tab !== 'py');
+    if (svgPane) svgPane.classList.toggle('hidden', tab !== 'svg');
+
+    if (pyBtn) {
+      pyBtn.className = tab === 'py'
+        ? 'px-2.5 py-1 rounded text-[11px] font-mono font-semibold flex items-center gap-1.5 transition-colors bg-amber-500/20 text-amber-300 border border-amber-500/40'
+        : 'px-2.5 py-1 rounded text-[11px] font-mono font-semibold flex items-center gap-1.5 transition-colors text-zinc-400 hover:text-zinc-200 border border-transparent';
+    }
+    if (svgBtn) {
+      svgBtn.className = tab === 'svg'
+        ? 'px-2.5 py-1 rounded text-[11px] font-mono font-semibold flex items-center gap-1.5 transition-colors bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+        : 'px-2.5 py-1 rounded text-[11px] font-mono font-semibold flex items-center gap-1.5 transition-colors text-zinc-400 hover:text-zinc-200 border border-transparent';
+    }
+  }
+
+  function getActiveGraphicCodeTab(gid) {
+    const panel = document.getElementById(`codePanel-${gid}`);
+    return (panel && panel.getAttribute('data-active-code-tab')) || 'py';
+  }
+
+  async function copyGraphicCode(gid) {
+    const tab = getActiveGraphicCodeTab(gid);
+    if (tab === 'svg') {
+      await copySvgSource(gid);
+    } else {
+      await copyPySource(gid);
+    }
+  }
+
+  function editGraphicCode(gid) {
+    const tab = getActiveGraphicCodeTab(gid);
+    if (tab === 'svg') {
+      openSvgEditor(gid);
+    } else {
+      openPyEditor(gid);
+    }
+  }
+
+  async function savePySource() {
+    if (!currentEditingGid) return;
+    const pyCode = document.getElementById('pyEditorTextarea').value;
+    try {
+      const res = await fetch(`/api/folio/${VOLUME_ID}/${FOLIO_ID}/graphic/${currentEditingGid}/save_py`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ py: pyCode })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(`Saved ${FOLIO_ID}.${currentEditingGid}.py to disk!`, 'success');
+        setTimeout(() => location.reload(), 500);
+      } else {
+        showToast(`Failed to save Python script: ${data.error}`, 'error');
+      }
+    } catch (e) {
+      console.error(e);
+      showToast('Error saving Python script', 'error');
+    }
+  }
+
+  function insertStandardSvgTemplate() {
+    const textarea = document.getElementById('svgEditorTextarea');
+    if (!textarea) return;
+    const gid = currentEditingGid || 'g1';
+    textarea.value = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200" class="euclid-graphic" data-folio="${FOLIO_ID}" data-graphic="${gid}">
+  <style>
+    .euclid-graphic {
+      font-family: 'Times New Roman', 'Georgia', serif;
+      font-style: italic;
+      background-color: #ffffff;
+    }
+    .geom-line {
+      stroke: #000000;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      transition: stroke 0.15s, stroke-width 0.15s;
+    }
+    .geom-circle {
+      stroke: #000000;
+      stroke-width: 1.8;
+      fill: none;
+      transition: stroke 0.15s, stroke-width 0.15s;
+    }
+    .geom-arc {
+      stroke: #000000;
+      stroke-width: 1.6;
+      fill: none;
+      transition: stroke 0.15s;
+    }
+    .geom-polygon {
+      fill: #000000;
+      fill-opacity: 0.04;
+      stroke: none;
+      transition: fill-opacity 0.15s;
+    }
+    .geom-point {
+      fill: #000000;
+      stroke: #ffffff;
+      stroke-width: 1;
+    }
+    .geom-label {
+      font-size: 15px;
+      font-weight: bold;
+      fill: #000000;
+      user-select: none;
+    }
+    /* Interactive Highlight States */
+    [data-ref]:hover, .highlight {
+      stroke: #0284c7 !important;
+      stroke-width: 3.5 !important;
+      cursor: pointer;
+    }
+    text[data-ref]:hover, text.highlight {
+      fill: #0284c7 !important;
+      stroke: none !important;
+    }
+    .geom-polygon:hover, .geom-polygon.highlight {
+      fill-opacity: 0.22 !important;
+      fill: #0284c7 !important;
+      stroke: #0284c7 !important;
+      stroke-width: 2 !important;
+    }
+    .geom-point:hover, .geom-point.highlight {
+      r: 5 !important;
+      fill: #0284c7 !important;
+      stroke: #ffffff !important;
+    }
+  </style>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#ffffff" />
+
+  <!-- Elements -->
+
+</svg>`;
+  }
+
+  async function saveSvgSource() {
+    if (!currentEditingGid) return;
+    const svgCode = document.getElementById('svgEditorTextarea').value;
+    try {
+      const res = await fetch(`/api/folio/${VOLUME_ID}/${FOLIO_ID}/graphic/${currentEditingGid}/save_svg`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ svg: svgCode })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(`Saved ${FOLIO_ID}.${currentEditingGid}.svg to disk!`, 'success');
+        setTimeout(() => location.reload(), 500);
+      } else {
+        showToast(`Failed to save SVG: ${data.error}`, 'error');
+      }
+    } catch (e) {
+      console.error(e);
+      showToast('Error saving SVG', 'error');
+    }
+  }
+
+  async function setGraphicFormat(gid, format) {
+    try {
+      const res = await fetch(`/api/folio/${VOLUME_ID}/${FOLIO_ID}/set_graphic_format`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: gid, format: format })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(`Updated markdown to use ${format.toUpperCase()}`, 'success');
+        setTimeout(() => location.reload(), 500);
+      } else {
+        showToast(`Error: ${data.error}`, 'error');
+      }
+    } catch (e) {
+      console.error(e);
+      showToast('Failed to switch format', 'error');
+    }
+  }
+
+  // State
+  let zoomLevel = 1.0;
+  let panX = 0;
+  let panY = 0;
+  let isDragging = false;
+  let startX = 0;
+  let startY = 0;
+  let naturalW = 750;
+  let naturalH = 1200;
+  let bboxVisible = true;
+  let scanInverted = false;
+
+  // Typographic Customization (matching scan layout)
+  let currentFontSize = parseInt(localStorage.getItem('folio_font_size') || '15', 10);
+  let currentColumnWidth = localStorage.getItem('folio_column_width') || '540px';
+  let currentIndentMode = localStorage.getItem('folio_indent_mode') || 'book-indent';
+
+  function applyTypographySettings() {
+    document.documentElement.style.setProperty('--folio-font-size', `${currentFontSize}px`);
+    document.documentElement.style.setProperty('--folio-width', currentColumnWidth);
+    
+    const fontDisplay = document.getElementById('fontSizeDisplay');
+    if (fontDisplay) fontDisplay.innerText = `${currentFontSize}px`;
+
+    const widthSelect = document.getElementById('widthSelect');
+    if (widthSelect) widthSelect.value = currentColumnWidth;
+
+    ['mdView-rendered', 'notesView-rendered'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        if (currentIndentMode === 'book-indent') {
+          el.classList.add('book-indent');
+          el.classList.remove('block-indent');
+        } else {
+          el.classList.add('block-indent');
+          el.classList.remove('book-indent');
+        }
+      }
+    });
+
+    const indentBtn = document.getElementById('indentBtn');
+    if (indentBtn) {
+      indentBtn.innerText = currentIndentMode === 'book-indent' ? 'Indent' : 'Block';
+    }
+  }
+
+  function changeFontSize(delta) {
+    currentFontSize = Math.min(Math.max(12, currentFontSize + delta), 24);
+    localStorage.setItem('folio_font_size', currentFontSize);
+    applyTypographySettings();
+  }
+
+  function changeColumnWidth(w) {
+    currentColumnWidth = w;
+    localStorage.setItem('folio_column_width', currentColumnWidth);
+    applyTypographySettings();
+  }
+
+  function toggleParagraphIndent() {
+    currentIndentMode = currentIndentMode === 'book-indent' ? 'block-indent' : 'book-indent';
+    localStorage.setItem('folio_indent_mode', currentIndentMode);
+    applyTypographySettings();
+  }
+
+  // Tab switching
+  function switchTab(tabName) {
+    ['transcription', 'notes', 'graphics', 'vetting'].forEach(t => {
+      const content = document.getElementById(`tabContent-${t}`);
+      const btn = document.getElementById(`tabBtn-${t}`);
+      if (content) content.classList.add('hidden');
+      if (btn) {
+        btn.classList.remove('border-emerald-500', 'text-emerald-600', 'dark:text-emerald-400');
+        btn.classList.add('border-transparent', 'text-zinc-500');
+      }
+    });
+
+    const activeContent = document.getElementById(`tabContent-${tabName}`);
+    const activeBtn = document.getElementById(`tabBtn-${tabName}`);
+    if (activeContent) activeContent.classList.remove('hidden');
+    if (activeBtn) {
+      activeBtn.classList.remove('border-transparent', 'text-zinc-500');
+      activeBtn.classList.add('border-emerald-500', 'text-emerald-600', 'dark:text-emerald-400');
+    }
+  }
+
+  // Markdown Sub-view
+  function setMdView(view) {
+    ['rendered', 'raw', 'edit'].forEach(v => {
+      document.getElementById(`mdView-${v}`)?.classList.add('hidden');
+      const b = document.getElementById(`mdBtn-${v}`);
+      if (b) {
+        b.className = 'px-2 py-0.5 rounded text-[11px] font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900';
+      }
+    });
+    document.getElementById(`mdView-${view}`)?.classList.remove('hidden');
+    const activeBtn = document.getElementById(`mdBtn-${view}`);
+    if (activeBtn) {
+      activeBtn.className = 'px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300';
+    }
+    if (view === 'rendered') {
+      renderAllMath();
+      if (window.EuclidInteractive) {
+        window.EuclidInteractive.init();
+      }
+    }
+  }
+
+  // Notes Sub-view
+  function setNotesView(view) {
+    ['rendered', 'raw', 'edit'].forEach(v => {
+      document.getElementById(`notesView-${v}`)?.classList.add('hidden');
+      const b = document.getElementById(`notesBtn-${v}`);
+      if (b) {
+        b.className = 'px-2 py-0.5 rounded text-[11px] font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900';
+      }
+    });
+    document.getElementById(`notesView-${view}`)?.classList.remove('hidden');
+    const activeBtn = document.getElementById(`notesBtn-${view}`);
+    if (activeBtn) {
+      activeBtn.className = 'px-2 py-0.5 rounded text-[11px] font-medium bg-violet-100 text-violet-800 dark:bg-violet-950 dark:text-violet-300';
+    }
+  }
+
+  // Scan Pan & Zoom
+  function initScanDimensions(img) {
+    if (!img) img = document.getElementById('folioScanImg');
+    if (img && img.naturalWidth > 0) {
+      naturalW = img.naturalWidth;
+      naturalH = img.naturalHeight;
+    }
+    
+    const svg = document.getElementById('bboxSvgOverlay');
+    if (svg) {
+      svg.setAttribute('viewBox', `0 0 ${naturalW} ${naturalH}`);
+      svg.setAttribute('width', naturalW);
+      svg.setAttribute('height', naturalH);
+    }
+
+    fitScanToViewport();
+  }
+
+  function applyTransform() {
+    const wrapper = document.getElementById('scanWrapper');
+    wrapper.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomLevel})`;
+    document.getElementById('zoomLevelDisplay').innerText = `${Math.round(zoomLevel * 100)}%`;
+  }
+
+  function zoomScan(delta) {
+    const newZoom = Math.min(Math.max(0.15, zoomLevel + delta), 4.5);
+    // Zoom around viewport center
+    const vp = document.getElementById('scanViewport');
+    const cx = vp.clientWidth / 2;
+    const cy = vp.clientHeight / 2;
+    const imgX = (cx - panX) / zoomLevel;
+    const imgY = (cy - panY) / zoomLevel;
+    panX = cx - (imgX * newZoom);
+    panY = cy - (imgY * newZoom);
+    zoomLevel = newZoom;
+    applyTransform();
+  }
+
+  function resetZoom() {
+    fitScanToViewport();
+  }
+
+  function fitFirstGraphic() {
+    {% if folio.graphics and folio.graphics|length > 0 and folio.graphics[0].bbox %}
+      focusOnGraphicBbox('{{ folio.graphics[0].id }}', {{ folio.graphics[0].bbox }});
+    {% else %}
+      fitScanToViewport();
+    {% endif %}
+  }
+
+  function setActualSize() {
+    zoomLevel = 1.0;
+    const vp = document.getElementById('scanViewport');
+    panX = (vp.clientWidth - naturalW) / 2;
+    panY = (vp.clientHeight - naturalH) / 2;
+    applyTransform();
+  }
+
+  function fitScanToViewport() {
+    const vp = document.getElementById('scanViewport');
+    const img = document.getElementById('folioScanImg');
+    if (img && img.naturalWidth > 0) {
+      naturalW = img.naturalWidth;
+      naturalH = img.naturalHeight;
+    }
+    const vpW = vp.clientWidth - 40;
+    const vpH = vp.clientHeight - 40;
+    
+    if (naturalW && naturalH && vpW > 0 && vpH > 0) {
+      const scaleW = vpW / naturalW;
+      const scaleH = vpH / naturalH;
+      zoomLevel = Math.min(scaleW, scaleH);
+      panX = (vp.clientWidth - naturalW * zoomLevel) / 2;
+      panY = (vp.clientHeight - naturalH * zoomLevel) / 2;
+      applyTransform();
+    }
+  }
+
+  function toggleBboxOverlay() {
+    bboxVisible = !bboxVisible;
+    const svg = document.getElementById('bboxSvgOverlay');
+    const btn = document.getElementById('bboxToggleBtn');
+    if (bboxVisible) {
+      svg.style.display = 'block';
+      btn.className = 'px-2.5 py-1 rounded flex items-center gap-1.5 transition-colors bg-emerald-950/80 text-emerald-300 border border-emerald-800';
+    } else {
+      svg.style.display = 'none';
+      btn.className = 'px-2.5 py-1 rounded flex items-center gap-1.5 transition-colors bg-zinc-800 text-zinc-400 border border-zinc-700';
+    }
+  }
+
+  function toggleInvertScan() {
+    scanInverted = !scanInverted;
+    const img = document.getElementById('folioScanImg');
+    const btn = document.getElementById('invertScanBtn');
+    if (scanInverted) {
+      img.style.filter = 'invert(1) hue-rotate(180deg)';
+      btn.classList.add('bg-zinc-700', 'text-white');
+    } else {
+      img.style.filter = 'none';
+      btn.classList.remove('bg-zinc-700', 'text-white');
+    }
+  }
+
+  function focusOnGraphicBbox(gid, bbox) {
+    if (!bbox || bbox.length !== 4) return;
+    const [x, y, w, h] = bbox;
+    const vp = document.getElementById('scanViewport');
+    
+    // Desired zoom level to comfortably view figure
+    zoomLevel = Math.min(2.0, (vp.clientWidth * 0.7) / w);
+    
+    // Center figure in viewport
+    const centerX = x + w / 2;
+    const centerY = y + h / 2;
+    panX = (vp.clientWidth / 2) - (centerX * zoomLevel);
+    panY = (vp.clientHeight / 2) - (centerY * zoomLevel);
+    applyTransform();
+
+    // Pulse highlight on rectangle
+    const rect = document.getElementById(`rect-${gid}`);
+    if (rect) {
+      rect.classList.add('stroke-amber-400', 'fill-amber-400/40');
+      setTimeout(() => {
+        rect.classList.remove('stroke-amber-400', 'fill-amber-400/40');
+      }, 1500);
+    }
+  }
+
+  function selectGraphic(gid) {
+    switchTab('graphics');
+    const card = document.getElementById(`graphic-card-${gid}`);
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.classList.add('ring-2', 'ring-emerald-500');
+      setTimeout(() => card.classList.remove('ring-2', 'ring-emerald-500'), 1500);
+    }
+  }
+
+  // Pan interaction
+  const viewport = document.getElementById('scanViewport');
+  viewport.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.clientX - panX;
+    startY = e.clientY - panY;
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      panX = e.clientX - startX;
+      panY = e.clientY - startY;
+      applyTransform();
+    }
+
+    // Coordinate HUD calculation
+    const img = document.getElementById('folioScanImg');
+    const rect = img.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    if (mouseX >= 0 && mouseX <= rect.width && mouseY >= 0 && mouseY <= rect.height) {
+      const realX = Math.round((mouseX / rect.width) * naturalW);
+      const realY = Math.round((mouseY / rect.height) * naturalH);
+      document.getElementById('coordHud').innerText = `X: ${realX}, Y: ${realY}`;
+    }
+  });
+
+  window.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
+
+  viewport.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const vp = document.getElementById('scanViewport');
+    const rect = vp.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    const delta = e.deltaY < 0 ? 0.15 : -0.15;
+    const newZoom = Math.min(Math.max(0.15, zoomLevel + delta), 4.5);
+
+    const imgX = (mouseX - panX) / zoomLevel;
+    const imgY = (mouseY - panY) / zoomLevel;
+    panX = mouseX - (imgX * newZoom);
+    panY = mouseY - (imgY * newZoom);
+    zoomLevel = newZoom;
+    applyTransform();
+  }, { passive: false });
+
+  // Render KaTeX Math
+  function renderAllMath() {
+    ['mdView-rendered', 'notesView-rendered'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && window.renderMathInElement) {
+        try {
+          renderMathInElement(el, {
+            delimiters: [
+              { left: '$$', right: '$$', display: true },
+              { left: '$', right: '$', display: false },
+              { left: '\\(', right: '\\)', display: false },
+              { left: '\\[', right: '\\]', display: true }
+            ],
+            throwOnError: false
+          });
+        } catch (e) {
+          console.warn('KaTeX render error:', e);
+        }
+      }
+    });
+  }
+
+  // Save Review / Vetting
+  async function saveReview() {
+    const selectedRadio = document.querySelector('input[name="reviewStatusRadio"]:checked');
+    const status = selectedRadio ? selectedRadio.value : 'unreviewed';
+
+    const checklist = {
+      transcription_verified: document.getElementById('check-transcription').checked,
+      math_verified: document.getElementById('check-math').checked,
+      notes_verified: document.getElementById('check-notes').checked,
+      graphics_verified: document.getElementById('check-graphics').checked,
+    };
+
+    const notes = document.getElementById('reviewNotesInput').value;
+
+    try {
+      const res = await fetch(`/api/folio/${VOLUME_ID}/${FOLIO_ID}/review`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status, checklist, notes, reviewer: 'phi' })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast('Vetting record saved successfully', 'success');
+        document.getElementById('headerStatusSelect').value = status;
+        updateStatusStyles(status);
+      } else {
+        showToast('Failed to save review', 'error');
+      }
+    } catch (e) {
+      console.error(e);
+      showToast('Error saving review', 'error');
+    }
+  }
+
+  async function quickUpdateStatus(newStatus) {
+    const radios = document.getElementsByName('reviewStatusRadio');
+    for (const r of radios) {
+      if (r.value === newStatus) r.checked = true;
+    }
+    await saveReview();
+  }
+
+  function updateStatusStyles(st) {
+    const select = document.getElementById('headerStatusSelect');
+    select.className = 'text-xs font-medium py-1 px-2.5 rounded-lg border focus:outline-none transition-colors ';
+    if (st === 'verified') {
+      select.className += 'bg-emerald-50 text-emerald-800 border-emerald-300 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800';
+    } else if (st === 'needs_fix') {
+      select.className += 'bg-amber-50 text-amber-800 border-amber-300 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800';
+    } else if (st === 'flagged') {
+      select.className += 'bg-rose-50 text-rose-800 border-rose-300 dark:bg-rose-950 dark:text-rose-300 dark:border-rose-800';
+    } else {
+      select.className += 'bg-zinc-100 text-zinc-700 border-zinc-300 dark:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700';
+    }
+
+    const badge = document.getElementById('tabVettingBadge');
+    badge.className = 'w-2 h-2 rounded-full ';
+    if (st === 'verified') badge.className += 'bg-emerald-500';
+    else if (st === 'needs_fix') badge.className += 'bg-amber-500';
+    else if (st === 'flagged') badge.className += 'bg-rose-500';
+    else badge.className += 'bg-zinc-400';
+  }
+
+  // Save Edited Text (Markdown or Notes)
+  async function saveEditedText(target) {
+    let content = '';
+    if (target === 'md') {
+      content = document.getElementById('mdEditTextarea').value;
+    } else if (target === 'notes') {
+      content = document.getElementById('notesEditTextarea').value;
+    }
+
+    try {
+      const res = await fetch(`/api/folio/${VOLUME_ID}/${FOLIO_ID}/save_text`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ target, content })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(`Saved ${target} to disk`, 'success');
+        setTimeout(() => location.reload(), 500);
+      } else {
+        showToast(`Error: ${data.error}`, 'error');
+      }
+    } catch (e) {
+      console.error(e);
+      showToast('Error saving text file', 'error');
+    }
+  }
+
+  // Re-extract Graphics
+  async function extractGraphicsNow() {
+    showToast('Extracting crops via graphic_tool...', 'info');
+    try {
+      const res = await fetch(`/api/folio/${VOLUME_ID}/${FOLIO_ID}/extract_graphics`, { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        showToast('Graphics successfully extracted!', 'success');
+        setTimeout(() => location.reload(), 600);
+      } else {
+        showToast(`Extraction failed: ${data.error}`, 'error');
+      }
+    } catch (e) {
+      console.error(e);
+      showToast('Extraction request failed', 'error');
+    }
+  }
+
+  // Recalibrate Graphic Bbox
+  async function updateGraphicBbox(gid) {
+    const x = parseInt(document.getElementById(`bbox-x-${gid}`).value, 10);
+    const y = parseInt(document.getElementById(`bbox-y-${gid}`).value, 10);
+    const w = parseInt(document.getElementById(`bbox-w-${gid}`).value, 10);
+    const h = parseInt(document.getElementById(`bbox-h-${gid}`).value, 10);
+
+    if (isNaN(x) || isNaN(y) || isNaN(w) || isNaN(h)) {
+      showToast('Coordinates must be valid numbers', 'error');
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/folio/${VOLUME_ID}/${FOLIO_ID}/update_graphic_bbox`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: gid,
+          bbox: [x, y, w, h],
+          extract: true
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(`Recalibrated ${gid} and updated crop!`, 'success');
+        setTimeout(() => location.reload(), 600);
+      } else {
+        showToast(`Error: ${data.error}`, 'error');
+      }
+    } catch (e) {
+      console.error(e);
+      showToast('Failed to update bbox', 'error');
+    }
+  }
+
+  // Jump to Folio
+  function handleJumpKey(e) {
+    if (e.key === 'Enter') {
+      let target = e.target.value.trim();
+      if (target.length > 0) {
+        if (target.length < 4 && !isNaN(target)) {
+          target = target.padStart(4, '0');
+        }
+        window.location.href = `/folio/${VOLUME_ID}/${target}`;
+      }
+    }
+  }
+
+  // Keyboard Shortcuts
+  window.addEventListener('keydown', (e) => {
+    if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+      if (e.key === 's' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        saveReview();
+      }
+      return;
+    }
+
+    if (e.key === 'h' || e.key === 'k' || e.key === '[' || e.key === 'ArrowLeft') {
+      const prev = document.getElementById('prevFolioLink');
+      if (prev) prev.click();
+    } else if (e.key === 'l' || e.key === 'j' || e.key === ']' || e.key === 'ArrowRight') {
+      const next = document.getElementById('nextFolioLink');
+      if (next) next.click();
+    } else if (e.key === '1') {
+      switchTab('transcription');
+    } else if (e.key === '2') {
+      switchTab('notes');
+    } else if (e.key === '3') {
+      switchTab('graphics');
+    } else if (e.key === '4') {
+      switchTab('vetting');
+    } else if (e.key === 'b') {
+      toggleBboxOverlay();
+    } else if (e.key === 'i') {
+      toggleInvertScan();
+    } else if (e.key === 'f') {
+      fitScanToViewport();
+    } else if (e.key === 'z') {
+      fitFirstGraphic();
+    } else if (e.key === 's' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      saveReview();
+    }
+  });
+
+  // =========================================================================
+  // EuclidInteractive: Dynamic SVG Inlining & Graphic-Scoped Geometor Highlighting
+  // =========================================================================
+  const EuclidInteractive = {
+    activeHighlights: new Set(),
+    svgRefMap: new Map(), // key ("<folio>.<gid>:<canonical_geometor_id>") -> Set of SVG elements
+
+    init() {
+      this.inlineFiguresInTranscription();
+      this.buildSvgIndex();
+      this.bindTextElements();
+      this.bindSvgElements();
+    },
+
+    // Normalize graphic ID to "<folio>.<gid>" (e.g. "g1" -> "0255.g1")
+    normalizeGraphicId(gid) {
+      const raw = (gid || '').trim();
+      if (!raw) return `${FOLIO_ID}.g1`;
+      if (raw.includes('.')) return raw;
+      return `${FOLIO_ID}.${raw}`;
+    },
+
+    // Parse a Geometor typed expression (with optional "<gid>:" prefix) into:
+    // { graphicId, type, points, keys: [scopedKey, ...], pointKeys: [scopedPtKey, ...] }
+    parseGeometorRef(rawStr, defaultGraphicId) {
+      let str = (rawStr || '').trim();
+      if (!str) return null;
+
+      let graphicId = this.normalizeGraphicId(defaultGraphicId);
+      const colonIdx = str.indexOf(':');
+      if (colonIdx !== -1) {
+        const prefix = str.slice(0, colonIdx).trim();
+        str = str.slice(colonIdx + 1).trim();
+        if (prefix) graphicId = this.normalizeGraphicId(prefix);
+      }
+
+      if (!str) return null;
+
+      const extractPts = (inner) => {
+        const tokens = inner.trim().split(/[\s,]+/).filter(Boolean);
+        if (tokens.length === 1 && /^[A-Z]{2,}$/.test(tokens[0])) {
+          return tokens[0].split('');
+        }
+        return tokens;
+      };
+
+      const makeScoped = (expr) => `${graphicId}:${expr}`;
+      const keys = new Set();
+      let points = [];
+      let type = 'unknown';
+
+      // 1. Wedge / Angle with circle prefix: ( A B )< B A C >
+      const fullWedgeMatch = str.match(/^\(([^)]+)\)\s*<([^>]+)>$/);
+      // 2. Wedge / Angle / Arc shorthand: < B A C )
+      const shortWedgeMatch = !fullWedgeMatch && str.match(/^<([^)]+)\)$/);
+      // 3. Line: [ A B ]
+      const lineMatch = str.match(/^\[([^\]]+)\]$/);
+      // 4. Segment / Section: / A B / or } A C B {
+      const segMatch = str.match(/^\/([^/]+)\/$/) || str.match(/^\}([^{]+)\{$/);
+      // 5. Circle: ( A B ) or ( B C D )
+      const circleMatch = !fullWedgeMatch && str.match(/^\(([^)]+)\)$/);
+      // 6. Polygon: < A B C >
+      const polyMatch = !fullWedgeMatch && !shortWedgeMatch && str.match(/^<([^>]+)>$/);
+
+      if (fullWedgeMatch) {
+        type = 'wedge';
+        const cPts = extractPts(fullWedgeMatch[1]);
+        const aPts = extractPts(fullWedgeMatch[2]);
+        points = Array.from(new Set([...cPts, ...aPts]));
+        const cPart = `( ${cPts.join(' ')} )`;
+        keys.add(makeScoped(`${cPart}< ${aPts.join(' ')} >`));
+        keys.add(makeScoped(`< ${aPts.join(' ')} )`));
+        if (aPts.length === 3) {
+          const revA = [aPts[2], aPts[1], aPts[0]];
+          keys.add(makeScoped(`${cPart}< ${revA.join(' ')} >`));
+          keys.add(makeScoped(`< ${revA.join(' ')} )`));
+        }
+      } else if (shortWedgeMatch) {
+        type = 'wedge';
+        points = extractPts(shortWedgeMatch[1]);
+        keys.add(makeScoped(`< ${points.join(' ')} )`));
+        if (points.length === 3) {
+          // Angle < B A C ) and < C A B ) share vertex A in the middle
+          const rev = [points[2], points[1], points[0]];
+          keys.add(makeScoped(`< ${rev.join(' ')} )`));
+        } else if (points.length === 2) {
+          keys.add(makeScoped(`< ${[points[1], points[0]].join(' ')} )`));
+        }
+      } else if (lineMatch) {
+        type = 'line';
+        points = extractPts(lineMatch[1]);
+        keys.add(makeScoped(`[ ${points.join(' ')} ]`));
+        keys.add(makeScoped(`[ ${[...points].reverse().join(' ')} ]`));
+      } else if (segMatch) {
+        type = points.length >= 3 ? 'section' : 'segment';
+        points = extractPts(segMatch[1]);
+        keys.add(makeScoped(`/ ${points.join(' ')} /`));
+        keys.add(makeScoped(`/ ${[...points].reverse().join(' ')} /`));
+      } else if (circleMatch) {
+        type = 'circle';
+        points = extractPts(circleMatch[1]);
+        if (points.length === 2) {
+          // ( Center RadiusPt ) is directional: ( A B ) != ( B A )
+          keys.add(makeScoped(`( ${points.join(' ')} )`));
+        } else if (points.length === 3) {
+          // 3 circumference points in Euclid (e.g. circle BCD): all 6 permutations match
+          const [a, b, c] = points;
+          [
+            [a, b, c], [a, c, b], [b, a, c], [b, c, a], [c, a, b], [c, b, a]
+          ].forEach(p => keys.add(makeScoped(`( ${p.join(' ')} )`)));
+        } else {
+          keys.add(makeScoped(`( ${points.join(' ')} )`));
+          keys.add(makeScoped(`( ${[...points].reverse().join(' ')} )`));
+        }
+      } else if (polyMatch) {
+        type = 'polygon';
+        points = extractPts(polyMatch[1]);
+        if (points.length === 3) {
+          const [a, b, c] = points;
+          [
+            [a, b, c], [a, c, b], [b, a, c], [b, c, a], [c, a, b], [c, b, a]
+          ].forEach(p => keys.add(makeScoped(`< ${p.join(' ')} >`)));
+        } else if (points.length > 3) {
+          // Cyclic rotations forward and reversed
+          const n = points.length;
+          for (let i = 0; i < n; i++) {
+            const rot = [...points.slice(i), ...points.slice(0, i)];
+            keys.add(makeScoped(`< ${rot.join(' ')} >`));
+            const rev = [...rot].reverse();
+            keys.add(makeScoped(`< ${rev.join(' ')} >`));
+          }
+        } else {
+          keys.add(makeScoped(`< ${points.join(' ')} >`));
+          keys.add(makeScoped(`< ${[...points].reverse().join(' ')} >`));
+        }
+      } else {
+        // Bare alphanumeric or single point (e.g. "A", or legacy "AB", "BCD")
+        const clean = str.replace(/[^A-Za-z0-9]/g, '').trim();
+        if (!clean) return null;
+        if (clean.length === 1 || /^[A-Z]\d+$/.test(clean)) {
+          type = 'point';
+          points = [clean];
+          keys.add(makeScoped(clean));
+        } else if (clean.length === 2) {
+          type = 'legacy2';
+          points = [clean[0], clean[1]];
+          keys.add(makeScoped(clean));
+          keys.add(makeScoped(clean[1] + clean[0]));
+          keys.add(makeScoped(`/ ${clean[0]} ${clean[1]} /`));
+          keys.add(makeScoped(`/ ${clean[1]} ${clean[0]} /`));
+        } else if (clean.length === 3) {
+          type = 'legacy3';
+          points = clean.split('');
+          const [a, b, c] = points;
+          [a+b+c, a+c+b, b+a+c, b+c+a, c+a+b, c+b+a].forEach(p => keys.add(makeScoped(p)));
+        } else {
+          type = 'legacyN';
+          points = clean.split('');
+          keys.add(makeScoped(clean));
+        }
+      }
+
+      const pointKeys = points.map(pt => makeScoped(pt));
+      return {
+        graphicId,
+        type,
+        points,
+        keys: Array.from(keys),
+        pointKeys
+      };
+    },
+
+    // Inlines Vector SVGs in #mdView-rendered
+    inlineFiguresInTranscription() {
+      const container = document.getElementById('mdView-rendered');
+      if (!container || !Array.isArray(FOLIO_GRAPHICS) || FOLIO_GRAPHICS.length === 0) return;
+
+      const imgs = Array.from(container.querySelectorAll('img:not(.woodcut-img)'));
+
+      FOLIO_GRAPHICS.forEach(g => {
+        if (!g.svg_exists || !g.svg_content) return;
+
+        // Find img matching this graphic (by file, svg_file, or id)
+        let targetImg = imgs.find(img => {
+          const src = img.getAttribute('src') || '';
+          return src.includes(g.file) || (g.svg_file && src.includes(g.svg_file)) || src.includes(g.id);
+        });
+
+        if (!targetImg && imgs.length === 1 && FOLIO_GRAPHICS.length === 1) {
+          targetImg = imgs[0];
+        }
+
+        if (targetImg) {
+          const fullGid = this.normalizeGraphicId(g.id);
+          const parentFig = targetImg.closest('figure');
+          const parentP = targetImg.closest('p');
+          const figureDiv = document.createElement('div');
+          figureDiv.className = 'euclid-figure-container';
+          figureDiv.setAttribute('data-graphic-id', g.id);
+          figureDiv.setAttribute('data-full-graphic-id', fullGid);
+          figureDiv.innerHTML = `
+            <div class="figure-svg-wrapper" id="fig-view-svg-${g.id}">
+              ${g.svg_content}
+            </div>
+            ${g.caption ? `<div class="figure-caption">${g.caption}</div>` : ''}
+          `;
+
+          const svgEl = figureDiv.querySelector('svg');
+          if (svgEl) {
+            svgEl.classList.add('euclid-graphic');
+            svgEl.setAttribute('data-graphic-id', fullGid);
+            svgEl.setAttribute('data-short-gid', g.id);
+          }
+
+          if (parentFig) {
+            parentFig.replaceWith(figureDiv);
+          } else if (parentP && parentP.children.length === 1 && parentP.firstElementChild === targetImg) {
+            parentP.replaceWith(figureDiv);
+          } else {
+            targetImg.replaceWith(figureDiv);
+          }
+        }
+      });
+    },
+
+    // Indexes all SVG elements by their graphic-scoped Geometor ID and aliases
+    buildSvgIndex() {
+      this.svgRefMap.clear();
+      const svgs = document.querySelectorAll('svg.euclid-graphic');
+
+      svgs.forEach(svg => {
+        const fullGid = this.normalizeGraphicId(
+          svg.getAttribute('data-graphic-id') ||
+          svg.closest('.euclid-figure-container')?.getAttribute('data-full-graphic-id') ||
+          'g1'
+        );
+        svg.setAttribute('data-graphic-id', fullGid);
+
+        const candidates = svg.querySelectorAll('[data-ref], [id]');
+        candidates.forEach(el => {
+          if (el.tagName.toLowerCase() === 'g' && !el.hasAttribute('data-ref')) return;
+          if (el.tagName.toLowerCase() === 'defs' || el.closest('defs')) return;
+
+          const rawRef = (el.getAttribute('data-ref') || el.getAttribute('id') || '').trim();
+          if (!rawRef) return;
+          if (['elements', 'graphics', 'highlights', 'points', 'labels', 'construction', 'geometry'].includes(rawRef)) return;
+
+          const refsToIndex = [rawRef];
+          const aliases = (el.getAttribute('data-aliases') || '').trim();
+          if (aliases) {
+            aliases.split(/[|;]/).map(s => s.trim()).filter(Boolean).forEach(a => refsToIndex.push(a));
+          }
+
+          refsToIndex.forEach(r => {
+            const parsed = this.parseGeometorRef(r, fullGid);
+            if (parsed) {
+              parsed.keys.forEach(k => this.registerRef(k, el));
+            }
+          });
+        });
+      });
+    },
+
+    registerRef(key, element) {
+      if (!this.svgRefMap.has(key)) {
+        this.svgRefMap.set(key, new Set());
+      }
+      this.svgRefMap.get(key).add(element);
+    },
+
+    // Find matching SVG elements for a graphic-scoped Geometor reference
+    getSvgElementsForRef(rawRef, defaultGraphicId) {
+      const parsed = this.parseGeometorRef(rawRef, defaultGraphicId);
+      if (!parsed) return { primary: [], secondary: [] };
+
+      const rawMatches = [];
+      parsed.keys.forEach(k => {
+        if (this.svgRefMap.has(k)) {
+          this.svgRefMap.get(k).forEach(el => rawMatches.push(el));
+        }
+      });
+
+      const hasVisiblePrimary = rawMatches.some(el => !el.closest('#highlights') && !el.classList.contains('geom-overlay'));
+      const matches = new Set();
+      rawMatches.forEach(el => {
+        if (hasVisiblePrimary && (el.closest('#highlights') || el.classList.contains('geom-overlay'))) {
+          const tag = el.tagName.toLowerCase();
+          const isRegionOrWedge = tag === 'polygon' || el.classList.contains('wedge') || el.classList.contains('angle') || el.classList.contains('geom-polygon');
+          if (!isRegionOrWedge) return;
+        }
+        matches.add(el);
+      });
+
+      // Secondary highlight for constituent points/labels within the same graphic
+      const secondary = new Set();
+      if (parsed.type !== 'point' && parsed.pointKeys.length > 0) {
+        parsed.pointKeys.forEach(pk => {
+          if (this.svgRefMap.has(pk)) {
+            this.svgRefMap.get(pk).forEach(el => {
+              if (!matches.has(el) && !el.closest('#highlights')) secondary.add(el);
+            });
+          }
+        });
+      }
+
+      return {
+        primary: Array.from(matches),
+        secondary: Array.from(secondary),
+      };
+    },
+
+    // Infer target graphic ID and Geometor type for untagged KaTeX math from surrounding context
+    inferContextualRef(kel, token) {
+      const explicitScope = kel.closest('[data-graphic]')?.getAttribute('data-graphic');
+      let targetGid = explicitScope ? this.normalizeGraphicId(explicitScope) : `${FOLIO_ID}.g1`;
+
+      // Get preceding text in paragraph to disambiguate Euclid's geometric nouns
+      let prevText = '';
+      let node = kel.previousSibling;
+      while (node && prevText.length < 60) {
+        prevText = (node.textContent || '') + ' ' + prevText;
+        node = node.previousSibling;
+      }
+      prevText = prevText.toLowerCase();
+
+      const pts = token.split('').join(' ');
+      const candidates = [];
+
+      if (token.length === 1) {
+        candidates.push(`${targetGid}:${token}`);
+      } else if (token.length === 2) {
+        if (/\b(produced)\b/.test(prevText)) {
+          candidates.push(`${targetGid}:[ ${pts} ]`);
+        }
+        candidates.push(`${targetGid}:/ ${pts} /`);
+        candidates.push(`${targetGid}:${token}`);
+      } else if (token.length === 3) {
+        if (/\b(angle|angles)\b/.test(prevText)) {
+          candidates.push(`${targetGid}:< ${pts} )`);
+        } else if (/\b(circle|circles|semicircle)\b/.test(prevText)) {
+          candidates.push(`${targetGid}:( ${pts} )`);
+        } else if (/\b(circumference|arc)\b/.test(prevText)) {
+          candidates.push(`${targetGid}:< ${pts} )`);
+          candidates.push(`${targetGid}:( ${pts} )`);
+        } else if (/\b(triangle|triangles)\b/.test(prevText)) {
+          candidates.push(`${targetGid}:< ${pts} >`);
+        }
+        candidates.push(`${targetGid}:< ${pts} >`);
+        candidates.push(`${targetGid}:( ${pts} )`);
+        candidates.push(`${targetGid}:< ${pts} )`);
+        candidates.push(`${targetGid}:/ ${pts} /`);
+        candidates.push(`${targetGid}:${token}`);
+      } else if (token.length >= 4) {
+        candidates.push(`${targetGid}:< ${pts} >`);
+        candidates.push(`${targetGid}:( ${pts} )`);
+        candidates.push(`${targetGid}:${token}`);
+      }
+
+      for (const cand of candidates) {
+        const { primary } = this.getSvgElementsForRef(cand, targetGid);
+        if (primary.length > 0) return cand;
+      }
+      return null;
+    },
+
+    // Binds explicit <span data-ref="..."> elements and contextual KaTeX fallback
+    bindTextElements() {
+      const container = document.getElementById('mdView-rendered');
+      if (!container) return;
+
+      // 1. Bind explicit <span data-ref="<folio>.<gid>:<geometor_id>"> wrappers
+      const explicitSpans = container.querySelectorAll('[data-ref]');
+      explicitSpans.forEach(span => {
+        if (span.closest('svg') || span.closest('.euclid-figure-container')) return;
+
+        const rawRefAttr = (span.getAttribute('data-ref') || '').trim();
+        if (!rawRefAttr) return;
+
+        const defaultGid = span.closest('[data-graphic]')?.getAttribute('data-graphic') || `${FOLIO_ID}.g1`;
+        const refList = rawRefAttr.split(';').map(s => s.trim()).filter(Boolean);
+
+        // Normalize all canonical keys for reverse lookup (SVG -> Text)
+        const allCanonicalKeys = [];
+        refList.forEach(r => {
+          const parsed = this.parseGeometorRef(r, defaultGid);
+          if (parsed) {
+            parsed.keys.forEach(k => allCanonicalKeys.push(k));
+          }
+        });
+
+        span.classList.add('geom-interactive-ref');
+        span.setAttribute('data-geom-keys', allCanonicalKeys.join('||'));
+
+        span.addEventListener('mouseenter', () => {
+          this.highlightFromText(refList, span, defaultGid);
+        });
+
+        span.addEventListener('mouseleave', () => {
+          this.clearHighlights();
+        });
+      });
+
+      // 2. Contextual fallback for untagged KaTeX math elements
+      const katexEls = container.querySelectorAll('.katex');
+      katexEls.forEach(kel => {
+        if (kel.closest('[data-ref]') || kel.closest('.euclid-figure-container')) return;
+
+        const annot = kel.querySelector('annotation');
+        const rawTex = annot ? annot.textContent.trim() : kel.innerText.trim();
+        const tokens = rawTex.split(/[,;\s]+/).map(t => t.replace(/[^A-Za-z0-9]/g, '')).filter(Boolean);
+
+        const resolvedRefs = tokens.map(t => this.inferContextualRef(kel, t)).filter(Boolean);
+        if (resolvedRefs.length > 0) {
+          const allCanonicalKeys = [];
+          resolvedRefs.forEach(r => {
+            const parsed = this.parseGeometorRef(r, `${FOLIO_ID}.g1`);
+            if (parsed) parsed.keys.forEach(k => allCanonicalKeys.push(k));
+          });
+
+          kel.classList.add('geom-interactive-ref');
+          kel.setAttribute('data-geom-keys', allCanonicalKeys.join('||'));
+
+          kel.addEventListener('mouseenter', () => {
+            this.highlightFromText(resolvedRefs, kel, `${FOLIO_ID}.g1`);
+          });
+
+          kel.addEventListener('mouseleave', () => {
+            this.clearHighlights();
+          });
+        }
+      });
+    },
+
+    // Binds hover events on SVG elements (bidirectional: SVG -> Text)
+    bindSvgElements() {
+      const svgs = document.querySelectorAll('svg.euclid-graphic');
+      svgs.forEach(svg => {
+        const fullGid = this.normalizeGraphicId(svg.getAttribute('data-graphic-id') || 'g1');
+        const refElements = svg.querySelectorAll('[data-ref], [id]');
+        refElements.forEach(el => {
+          if (el.tagName.toLowerCase() === 'g' && !el.hasAttribute('data-ref')) return;
+          if (el.tagName.toLowerCase() === 'defs' || el.closest('defs')) return;
+
+          const rawRef = (el.getAttribute('data-ref') || el.getAttribute('id') || '').trim();
+          if (!rawRef || ['elements', 'graphics', 'highlights', 'points', 'labels', 'construction', 'geometry'].includes(rawRef)) return;
+
+          el.style.cursor = 'pointer';
+
+          el.addEventListener('mouseenter', () => {
+            this.highlightFromSvg(rawRef, el, fullGid);
+          });
+
+          el.addEventListener('mouseleave', () => {
+            this.clearHighlights();
+          });
+        });
+      });
+    },
+
+    // Highlight trigger from Text hover
+    highlightFromText(refs, textElement, defaultGraphicId) {
+      this.clearHighlights();
+
+      textElement.classList.add('geom-highlight-text');
+      this.activeHighlights.add(textElement);
+
+      refs.forEach(ref => {
+        const { primary, secondary } = this.getSvgElementsForRef(ref, defaultGraphicId);
+
+        primary.forEach(svgEl => {
+          svgEl.classList.add('geom-highlight-active');
+          this.activeHighlights.add(svgEl);
+        });
+
+        secondary.forEach(svgEl => {
+          svgEl.classList.add('geom-highlight-secondary');
+          this.activeHighlights.add(svgEl);
+        });
+      });
+    },
+
+    // Highlight trigger from SVG hover (strictly scoped to the hovered SVG's graphicId)
+    highlightFromSvg(rawRef, svgElement, fullGid) {
+      this.clearHighlights();
+
+      svgElement.classList.add('geom-highlight-active');
+      this.activeHighlights.add(svgElement);
+
+      const { primary, secondary } = this.getSvgElementsForRef(rawRef, fullGid);
+      primary.forEach(svgEl => {
+        svgEl.classList.add('geom-highlight-active');
+        this.activeHighlights.add(svgEl);
+      });
+      secondary.forEach(svgEl => {
+        svgEl.classList.add('geom-highlight-secondary');
+        this.activeHighlights.add(svgEl);
+      });
+
+      const targetKeys = new Set();
+      const parsed = this.parseGeometorRef(rawRef, fullGid);
+      if (parsed) parsed.keys.forEach(k => targetKeys.add(k));
+
+      const aliases = (svgElement.getAttribute('data-aliases') || '').trim();
+      if (aliases) {
+        aliases.split(/[|;]/).map(s => s.trim()).filter(Boolean).forEach(a => {
+          const pa = this.parseGeometorRef(a, fullGid);
+          if (pa) pa.keys.forEach(k => targetKeys.add(k));
+        });
+      }
+
+      const container = document.getElementById('mdView-rendered');
+      if (!container) return;
+
+      const interactiveTexts = container.querySelectorAll('.geom-interactive-ref');
+      interactiveTexts.forEach(txtEl => {
+        const elKeys = (txtEl.getAttribute('data-geom-keys') || '').split('||').filter(Boolean);
+        const matches = elKeys.some(k => targetKeys.has(k));
+
+        if (matches) {
+          txtEl.classList.add('geom-highlight-text');
+          this.activeHighlights.add(txtEl);
+        }
+      });
+    },
+
+    // Clear all active highlights
+    clearHighlights() {
+      this.activeHighlights.forEach(el => {
+        el.classList.remove('geom-highlight-text', 'geom-highlight-active', 'geom-highlight-secondary');
+      });
+      this.activeHighlights.clear();
+    }
+  };
+
+  // =========================================================================
+  // Scholarly Apparatus Inspector (:cite: Citations, :term: Terms, :person: People)
+  // =========================================================================
+  const FOLIO_CITATIONS = {{ (folio.folio_citations or {})|tojson }};
+  const FOLIO_TERMS = {{ (folio.folio_terms or {})|tojson }};
+  const FOLIO_PERSONS = {{ (folio.folio_persons or {})|tojson }};
+
+  const ScholarlyApparatus = {
+    popover: null,
+    activeTarget: null,
+    hideTimeout: null,
+
+    init() {
+      this.ensurePopover();
+      this.bindElements();
+    },
+
+    ensurePopover() {
+      if (this.popover) return;
+      const pop = document.createElement('div');
+      pop.id = 'apparatusPopover';
+      pop.className = 'fixed z-50 hidden w-96 max-w-[92vw] bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl shadow-2xl p-4 text-left transition-opacity duration-150';
+      pop.style.fontFamily = "'Inter', system-ui, sans-serif";
+      pop.addEventListener('mouseenter', () => {
+        if (this.hideTimeout) clearTimeout(this.hideTimeout);
+      });
+      pop.addEventListener('mouseleave', () => {
+        this.scheduleHide();
+      });
+      document.body.appendChild(pop);
+      this.popover = pop;
+
+      document.addEventListener('click', (e) => {
+        if (!this.popover.classList.contains('hidden')) {
+          if (!this.popover.contains(e.target) && !e.target.closest('.citation-ref, .glossary-term, .person-ref')) {
+            this.hide();
+          }
+        }
+      });
+    },
+
+    bindElements() {
+      const refs = document.querySelectorAll('.citation-ref, .glossary-term, .person-ref');
+      refs.forEach(el => {
+        if (el.dataset.apparatusBound === '1') return;
+        el.dataset.apparatusBound = '1';
+
+        // Remove native title attribute so browser tooltip doesn't obscure the rich popover
+        if (el.hasAttribute('title')) {
+          el.dataset.origTitle = el.getAttribute('title');
+          el.removeAttribute('title');
+        }
+
+        el.addEventListener('mouseenter', () => {
+          if (this.hideTimeout) clearTimeout(this.hideTimeout);
+          this.showForElement(el);
+        });
+
+        el.addEventListener('mouseleave', () => {
+          this.scheduleHide();
+        });
+
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (this.hideTimeout) clearTimeout(this.hideTimeout);
+          this.showForElement(el, true);
+        });
+      });
+    },
+
+    scheduleHide() {
+      if (this.hideTimeout) clearTimeout(this.hideTimeout);
+      this.hideTimeout = setTimeout(() => this.hide(), 260);
+    },
+
+    hide() {
+      if (this.popover) {
+        this.popover.classList.add('hidden');
+      }
+      document.querySelectorAll('.apparatus-active-highlight').forEach(el => {
+        el.classList.remove('apparatus-active-highlight');
+        el.style.backgroundColor = '';
+      });
+      this.activeTarget = null;
+    },
+
+    escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    },
+
+    dedupeOccurrences(occs) {
+      const seen = new Set();
+      return (occs || []).filter(o => {
+        const k = `${o.volume || VOLUME_ID}:${o.folio}`;
+        if (seen.has(k)) return false;
+        seen.add(k);
+        return true;
+      });
+    },
+
+    renderPills(occs, activeColorCls, hoverColorCls) {
+      const uniqueOccs = this.dedupeOccurrences(occs);
+      return uniqueOccs.map(o => {
+        const vol = o.volume || VOLUME_ID;
+        const isCurrent = (vol === VOLUME_ID && o.folio === FOLIO_ID);
+        const cls = isCurrent ? activeColorCls : hoverColorCls;
+        const volPrefix = (vol !== VOLUME_ID) ? `${vol.replace('volume_', '')}:` : '';
+        return `<a href="/folio/${this.escapeHtml(vol)}/${this.escapeHtml(o.folio)}" class="px-2 py-0.5 rounded text-[11px] font-mono border transition-colors ${cls}" title="Jump to ${this.escapeHtml(vol)} Folio ${this.escapeHtml(o.folio)} (p. ${this.escapeHtml(o.page)})">${this.escapeHtml(volPrefix)}${this.escapeHtml(o.folio)} <span class="opacity-75">(p.${this.escapeHtml(o.page)})</span></a>`;
+      }).join('');
+    },
+
+    showForElement(el) {
+      const isCite = el.classList.contains('citation-ref');
+      const isTerm = el.classList.contains('glossary-term');
+      const isPerson = el.classList.contains('person-ref');
+      const key = isCite
+        ? el.getAttribute('data-cite')
+        : (isTerm ? el.getAttribute('data-term') : el.getAttribute('data-person'));
+      if (!key) return;
+
+      // Highlight all matching occurrences on the current folio
+      document.querySelectorAll('.apparatus-active-highlight').forEach(node => {
+        node.classList.remove('apparatus-active-highlight');
+        node.style.backgroundColor = '';
+      });
+      const selector = isCite
+        ? `.citation-ref[data-cite="${CSS.escape(key)}"]`
+        : (isTerm ? `.glossary-term[data-term="${CSS.escape(key)}"]` : `.person-ref[data-person="${CSS.escape(key)}"]`);
+      document.querySelectorAll(selector).forEach(node => {
+        node.classList.add('apparatus-active-highlight');
+        node.style.backgroundColor = isCite
+          ? 'rgba(37, 99, 235, 0.14)'
+          : (isTerm ? 'rgba(180, 83, 9, 0.16)' : 'rgba(5, 150, 105, 0.15)');
+      });
+
+      let html = '';
+      if (isCite) {
+        const entry = FOLIO_CITATIONS[key] || {
+          key: key,
+          author: key.split(':')[0].replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+          work: key.split(':').slice(0, 2).join(':'),
+          locus: key.split(':').slice(2).join(':'),
+          occurrences: [{ volume: VOLUME_ID, folio: FOLIO_ID, page: FOLIO_ID }],
+          work_occurrences: [{ volume: VOLUME_ID, folio: FOLIO_ID, page: FOLIO_ID }]
+        };
+        const rawOccs = (entry.work_occurrences && entry.work_occurrences.length)
+          ? entry.work_occurrences
+          : (entry.occurrences || []);
+        const occs = this.dedupeOccurrences(rawOccs);
+        const pills = this.renderPills(
+          occs,
+          'bg-blue-600 text-white font-semibold border-blue-600',
+          'bg-zinc-100 hover:bg-blue-50 dark:bg-zinc-800 dark:hover:bg-blue-950/60 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700'
+        );
+
+        html = `
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-2">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300">
+                Bibliographic Citation
+              </span>
+              <code class="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 truncate max-w-[180px]" title="${this.escapeHtml(key)}">${this.escapeHtml(key)}</code>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-zinc-900 dark:text-zinc-100">${this.escapeHtml(entry.author)}</div>
+              <div class="text-xs italic text-zinc-700 dark:text-zinc-300 mt-0.5">${this.escapeHtml(entry.work)}</div>
+              ${entry.locus ? `<div class="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1"><span class="font-semibold">Locus:</span> <code class="font-mono">${this.escapeHtml(entry.locus)}</code></div>` : ''}
+            </div>
+            <div class="pt-1 border-t border-zinc-100 dark:border-zinc-800">
+              <div class="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
+                Folios Citing This Work (${occs.length})
+              </div>
+              <div class="flex flex-wrap gap-1 max-h-28 overflow-y-auto pr-1">
+                ${pills}
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (isTerm) {
+        const entry = FOLIO_TERMS[key] || {
+          slug: key,
+          headword: el.textContent,
+          language: 'Technical Term',
+          translation: el.textContent,
+          definition: '',
+          occurrences: [{ volume: VOLUME_ID, folio: FOLIO_ID, page: FOLIO_ID }]
+        };
+        const uniqueOccs = this.dedupeOccurrences(entry.occurrences || []);
+        const pills = this.renderPills(
+          uniqueOccs,
+          'bg-amber-600 text-white font-semibold border-amber-600',
+          'bg-zinc-100 hover:bg-amber-50 dark:bg-zinc-800 dark:hover:bg-amber-950/60 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700'
+        );
+
+        html = `
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-2">
+              <div class="flex items-center gap-1.5">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                  Glossary Term
+                </span>
+                <span class="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">${this.escapeHtml(entry.language)}</span>
+              </div>
+              <code class="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 truncate max-w-[150px]">${this.escapeHtml(key)}</code>
+            </div>
+            <div>
+              <div class="text-sm font-bold text-zinc-900 dark:text-zinc-100 font-serif">${this.escapeHtml(entry.headword)}</div>
+              <div class="text-xs font-semibold text-amber-700 dark:text-amber-400 mt-0.5">“${this.escapeHtml(entry.translation)}”</div>
+              ${entry.definition ? `<p class="text-xs text-zinc-600 dark:text-zinc-300 mt-1.5 leading-relaxed">${this.escapeHtml(entry.definition)}</p>` : ''}
+            </div>
+            <div class="pt-1 border-t border-zinc-100 dark:border-zinc-800">
+              <div class="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
+                Folios Using This Term (${uniqueOccs.length})
+              </div>
+              <div class="flex flex-wrap gap-1 max-h-28 overflow-y-auto pr-1">
+                ${pills}
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (isPerson) {
+        const entry = FOLIO_PERSONS[key] || {
+          slug: key,
+          name: el.textContent,
+          dates: '',
+          role: 'Historical Figure / Scholar',
+          bio: '',
+          works: [],
+          occurrences: [{ volume: VOLUME_ID, folio: FOLIO_ID, page: FOLIO_ID }]
+        };
+        const uniqueOccs = this.dedupeOccurrences(entry.occurrences || []);
+        const pills = this.renderPills(
+          uniqueOccs,
+          'bg-emerald-600 text-white font-semibold border-emerald-600',
+          'bg-zinc-100 hover:bg-emerald-50 dark:bg-zinc-800 dark:hover:bg-emerald-950/60 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700'
+        );
+
+        const worksHtml = (entry.works && entry.works.length)
+          ? `<div class="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1"><span class="font-semibold">Works:</span> <em>${entry.works.map(w => this.escapeHtml(w)).join(', ')}</em></div>`
+          : '';
+
+        html = `
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-2">
+              <div class="flex items-center gap-1.5">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                  Person
+                </span>
+                ${entry.dates ? `<span class="text-[10px] font-mono text-zinc-500 dark:text-zinc-400">${this.escapeHtml(entry.dates)}</span>` : ''}
+              </div>
+              <code class="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 truncate max-w-[140px]">${this.escapeHtml(key)}</code>
+            </div>
+            <div>
+              <div class="text-sm font-bold text-zinc-900 dark:text-zinc-100 font-serif">${this.escapeHtml(entry.name)}</div>
+              ${entry.role ? `<div class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 mt-0.5">${this.escapeHtml(entry.role)}</div>` : ''}
+              ${entry.bio ? `<p class="text-xs text-zinc-600 dark:text-zinc-300 mt-1.5 leading-relaxed">${this.escapeHtml(entry.bio)}</p>` : ''}
+              ${worksHtml}
+            </div>
+            <div class="pt-1 border-t border-zinc-100 dark:border-zinc-800">
+              <div class="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
+                Folios Mentioning This Person (${uniqueOccs.length})
+              </div>
+              <div class="flex flex-wrap gap-1 max-h-28 overflow-y-auto pr-1">
+                ${pills}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      this.popover.innerHTML = html;
+      this.popover.classList.remove('hidden');
+
+      const rect = el.getBoundingClientRect();
+      const popRect = this.popover.getBoundingClientRect();
+      let top = rect.bottom + 8;
+      if (top + popRect.height > window.innerHeight - 12) {
+        top = Math.max(12, rect.top - popRect.height - 8);
+      }
+      let left = rect.left;
+      if (left + popRect.width > window.innerWidth - 12) {
+        left = Math.max(12, window.innerWidth - popRect.width - 12);
+      }
+      this.popover.style.top = `${top}px`;
+      this.popover.style.left = `${left}px`;
+      this.activeTarget = el;
+    }
+  };
+
+  // Init
+  document.addEventListener('DOMContentLoaded', () => {
+    applyTypographySettings();
+    renderAllMath();
+    EuclidInteractive.init();
+    ScholarlyApparatus.init();
+
+    const scanImg = document.getElementById('folioScanImg');
+    if (scanImg) {
+      if (scanImg.complete && scanImg.naturalWidth > 0) {
+        initScanDimensions(scanImg);
+      } else {
+        scanImg.addEventListener('load', () => initScanDimensions(scanImg));
+      }
+    }
+  });
+</script>
+{% endblock %}

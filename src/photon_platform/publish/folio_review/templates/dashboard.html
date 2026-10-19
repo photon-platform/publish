@@ -1,0 +1,469 @@
+{% extends "base.html" %}
+
+{% block title %}Folio Dashboard{% endblock %}
+
+{% block content %}
+<div class="flex-1 overflow-y-auto p-6 max-w-7xl w-full mx-auto space-y-6">
+
+  <!-- Overview Stats Header -->
+  <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+    <!-- Total Folios -->
+    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm">
+      <div class="flex items-center justify-between text-zinc-500 dark:text-zinc-400 text-xs font-medium uppercase tracking-wider">
+        <span>Folio Scans</span>
+        <i data-lucide="book-open" class="w-4 h-4 text-emerald-500"></i>
+      </div>
+      <div class="mt-2 text-2xl font-bold font-mono">{{ stats.total_folios }}</div>
+      <div class="mt-1 text-xs text-zinc-500">Across {{ volumes|length }} Volume{{ 's' if volumes|length != 1 else '' }}</div>
+    </div>
+
+    <!-- Transcriptions -->
+    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm">
+      <div class="flex items-center justify-between text-zinc-500 dark:text-zinc-400 text-xs font-medium uppercase tracking-wider">
+        <span>Transcribed</span>
+        <i data-lucide="file-text" class="w-4 h-4 text-blue-500"></i>
+      </div>
+      <div class="mt-2 text-2xl font-bold font-mono">{{ stats.total_transcribed }} <span class="text-sm font-normal text-zinc-500">({{ stats.transcribed_pct }}%)</span></div>
+      <div class="mt-2 w-full bg-zinc-100 dark:bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+        <div class="bg-blue-500 h-1.5 rounded-full" style="width: {{ stats.transcribed_pct }}%"></div>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm">
+      <div class="flex items-center justify-between text-zinc-500 dark:text-zinc-400 text-xs font-medium uppercase tracking-wider">
+        <span>Notes</span>
+        <i data-lucide="sticky-note" class="w-4 h-4 text-violet-500"></i>
+      </div>
+      <div class="mt-2 text-2xl font-bold font-mono">{{ stats.total_notes }} <span class="text-sm font-normal text-zinc-500">({{ stats.notes_pct }}%)</span></div>
+      <div class="mt-2 w-full bg-zinc-100 dark:bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+        <div class="bg-violet-500 h-1.5 rounded-full" style="width: {{ stats.notes_pct }}%"></div>
+      </div>
+    </div>
+
+    <!-- Graphics -->
+    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm">
+      <div class="flex items-center justify-between text-zinc-500 dark:text-zinc-400 text-xs font-medium uppercase tracking-wider">
+        <span>Graphics</span>
+        <i data-lucide="image" class="w-4 h-4 text-amber-500"></i>
+      </div>
+      <div class="mt-2 text-2xl font-bold font-mono">{{ stats.total_graphics }}</div>
+      <div class="mt-1 text-xs text-zinc-500">
+        {{ stats.total_folios_with_graphics }} folios with figures
+        {% if stats.total_missing_crops > 0 %}
+          <span class="text-amber-500 font-medium">({{ stats.total_missing_crops }} crops unextracted)</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Vector SVGs -->
+    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm">
+      <div class="flex items-center justify-between text-zinc-500 dark:text-zinc-400 text-xs font-medium uppercase tracking-wider">
+        <span>Vector SVGs</span>
+        <i data-lucide="pen-tool" class="w-4 h-4 text-emerald-500"></i>
+      </div>
+      <div class="mt-2 text-2xl font-bold font-mono text-emerald-600 dark:text-emerald-400">{{ stats.total_svgs }} <span class="text-sm font-normal text-zinc-500">({{ stats.svg_pct }}%)</span></div>
+      <div class="mt-2 w-full bg-zinc-100 dark:bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+        <div class="bg-emerald-500 h-1.5 rounded-full" style="width: {{ stats.svg_pct }}%"></div>
+      </div>
+    </div>
+
+    <!-- Vetting Progress -->
+    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm">
+      <div class="flex items-center justify-between text-zinc-500 dark:text-zinc-400 text-xs font-medium uppercase tracking-wider">
+        <span>Vetting Progress</span>
+        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
+      </div>
+      <div class="mt-2 text-2xl font-bold font-mono text-emerald-600 dark:text-emerald-400">{{ rev_stats.verified }} <span class="text-sm font-normal text-zinc-500">/ {{ stats.total_folios }}</span></div>
+      <div class="mt-1 text-xs flex gap-2">
+        {% if rev_stats.needs_fix > 0 %}
+          <span class="text-amber-600 dark:text-amber-400 font-medium">{{ rev_stats.needs_fix }} needs fix</span>
+        {% endif %}
+        {% if rev_stats.flagged > 0 %}
+          <span class="text-rose-600 dark:text-rose-400 font-medium">{{ rev_stats.flagged }} flagged</span>
+        {% endif %}
+        {% if rev_stats.needs_fix == 0 and rev_stats.flagged == 0 %}
+          <span class="text-zinc-500">{{ rev_stats.unreviewed }} unreviewed</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Volume Cards Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+    {% for vol in volumes %}
+      {% set vstat = stats.volumes[vol.name] %}
+      <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex flex-col justify-between hover:border-emerald-500/50 transition-colors">
+        <div>
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-bold">{{ vol.label }}</h2>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+              {{ vstat.total_folios }} Folios
+            </span>
+          </div>
+
+          <!-- Progress Bars -->
+          <div class="mt-4 space-y-2.5">
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-zinc-500">Transcriptions</span>
+                <span class="font-mono font-medium">{{ vstat.transcribed_count }} / {{ vstat.total_folios }}</span>
+              </div>
+              <div class="w-full bg-zinc-100 dark:bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+                <div class="bg-blue-500 h-1.5 rounded-full" style="width: {{ (vstat.transcribed_count / vstat.total_folios * 100) if vstat.total_folios else 0 }}%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-zinc-500">Notes</span>
+                <span class="font-mono font-medium">{{ vstat.notes_count }} / {{ vstat.total_folios }}</span>
+              </div>
+              <div class="w-full bg-zinc-100 dark:bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+                <div class="bg-violet-500 h-1.5 rounded-full" style="width: {{ (vstat.notes_count / vstat.total_folios * 100) if vstat.total_folios else 0 }}%"></div>
+              </div>
+            </div>
+
+            <div class="flex justify-between text-xs pt-1 text-zinc-500">
+              <span>Graphics Defined</span>
+              <span class="font-mono font-medium text-zinc-700 dark:text-zinc-300">{{ vstat.graphics_count }} figures ({{ vstat.folios_with_graphics }} folios)</span>
+            </div>
+          </div>
+
+          <!-- Sections Pills -->
+          <div class="mt-4 flex flex-wrap gap-1.5 max-h-28 overflow-y-auto">
+            {% for sec in vstat.sections %}
+              <button onclick="filterBySection('{{ vol.name }}', '{{ sec }}')" class="text-[11px] px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800/80 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 hover:text-emerald-700 dark:hover:text-emerald-300 text-zinc-600 dark:text-zinc-400 transition-colors">
+                {{ sec.replace('_', ' ') }}
+              </button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="mt-5 pt-3 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between">
+          <a href="/folio/{{ vol.name }}/{{ vstat.first_folio or '0001' }}" class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300">
+            Start Reviewing <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+          <button onclick="filterByVolume('{{ vol.name }}')" class="text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200">
+            View in Explorer ↓
+          </button>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Interactive Folio Explorer -->
+  <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm overflow-hidden" id="explorerSection">
+    
+    <!-- Controls Header -->
+    <div class="p-4 border-b border-zinc-200 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <h3 class="text-base font-bold flex items-center gap-2">
+          <i data-lucide="layers" class="w-4 h-4 text-emerald-500"></i>
+          Folio Explorer
+        </h3>
+        <span id="folioCountBadge" class="text-xs px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 font-mono">
+          Loading...
+        </span>
+      </div>
+
+      <!-- Filters & Search -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        <!-- Search Input -->
+        <div class="relative w-56">
+          <i data-lucide="search" class="w-3.5 h-3.5 absolute left-2.5 top-3 text-zinc-400 pointer-events-none"></i>
+          <input type="text" id="searchInput" placeholder="Search folio, page, title..." oninput="debounceFetchFolios()" class="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:outline-none focus:ring-1 focus:ring-emerald-500 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400">
+        </div>
+
+        <!-- Volume Filter -->
+        <select id="volumeFilter" onchange="onVolumeFilterChange()" class="text-xs py-1.5 px-2.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+          <option value="">All Volumes</option>
+          {% for vol in volumes %}
+            <option value="{{ vol.name }}">{{ vol.label }}</option>
+          {% endfor %}
+        </select>
+
+        <!-- Section Filter -->
+        <select id="sectionFilter" onchange="fetchFolios()" class="text-xs py-1.5 px-2.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+          <option value="">All Sections</option>
+          {% for vol in volumes %}
+            {% for sec in stats.volumes[vol.name].sections %}
+              <option value="{{ sec }}" data-volume="{{ vol.name }}">{{ vol.name }}: {{ sec.replace('_', ' ') }}</option>
+            {% endfor %}
+          {% endfor %}
+        </select>
+
+        <!-- Status Filter -->
+        <select id="statusFilter" onchange="fetchFolios()" class="text-xs py-1.5 px-2.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+          <option value="">All Content</option>
+          <option value="transcribed">Has Transcription</option>
+          <option value="missing_transcription">Missing Transcription</option>
+          <option value="has_notes">Has Notes</option>
+          <option value="missing_notes">Missing Notes</option>
+          <option value="has_graphics">Has Graphics</option>
+          <option value="has_svg">✓ Has Vector SVG</option>
+          <option value="missing_svg">○ Missing Vector SVG</option>
+          <option value="missing_crops">Missing Graphic Crops</option>
+        </select>
+
+        <!-- Review Status Filter -->
+        <select id="reviewStatusFilter" onchange="fetchFolios()" class="text-xs py-1.5 px-2.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+          <option value="all">All Review Statuses</option>
+          <option value="unreviewed">Unreviewed</option>
+          <option value="verified">Verified</option>
+          <option value="needs_fix">Needs Fix</option>
+          <option value="flagged">Flagged</option>
+        </select>
+
+        <!-- Refresh Button -->
+        <button onclick="fetchFolios(true)" title="Refresh data from disk" class="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Table Container -->
+    <div class="overflow-x-auto max-h-[600px] overflow-y-auto">
+      <table class="w-full text-left text-xs border-collapse">
+        <thead class="sticky top-0 bg-zinc-50 dark:bg-zinc-800/90 backdrop-blur-sm z-10 border-b border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 font-medium">
+          <tr>
+            <th class="py-2.5 px-4">Folio</th>
+            <th class="py-2.5 px-3">Volume</th>
+            <th class="py-2.5 px-3">Page</th>
+            <th class="py-2.5 px-4">Section / Title</th>
+            <th class="py-2.5 px-3 text-center">Scan</th>
+            <th class="py-2.5 px-3 text-center">Text</th>
+            <th class="py-2.5 px-3 text-center">Notes</th>
+            <th class="py-2.5 px-3 text-center">Graphics</th>
+            <th class="py-2.5 px-3 text-center">Review</th>
+            <th class="py-2.5 px-4 text-right">Action</th>
+          </tr>
+        </thead>
+        <tbody id="folioTableBody" class="divide-y divide-zinc-100 dark:divide-zinc-800/60">
+          <tr>
+            <td colspan="10" class="py-12 text-center text-zinc-400">Loading folios...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  let debounceTimeout = null;
+  function debounceFetchFolios() {
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => fetchFolios(), 250);
+  }
+
+  function syncSectionFilterOptions(volName) {
+    const secSelect = document.getElementById('sectionFilter');
+    if (!secSelect) return;
+    Array.from(secSelect.options).forEach(opt => {
+      if (!opt.value) return;
+      const optVol = opt.getAttribute('data-volume');
+      opt.hidden = Boolean(volName && optVol && optVol !== volName);
+    });
+  }
+
+  function onVolumeFilterChange() {
+    const volName = document.getElementById('volumeFilter').value;
+    const secSelect = document.getElementById('sectionFilter');
+    if (secSelect) {
+      secSelect.value = '';
+      syncSectionFilterOptions(volName);
+    }
+    fetchFolios();
+  }
+
+  function filterByVolume(volName) {
+    document.getElementById('volumeFilter').value = volName;
+    const secSelect = document.getElementById('sectionFilter');
+    if (secSelect) {
+      secSelect.value = '';
+      syncSectionFilterOptions(volName);
+    }
+    fetchFolios();
+    document.getElementById('explorerSection').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function filterBySection(volName, secPath) {
+    document.getElementById('volumeFilter').value = volName;
+    const secSelect = document.getElementById('sectionFilter');
+    if (secSelect) {
+      syncSectionFilterOptions(volName);
+      const matchOpt = Array.from(secSelect.options).find(
+        opt => opt.value === secPath && (!opt.getAttribute('data-volume') || opt.getAttribute('data-volume') === volName)
+      );
+      if (matchOpt) {
+        matchOpt.selected = true;
+      } else {
+        secSelect.value = secPath;
+      }
+    }
+    document.getElementById('searchInput').value = '';
+    fetchFolios();
+    document.getElementById('explorerSection').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  async function fetchFolios(showNotification = false) {
+    const vol = document.getElementById('volumeFilter').value;
+    const sec = document.getElementById('sectionFilter') ? document.getElementById('sectionFilter').value : '';
+    const status = document.getElementById('statusFilter').value;
+    const revStatus = document.getElementById('reviewStatusFilter').value;
+    const q = document.getElementById('searchInput').value;
+
+    const params = new URLSearchParams();
+    if (vol) params.append('volume', vol);
+    if (sec) params.append('section', sec);
+    if (status) params.append('status', status);
+    if (revStatus) params.append('review_status', revStatus);
+    if (q) params.append('q', q);
+
+    try {
+      const res = await fetch(`/api/folios?${params.toString()}`);
+      const data = await res.json();
+      renderFolios(data.folios);
+      if (showNotification) showToast('Refreshed folios from disk', 'success');
+    } catch (err) {
+      console.error(err);
+      showToast('Error loading folios', 'error');
+    }
+  }
+
+  function renderFolios(folios) {
+    const tbody = document.getElementById('folioTableBody');
+    const badge = document.getElementById('folioCountBadge');
+    badge.innerText = `${folios.length} Folios`;
+
+    if (!folios || folios.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="10" class="py-12 text-center text-zinc-400">No folios matched your filter criteria.</td></tr>`;
+      return;
+    }
+
+    const rows = folios.map(f => {
+      // Review badge
+      let reviewBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">Unreviewed</span>';
+      if (f.review_status === 'verified') {
+        reviewBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Verified</span>';
+      } else if (f.review_status === 'needs_fix') {
+        reviewBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">Needs Fix</span>';
+      } else if (f.review_status === 'flagged') {
+        reviewBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300">Flagged</span>';
+      }
+
+      // Graphics badge
+      let graphicsBadge = '<span class="text-zinc-400">-</span>';
+      if (f.graphics_count > 0) {
+        if (f.has_svg) {
+          graphicsBadge = `<span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300" title="${f.svg_count} Vector SVG(s)">${f.graphics_count} fig${f.graphics_count > 1 ? 's' : ''} (${f.svg_count} SVG)</span>`;
+        } else if (f.missing_crops_count > 0) {
+          graphicsBadge = `<span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300" title="${f.missing_crops_count} crop(s) unextracted">${f.graphics_count} figs (!${f.missing_crops_count})</span>`;
+        } else {
+          graphicsBadge = `<span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">${f.graphics_count} fig${f.graphics_count > 1 ? 's' : ''}</span>`;
+        }
+      }
+
+      const scanBadge = f.has_scan 
+        ? '<span class="text-emerald-600 dark:text-emerald-400 font-bold">✓</span>' 
+        : '<span class="text-zinc-400">✗</span>';
+
+      const mdBadge = f.has_md 
+        ? '<span class="text-blue-600 dark:text-blue-400 font-bold">✓</span>' 
+        : '<span class="text-zinc-400">✗</span>';
+
+      const notesBadge = f.has_notes 
+        ? '<span class="text-violet-600 dark:text-violet-400 font-bold">✓</span>' 
+        : '<span class="text-zinc-400">✗</span>';
+
+      return `
+        <tr class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 transition-colors">
+          <td class="py-2.5 px-4 font-mono font-bold text-zinc-900 dark:text-zinc-100">
+            ${f.folio}
+          </td>
+          <td class="py-2.5 px-3 text-zinc-600 dark:text-zinc-400">
+            ${f.volume.replace('volume_', 'Vol ')}
+          </td>
+          <td class="py-2.5 px-3 font-mono text-zinc-600 dark:text-zinc-400">
+            ${f.page || '-'}
+          </td>
+          <td class="py-2.5 px-4 max-w-xs truncate" title="${f.title}">
+            <div class="font-medium text-zinc-900 dark:text-zinc-100 truncate">${f.title}</div>
+            <div class="text-[11px] text-zinc-400 font-mono truncate">${f.section_path}</div>
+          </td>
+          <td class="py-2.5 px-3 text-center">${scanBadge}</td>
+          <td class="py-2.5 px-3 text-center">${mdBadge}</td>
+          <td class="py-2.5 px-3 text-center">${notesBadge}</td>
+          <td class="py-2.5 px-3 text-center">${graphicsBadge}</td>
+          <td class="py-2.5 px-3 text-center">${reviewBadge}</td>
+          <td class="py-2.5 px-4 text-right">
+            <a href="/folio/${f.volume}/${f.folio}" class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 font-medium hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors">
+              Review <i data-lucide="arrow-right" class="w-3 h-3"></i>
+            </a>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    tbody.innerHTML = rows;
+    lucide.createIcons();
+    updateRowSelection();
+  }
+
+  // Dashboard hjkl navigation
+  let selectedRowIndex = 0;
+  let currentFoliosList = [];
+
+  function updateRowSelection() {
+    const rows = document.querySelectorAll('#folioTableBody tr');
+    rows.forEach((r, idx) => {
+      if (idx === selectedRowIndex) {
+        r.classList.add('bg-emerald-50/70', 'dark:bg-emerald-950/40', 'ring-1', 'ring-emerald-500/50');
+      } else {
+        r.classList.remove('bg-emerald-50/70', 'dark:bg-emerald-950/40', 'ring-1', 'ring-emerald-500/50');
+      }
+    });
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+      if (e.key === 'Escape') {
+        document.activeElement.blur();
+      }
+      return;
+    }
+
+    const rows = document.querySelectorAll('#folioTableBody tr');
+    if (!rows.length) return;
+
+    if (e.key === 'j' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      selectedRowIndex = Math.min(rows.length - 1, selectedRowIndex + 1);
+      updateRowSelection();
+      rows[selectedRowIndex]?.scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'k' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      selectedRowIndex = Math.max(0, selectedRowIndex - 1);
+      updateRowSelection();
+      rows[selectedRowIndex]?.scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'l' || e.key === 'Enter') {
+      const activeLink = rows[selectedRowIndex]?.querySelector('a');
+      if (activeLink) {
+        e.preventDefault();
+        window.location.href = activeLink.href;
+      }
+    } else if (e.key === '/') {
+      e.preventDefault();
+      document.getElementById('searchInput').focus();
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    fetchFolios();
+  });
+</script>
+{% endblock %}
