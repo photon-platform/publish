@@ -1,0 +1,1395 @@
+/* =========================================================================
+   Geometor Interactive Diagrams & Classical Scriptorium Monograph Theme
+   Typography: Classical Roman Serif (EB Garamond)
+   Palette: Nocturnal warm parchment / soft charcoal (low-glare scholarly theme)
+   Layout: Centered reading column limited on large viewports (46rem)
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   1. Book Codex Variables & Container Layout ("Website in a Website")
+   ------------------------------------------------------------------------- */
+body.is-book-page,
+article.book-layout,
+article.book-reading-pane {
+  --book-bg: #1e1e20;
+  --book-bg-alpha: rgba(30, 30, 32, 0.94);
+  --book-surface: #272629;
+  --book-surface-alt: #313035;
+
+  --book-text: #d6cfc5;
+  --book-text-muted: #9c958a;
+  --book-text-dim: #787268;
+
+  --book-border: #3d3934;
+  --book-border-dark: #544f47;
+  --book-border-light: #2c2b2e;
+
+  --book-link: #de836e;
+  --book-link-hover: #f5a492;
+  --book-link-visited: #c97864;
+
+  --book-quote-bg: rgba(255, 255, 255, 0.04);
+  --book-quote-border: #4d4841;
+
+  --book-code-bg: #29282b;
+  --book-code-text: #d6cfc5;
+
+  --book-max-width: 46rem; /* ~736px, optimal 65-75 characters per line */
+  --book-scroll-offset: 8.5rem;
+
+  --book-font-serif: 'EB Garamond', Garamond, 'Palatino Linotype', Palatino, 'Georgia', 'Times New Roman', serif;
+  --book-font-display: 'EB Garamond', Garamond, 'Georgia', serif;
+  --book-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+main.book-main {
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+/* Fix inline-size container collapse and keep book reading pane a clean single column */
+article.book-layout,
+article.book-reading-pane {
+  width: 100% !important;
+  max-width: var(--book-max-width) !important;
+  margin: 0 auto !important;
+  padding: 0 1.75rem 3.5rem !important;
+  box-sizing: border-box;
+  display: flex !important;
+  flex-flow: column nowrap !important;
+  color: var(--book-text);
+  font-family: var(--book-font-serif);
+  font-feature-settings: "locl" 0, "kern" 1, "liga" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+
+  > header,
+  > .content,
+  > footer {
+    width: 100% !important;
+    flex: 0 0 auto !important;
+    order: unset !important;
+    padding: 0 !important;
+    margin: 0;
+  }
+
+  @container article (min-width: 60em) {
+    flex-flow: column nowrap !important;
+
+    > .content,
+    > header,
+    > footer {
+      flex: 0 0 auto !important;
+      width: 100% !important;
+      order: unset !important;
+    }
+  }
+
+  @container article (min-width: 80em) {
+    > .content {
+      flex: 0 0 auto !important;
+      width: 100% !important;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  article.book-layout,
+  article.book-reading-pane {
+    padding: 0 1rem 2.5rem !important;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   2. Sticky Book Codex Masthead (header.book-header)
+   ------------------------------------------------------------------------- */
+header.book-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  background-color: var(--book-bg-alpha);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--book-border);
+  padding: 0.45rem 0.65rem 0.4rem !important;
+  margin-bottom: 1.5rem !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
+  box-sizing: border-box;
+}
+
+.book-header-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem 0.75rem;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.book-header-identity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.45rem;
+}
+
+.book-portal-link {
+  font-family: var(--book-font-mono);
+  font-size: 0.76rem;
+  color: var(--book-text-muted) !important;
+  text-decoration: none !important;
+  padding: 0.08rem 0.38rem;
+  border-radius: 3px;
+  background-color: var(--book-surface);
+  border: 1px solid var(--book-border);
+  transition: all 0.15s ease;
+
+  &:hover {
+    color: var(--book-link-hover) !important;
+    border-color: var(--book-border-dark);
+  }
+}
+
+.book-header-sep {
+  color: var(--book-border-dark);
+  font-size: 0.85rem;
+  user-select: none;
+}
+
+.book-title-link {
+  font-family: var(--book-font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--book-text) !important;
+  text-decoration: none !important;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: var(--book-link) !important;
+  }
+}
+
+.book-subtitle {
+  font-family: var(--book-font-serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--book-text-muted);
+}
+
+.book-header-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.book-badge {
+  font-family: var(--book-font-mono);
+  font-size: 0.72rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid var(--book-border);
+  background: var(--book-surface);
+  color: var(--book-text-muted);
+
+  &.canonical-badge {
+    font-weight: 700;
+    color: var(--book-text);
+  }
+}
+
+/* Second Row of Book Header: [← Prev] | Chapter Title + Track Switcher | [Next →] */
+.book-header-nav {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 1fr) auto minmax(4.5rem, 1fr);
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 0.28rem;
+  border-top: 1px solid var(--book-border-light);
+}
+
+.book-nav-prev {
+  text-align: left;
+}
+
+.book-nav-next {
+  text-align: right;
+}
+
+.book-nav-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  text-align: center;
+}
+
+.book-doc-title {
+  text-align: center;
+  font-family: var(--book-font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--book-text);
+  line-height: 1.2;
+}
+
+.book-nav-btn {
+  font-family: var(--book-font-serif);
+  font-size: 0.84rem;
+  color: var(--book-link) !important;
+  text-decoration: none !important;
+  padding: 0.15rem 0.55rem;
+  border-radius: 4px;
+  background-color: var(--book-surface);
+  border: 1px solid var(--book-border);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  line-height: 1.25;
+
+  &:hover {
+    background-color: var(--book-surface-alt);
+    color: var(--book-link-hover) !important;
+    border-color: var(--book-border-dark);
+    text-decoration: none !important;
+  }
+}
+
+article.book-layout nav,
+.book-tracks-nav {
+  display: flex !important;
+  flex-flow: row wrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.3rem;
+  font-family: var(--book-font-serif);
+  font-size: 0.84rem;
+  line-height: 1.2;
+
+  a {
+    display: inline-flex !important;
+    flex-basis: auto !important;
+    width: auto !important;
+
+    &::before,
+    &::after {
+      content: none !important;
+      display: none !important;
+      width: 0 !important;
+      flex: none !important;
+    }
+  }
+}
+
+.book-track-item {
+  color: var(--book-link) !important;
+  text-decoration: none !important;
+  padding: 0.06rem 0.4rem !important;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+  font-weight: 400;
+  line-height: 1.2;
+
+  &:hover {
+    color: var(--book-link-hover) !important;
+    background-color: var(--book-surface);
+    text-decoration: none !important;
+  }
+
+  &.is-active {
+    color: var(--book-text) !important;
+    font-weight: 600;
+    background-color: var(--book-surface);
+    border: 1px solid var(--book-border);
+    cursor: default;
+  }
+}
+
+.book-track-sep {
+  color: var(--book-border-dark);
+  font-size: 0.75rem;
+  user-select: none;
+}
+
+/* -------------------------------------------------------------------------
+   3. Scholarly Monograph Typography (.book-reading-pane .book-content)
+   ------------------------------------------------------------------------- */
+.book-reading-pane .book-content,
+.folio-book-page {
+  font-family: var(--book-font-serif);
+  font-size: 1.16rem;
+  line-height: 1.72;
+  color: var(--book-text);
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "locl" 0, "kern" 1, "liga" 1;
+
+  p, div, li, dd, dt, th, td {
+    font-feature-settings: "locl" 0, "kern" 1, "liga" 1;
+  }
+
+  /* Anchor scroll margin for sticky header */
+  h1, h2, h3, h4, h5, h6,
+  section[id],
+  span[id],
+  aside.footnote[id] {
+    scroll-margin-top: var(--book-scroll-offset);
+  }
+
+  /* Headings */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--book-font-serif) !important;
+    color: var(--book-text) !important;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    text-indent: 0 !important;
+    border-bottom: none !important;
+
+    a.headerlink {
+      font-size: 0.72em;
+      color: var(--book-text-dim) !important;
+      text-decoration: none !important;
+      opacity: 0;
+      padding-left: 0.4em;
+      transition: opacity 0.15s ease;
+    }
+
+    &:hover a.headerlink {
+      opacity: 0.65;
+    }
+  }
+
+  h1 {
+    font-size: 2.15rem !important;
+    line-height: 1.2;
+    letter-spacing: 0.04em;
+    text-align: center;
+    margin-top: 1.75rem !important;
+    margin-bottom: 0.85rem !important;
+  }
+
+  /* Chapter Subtitle Rubric (.. rubric::) */
+  p.rubric {
+    font-family: var(--book-font-serif);
+    font-size: 1.22rem;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    color: var(--book-text-muted);
+    text-align: center !important;
+    text-indent: 0 !important;
+    margin-top: -0.35rem !important;
+    margin-bottom: 1.4rem !important;
+    line-height: 1.35;
+  }
+
+  h2 {
+    font-size: 1.48rem !important;
+    line-height: 1.3;
+    letter-spacing: 0.02em;
+    text-align: center;
+    margin-top: 2.1rem !important;
+    margin-bottom: 0.9rem !important;
+  }
+
+  h3 {
+    font-size: 1.25rem !important;
+    line-height: 1.35;
+    text-align: left;
+    margin-top: 1.75rem !important;
+    margin-bottom: 0.45rem !important;
+
+    em {
+      font-weight: 400;
+      font-style: italic;
+    }
+  }
+
+  h4 {
+    font-size: 1.12rem !important;
+    font-style: italic;
+    text-align: left;
+    margin-top: 1.25rem !important;
+    margin-bottom: 0.45rem !important;
+  }
+
+  h5, h6 {
+    font-size: 1.05rem !important;
+    font-style: italic;
+    text-align: left;
+    margin-top: 1rem !important;
+    margin-bottom: 0.4rem !important;
+  }
+
+  /* Paragraphs & Classical 2em First-Line Indentation */
+  p {
+    text-indent: 2em;
+    margin-top: 0 !important;
+    margin-bottom: 0.45em !important;
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+  }
+
+  /* Explicit resets where first-line paragraph indentation is NOT desired */
+  blockquote p,
+  li p,
+  table p,
+  th p,
+  td p,
+  aside.footnote p,
+  .footnote-list p,
+  .footnotes p,
+  p.rubric,
+  .no-indent,
+  .title-page p,
+  .work-toc p,
+  .chapter-toc p,
+  .admonition p,
+  .note p,
+  p:has(> strong:first-child) {
+    text-indent: 0 !important;
+  }
+
+  /* Line Blocks (e.g. mathematical arrays, verse, or title blocks) */
+  .line-block {
+    margin: 0.85em 0 0.85em 2em !important;
+    line-height: 1.55;
+
+    .line {
+      text-indent: 0 !important;
+    }
+
+    .line-block {
+      margin: 0 0 0 1.5em !important;
+    }
+  }
+
+  /* Blockquotes (Smaller-type set-off passages & quotations) */
+  blockquote {
+    margin: 1.25em 0 !important;
+    padding: 0.75em 1.4em !important;
+    border: none !important;
+    border-left: 3px solid var(--book-quote-border) !important;
+    background-color: var(--book-quote-bg) !important;
+    color: var(--book-text) !important;
+    font-size: 0.95em !important;
+    font-style: normal;
+    line-height: 1.65;
+    border-radius: 0 4px 4px 0;
+
+    p {
+      text-indent: 0 !important;
+      margin: 0.35em 0 !important;
+      text-align: justify;
+
+      &:first-child {
+        margin-top: 0 !important;
+      }
+
+      &:last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+  }
+
+  /* Links inside Book Content */
+  a {
+    color: var(--book-link);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--book-link-hover);
+      text-decoration-thickness: 1.5px;
+    }
+  }
+
+  /* Lists */
+  ul, ol {
+    margin: 0.85rem 0 1.15rem !important;
+    padding-left: 1.75rem;
+  }
+
+  li {
+    margin: 0.3rem 0;
+    line-height: 1.65;
+
+    &::marker {
+      color: var(--book-text-muted);
+    }
+  }
+
+  /* Horizontal Rules / Section Dividers */
+  hr,
+  hr.docutils {
+    border: 0 !important;
+    height: 1px;
+    background: var(--book-border);
+    margin: 2.25rem auto !important;
+    width: 50%;
+  }
+
+  /* Tables (Translation Notes, Comparative Apparatus, Scan Inventory) */
+  table,
+  table.docutils {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.75rem 0 !important;
+    font-size: 0.94rem;
+
+    th, td {
+      padding: 0.6rem 0.8rem;
+      border-bottom: 1px solid var(--book-border);
+      text-align: left !important;
+      vertical-align: top;
+    }
+
+    th {
+      font-family: var(--book-font-serif);
+      font-size: 0.88rem;
+      letter-spacing: 0.04em;
+      font-weight: 600;
+      text-transform: uppercase;
+      background-color: var(--book-surface);
+      border-bottom: 2px solid var(--book-border-dark);
+      color: var(--book-text);
+    }
+
+    tr:hover td {
+      background-color: var(--book-surface);
+    }
+  }
+
+  /* Chapter Table of Contents (.. contents:: / Conspectus Capitis) */
+  .chapter-toc,
+  nav.contents.local,
+  nav.contents {
+    margin: 2rem 0 2.5rem !important;
+    background-color: var(--book-surface);
+    border: 1px solid var(--book-border);
+    border-left: 3px solid var(--book-border-dark);
+    border-radius: 5px;
+    padding: 0.75rem 1.25rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+
+    p {
+      margin: 0 !important;
+      text-indent: 0 !important;
+      text-align: left !important;
+    }
+
+    p.topic-title {
+      font-family: var(--book-font-display);
+      font-weight: 600;
+      font-size: 0.92rem !important;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--book-text);
+      margin: 0.25rem 0 0.65rem 0 !important;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--book-border);
+      text-align: left !important;
+    }
+
+    > ul,
+    .chapter-toc-list {
+      list-style: none !important;
+      margin: 0.65rem 0 0.25rem !important;
+      padding: 0 !important;
+      column-count: 2;
+      column-gap: 2.2rem;
+
+      @media (max-width: 720px) {
+        column-count: 1;
+      }
+
+      > li {
+        margin: 0 0 0.85rem 0 !important;
+        line-height: 1.45;
+        list-style: none !important;
+
+        > p > a,
+        > a,
+        .toc-parent-link {
+          font-family: var(--book-font-serif);
+          font-weight: 600;
+          font-size: 0.94rem;
+          color: var(--book-text);
+          text-decoration: none !important;
+          display: block;
+          padding: 0.15rem 0.35rem;
+          border-radius: 3px;
+          transition: all 0.12s ease;
+
+          &:hover {
+            color: var(--book-link);
+            background-color: var(--book-surface-alt);
+            text-decoration: none !important;
+          }
+        }
+
+        > ul,
+        .chapter-toc-sublist {
+          list-style: none !important;
+          margin: 0.3rem 0 0.45rem 0.55rem !important;
+          padding: 0 0 0 0.7rem !important;
+          border-left: 1px solid var(--book-border);
+
+          > li {
+            margin: 0.2rem 0 !important;
+            line-height: 1.4;
+            break-inside: avoid;
+            page-break-inside: avoid;
+            list-style: none !important;
+
+            > p > a,
+            > a,
+            .toc-sub-link {
+              font-family: var(--book-font-serif);
+              font-size: 0.86rem;
+              color: var(--book-text-muted);
+              text-decoration: none !important;
+              display: block;
+              padding: 0.12rem 0.3rem;
+              border-radius: 3px;
+              transition: all 0.12s ease;
+
+              &:hover {
+                color: var(--book-link);
+                background-color: var(--book-surface-alt);
+                text-decoration: none !important;
+              }
+            }
+
+            > ul {
+              list-style: none !important;
+              margin: 0.15rem 0 0.25rem 0 !important;
+              padding: 0 0 0 0.75rem !important;
+              border-left: none;
+
+              > li {
+                margin: 0.15rem 0 !important;
+                line-height: 1.38;
+                break-inside: avoid;
+                page-break-inside: avoid;
+                list-style: none !important;
+
+                > p > a,
+                > a {
+                  font-family: var(--book-font-serif);
+                  font-size: 0.82rem;
+                  color: var(--book-text-muted);
+                  opacity: 0.9;
+                  text-decoration: none !important;
+                  display: block;
+                  padding: 0.1rem 0.3rem;
+                  border-radius: 3px;
+                  transition: all 0.12s ease;
+
+                  &:hover {
+                    color: var(--book-link);
+                    background-color: var(--book-surface-alt);
+                    text-decoration: none !important;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .chapter-toc-details summary {
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+    }
+
+    .chapter-toc-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.25rem 0;
+    }
+
+    .chapter-toc-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--book-font-display);
+      font-weight: 600;
+      font-size: 0.92rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--book-text);
+
+      .toc-icon {
+        color: var(--book-link);
+        font-size: 1.05rem;
+        font-weight: 700;
+      }
+    }
+
+    .chapter-toc-badge {
+      font-size: 0.78rem;
+      color: var(--book-text-muted);
+      background-color: var(--book-surface-alt);
+      border: 1px solid var(--book-border);
+      padding: 0.15rem 0.55rem;
+      border-radius: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .chapter-toc-list {
+      padding-top: 0.75rem !important;
+      border-top: 1px solid var(--book-border);
+    }
+  }
+
+  /* Front Matter / 1954 Monograph Title Page Reconstruction (.title-page) */
+  .title-page {
+    max-width: 42rem;
+    margin: 1.5rem auto 2.75rem !important;
+    padding: 1.5rem 1.25rem;
+    text-align: center;
+    border-top: 1px solid var(--book-border);
+    border-bottom: 1px solid var(--book-border);
+    background-color: rgba(255, 255, 255, 0.015);
+    border-radius: 4px;
+
+    .line-block {
+      margin: 0 auto !important;
+      text-align: center !important;
+      letter-spacing: 0.08em;
+      line-height: 1.85;
+      font-size: 0.98rem;
+      color: var(--book-text-muted);
+    }
+
+    a {
+      color: var(--book-text) !important;
+      font-weight: 600;
+      text-decoration: none !important;
+      border-bottom: 1px dotted var(--book-border-dark);
+
+      &:hover {
+        color: var(--book-link-hover) !important;
+        border-bottom-color: var(--book-link-hover);
+      }
+    }
+  }
+
+  /* Conspectus Totius Operis (Book Index Table of Contents) */
+  section#conspectus-totius-operis {
+    max-width: 42rem;
+    margin: 1.5rem auto 2.5rem !important;
+    text-align: center;
+
+    h2 {
+      margin-bottom: 0.2rem !important;
+    }
+
+    h3 {
+      text-align: center !important;
+      font-size: 1.22rem !important;
+      letter-spacing: 0.04em;
+      margin-top: 2rem !important;
+      margin-bottom: 0.2rem !important;
+    }
+
+    p {
+      text-align: center !important;
+      text-indent: 0 !important;
+      margin-bottom: 0.35rem !important;
+
+      em {
+        color: var(--book-text-muted);
+        font-size: 1.02rem;
+      }
+
+      a {
+        text-decoration: none !important;
+        padding: 0.1rem 0.45rem;
+        border-radius: 3px;
+
+        &:hover {
+          background-color: var(--book-surface);
+        }
+      }
+    }
+  }
+
+  /* Scroll offset for sticky book header and :target highlights */
+  section[id],
+  h1[id],
+  h2[id],
+  h3[id],
+  h4[id],
+  aside.footnote[id],
+  span[id],
+  a[id] {
+    scroll-margin-top: 6.5rem;
+  }
+
+  section:target,
+  aside.footnote:target {
+    background-color: rgba(212, 175, 55, 0.07);
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+
+  span[id]:target + h2,
+  span[id]:target + h3,
+  span[id]:target + h4,
+  span[id]:target + ul > li:first-child {
+    background-color: rgba(212, 175, 55, 0.12);
+    border-radius: 4px;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+  }
+
+  /* Semantic Apparatus Links & Spans (:cite:, :term:, :person:) */
+  a.citation-ref,
+  .citation-ref {
+    color: var(--book-text) !important;
+    text-decoration: none !important;
+    border-bottom: 1px dotted rgba(222, 131, 110, 0.55);
+    cursor: pointer;
+    padding: 0 0.08em;
+    border-radius: 2px;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+
+    &:hover {
+      color: var(--book-link-hover) !important;
+      border-bottom: 1px solid var(--book-link);
+      background-color: rgba(222, 131, 110, 0.12);
+      text-decoration: none !important;
+    }
+
+    &:target {
+      background-color: rgba(222, 131, 110, 0.24);
+      border-bottom: 1px solid var(--book-link);
+      outline: 1px solid rgba(222, 131, 110, 0.45);
+    }
+  }
+
+  a.term-ref,
+  .term-ref,
+  .glossary-term {
+    color: var(--book-text) !important;
+    text-decoration: none !important;
+    border-bottom: 1px dotted rgba(212, 175, 55, 0.5);
+    cursor: pointer;
+    padding: 0 0.08em;
+    border-radius: 2px;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+
+    &:hover {
+      color: #f3d478 !important;
+      border-bottom: 1px solid var(--book-accent-gold);
+      background-color: rgba(212, 175, 55, 0.12);
+      text-decoration: none !important;
+    }
+
+    &:target {
+      background-color: rgba(212, 175, 55, 0.24);
+      border-bottom: 1px solid var(--book-accent-gold);
+      outline: 1px solid rgba(212, 175, 55, 0.45);
+    }
+  }
+
+  a.person-ref,
+  .person-ref {
+    color: var(--book-text) !important;
+    text-decoration: none !important;
+    font-variant: small-caps;
+    letter-spacing: 0.03em;
+    border-bottom: 1px dotted rgba(156, 149, 138, 0.5);
+    cursor: pointer;
+    padding: 0 0.08em;
+    border-radius: 2px;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+
+    &:hover {
+      color: var(--book-link-hover) !important;
+      border-bottom: 1px solid var(--book-link);
+      background-color: rgba(222, 131, 110, 0.1);
+      text-decoration: none !important;
+    }
+
+    &:target {
+      background-color: rgba(222, 131, 110, 0.22);
+      border-bottom: 1px solid var(--book-link);
+      outline: 1px solid rgba(222, 131, 110, 0.45);
+    }
+  }
+
+  /* Footnotes (Docutils HTML5 aside.footnote & inline a.footnote-reference) */
+  a.footnote-reference {
+    font-size: 0.78em;
+    vertical-align: super;
+    line-height: 0;
+    text-decoration: none !important;
+    color: var(--book-link) !important;
+    padding: 0 0.12em;
+    font-weight: 600;
+
+    &:hover {
+      color: var(--book-link-hover) !important;
+      text-decoration: underline !important;
+    }
+  }
+
+  aside.footnote-list {
+    margin-top: 2.75rem !important;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--book-border);
+  }
+
+  aside.footnote {
+    display: grid;
+    grid-template-columns: 2.6rem 1fr;
+    gap: 0.4rem;
+    align-items: baseline;
+    font-size: 0.92rem;
+    line-height: 1.58;
+    color: var(--book-text-muted);
+    margin: 0.5rem 0 !important;
+
+    &:first-of-type {
+      margin-top: 2.25rem !important;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--book-border);
+    }
+
+    aside.footnote-list & {
+      &:first-of-type {
+        margin-top: 0.5rem !important;
+        padding-top: 0;
+        border-top: none;
+      }
+    }
+
+    > .label {
+      font-family: var(--book-font-serif);
+      font-weight: 600;
+      color: var(--book-link);
+      text-align: right;
+      padding-right: 0.25rem;
+      white-space: nowrap;
+
+      a {
+        text-decoration: none !important;
+        color: var(--book-link) !important;
+      }
+    }
+
+    > p {
+      grid-column: 2;
+      text-indent: 0 !important;
+      margin: 0 0 0.3rem 0 !important;
+      text-align: justify;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .book-header-nav {
+    grid-template-columns: auto 1fr auto;
+    gap: 0.25rem;
+  }
+
+  .book-nav-btn .nav-label {
+    display: none;
+  }
+
+  .book-reading-pane .book-content {
+    font-size: 1.08rem;
+
+    h1 {
+      font-size: 1.75rem !important;
+    }
+
+    h2 {
+      font-size: 1.32rem !important;
+    }
+
+    p {
+      text-align: left;
+      text-indent: 1.5em;
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------
+   4. Book Codex Footer (footer.book-footer)
+   ------------------------------------------------------------------------- */
+footer.book-footer {
+  margin-top: 3rem !important;
+  padding-top: 1.5rem !important;
+  border-top: 1px solid var(--book-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.book-footer-ornament {
+  font-size: 1.15rem;
+  color: var(--book-border-dark);
+  line-height: 1;
+  user-select: none;
+}
+
+.book-footer-nav {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 1fr) auto minmax(4.5rem, 1fr);
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.book-toc-link {
+  font-family: var(--book-font-display);
+  font-size: 0.88rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--book-text-muted) !important;
+  text-decoration: none !important;
+
+  &:hover {
+    color: var(--book-link-hover) !important;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   5. Classical Proposition & Proof Structural Blocks (Euclid / Pacioli)
+   ------------------------------------------------------------------------- */
+.enunciation {
+  font-style: italic;
+  text-indent: 1.75em;
+  margin-top: 0.5em;
+  margin-bottom: 0.75em;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.assertion {
+  text-align: center !important;
+  text-indent: 0 !important;
+  margin-top: 0.35em;
+  margin-bottom: 0.35em;
+  clear: both;
+}
+
+.sub-clause {
+  text-indent: 3.5em !important;
+  margin-top: 0.15em;
+  margin-bottom: 0.15em;
+  text-align: left;
+}
+
+.justification {
+  float: right;
+  text-indent: 0 !important;
+  font-style: normal;
+  font-size: 0.95em;
+  letter-spacing: 0.02em;
+}
+
+.qed {
+  text-align: right;
+  text-indent: 0 !important;
+  margin-top: 0.6em;
+  margin-bottom: 0.6em;
+  padding-right: 1.5em;
+  font-style: normal;
+}
+
+.porism,
+.lemma,
+.scholium {
+  margin: 0.75em 0;
+  padding-left: 1em;
+  border-left: 2px solid rgba(113, 113, 122, 0.35);
+}
+
+.porism-title,
+.lemma-title,
+.scholium-title {
+  font-weight: 700;
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.25em;
+}
+
+.folio-milestone {
+  font-size: 0.75em;
+  color: #71717a;
+  text-align: right;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  margin: 0.4em 0;
+  clear: both;
+}
+
+sup.line-num {
+  font-size: 0.75em;
+  line-height: 0;
+  vertical-align: baseline;
+  position: relative;
+  top: -0.4em;
+  color: #71717a;
+  margin-right: 0.15em;
+}
+
+/* Responsive Side-by-Side / Floating Diagram Layouts */
+figure.photon-picture.diagram-right,
+figure.photon-svg.diagram-right {
+  float: right;
+  clear: right;
+  margin: 0.25em 0 1.25em 1.5em;
+  max-width: 50%;
+}
+
+@media (max-width: 640px) {
+  figure.photon-picture.diagram-right,
+  figure.photon-svg.diagram-right,
+  .euclid-figure-container {
+    float: none;
+    max-width: 100%;
+    margin: 0.75em auto;
+  }
+}
+
+/* Interactive Geometric Text References */
+.geom-ref,
+.geom-interactive-ref,
+.katex.geom-interactive-ref {
+  cursor: pointer;
+  position: relative;
+  border-bottom: 1.5px dotted rgba(220, 38, 38, 0.45);
+  border-radius: 2px;
+  padding: 0 1px;
+  transition: all 0.15s ease-in-out;
+}
+
+.geom-ref:hover,
+.geom-interactive-ref:hover,
+.katex.geom-interactive-ref:hover {
+  border-bottom: 1.5px solid #dc2626 !important;
+}
+
+/* Active Highlight: Turning text RED without glow */
+.geom-highlight-text,
+.geom-highlight-text *,
+.katex.geom-highlight-text,
+.katex.geom-highlight-text * {
+  color: #dc2626 !important;
+  background-color: rgba(239, 68, 68, 0.08) !important;
+  border-radius: 3px;
+  transition: color 0.1s ease-in-out, background-color 0.1s ease-in-out;
+}
+
+/* Hidden/Toggleable Semantic Overlay Elements in SVG */
+svg.euclid-graphic .geom-overlay,
+svg.euclid-graphic #highlights > * {
+  opacity: 0;
+  transition: opacity 0.12s ease, stroke 0.12s ease, fill-opacity 0.12s ease;
+}
+
+/* Active Highlight in SVG: Change color to RED without glow or overstroke */
+svg.euclid-graphic [data-ref]:hover,
+svg.euclid-graphic .highlight,
+svg.euclid-graphic .geom-highlight-active {
+  opacity: 1 !important;
+  stroke: #ef4444 !important;
+  stroke-opacity: 1 !important;
+  filter: none !important;
+  cursor: pointer;
+  transition: opacity 0.1s ease, stroke 0.1s ease;
+}
+
+svg.euclid-graphic polygon:hover,
+svg.euclid-graphic polygon.highlight,
+svg.euclid-graphic polygon.geom-highlight-active,
+svg.euclid-graphic path.polygon.geom-highlight-active,
+svg.euclid-graphic path.geom-polygon.geom-highlight-active,
+svg.euclid-graphic path.wedge.geom-highlight-active,
+svg.euclid-graphic path.angle.geom-highlight-active {
+  opacity: 1 !important;
+  fill: #ef4444 !important;
+  fill-opacity: 0.22 !important;
+  stroke: #ef4444 !important;
+  stroke-opacity: 1 !important;
+  stroke-width: 1.5px !important;
+  filter: none !important;
+}
+
+svg.euclid-graphic circle.geom-point:hover,
+svg.euclid-graphic circle.point:hover,
+svg.euclid-graphic #points circle:hover,
+svg.euclid-graphic circle.geom-point.geom-highlight-active,
+svg.euclid-graphic circle.point.geom-highlight-active,
+svg.euclid-graphic #points circle.geom-highlight-active {
+  opacity: 1 !important;
+  fill: #ef4444 !important;
+  fill-opacity: 1 !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+  filter: none !important;
+}
+
+svg.euclid-graphic text:hover,
+svg.euclid-graphic text.highlight,
+svg.euclid-graphic text.geom-highlight-active,
+svg.euclid-graphic text.geom-highlight-active *,
+svg.euclid-graphic text.geom-highlight-active tspan,
+svg.euclid-graphic text.geom-label.geom-highlight-active,
+svg.euclid-graphic text.label.geom-highlight-active {
+  opacity: 1 !important;
+  fill: #ef4444 !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+  filter: none !important;
+}
+
+/* Secondary highlight for endpoints/labels when a segment, angle, or polygon is hovered */
+svg.euclid-graphic .geom-highlight-secondary {
+  opacity: 1 !important;
+  stroke: #ef4444 !important;
+  filter: none !important;
+  transition: opacity 0.1s ease, stroke 0.1s ease, fill 0.1s ease;
+}
+
+svg.euclid-graphic text.geom-highlight-secondary,
+svg.euclid-graphic text.geom-highlight-secondary tspan,
+svg.euclid-graphic tspan.geom-highlight-secondary {
+  opacity: 1 !important;
+  fill: #ef4444 !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+  filter: none !important;
+}
+
+svg.euclid-graphic circle.geom-point.geom-highlight-secondary,
+svg.euclid-graphic circle.point.geom-highlight-secondary,
+svg.euclid-graphic #points circle.geom-highlight-secondary {
+  opacity: 1 !important;
+  fill: #ef4444 !important;
+  fill-opacity: 1 !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+  filter: none !important;
+}
+
+/* Inline Figure Wrapper in Book Page */
+.euclid-figure-container {
+  float: right;
+  clear: right;
+  margin: 0.25em 0 1.25em 1.5em;
+  max-width: 52%;
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.08);
+  user-select: none;
+  transition: max-width 0.2s ease;
+}
+
+.euclid-figure-container:hover {
+  border-color: #cbd5e1;
+}
+
+.euclid-figure-container .figure-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #f4f4f5;
+}
+
+.euclid-figure-container .figure-btn {
+  font-size: 10px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #71717a;
+  background: transparent;
+  transition: all 0.15s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.euclid-figure-container .figure-btn:hover {
+  color: #18181b;
+  background: #f4f4f5;
+}
+
+.euclid-figure-container .figure-btn.active {
+  color: #047857;
+  background: #ecfdf5;
+  font-weight: 600;
+}
+
+.euclid-figure-container.python-mode {
+  min-width: 340px;
+  max-width: 62%;
+}
+
+.euclid-figure-container .figure-svg-wrapper svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.euclid-figure-container .figure-python-wrapper {
+  background: #09090b;
+  color: #e4e4e7;
+  border-radius: 6px;
+  border: 1px solid #27272a;
+  padding: 8px 10px;
+  max-height: 300px;
+  overflow: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10.5px;
+  line-height: 1.5;
+  text-align: left;
+  user-select: text;
+}
+
+.euclid-figure-container .figure-caption {
+  font-size: 11px;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-style: italic;
+  color: #71717a;
+  text-align: center;
+  margin-top: 6px;
+}

@@ -17,6 +17,7 @@ Functions
    photon_platform.publish.app.cli
    photon_platform.publish.app.build
    photon_platform.publish.app.test
+   photon_platform.publish.app.folio
 
 
 Module Contents
@@ -35,5 +36,10 @@ Module Contents
 .. py:function:: test(port)
 
    Builds and serves the documentation locally.
+
+
+.. py:function:: folio(host, port, root, title, edition, debug)
+
+   Launches the interactive Folio Review & Vetting web application for resources/.
 
 

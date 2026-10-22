@@ -25,6 +25,7 @@ Functions
 
    photon_platform.publish.images.directive.visit_picture_node
    photon_platform.publish.images.directive.depart_picture_node
+   photon_platform.publish.images.directive.register_standalone_picture
 
 
 Module Contents
@@ -42,7 +43,9 @@ Module Contents
 
    HTML visitor for picture_node.
 
-   Renders a standard <figure> with nested <picture> element.
+   Renders a standard <figure> with nested <picture> element for raster images,
+   or a clean <figure class="photon-picture photon-svg"><img .../></figure> for SVGs
+   and standalone Docutils rendering.
 
    :param self: The translator instance.
    :param node: The picture_node being visited.
@@ -58,10 +61,10 @@ Module Contents
 
 .. py:class:: PictureDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
 
-   Bases: :py:obj:`sphinx.util.docutils.SphinxDirective`
+   Bases: :py:obj:`docutils.parsers.rst.Directive`
 
 
-   Directive for inserting responsive pictures.
+   Directive for inserting responsive pictures and interactive SVG figures.
 
 
    .. py:attribute:: required_arguments
@@ -90,11 +93,23 @@ Module Contents
       Mapping of option names to validator functions.
 
 
+   .. py:property:: env
+      :type: Any
+
+
+      Return the Sphinx BuildEnvironment if running inside Sphinx, else None.
+
+
    .. py:method:: run() -> List[docutils.nodes.Node]
 
-      Process the picture directive.
+      Process the picture directive in either Sphinx or standalone Docutils mode.
 
       :returns: A list containing the picture_node.
 
+
+
+.. py:function:: register_standalone_picture() -> None
+
+   Register picture directive and HTML visitors with standalone Docutils.
 
 

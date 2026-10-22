@@ -1,14 +1,14 @@
 
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-content_root="../../">
 
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Collections &mdash; Project name not set  documentation</title>
   <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../_static/css/styles.css?v=38c7a96b" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/styles.css?v=fe81bde1" />
   <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="../../_static/css/print.css" type="text/css" media="print" />
   <link rel="icon" href="../../_static/favicon.ico" />
@@ -34,10 +34,10 @@
           <a href="../../mission/index.html"  >mission</a>
         </li>
         <li>
-          <a href="../../modules/index.html"  >modules</a>
+          <a href="../index.html"  >usage</a>
         </li>
         <li>
-          <a href="../index.html"  >usage</a>
+          <a href="../../modules/index.html"  >modules</a>
         </li>
         <li>
           <a href="../../log/index.html"  >log</a>
@@ -59,25 +59,25 @@
       </nav>
         <nav class="context">
           <div class="prev">
-             <a href="../colors.html" title="Color Swatches" >Prev</a>
+             <a href="../figures/wide.html" title="wide" >Prev</a>
           </div>
           <div class="next">
             <a href="diagrams.html" title="Diagrams" >Next</a>
           </div>
         </nav>
       </header>
-      <div class="content">
-        <section id="collections">
+      <div class="content body" role="main">
+        <section class="level-1" id="collections">
           <h1>Collections<a class="headerlink" href="#collections" title="Link to this heading">¶</a></h1>
           <p>The <code class="docutils literal notranslate"><span class="pre">collection</span></code> directive is a powerful tool for aggregating and listing content. It allows you to create dynamic indexes of your content based on metadata.</p>
-          <section id="basic-usage">
+          <section class="level-2" id="basic-usage">
           <h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Link to this heading">¶</a></h2>
           <p>To list all pages in the current directory and subdirectories:</p>
           <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">collection</span><span class="p">::</span>
           </pre></div>
           </div>
           </section>
-          <section id="filtering-by-type">
+          <section class="level-2" id="filtering-by-type">
           <h2>Filtering by Type<a class="headerlink" href="#filtering-by-type" title="Link to this heading">¶</a></h2>
           <p>You can filter content by the <code class="docutils literal notranslate"><span class="pre">type</span></code> metadata field. For example, to list only logs:</p>
           <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">collection</span><span class="p">::</span>
@@ -85,7 +85,7 @@
           </pre></div>
           </div>
           </section>
-          <section id="sorting-and-limiting">
+          <section class="level-2" id="sorting-and-limiting">
           <h2>Sorting and Limiting<a class="headerlink" href="#sorting-and-limiting" title="Link to this heading">¶</a></h2>
           <p>You can sort the collection by any metadata field and limit the number of items shown.</p>
           <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">collection</span><span class="p">::</span>
@@ -95,7 +95,7 @@
           </pre></div>
           </div>
           </section>
-          <section id="custom-templates">
+          <section class="level-2" id="custom-templates">
           <h2>Custom Templates<a class="headerlink" href="#custom-templates" title="Link to this heading">¶</a></h2>
           <p>You can specify a custom template to render the collection.</p>
           <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">collection</span><span class="p">::</span>
@@ -103,7 +103,7 @@
           </pre></div>
           </div>
           </section>
-          <section id="example">
+          <section class="level-2" id="example">
           <h2>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h2>
           <p>Here is a live example of a collection listing the most recent logs (if any exist):</p>
               <section class="collection ">
@@ -115,7 +115,7 @@
 
         <nav class="context">
           <div class="prev">
-             <a href="../colors.html" title="Color Swatches" >Prev</a>
+             <a href="../figures/wide.html" title="wide" >Prev</a>
           </div>
           <div class="next">
             <a href="diagrams.html" title="Diagrams" >Next</a>
@@ -125,11 +125,19 @@
     </article>
   </main>
   <div class="asides">
-    <aside>
+    <aside class="aside-search">
       <h3>Search</h3>
-      <div role="search">
-        <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-          <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+      <div id="searchbox" role="search">
+        <form id="rtd-search-form" class="wy-form search-form" action="../../search.html" method="get">
+          <div class="search-field">
+            <input type="search" name="q" placeholder="Search docs..." aria-label="Search docs" autocomplete="off" />
+            <button type="submit" class="search-submit" aria-label="Search" title="Search">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </button>
+          </div>
           <input type="hidden" name="check_keywords" value="yes" />
           <input type="hidden" name="area" value="default" />
         </form>
@@ -166,8 +174,8 @@
         <li><a href="../../about.html">About</a></li>
         <li><a href="../../connect.html">Connect</a></li>
         <li><a href="../../changelog.html">Changelog</a></li>
-        <li><a href="../../todos/index.html">todos</a></li>
         <li><a href="../../glossary.html">Glossary</a></li>
+        <li><a href="../../todos/index.html">todos</a></li>
         <li><a href="../../orphan.html">Orphan Page</a></li>
       </ul>
     </div>
@@ -185,6 +193,8 @@
   <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../_static/js/collection_controls.js?v=b6b5297a"></script>
+  <script src="../../_static/js/geometor_interactive.js?v=20b4c21a"></script>
+  <script src="../../_static/js/search_highlight.js"></script>
 
 </body>
 </html>
