@@ -62,7 +62,14 @@ class ReviewManager:
             "updated_at": None,
             "reviewer": None,
         }
-        return self._reviews.get(key, default_record)
+        if key in self._reviews:
+            return self._reviews[key]
+        if folio.isdigit():
+            folio = f"{int(folio):04d}"
+        legacy_key = f"volume_I:{folio}"
+        if legacy_key in self._reviews:
+            return self._reviews[legacy_key]
+        return default_record
 
     def set_review(
         self,

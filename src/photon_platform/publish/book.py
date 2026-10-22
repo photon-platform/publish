@@ -286,12 +286,10 @@ def resolve_book_context(
 
     tracks = detect_companion_tracks(env, pagename)
 
-    has_inline_track_nav = False
     if doctree is not None and nodes is not None and hasattr(doctree, "traverse"):
-        for node in doctree.traverse(nodes.container):
-            if "track-nav" in node.get("classes", []):
-                has_inline_track_nav = True
-                break
+        for node in list(doctree.traverse(nodes.container)):
+            if "track-nav" in node.get("classes", []) and node.parent is not None:
+                node.parent.remove(node)
 
     return {
         "is_book_page": True,
@@ -305,7 +303,6 @@ def resolve_book_context(
         "book": book_num,
         "volume": volume,
         "book_tracks": tracks,
-        "has_inline_track_nav": has_inline_track_nav,
     }
 
 

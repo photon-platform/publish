@@ -168,13 +168,24 @@ def _has_volume_dirs(directory: Path) -> bool:
         return False
 
 
-def discover_edition_root(root_path: Optional[Path] = None) -> Path:
-    """Locate the edition root directory containing `volume_*` folders inside `resources/`.
+def _has_folio_pngs(directory: Path) -> bool:
+    """Return True if `directory` or its subdirectories contain 4-digit `<NNNN>.png` folio scans."""
+    if not directory.is_dir():
+        return False
+    try:
+        return any(
+            re.match(r"^\d{4}\.png$", p.name)
+            for p in directory.rglob("[0-9][0-9][0-9][0-9].png")
+        )
+    except OSError:
+        return False
 
-    Never inspects `docsrc/`. Supports:
-    1. A direct edition path (e.g. `resources/heath` or `/path/to/repo/resources/heath`).
-    2. A `resources/` directory containing an edition subfolder (e.g. `resources/`).
-    3. A repository root containing `resources/<edition>/volume_*` or `resources/volume_*`.
+
+def discover_edition_root(root_path: Optional[Path] = None) -> Path:
+    """Locate the edition or book root directory inside `resources/`.
+
+    Never inspects `docsrc/`. Supports both multi-volume editions (`volume_*`)
+    and single-volume book directories (`resources/<book>/`) containing folio PNGs.
     """
     base = Path(root_path).resolve() if root_path is not None else Path.cwd().resolve()
 
@@ -187,7 +198,7 @@ def discover_edition_root(root_path: Optional[Path] = None) -> Path:
     if resources_dir.is_dir():
         if _has_volume_dirs(resources_dir):
             return resources_dir
-        candidates = sorted(
+        vol_candidates = sorted(
             [
                 d
                 for d in resources_dir.iterdir()
@@ -195,12 +206,27 @@ def discover_edition_root(root_path: Optional[Path] = None) -> Path:
             ],
             key=lambda p: p.name,
         )
-        if candidates:
-            return candidates[0]
+        if vol_candidates:
+            return vol_candidates[0]
+        book_candidates = sorted(
+            [
+                d
+                for d in resources_dir.iterdir()
+                if d.is_dir() and not d.name.startswith(".") and _has_folio_pngs(d)
+            ],
+            key=lambda p: p.name,
+        )
+        if book_candidates:
+            return book_candidates[0]
 
-    # Case 3: `base` is `resources/` or parent of an edition directory
+    # Case 3: `base` itself is a book directory (not repo root or `resources`) with folio PNGs
+    if base.is_dir() and base.name != "resources" and not (base / "resources").is_dir():
+        if _has_folio_pngs(base):
+            return base
+
+    # Case 4: `base` is `resources/` or parent of an edition/book directory
     if base.is_dir():
-        candidates = sorted(
+        vol_candidates = sorted(
             [
                 d
                 for d in base.iterdir()
@@ -211,8 +237,21 @@ def discover_edition_root(root_path: Optional[Path] = None) -> Path:
             ],
             key=lambda p: p.name,
         )
-        if candidates:
-            return candidates[0]
+        if vol_candidates:
+            return vol_candidates[0]
+        book_candidates = sorted(
+            [
+                d
+                for d in base.iterdir()
+                if d.is_dir()
+                and d.name != "docsrc"
+                and not d.name.startswith(".")
+                and _has_folio_pngs(d)
+            ],
+            key=lambda p: p.name,
+        )
+        if book_candidates:
+            return book_candidates[0]
 
     # Fallback: return `resources_dir` if it exists, otherwise `base`
     return resources_dir if resources_dir.is_dir() else base
@@ -252,31 +291,61 @@ def infer_project_and_edition(
 
 
 class FolioScanner:
-    """Scans `volume_*` directories under an edition root and indexes all folio assets."""
+    """Scans `volume_*` or book directories under an edition root and indexes all folio assets."""
 
     def __init__(self, root_dir: Optional[Path] = None):
         self.root_dir = discover_edition_root(root_dir)
         self._cache: Optional[List[Dict[str, Any]]] = None
         self._by_key: Dict[str, Dict[str, Any]] = {}
 
+    def _get_volume_dir(self, vol_name: str) -> Path:
+        """Resolve the filesystem directory for a volume or single-book identifier."""
+        candidate = self.root_dir / vol_name
+        if candidate.exists() and (candidate.is_dir() or candidate.is_symlink()):
+            return candidate
+        if vol_name == self.root_dir.name or not _has_volume_dirs(self.root_dir):
+            return self.root_dir
+        return candidate
+
     @property
     def volumes(self) -> List[Dict[str, str]]:
-        """Discover `volume_*` directories dynamically in canonical order."""
+        """Discover `volume_*` directories dynamically, or treat the book directory itself as the unit."""
         if not self.root_dir.exists():
             return []
         found: List[Path] = []
         for child in self.root_dir.iterdir():
             if (child.is_dir() or child.is_symlink()) and child.name.startswith("volume_"):
                 found.append(child)
-        found.sort(key=lambda p: (ROMAN_ORDER.get(p.name, 999), p.name))
-        result = []
-        for p in found:
-            suffix = p.name.replace("volume_", "")
-            result.append({"name": p.name, "label": f"Volume {suffix}"})
-        return result
+        if found:
+            found.sort(key=lambda p: (ROMAN_ORDER.get(p.name, 999), p.name))
+            result = []
+            for p in found:
+                suffix = p.name.replace("volume_", "")
+                result.append({"name": p.name, "label": f"Volume {suffix}"})
+            return result
+
+        if self.root_dir.name == "resources":
+            books = sorted(
+                [
+                    child
+                    for child in self.root_dir.iterdir()
+                    if child.is_dir() and not child.name.startswith(".") and _has_folio_pngs(child)
+                ],
+                key=lambda p: p.name,
+            )
+            return [{"name": b.name, "label": b.name.replace("_", " ").title()} for b in books]
+
+        if _has_folio_pngs(self.root_dir):
+            return [
+                {
+                    "name": self.root_dir.name,
+                    "label": self.root_dir.name.replace("_", " ").title(),
+                }
+            ]
+        return []
 
     def scan(self, force: bool = False) -> List[Dict[str, Any]]:
-        """Scan all volumes and return sorted list of folio metadata dicts."""
+        """Scan all volumes/books and return sorted list of folio metadata dicts."""
         if self._cache is not None and not force:
             return self._cache
 
@@ -286,7 +355,7 @@ class FolioScanner:
         for vol_info in self.volumes:
             vol_name = vol_info["name"]
             vol_label = vol_info["label"]
-            vol_dir = self.root_dir / vol_name
+            vol_dir = self._get_volume_dir(vol_name)
             if not vol_dir.exists():
                 continue
 
@@ -479,15 +548,20 @@ class FolioScanner:
             folio = f"{int(folio):04d}"
         key = f"{volume}:{folio}"
         base_info = self._by_key.get(key)
+        if not base_info and len(self.volumes) == 1:
+            base_info = self._by_key.get(f"{self.volumes[0]['name']}:{folio}")
         if not base_info:
             self.scan(force=True)
             base_info = self._by_key.get(key)
+            if not base_info and len(self.volumes) == 1:
+                base_info = self._by_key.get(f"{self.volumes[0]['name']}:{folio}")
             if not base_info:
                 return None
 
         res = dict(base_info)
         rel_dir = res["rel_dir"]
-        full_parent = (self.root_dir / res["volume"] / rel_dir) if rel_dir else (self.root_dir / res["volume"])
+        vol_dir = self._get_volume_dir(res["volume"])
+        full_parent = (vol_dir / rel_dir) if rel_dir else vol_dir
 
         rst_path = full_parent / f"{folio}.rst"
         md_path = full_parent / f"{folio}.md"
@@ -758,8 +832,9 @@ class FolioScanner:
         if folio.isdigit():
             folio = f"{int(folio):04d}"
         key = f"{volume}:{folio}"
+        fallback_key = f"{self.volumes[0]['name']}:{folio}" if len(self.volumes) == 1 else key
         for idx, item in enumerate(folios):
-            if item["key"] == key:
+            if item["key"] in (key, fallback_key):
                 prev_item = folios[idx - 1] if idx > 0 else None
                 next_item = folios[idx + 1] if idx < len(folios) - 1 else None
                 return prev_item, next_item

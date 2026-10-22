@@ -386,7 +386,7 @@
             ${f.folio}
           </td>
           <td class="py-2.5 px-3 text-zinc-600 dark:text-zinc-400">
-            ${f.volume.replace('volume_', 'Vol ')}
+            ${f.volume.startsWith('volume_') ? f.volume.replace('volume_', 'Vol ') : (f.volume_label || f.volume)}
           </td>
           <td class="py-2.5 px-3 font-mono text-zinc-600 dark:text-zinc-400">
             ${f.page || '-'}

@@ -12,40 +12,69 @@
             <span class="book-subtitle">&middot; {{ book_subtitle }}</span>
 {%- endif %}
           </div>
+{%- if canonical_id or folio %}
           <div class="book-header-badges">
-{%- if canonical_id %}
+{%-   if canonical_id %}
             <span class="book-badge canonical-badge">{{ canonical_id }}</span>
-{%- endif %}
-{%- if folio %}
+{%-   endif %}
+{%-   if folio %}
             <span class="book-badge folio-badge">Folio {{ folio }}{% if page %} | p. {{ page }}{% endif %}</span>
+{%-   endif %}
+          </div>
+{%- endif %}
+        </div>
+        <div class="book-header-nav">
+          <div class="book-nav-prev">
+{%- if prev %}
+            <a class="book-nav-btn" href="{{ prev.link|e }}" title="{{ prev.title|striptags|e }}">&larr; <span class="nav-label">Prev</span></a>
+{%- endif %}
+          </div>
+          <div class="book-nav-center">
+{%- if title and pagename != book_root %}
+            <div class="book-doc-title">{{ title|striptags }}</div>
+{%- endif %}
+{%- if book_tracks %}
+            <nav class="book-tracks-nav" aria-label="Document Tracks">
+{%-   for tr in book_tracks %}
+{%-     if not loop.first %}
+              <span class="book-track-sep">&middot;</span>
+{%-     endif %}
+{%-     if tr.active %}
+              <strong class="book-track-item is-active" aria-current="page">{{ tr.label }}</strong>
+{%-     else %}
+              <a class="book-track-item" href="{{ pathto(tr.docname) }}">{{ tr.label }}</a>
+{%-     endif %}
+{%-   endfor %}
+            </nav>
+{%- endif %}
+          </div>
+          <div class="book-nav-next">
+{%- if next %}
+            <a class="book-nav-btn" href="{{ next.link|e }}" title="{{ next.title|striptags|e }}"><span class="nav-label">Next</span> &rarr;</a>
 {%- endif %}
           </div>
         </div>
-        <div class="book-header-nav">
-{% include "article/_nav_breadcrumbs.html" %}
-{% include "article/_nav_prev_next.html" %}
-        </div>
-{%- if book_tracks and not has_inline_track_nav %}
-        <nav class="track-nav" aria-label="Document Tracks">
-{%-   for tr in book_tracks %}
-{%-     if not loop.first %}
-          <span class="track-sep">&middot;</span>
-{%-     endif %}
-{%-     if tr.active %}
-          <strong class="track-item is-active" aria-current="page">{{ tr.label }}</strong>
-{%-     else %}
-          <a class="track-item" href="{{ pathto(tr.docname) }}">{{ tr.label }}</a>
-{%-     endif %}
-{%-   endfor %}
-        </nav>
-{%- endif %}
       </header>
-      <div class="content book-content folio-book-page">
+      <div class="content body book-content folio-book-page" role="main">
         {{ body | indent(8) }}
       </div>
       <footer class="book-footer">
-{% include "article/_nav_meta.html" %}
-{% include "article/_nav_prev_next.html" %}
+        <div class="book-footer-ornament">&#10086;</div>
+        <div class="book-footer-nav">
+          <div class="book-nav-prev">
+{%- if prev %}
+            <a class="book-nav-btn" href="{{ prev.link|e }}" title="{{ prev.title|striptags|e }}">&larr; <span class="nav-label">{{ prev.title|striptags }}</span></a>
+{%- endif %}
+          </div>
+          <div class="book-nav-center">
+            <a class="book-toc-link" href="{{ pathto(book_root|default(master_doc)) }}">{{ book_title|default(docstitle) }}</a>
+          </div>
+          <div class="book-nav-next">
+{%- if next %}
+            <a class="book-nav-btn" href="{{ next.link|e }}" title="{{ next.title|striptags|e }}"><span class="nav-label">{{ next.title|striptags }}</span> &rarr;</a>
+{%- endif %}
+          </div>
+        </div>
       </footer>
     </article>
 {%- endblock %}

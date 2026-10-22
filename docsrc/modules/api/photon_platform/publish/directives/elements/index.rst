@@ -9,6 +9,14 @@ photon_platform.publish.directives.elements
 
 
 
+Attributes
+----------
+
+.. autoapisummary::
+
+   photon_platform.publish.directives.elements.FIXED_SECTION_LEVELS
+
+
 Classes
 -------
 
@@ -57,6 +65,7 @@ Functions
    photon_platform.publish.directives.elements.depart_scholium_node
    photon_platform.publish.directives.elements.visit_folio_node
    photon_platform.publish.directives.elements.depart_folio_node
+   photon_platform.publish.directives.elements.install_fixed_section_levels
    photon_platform.publish.directives.elements.register_standalone_directives
    photon_platform.publish.directives.elements.setup
 
@@ -471,13 +480,21 @@ Module Contents
 
 
 
+.. py:data:: FIXED_SECTION_LEVELS
+   :type:  Dict[str, int]
+
+.. py:function:: install_fixed_section_levels(custom_levels: Optional[Dict[str, int]] = None) -> None
+
+   Install fixed underline-character to heading-level mapping into Docutils and Sphinx.
+
+
 .. py:function:: register_standalone_directives() -> None
 
-   Register directives and HTML node visitors with standalone Docutils.
+   Register directives, fixed section levels, and HTML node visitors with standalone Docutils.
 
 
 .. py:function:: setup(app: Any) -> Dict[str, Any]
 
-   Register elements directives and nodes with Sphinx.
+   Register elements directives, fixed section levels, and nodes with Sphinx.
 
 

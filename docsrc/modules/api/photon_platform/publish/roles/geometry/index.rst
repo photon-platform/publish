@@ -17,6 +17,9 @@ Classes
    photon_platform.publish.roles.geometry.geom_ref_node
    photon_platform.publish.roles.geometry.just_ref_node
    photon_platform.publish.roles.geometry.line_num_node
+   photon_platform.publish.roles.geometry.cite_ref_node
+   photon_platform.publish.roles.geometry.term_ref_node
+   photon_platform.publish.roles.geometry.person_ref_node
 
 
 Functions
@@ -34,6 +37,17 @@ Functions
    photon_platform.publish.roles.geometry.depart_line_num_node
    photon_platform.publish.roles.geometry.g_role
    photon_platform.publish.roles.geometry.just_role
+   photon_platform.publish.roles.geometry.format_inline_emphasis_html
+   photon_platform.publish.roles.geometry.parse_display_target
+   photon_platform.publish.roles.geometry.visit_cite_ref_node
+   photon_platform.publish.roles.geometry.depart_cite_ref_node
+   photon_platform.publish.roles.geometry.visit_term_ref_node
+   photon_platform.publish.roles.geometry.depart_term_ref_node
+   photon_platform.publish.roles.geometry.visit_person_ref_node
+   photon_platform.publish.roles.geometry.depart_person_ref_node
+   photon_platform.publish.roles.geometry.cite_role
+   photon_platform.publish.roles.geometry.term_role
+   photon_platform.publish.roles.geometry.person_role
    photon_platform.publish.roles.geometry.line_role
    photon_platform.publish.roles.geometry.register_standalone_roles
    photon_platform.publish.roles.geometry.setup
@@ -122,6 +136,85 @@ Module Contents
    Role `:just:` for proposition step justifications and dependency recording.
 
 
+.. py:function:: format_inline_emphasis_html(text: str) -> str
+
+   Escape HTML and convert ``**bold**`` and ``*italic*`` spans into ``<strong>`` and ``<em>``.
+
+
+.. py:function:: parse_display_target(raw_content: str) -> Tuple[str, str]
+
+   Parse ``display <target>`` or bare ``display`` into ``(display, target)``.
+
+
+.. py:class:: cite_ref_node(rawsource: str = '', text: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.Inline`, :py:obj:`docutils.nodes.TextElement`
+
+
+   Inline AST node for bibliographic/locus citations (:cite:).
+
+
+.. py:class:: term_ref_node(rawsource: str = '', text: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.Inline`, :py:obj:`docutils.nodes.TextElement`
+
+
+   Inline AST node for foreign/glossary terms (:term:).
+
+
+.. py:class:: person_ref_node(rawsource: str = '', text: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.Inline`, :py:obj:`docutils.nodes.TextElement`
+
+
+   Inline AST node for historical/scholarly person references (:person:).
+
+
+.. py:function:: visit_cite_ref_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for cite_ref_node.
+
+
+.. py:function:: depart_cite_ref_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for cite_ref_node.
+
+
+.. py:function:: visit_term_ref_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for term_ref_node.
+
+
+.. py:function:: depart_term_ref_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for term_ref_node.
+
+
+.. py:function:: visit_person_ref_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for person_ref_node.
+
+
+.. py:function:: depart_person_ref_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for person_ref_node.
+
+
+.. py:function:: cite_role(name: str, rawtext: str, text: str, lineno: int, inliner: Any, options: Optional[Dict[str, Any]] = None, content: Optional[List[str]] = None) -> Tuple[List[docutils.nodes.Node], List[docutils.nodes.system_message]]
+
+   Role `:cite:` for bibliographic and locus citations.
+
+
+.. py:function:: term_role(name: str, rawtext: str, text: str, lineno: int, inliner: Any, options: Optional[Dict[str, Any]] = None, content: Optional[List[str]] = None) -> Tuple[List[docutils.nodes.Node], List[docutils.nodes.system_message]]
+
+   Role `:term:` for glossary and foreign philosophical/mathematical terms.
+
+
+.. py:function:: person_role(name: str, rawtext: str, text: str, lineno: int, inliner: Any, options: Optional[Dict[str, Any]] = None, content: Optional[List[str]] = None) -> Tuple[List[docutils.nodes.Node], List[docutils.nodes.system_message]]
+
+   Role `:person:` for historical mathematicians, philosophers, and commentators.
+
+
 .. py:function:: line_role(name: str, rawtext: str, text: str, lineno: int, inliner: Any, options: Optional[Dict[str, Any]] = None, content: Optional[List[str]] = None) -> Tuple[List[docutils.nodes.Node], List[docutils.nodes.system_message]]
 
    Role `:line:` for diplomatic line numbers.
@@ -134,6 +227,6 @@ Module Contents
 
 .. py:function:: setup(app: Any) -> Dict[str, Any]
 
-   Register geometry roles and nodes with Sphinx.
+   Register geometry and scholarly roles and nodes with Sphinx.
 
 

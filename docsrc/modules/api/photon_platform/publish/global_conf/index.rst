@@ -24,6 +24,7 @@ Attributes
    photon_platform.publish.global_conf.potential_path
    photon_platform.publish.global_conf.autoapi_dirs
    photon_platform.publish.global_conf.pyproject_data
+   photon_platform.publish.global_conf.autoapi_ignore
    photon_platform.publish.global_conf.autoapi_options
    photon_platform.publish.global_conf.autoapi_root
    photon_platform.publish.global_conf.autoapi_python_use_implicit_namespaces
@@ -44,6 +45,7 @@ Attributes
    photon_platform.publish.global_conf.html_logo
    photon_platform.publish.global_conf.autodoc_default_options
    photon_platform.publish.global_conf.html_permalinks
+   photon_platform.publish.global_conf.rst_fixed_section_levels
 
 
 Functions
@@ -94,6 +96,10 @@ Module Contents
 .. py:data:: autoapi_dirs
 
 .. py:data:: pyproject_data
+
+.. py:data:: autoapi_ignore
+   :value: ['*migrations*', '*venv*', '*.venv*', '*tests*', '*/conf.py', '*scripts*']
+
 
 .. py:data:: autoapi_options
    :value: ['members', 'undoc-members', 'show-inheritance', 'show-module-summary', 'special-members',...
@@ -164,4 +170,6 @@ Module Contents
 .. py:data:: html_permalinks
    :value: True
 
+
+.. py:data:: rst_fixed_section_levels
 

@@ -9,33 +9,51 @@
 {% set display_vcs_links = False %}
 
 {% block body %}
-  <noscript>
-    <div id="fallback" class="admonition warning">
-      <p class="last">
-        {% trans trimmed %}Please activate JavaScript to enable the search functionality.{% endtrans %}
-      </p>
+  <article class="search-page">
+    <div class="content body" role="main">
+      <noscript>
+        <div id="fallback" class="admonition warning">
+          <p class="last">
+            {% trans trimmed %}Please activate JavaScript to enable the search functionality.{% endtrans %}
+          </p>
+        </div>
+      </noscript>
+
+      <form class="search-form search-page-form" action="{{ pathto('search') }}" method="get" role="search">
+        <div class="search-field">
+          <input type="search" name="q" placeholder="{{ _('Search documentation...') }}" aria-label="{{ _('Search documentation') }}" autocomplete="off" />
+          <button type="submit" class="search-submit" aria-label="{{ _('Search') }}" title="{{ _('Search') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+
+      <div id="search-progress"></div>
+
+      <div id="search-results">
+        {#- This is where the JavaScript will inject the results -#}
+      </div>
     </div>
-  </noscript>
-
-  <h2>{{ _('Search Results') }}</h2>
-
-  <div id="search-results">
-    {#- This is where the JavaScript will inject the results -#}
-  </div>
+  </article>
 {% endblock %}
 
 {% block scripts %}
-  {{ super() }} {#- This is crucial! It includes all scripts from layout.html (like jQuery) first -#}
+  {{ super() }}
 
   {#- The search page requires these specific scripts -#}
   <script src="{{ pathto('_static/searchtools.js', 1) }}"></script>
   <script src="{{ pathto('_static/language_data.js', 1) }}"></script>
 
-  {#- Now we can initialize the search -#}
   <script>
-    jQuery(function() {
+    if (window.PhotonSearch) {
+      window.PhotonSearch.initSearchPage("{{ pathto('searchindex.js', 1) }}");
+    } else {
       Search.loadIndex("{{ pathto('searchindex.js', 1) }}");
-      Search.init();
-    });
+    }
   </script>
 {% endblock %}

@@ -20,7 +20,9 @@ Submodules
 
    /modules/api/photon_platform/publish/__main__/index
    /modules/api/photon_platform/publish/app/index
+   /modules/api/photon_platform/publish/book/index
    /modules/api/photon_platform/publish/directives/index
+   /modules/api/photon_platform/publish/folio_review/index
    /modules/api/photon_platform/publish/global_conf/index
    /modules/api/photon_platform/publish/images/index
    /modules/api/photon_platform/publish/publish/index

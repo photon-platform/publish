@@ -61,6 +61,25 @@ def _standalone_ref_role(
     return [nodes.raw(rawtext, raw_html, format="html")], []
 
 
+def _standalone_fnref_role(
+    name: str,
+    rawtext: str,
+    text: str,
+    lineno: int,
+    inliner: Any,
+    options: Optional[Dict[str, Any]] = None,
+    content: Optional[List[str]] = None,
+) -> Tuple[List[Any], List[Any]]:
+    """Standalone footnote reference role for multi-folio propositions where the footnote body is on the next folio."""
+    num = utils.unescape(text, restore_backslashes=True).strip()
+    esc = html.escape(num, quote=True)
+    raw_html = (
+        f'<a class="footnote-reference brackets" href="#fn-{esc}" role="doc-noteref">'
+        f'<span class="fn-bracket">[</span>{esc}<span class="fn-bracket">]</span></a>'
+    )
+    return [nodes.raw(rawtext, raw_html, format="html")], []
+
+
 def ensure_standalone_extensions() -> None:
     """Ensure all publish directives and roles are registered with Docutils."""
     global _REGISTERED
@@ -70,6 +89,7 @@ def ensure_standalone_extensions() -> None:
     register_standalone_roles()
     register_standalone_picture()
     roles.register_local_role("ref", _standalone_ref_role)
+    roles.register_local_role("fnref", _standalone_fnref_role)
     _REGISTERED = True
 
 
@@ -209,16 +229,31 @@ def _fallback_render_rst(body_rst: str) -> str:
 def _normalize_standalone_rst(rst_body: str) -> str:
     """Normalize standalone folio RST before passing to Docutils.
 
-    1. Convert ``[#fN]_`` and ``.. [#fN]`` to explicit ``[N]_`` and ``.. [N]`` so
-       each folio displays its actual printed footnote number (e.g. 7, 8) instead
-       of restarting at 1 on every page.
+    1. Convert ``[#fN]_`` (and ``[#f<page>_<N>]_``) and ``.. [#fN]`` to explicit
+       ``[N]_`` and ``.. [N]`` when defined on the same folio, or ``:fnref:`N```
+       when the footnote definition resides on a continuation folio.
     2. Escape initial name/title abbreviations at the start of a paragraph
        (e.g. ``F. Klein``, ``S. Thomas``, ``P. HOENEN``, ``cl. Poincaré``) when not
        followed by a section underline, preventing Docutils from parsing the initial
        as an ``<ol>`` list marker.
     """
-    rst_body = re.sub(r"\[#f(\d+)\]_", r"[\1]_", rst_body)
-    rst_body = re.sub(r"^(\.\.\s+)\[#f(\d+)\]", r"\1[\2]", rst_body, flags=re.M)
+    defined_nums = set(
+        m.group(1)
+        for m in re.finditer(r"^\.\.\s+\[#f(?:\d+_)?(\d+)\]", rst_body, flags=re.M)
+    )
+    rst_body = re.sub(r"^(\.\.\s+)\[#f(?:\d+_)?(\d+)\]", r"\1[\2]", rst_body, flags=re.M)
+
+    def _replace_fn_ref(match: re.Match) -> str:
+        prefix = match.group(1)
+        num = match.group(2)
+        if num in defined_nums:
+            return f"{prefix}[{num}]_"
+        # Cross-folio footnote reference
+        if prefix and not prefix.endswith((" ", "\t", "\n")):
+            return f"{prefix}\\ :fnref:`{num}`"
+        return f"{prefix}:fnref:`{num}`"
+
+    rst_body = re.sub(r"(^|.)\[#f(?:\d+_)?(\d+)\]_", _replace_fn_ref, rst_body, flags=re.M)
 
     lines = rst_body.splitlines()
     adornment_re = re.compile(r"^([=!~^\"'`#*+\-_])\1{2,}\s*$")

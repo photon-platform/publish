@@ -178,7 +178,7 @@
 {% block nav_breadcrumbs %}
 <div class="hidden sm:flex items-center space-x-1.5 text-xs text-zinc-400">
   <span>/</span>
-  <a href="/?volume={{ folio.volume }}" class="hover:text-zinc-600 dark:hover:text-zinc-200">{{ folio.volume.replace('volume_', 'Vol ') }}</a>
+  <a href="/?volume={{ folio.volume }}" class="hover:text-zinc-600 dark:hover:text-zinc-200">{{ folio.volume.replace('volume_', 'Vol ') if folio.volume.startswith('volume_') else folio.volume_label }}</a>
   <span>/</span>
   <span class="text-zinc-500 font-mono">{{ folio.section_path }}</span>
   <span>/</span>

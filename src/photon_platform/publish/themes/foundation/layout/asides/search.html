@@ -1,7 +1,15 @@
 {%- if 'singlehtml' not in builder %}
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="{{ pathto('search') }}" method="get">
-    <input type="text" name="q" placeholder="{{ _('Search docs') }}" aria-label="{{ _('Search docs') }}" />
+<div id="searchbox" role="search">
+  <form id="rtd-search-form" class="wy-form search-form" action="{{ pathto('search') }}" method="get">
+    <div class="search-field">
+      <input type="search" name="q" placeholder="{{ _('Search docs...') }}" aria-label="{{ _('Search docs') }}" autocomplete="off" />
+      <button type="submit" class="search-submit" aria-label="{{ _('Search') }}" title="{{ _('Search') }}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+    </div>
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>

@@ -132,10 +132,25 @@ if project_root and pyproject_path:
         
         # Extract package configuration
         find_config = pyproject_data.get('tool', {}).get('setuptools', {}).get('packages', {}).get('find', {})
-        where = find_config.get('where', ['.'])[0]
+        default_where = ['src'] if os.path.isdir(os.path.join(project_root, 'src')) else ['.']
+        where = find_config.get('where', default_where)[0]
         include = find_config.get('include', ['*'])[0]
+        if include == '*':
+            flit_name = pyproject_data.get('tool', {}).get('flit', {}).get('module', {}).get('name')
+            if flit_name:
+                include = flit_name.split('.')[0]
         
         src_path = os.path.join(project_root, where)
+        if include == '*' and os.path.isdir(src_path):
+            subdirs = [
+                d for d in os.listdir(src_path)
+                if os.path.isdir(os.path.join(src_path, d))
+                and not d.startswith('.')
+                and not d.endswith('.egg-info')
+                and d != '__pycache__'
+            ]
+            if len(subdirs) == 1:
+                include = subdirs[0]
         
         # Add src to sys.path so that modules can be imported
         if src_path not in sys.path:
@@ -151,6 +166,15 @@ if project_root and pyproject_path:
             
     except Exception as e:
         print(f"Warning: Error parsing pyproject.toml for AutoAPI config: {e}")
+
+autoapi_ignore = [
+    '*migrations*',
+    '*venv*',
+    '*.venv*',
+    '*tests*',
+    '*/conf.py',
+    '*scripts*',
+]
 
 autoapi_options = [
     'members',

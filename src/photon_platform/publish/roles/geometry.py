@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import html
+import json
 import re
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from docutils import nodes, utils
@@ -184,15 +186,136 @@ class person_ref_node(nodes.Inline, nodes.TextElement):
     """Inline AST node for historical/scholarly person references (:person:)."""
 
 
+def _apparatus_slug(key: str) -> str:
+    """Create a deterministic anchor slug for a citation, person, or glossary term key."""
+    return re.sub(r"[^a-z0-9]+", "-", (key or "").lower()).strip("-")
+
+
+def _load_book_apparatus(env: Any, book_slug: str) -> Dict[str, Dict[str, Any]]:
+    """Load and cache citations.json, persons.json, and glossary.json for a book if available."""
+    cache_attr = "_photon_apparatus_cache"
+    cache = getattr(env, cache_attr, None)
+    if cache is None:
+        cache = {}
+        setattr(env, cache_attr, cache)
+    if book_slug in cache:
+        return cache[book_slug]
+
+    registries: Dict[str, Dict[str, Any]] = {"cite": {}, "person": {}, "term": {}}
+    srcdir = Path(getattr(env, "srcdir", "."))
+    candidates = [
+        srcdir.parent / "resources" / book_slug,
+        srcdir / book_slug,
+        srcdir.parent / "resources",
+    ]
+    file_map = {"cite": "citations.json", "person": "persons.json", "term": "glossary.json"}
+    for kind, fname in file_map.items():
+        for base in candidates:
+            fpath = base / fname
+            if fpath.is_file():
+                try:
+                    registries[kind] = json.loads(fpath.read_text(encoding="utf-8"))
+                except Exception:
+                    pass
+                break
+
+    cache[book_slug] = registries
+    return registries
+
+
+def _resolve_apparatus_link(
+    translator: Any, role_type: str, target: str
+) -> Tuple[Optional[str], Optional[str], str]:
+    """Return (href, occ_id, title_text) for :cite:, :person:, or :term: nodes."""
+    slug = _apparatus_slug(target)
+    default_labels = {"cite": "Citation", "person": "Person", "term": "Term"}
+    title_text = f"{default_labels.get(role_type, 'Ref')}: {target}"
+
+    builder = getattr(translator, "builder", None)
+    if builder is None:
+        return None, None, title_text
+
+    current_docname = getattr(builder, "current_docname", "") or ""
+    env = getattr(builder, "env", None)
+    found_docs = getattr(env, "found_docs", set()) if env is not None else set()
+
+    first_seg = current_docname.split("/")[0] if "/" in current_docname else ""
+    doc_targets = {"cite": "bibliography", "person": "persons", "term": "glossary"}
+    anchor_prefixes = {"cite": "cite", "person": "person", "term": "term"}
+    base_doc = doc_targets.get(role_type, "bibliography")
+    anchor_prefix = anchor_prefixes.get(role_type, role_type)
+
+    target_doc = None
+    if first_seg and f"{first_seg}/{base_doc}" in found_docs:
+        target_doc = f"{first_seg}/{base_doc}"
+    elif base_doc in found_docs:
+        target_doc = base_doc
+    elif first_seg:
+        target_doc = f"{first_seg}/{base_doc}"
+
+    href = None
+    if target_doc and hasattr(builder, "get_relative_uri"):
+        try:
+            rel_uri = builder.get_relative_uri(current_docname, target_doc)
+            href = f"{rel_uri}#{anchor_prefix}-{slug}"
+        except Exception:
+            href = None
+
+    # Track per-page occurrence counter for back-link targets
+    occ_doc = getattr(translator, "_apparatus_occ_doc", None)
+    if occ_doc != current_docname:
+        translator._apparatus_occ_doc = current_docname
+        translator._apparatus_occ_counts = {}
+    counts: Dict[Tuple[str, str], int] = getattr(translator, "_apparatus_occ_counts", {})
+    key_pair = (role_type, target)
+    counts[key_pair] = counts.get(key_pair, 0) + 1
+    occ_id = f"occ-{role_type}-{slug}-{counts[key_pair]}"
+
+    # Enrich tooltip title from book apparatus registries if available
+    if env is not None:
+        regs = _load_book_apparatus(env, first_seg or "default")
+        entry = regs.get(role_type, {}).get(target)
+        if isinstance(entry, dict):
+            if role_type == "cite":
+                author = entry.get("author", "")
+                work = entry.get("work", "")
+                locus = entry.get("locus", "")
+                parts = [p for p in (author, work, f"({locus})" if locus else "") if p]
+                if parts:
+                    title_text = " — ".join(parts[:2]) + (f" {parts[2]}" if len(parts) > 2 else "")
+            elif role_type == "person":
+                name = entry.get("name", target)
+                dates = entry.get("dates", "")
+                role = entry.get("role", "")
+                head = f"{name} ({dates})" if dates else name
+                title_text = f"{head} — {role}" if role else head
+            elif role_type == "term":
+                hw = entry.get("headword", target)
+                trans = entry.get("translation", "")
+                defn = entry.get("definition", "")
+                head = f"{hw} ({trans})" if trans and trans.lower() != hw.lower() else hw
+                title_text = f"{head}: {defn}" if defn else head
+
+    return href, occ_id, title_text
+
+
 def visit_cite_ref_node(self: Any, node: nodes.Element) -> None:
     """HTML visitor for cite_ref_node."""
     display = str(node.get("display", node.astext()))
     target = str(node.get("ref_target", ""))
     esc_target = html.escape(target, quote=True)
     inner_html = format_inline_emphasis_html(display)
-    self.body.append(
-        f'<span class="citation-ref" data-cite="{esc_target}" title="Citation: {esc_target}">{inner_html}</span>'
-    )
+    href, occ_id, title_text = _resolve_apparatus_link(self, "cite", target)
+    esc_title = html.escape(title_text, quote=True)
+    if href:
+        id_attr = f' id="{html.escape(occ_id, quote=True)}"' if occ_id else ""
+        self.body.append(
+            f'<a class="citation-ref"{id_attr} href="{html.escape(href, quote=True)}" data-cite="{esc_target}" title="{esc_title}">{inner_html}</a>'
+        )
+    else:
+        self.body.append(
+            f'<span class="citation-ref" data-cite="{esc_target}" title="{esc_title}">{inner_html}</span>'
+        )
     raise nodes.SkipNode
 
 
@@ -207,9 +330,17 @@ def visit_term_ref_node(self: Any, node: nodes.Element) -> None:
     target = str(node.get("ref_target", ""))
     esc_target = html.escape(target, quote=True)
     inner_html = format_inline_emphasis_html(display)
-    self.body.append(
-        f'<span class="glossary-term" data-term="{esc_target}" title="Term: {esc_target}">{inner_html}</span>'
-    )
+    href, occ_id, title_text = _resolve_apparatus_link(self, "term", target)
+    esc_title = html.escape(title_text, quote=True)
+    if href:
+        id_attr = f' id="{html.escape(occ_id, quote=True)}"' if occ_id else ""
+        self.body.append(
+            f'<a class="term-ref glossary-term"{id_attr} href="{html.escape(href, quote=True)}" data-term="{esc_target}" title="{esc_title}">{inner_html}</a>'
+        )
+    else:
+        self.body.append(
+            f'<span class="glossary-term" data-term="{esc_target}" title="{esc_title}">{inner_html}</span>'
+        )
     raise nodes.SkipNode
 
 
@@ -224,9 +355,17 @@ def visit_person_ref_node(self: Any, node: nodes.Element) -> None:
     target = str(node.get("ref_target", ""))
     esc_target = html.escape(target, quote=True)
     inner_html = format_inline_emphasis_html(display)
-    self.body.append(
-        f'<span class="person-ref" data-person="{esc_target}" title="Person: {esc_target}">{inner_html}</span>'
-    )
+    href, occ_id, title_text = _resolve_apparatus_link(self, "person", target)
+    esc_title = html.escape(title_text, quote=True)
+    if href:
+        id_attr = f' id="{html.escape(occ_id, quote=True)}"' if occ_id else ""
+        self.body.append(
+            f'<a class="person-ref"{id_attr} href="{html.escape(href, quote=True)}" data-person="{esc_target}" title="{esc_title}">{inner_html}</a>'
+        )
+    else:
+        self.body.append(
+            f'<span class="person-ref" data-person="{esc_target}" title="{esc_title}">{inner_html}</span>'
+        )
     raise nodes.SkipNode
 
 

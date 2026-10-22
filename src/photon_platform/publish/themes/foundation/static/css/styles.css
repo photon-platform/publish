@@ -433,44 +433,43 @@ button {
   display: none;
 }
 
-input[type=text] {
-  --bg: var(--color-key-lighter);
+input[type=text],
+input[type=search] {
   display: block;
-  padding: .4em;
+  box-sizing: border-box;
+  padding: 0.45em 0.75em;
   outline: 0 none;
-  border: 1px solid var(--color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  box-shadow: none;
   text-align: left;
-  color: var(--color);
-  background: var(--bg);
+  color: var(--text-color);
+  background: var(--bg-alt-color);
   appearance: none;
+  font-family: var(--font-primary);
+  font-size: 0.95rem;
+  line-height: 1.4;
   width: 100%;
   max-width: 100%;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
 }
 
-input[type=text]:focus {
-  color: var(--color);
+input[type=text]::placeholder,
+input[type=search]::placeholder {
+  color: var(--color-muted);
+  opacity: 1;
 }
 
-input[type=text]::placeholder {
-  --color: var(--color-key-dark);
+input[type=text]:hover,
+input[type=search]:hover {
+  border-color: color-mix(in oklch, var(--border-color), var(--text-color) 30%);
 }
 
-input[type=search] {
-  --bg: var(--color-key-lighter);
-  display: block;
-  padding: .4em;
-  border: 1px solid var(--border-color);
-  border-radius: 3px;
-  box-shadow: none;
-  font-family: inherit;
-  font-size: 1rem;
-  padding: 0.5rem 1rem;
-  width: 100%;
-}
-
+input[type=text]:focus,
 input[type=search]:focus {
+  color: var(--heading-color);
   border-color: var(--link-color);
-  box-shadow: 0 0 0 3px var(--color-key-light);
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--link-color), transparent 75%);
   outline: none;
 }
 
@@ -510,21 +509,6 @@ label {
   margin-bottom: 0.5rem;
   color: var(--color-key-lighter);
   background: var(--link-color);
-}
-
-input:invalid,
-textarea:invalid,
-select:invalid {
-  background: var(--color-key-light);
-  border-color: var(--color-danger);
-}
-
-input:valid {
-  border-color: var(--color-success);
-}
-
-input:invalid {
-  border-color: var(--color-danger);
 }
 
 button {
@@ -653,452 +637,6 @@ dl.py em.property {
 dl.py dd {
   padding: 1rem 1rem 1rem 2rem;
   margin-left: 0;
-}
-
-/* =========================================================================
-   Geometor Interactive Diagrams & Classical Scriptorium Typography
-   ========================================================================= */
-/* "Website in a Website" Book Codex Layout & Reading Pane */
-article.book-layout,
-article.book-reading-pane {
-  max-width: 72ch;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.book-reading-pane .book-content,
-.folio-book-page {
-  font-family: 'EB Garamond', Georgia, Cambria, 'Times New Roman', serif;
-  line-height: 1.65;
-  hyphens: auto;
-  text-rendering: optimizeLegibility;
-}
-
-.book-header {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  border-bottom: 1px solid rgba(113, 113, 122, 0.25);
-  padding-bottom: 0.75rem;
-  margin-bottom: 1rem;
-}
-
-.book-header-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem 1rem;
-  padding: 0.4rem 0.65rem;
-  border-radius: 6px;
-  background: rgba(113, 113, 122, 0.08);
-  font-size: 0.85rem;
-}
-
-.book-header-identity {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.4rem;
-}
-
-.book-portal-link {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.78rem;
-  opacity: 0.75;
-  text-decoration: none;
-}
-
-.book-portal-link:hover {
-  opacity: 1;
-}
-
-.book-header-sep {
-  opacity: 0.45;
-}
-
-.book-title-link {
-  font-family: 'EB Garamond', Georgia, serif;
-  font-weight: 700;
-  font-size: 1.05rem;
-  letter-spacing: 0.02em;
-  text-decoration: none;
-}
-
-.book-subtitle {
-  font-family: 'EB Garamond', Georgia, serif;
-  font-style: italic;
-  opacity: 0.8;
-}
-
-.book-header-badges {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.book-badge {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.72rem;
-  padding: 0.12rem 0.45rem;
-  border-radius: 4px;
-  border: 1px solid rgba(113, 113, 122, 0.35);
-  background: rgba(113, 113, 122, 0.1);
-}
-
-.book-badge.canonical-badge {
-  font-weight: 700;
-}
-
-/* Sticky Multi-Track Switcher Bar (Hoenen / Euclid / Pacioli) */
-.track-nav,
-div.track-nav {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem 0.5rem;
-  padding: 0.45rem 0.75rem;
-  margin: 0.35rem 0 1rem 0;
-  border-top: 1px solid rgba(113, 113, 122, 0.25);
-  border-bottom: 1px solid rgba(113, 113, 122, 0.25);
-  background: rgba(24, 24, 27, 0.92);
-  backdrop-filter: blur(6px);
-  font-family: 'EB Garamond', Georgia, serif;
-  font-size: 0.95rem;
-  text-align: center;
-}
-
-.track-nav p {
-  margin: 0 !important;
-  text-indent: 0 !important;
-}
-
-.track-nav .track-item,
-.track-nav a {
-  text-decoration: none;
-  padding: 0.1rem 0.35rem;
-  border-radius: 4px;
-  transition: background-color 0.15s ease, color 0.15s ease;
-}
-
-.track-nav .track-item.is-active,
-.track-nav strong {
-  font-weight: 700;
-  border-bottom: 2px solid currentColor;
-}
-
-.track-nav .track-sep {
-  opacity: 0.5;
-}
-
-/* Classical Proposition & Proof Structural Blocks */
-.enunciation {
-  font-style: italic;
-  text-indent: 1.75em;
-  margin-top: 0.5em;
-  margin-bottom: 0.75em;
-  text-align: justify;
-  text-justify: inter-word;
-}
-
-.assertion {
-  text-align: center !important;
-  text-indent: 0 !important;
-  margin-top: 0.35em;
-  margin-bottom: 0.35em;
-  clear: both;
-}
-
-.sub-clause {
-  text-indent: 3.5em !important;
-  margin-top: 0.15em;
-  margin-bottom: 0.15em;
-  text-align: left;
-}
-
-.justification {
-  float: right;
-  text-indent: 0 !important;
-  font-style: normal;
-  font-size: 0.95em;
-  letter-spacing: 0.02em;
-}
-
-.qed {
-  text-align: right;
-  text-indent: 0 !important;
-  margin-top: 0.6em;
-  margin-bottom: 0.6em;
-  padding-right: 1.5em;
-  font-style: normal;
-}
-
-.porism,
-.lemma,
-.scholium {
-  margin: 0.75em 0;
-  padding-left: 1em;
-  border-left: 2px solid rgba(113, 113, 122, 0.35);
-}
-
-.porism-title,
-.lemma-title,
-.scholium-title {
-  font-weight: 700;
-  font-variant: small-caps;
-  letter-spacing: 0.04em;
-  margin-bottom: 0.25em;
-}
-
-.folio-milestone {
-  font-size: 0.75em;
-  color: #71717a;
-  text-align: right;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  margin: 0.4em 0;
-  clear: both;
-}
-
-sup.line-num {
-  font-size: 0.75em;
-  line-height: 0;
-  vertical-align: baseline;
-  position: relative;
-  top: -0.4em;
-  color: #71717a;
-  margin-right: 0.15em;
-}
-
-/* Responsive Side-by-Side / Floating Diagram Layouts */
-figure.photon-picture.diagram-right,
-figure.photon-svg.diagram-right {
-  float: right;
-  clear: right;
-  margin: 0.25em 0 1.25em 1.5em;
-  max-width: 50%;
-}
-
-@media (max-width: 640px) {
-  figure.photon-picture.diagram-right,
-  figure.photon-svg.diagram-right,
-  .euclid-figure-container {
-    float: none;
-    max-width: 100%;
-    margin: 0.75em auto;
-  }
-}
-
-/* Interactive Geometric Text References */
-.geom-ref,
-.geom-interactive-ref,
-.katex.geom-interactive-ref {
-  cursor: pointer;
-  position: relative;
-  border-bottom: 1.5px dotted rgba(220, 38, 38, 0.45);
-  border-radius: 2px;
-  padding: 0 1px;
-  transition: all 0.15s ease-in-out;
-}
-
-.geom-ref:hover,
-.geom-interactive-ref:hover,
-.katex.geom-interactive-ref:hover {
-  border-bottom: 1.5px solid #dc2626 !important;
-}
-
-/* Active Highlight: Turning text RED without glow */
-.geom-highlight-text,
-.geom-highlight-text *,
-.katex.geom-highlight-text,
-.katex.geom-highlight-text * {
-  color: #dc2626 !important;
-  background-color: rgba(239, 68, 68, 0.08) !important;
-  border-radius: 3px;
-  transition: color 0.1s ease-in-out, background-color 0.1s ease-in-out;
-}
-
-/* Hidden/Toggleable Semantic Overlay Elements in SVG */
-svg.euclid-graphic .geom-overlay,
-svg.euclid-graphic #highlights > * {
-  opacity: 0;
-  transition: opacity 0.12s ease, stroke 0.12s ease, fill-opacity 0.12s ease;
-}
-
-/* Active Highlight in SVG: Change color to RED without glow or overstroke */
-svg.euclid-graphic [data-ref]:hover,
-svg.euclid-graphic .highlight,
-svg.euclid-graphic .geom-highlight-active {
-  opacity: 1 !important;
-  stroke: #ef4444 !important;
-  stroke-opacity: 1 !important;
-  filter: none !important;
-  cursor: pointer;
-  transition: opacity 0.1s ease, stroke 0.1s ease;
-}
-
-svg.euclid-graphic polygon:hover,
-svg.euclid-graphic polygon.highlight,
-svg.euclid-graphic polygon.geom-highlight-active,
-svg.euclid-graphic path.polygon.geom-highlight-active,
-svg.euclid-graphic path.geom-polygon.geom-highlight-active,
-svg.euclid-graphic path.wedge.geom-highlight-active,
-svg.euclid-graphic path.angle.geom-highlight-active {
-  opacity: 1 !important;
-  fill: #ef4444 !important;
-  fill-opacity: 0.22 !important;
-  stroke: #ef4444 !important;
-  stroke-opacity: 1 !important;
-  stroke-width: 1.5px !important;
-  filter: none !important;
-}
-
-svg.euclid-graphic circle.geom-point:hover,
-svg.euclid-graphic circle.point:hover,
-svg.euclid-graphic #points circle:hover,
-svg.euclid-graphic circle.geom-point.geom-highlight-active,
-svg.euclid-graphic circle.point.geom-highlight-active,
-svg.euclid-graphic #points circle.geom-highlight-active {
-  opacity: 1 !important;
-  fill: #ef4444 !important;
-  fill-opacity: 1 !important;
-  stroke: none !important;
-  stroke-width: 0 !important;
-  filter: none !important;
-}
-
-svg.euclid-graphic text:hover,
-svg.euclid-graphic text.highlight,
-svg.euclid-graphic text.geom-highlight-active,
-svg.euclid-graphic text.geom-highlight-active *,
-svg.euclid-graphic text.geom-highlight-active tspan,
-svg.euclid-graphic text.geom-label.geom-highlight-active,
-svg.euclid-graphic text.label.geom-highlight-active {
-  opacity: 1 !important;
-  fill: #ef4444 !important;
-  stroke: none !important;
-  stroke-width: 0 !important;
-  filter: none !important;
-}
-
-/* Secondary highlight for endpoints/labels when a segment, angle, or polygon is hovered */
-svg.euclid-graphic .geom-highlight-secondary {
-  opacity: 1 !important;
-  stroke: #ef4444 !important;
-  filter: none !important;
-  transition: opacity 0.1s ease, stroke 0.1s ease, fill 0.1s ease;
-}
-
-svg.euclid-graphic text.geom-highlight-secondary,
-svg.euclid-graphic text.geom-highlight-secondary tspan,
-svg.euclid-graphic tspan.geom-highlight-secondary {
-  opacity: 1 !important;
-  fill: #ef4444 !important;
-  stroke: none !important;
-  stroke-width: 0 !important;
-  filter: none !important;
-}
-
-svg.euclid-graphic circle.geom-point.geom-highlight-secondary,
-svg.euclid-graphic circle.point.geom-highlight-secondary,
-svg.euclid-graphic #points circle.geom-highlight-secondary {
-  opacity: 1 !important;
-  fill: #ef4444 !important;
-  fill-opacity: 1 !important;
-  stroke: none !important;
-  stroke-width: 0 !important;
-  filter: none !important;
-}
-
-/* Inline Figure Wrapper in Book Page */
-.euclid-figure-container {
-  float: right;
-  clear: right;
-  margin: 0.25em 0 1.25em 1.5em;
-  max-width: 52%;
-  background: #ffffff;
-  border: 1px solid #e4e4e7;
-  border-radius: 8px;
-  padding: 8px;
-  box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.08);
-  user-select: none;
-  transition: max-width 0.2s ease;
-}
-
-.euclid-figure-container:hover {
-  border-color: #cbd5e1;
-}
-
-.euclid-figure-container .figure-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 6px;
-  padding-bottom: 4px;
-  border-bottom: 1px solid #f4f4f5;
-}
-
-.euclid-figure-container .figure-btn {
-  font-size: 10px;
-  font-family: ui-sans-serif, system-ui, sans-serif;
-  font-weight: 500;
-  padding: 2px 6px;
-  border-radius: 4px;
-  color: #71717a;
-  background: transparent;
-  transition: all 0.15s ease;
-  border: none;
-  cursor: pointer;
-}
-
-.euclid-figure-container .figure-btn:hover {
-  color: #18181b;
-  background: #f4f4f5;
-}
-
-.euclid-figure-container .figure-btn.active {
-  color: #047857;
-  background: #ecfdf5;
-  font-weight: 600;
-}
-
-.euclid-figure-container.python-mode {
-  min-width: 340px;
-  max-width: 62%;
-}
-
-.euclid-figure-container .figure-svg-wrapper svg {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-.euclid-figure-container .figure-python-wrapper {
-  background: #09090b;
-  color: #e4e4e7;
-  border-radius: 6px;
-  border: 1px solid #27272a;
-  padding: 8px 10px;
-  max-height: 300px;
-  overflow: auto;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 10.5px;
-  line-height: 1.5;
-  text-align: left;
-  user-select: text;
-}
-
-.euclid-figure-container .figure-caption {
-  font-size: 11px;
-  font-family: 'EB Garamond', Georgia, serif;
-  font-style: italic;
-  color: #71717a;
-  text-align: center;
-  margin-top: 6px;
 }
 
 article {
@@ -2045,64 +1583,237 @@ body > .asides > aside {
   margin: var(--fitz);
 }
 
-body .wy-side-nav-search input[type=text] {
+body .highlighted {
+  background: color-mix(in oklch, var(--color-warning), transparent 68%);
+  color: var(--heading-color);
+  border-bottom: 1px solid color-mix(in oklch, var(--color-warning), transparent 30%);
+  padding: 0.05em 0.22em;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+body #searchbox .search-field,
+body .aside-search .search-field,
+body .search-form .search-field {
+  position: relative;
+  display: flex;
+  align-items: center;
   width: 100%;
-  border-radius: 0.25em;
-  padding: 0.5em 0.75em;
+}
+
+body #searchbox input[type="text"],
+body #searchbox input[type="search"],
+body #searchbox input[name="q"],
+body .aside-search input[type="text"],
+body .aside-search input[type="search"],
+body .aside-search input[name="q"],
+body .search-form input[type="text"],
+body .search-form input[type="search"],
+body .search-form input[name="q"] {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.45em 2.25em 0.45em 0.75em;
   border: 1px solid var(--border-color);
+  border-radius: 4px;
   background: var(--bg-alt-color);
   color: var(--text-color);
-  padding: 0.5em;
-  border-radius: 4px;
-  width: 100%;
   font-family: var(--font-primary);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
 }
 
-body .wy-side-nav-search input[type=text]:focus {
+body #searchbox input[type="text"]::placeholder,
+body #searchbox input[type="search"]::placeholder,
+body #searchbox input[name="q"]::placeholder,
+body .aside-search input[type="text"]::placeholder,
+body .aside-search input[type="search"]::placeholder,
+body .aside-search input[name="q"]::placeholder,
+body .search-form input[type="text"]::placeholder,
+body .search-form input[type="search"]::placeholder,
+body .search-form input[name="q"]::placeholder {
+  color: var(--color-muted);
+  opacity: 1;
+}
+
+body #searchbox input[type="text"]:hover,
+body #searchbox input[type="search"]:hover,
+body #searchbox input[name="q"]:hover,
+body .aside-search input[type="text"]:hover,
+body .aside-search input[type="search"]:hover,
+body .aside-search input[name="q"]:hover,
+body .search-form input[type="text"]:hover,
+body .search-form input[type="search"]:hover,
+body .search-form input[name="q"]:hover {
+  border-color: color-mix(in oklch, var(--border-color), var(--text-color) 30%);
+}
+
+body #searchbox input[type="text"]:focus,
+body #searchbox input[type="search"]:focus,
+body #searchbox input[name="q"]:focus,
+body .aside-search input[type="text"]:focus,
+body .aside-search input[type="search"]:focus,
+body .aside-search input[name="q"]:focus,
+body .search-form input[type="text"]:focus,
+body .search-form input[type="search"]:focus,
+body .search-form input[name="q"]:focus {
   outline: none;
-  border-bottom: 1px solid var(--border-color);
+  color: var(--heading-color);
+  border-color: var(--link-color);
+  background: color-mix(in oklch, var(--bg-alt-color), black 15%);
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--link-color), transparent 75%);
 }
 
-body .wy-side-nav-search .highlighted {
-  border-top: 1px solid var(--border-color);
+body #searchbox input[type="text"]::-webkit-search-cancel-button,
+body #searchbox input[type="search"]::-webkit-search-cancel-button,
+body #searchbox input[name="q"]::-webkit-search-cancel-button,
+body .aside-search input[type="text"]::-webkit-search-cancel-button,
+body .aside-search input[type="search"]::-webkit-search-cancel-button,
+body .aside-search input[name="q"]::-webkit-search-cancel-button,
+body .search-form input[type="text"]::-webkit-search-cancel-button,
+body .search-form input[type="search"]::-webkit-search-cancel-button,
+body .search-form input[name="q"]::-webkit-search-cancel-button {
+  cursor: pointer;
+  filter: invert(0.7);
 }
 
-body .wy-side-nav-search .highlighted {
-  background: var(--link-color);
-  color: var(--bg-color);
-  padding: 0.1em 0.2em;
+body #searchbox .search-submit,
+body .aside-search .search-submit,
+body .search-form .search-submit {
+  position: absolute;
+  right: 0.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--color-muted);
+  padding: 0.35em;
+  margin: 0;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+body #searchbox .search-submit:hover, body #searchbox .search-submit:focus-visible,
+body .aside-search .search-submit:hover,
+body .aside-search .search-submit:focus-visible,
+body .search-form .search-submit:hover,
+body .search-form .search-submit:focus-visible {
+  color: var(--link-hover-color);
+  background: color-mix(in oklch, var(--link-color), transparent 88%);
+  outline: none;
+}
+
+body #searchbox .search-submit svg,
+body .aside-search .search-submit svg,
+body .search-form .search-submit svg {
+  display: block;
+}
+
+body #searchbox .highlight-link,
+body .aside-search .highlight-link,
+body .search-form .highlight-link {
+  margin: 0.55em 0 0;
+  padding: 0;
+  text-align: left;
+  font-size: 0.85em;
+}
+
+body #searchbox .highlight-link a,
+body .aside-search .highlight-link a,
+body .search-form .highlight-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.25em 0.65em;
+  border-radius: 4px;
+  background: color-mix(in oklch, var(--color-warning), transparent 82%);
+  border: 1px solid color-mix(in oklch, var(--color-warning), transparent 55%);
+  color: var(--heading-color);
+  text-decoration: none;
+  font-size: 0.9em;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+body #searchbox .highlight-link a::before,
+body .aside-search .highlight-link a::before,
+body .search-form .highlight-link a::before {
+  content: "×";
+  font-weight: 700;
+  font-size: 1.1em;
+  line-height: 1;
+}
+
+body #searchbox .highlight-link a:hover,
+body .aside-search .highlight-link a:hover,
+body .search-form .highlight-link a:hover {
+  background: color-mix(in oklch, var(--color-warning), transparent 70%);
+  border-color: var(--color-warning);
+  text-decoration: none;
+}
+
+body .search-page-form {
+  max-width: 36em;
+  margin-bottom: 1.5em;
+}
+
+body .search-page-form .search-field input[name="q"] {
+  font-size: 1.05rem;
+  padding: 0.55em 2.5em 0.55em 0.85em;
 }
 
 body #search-results h2 {
-  margin-bottom: 1em;
+  margin-top: 0;
+  margin-bottom: 0.4em;
+  font-size: 1.35em;
+}
+
+body #search-results .search-summary {
+  color: var(--color-muted);
+  font-size: 0.95em;
+  margin-top: 0;
+  margin-bottom: 1.25em;
+}
+
+body #search-results ul.search {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 body #search-results .search li {
-  margin-bottom: 1.5em;
+  margin: 0;
+  padding: 1.15em 0;
   border-bottom: 1px solid var(--border-color);
-  padding-bottom: 1.5em;
+  list-style: none;
 }
 
 body #search-results .search li:first-child {
   border-top: 1px solid var(--border-color);
-  padding-top: 1.5em;
 }
 
-body #search-results .search li a {
-  font-size: 1.2em;
-  margin-bottom: 0.5em;
+body #search-results .search li > a {
+  font-size: 1.15em;
+  font-weight: 600;
+  margin-bottom: 0.3em;
   display: inline-block;
+}
+
+body #search-results .search li > span {
+  color: var(--color-muted);
+  font-size: 0.88em;
+  margin-left: 0.35em;
 }
 
 body #search-results .context {
   color: var(--text-color);
-  font-size: 90%;
-}
-
-body #search-results .highlighted {
-  background: var(--link-color);
-  color: var(--bg-color);
-  padding: 0.1em 0.2em;
+  font-size: 0.92em;
+  line-height: 1.55;
+  margin: 0.3em 0 0;
+  opacity: 0.9;
 }
 
 @media (min-width: 48em) and (orientation: landscape) {
@@ -2133,4 +1844,2021 @@ body #search-results .highlighted {
     grid-template-areas: " header main asides" " footer main asides";
     grid-template-columns: var(--col) 1fr var(--col);
   }
+}
+
+/* =========================================================================
+   Geometor Interactive Diagrams & Classical Scriptorium Monograph Theme
+   Typography: Classical Roman Serif (EB Garamond)
+   Palette: Nocturnal warm parchment / soft charcoal (low-glare scholarly theme)
+   Layout: Centered reading column limited on large viewports (46rem)
+   ========================================================================= */
+/* -------------------------------------------------------------------------
+   1. Book Codex Variables & Container Layout ("Website in a Website")
+   ------------------------------------------------------------------------- */
+body.is-book-page,
+article.book-layout,
+article.book-reading-pane {
+  --book-bg: #1e1e20;
+  --book-bg-alpha: rgba(30, 30, 32, 0.94);
+  --book-surface: #272629;
+  --book-surface-alt: #313035;
+  --book-text: #d6cfc5;
+  --book-text-muted: #9c958a;
+  --book-text-dim: #787268;
+  --book-border: #3d3934;
+  --book-border-dark: #544f47;
+  --book-border-light: #2c2b2e;
+  --book-link: #de836e;
+  --book-link-hover: #f5a492;
+  --book-link-visited: #c97864;
+  --book-quote-bg: rgba(255, 255, 255, 0.04);
+  --book-quote-border: #4d4841;
+  --book-code-bg: #29282b;
+  --book-code-text: #d6cfc5;
+  --book-max-width: 46rem;
+  /* ~736px, optimal 65-75 characters per line */
+  --book-scroll-offset: 8.5rem;
+  --book-font-serif: 'EB Garamond', Garamond, 'Palatino Linotype', Palatino, 'Georgia', 'Times New Roman', serif;
+  --book-font-display: 'EB Garamond', Garamond, 'Georgia', serif;
+  --book-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+main.book-main {
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+/* Fix inline-size container collapse and keep book reading pane a clean single column */
+article.book-layout,
+article.book-reading-pane {
+  width: 100% !important;
+  max-width: var(--book-max-width) !important;
+  margin: 0 auto !important;
+  padding: 0 1.75rem 3.5rem !important;
+  box-sizing: border-box;
+  display: flex !important;
+  flex-flow: column nowrap !important;
+  color: var(--book-text);
+  font-family: var(--book-font-serif);
+  font-feature-settings: "locl" 0, "kern" 1, "liga" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+article.book-layout > header,
+article.book-layout > .content,
+article.book-layout > footer,
+article.book-reading-pane > header,
+article.book-reading-pane > .content,
+article.book-reading-pane > footer {
+  width: 100% !important;
+  flex: 0 0 auto !important;
+  order: unset !important;
+  padding: 0 !important;
+  margin: 0;
+}
+
+@container article (min-width: 60em) {
+  article.book-layout,
+article.book-reading-pane {
+    flex-flow: column nowrap !important;
+  }
+  article.book-layout > .content,
+article.book-layout > header,
+article.book-layout > footer,
+article.book-reading-pane > .content,
+article.book-reading-pane > header,
+article.book-reading-pane > footer {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    order: unset !important;
+  }
+}
+
+@container article (min-width: 80em) {
+  article.book-layout > .content,
+article.book-reading-pane > .content {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 640px) {
+  article.book-layout,
+article.book-reading-pane {
+    padding: 0 1rem 2.5rem !important;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   2. Sticky Book Codex Masthead (header.book-header)
+   ------------------------------------------------------------------------- */
+header.book-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  background-color: var(--book-bg-alpha);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--book-border);
+  padding: 0.45rem 0.65rem 0.4rem !important;
+  margin-bottom: 1.5rem !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
+  box-sizing: border-box;
+}
+
+.book-header-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem 0.75rem;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.book-header-identity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.45rem;
+}
+
+.book-portal-link {
+  font-family: var(--book-font-mono);
+  font-size: 0.76rem;
+  color: var(--book-text-muted) !important;
+  text-decoration: none !important;
+  padding: 0.08rem 0.38rem;
+  border-radius: 3px;
+  background-color: var(--book-surface);
+  border: 1px solid var(--book-border);
+  transition: all 0.15s ease;
+}
+
+.book-portal-link:hover {
+  color: var(--book-link-hover) !important;
+  border-color: var(--book-border-dark);
+}
+
+.book-header-sep {
+  color: var(--book-border-dark);
+  font-size: 0.85rem;
+  user-select: none;
+}
+
+.book-title-link {
+  font-family: var(--book-font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--book-text) !important;
+  text-decoration: none !important;
+  transition: color 0.15s ease;
+}
+
+.book-title-link:hover {
+  color: var(--book-link) !important;
+}
+
+.book-subtitle {
+  font-family: var(--book-font-serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--book-text-muted);
+}
+
+.book-header-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.book-badge {
+  font-family: var(--book-font-mono);
+  font-size: 0.72rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid var(--book-border);
+  background: var(--book-surface);
+  color: var(--book-text-muted);
+}
+
+.book-badge.canonical-badge {
+  font-weight: 700;
+  color: var(--book-text);
+}
+
+/* Second Row of Book Header: [← Prev] | Chapter Title + Track Switcher | [Next →] */
+.book-header-nav {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 1fr) auto minmax(4.5rem, 1fr);
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 0.28rem;
+  border-top: 1px solid var(--book-border-light);
+}
+
+.book-nav-prev {
+  text-align: left;
+}
+
+.book-nav-next {
+  text-align: right;
+}
+
+.book-nav-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  text-align: center;
+}
+
+.book-doc-title {
+  text-align: center;
+  font-family: var(--book-font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--book-text);
+  line-height: 1.2;
+}
+
+.book-nav-btn {
+  font-family: var(--book-font-serif);
+  font-size: 0.84rem;
+  color: var(--book-link) !important;
+  text-decoration: none !important;
+  padding: 0.15rem 0.55rem;
+  border-radius: 4px;
+  background-color: var(--book-surface);
+  border: 1px solid var(--book-border);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  line-height: 1.25;
+}
+
+.book-nav-btn:hover {
+  background-color: var(--book-surface-alt);
+  color: var(--book-link-hover) !important;
+  border-color: var(--book-border-dark);
+  text-decoration: none !important;
+}
+
+article.book-layout nav,
+.book-tracks-nav {
+  display: flex !important;
+  flex-flow: row wrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.3rem;
+  font-family: var(--book-font-serif);
+  font-size: 0.84rem;
+  line-height: 1.2;
+}
+
+article.book-layout nav a,
+.book-tracks-nav a {
+  display: inline-flex !important;
+  flex-basis: auto !important;
+  width: auto !important;
+}
+
+article.book-layout nav a::before, article.book-layout nav a::after,
+.book-tracks-nav a::before,
+.book-tracks-nav a::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  flex: none !important;
+}
+
+.book-track-item {
+  color: var(--book-link) !important;
+  text-decoration: none !important;
+  padding: 0.06rem 0.4rem !important;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.book-track-item:hover {
+  color: var(--book-link-hover) !important;
+  background-color: var(--book-surface);
+  text-decoration: none !important;
+}
+
+.book-track-item.is-active {
+  color: var(--book-text) !important;
+  font-weight: 600;
+  background-color: var(--book-surface);
+  border: 1px solid var(--book-border);
+  cursor: default;
+}
+
+.book-track-sep {
+  color: var(--book-border-dark);
+  font-size: 0.75rem;
+  user-select: none;
+}
+
+/* -------------------------------------------------------------------------
+   3. Scholarly Monograph Typography (.book-reading-pane .book-content)
+   ------------------------------------------------------------------------- */
+.book-reading-pane .book-content,
+.folio-book-page {
+  font-family: var(--book-font-serif);
+  font-size: 1.16rem;
+  line-height: 1.72;
+  color: var(--book-text);
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "locl" 0, "kern" 1, "liga" 1;
+  /* Anchor scroll margin for sticky header */
+  /* Headings */
+  /* Chapter Subtitle Rubric (.. rubric::) */
+  /* Paragraphs & Classical 2em First-Line Indentation */
+  /* Explicit resets where first-line paragraph indentation is NOT desired */
+  /* Line Blocks (e.g. mathematical arrays, verse, or title blocks) */
+  /* Blockquotes (Smaller-type set-off passages & quotations) */
+  /* Links inside Book Content */
+  /* Lists */
+  /* Horizontal Rules / Section Dividers */
+  /* Tables (Translation Notes, Comparative Apparatus, Scan Inventory) */
+  /* Chapter Table of Contents (.. contents:: / Conspectus Capitis) */
+  /* Front Matter / 1954 Monograph Title Page Reconstruction (.title-page) */
+  /* Conspectus Totius Operis (Book Index Table of Contents) */
+  /* Scroll offset for sticky book header and :target highlights */
+  /* Semantic Apparatus Links & Spans (:cite:, :term:, :person:) */
+  /* Footnotes (Docutils HTML5 aside.footnote & inline a.footnote-reference) */
+}
+
+.book-reading-pane .book-content p, .book-reading-pane .book-content div, .book-reading-pane .book-content li, .book-reading-pane .book-content dd, .book-reading-pane .book-content dt, .book-reading-pane .book-content th, .book-reading-pane .book-content td,
+.folio-book-page p,
+.folio-book-page div,
+.folio-book-page li,
+.folio-book-page dd,
+.folio-book-page dt,
+.folio-book-page th,
+.folio-book-page td {
+  font-feature-settings: "locl" 0, "kern" 1, "liga" 1;
+}
+
+.book-reading-pane .book-content h1, .book-reading-pane .book-content h2, .book-reading-pane .book-content h3, .book-reading-pane .book-content h4, .book-reading-pane .book-content h5, .book-reading-pane .book-content h6,
+.book-reading-pane .book-content section[id],
+.book-reading-pane .book-content span[id],
+.book-reading-pane .book-content aside.footnote[id],
+.folio-book-page h1,
+.folio-book-page h2,
+.folio-book-page h3,
+.folio-book-page h4,
+.folio-book-page h5,
+.folio-book-page h6,
+.folio-book-page section[id],
+.folio-book-page span[id],
+.folio-book-page aside.footnote[id] {
+  scroll-margin-top: var(--book-scroll-offset);
+}
+
+.book-reading-pane .book-content h1, .book-reading-pane .book-content h2, .book-reading-pane .book-content h3, .book-reading-pane .book-content h4, .book-reading-pane .book-content h5, .book-reading-pane .book-content h6,
+.folio-book-page h1,
+.folio-book-page h2,
+.folio-book-page h3,
+.folio-book-page h4,
+.folio-book-page h5,
+.folio-book-page h6 {
+  font-family: var(--book-font-serif) !important;
+  color: var(--book-text) !important;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  text-indent: 0 !important;
+  border-bottom: none !important;
+}
+
+.book-reading-pane .book-content h1 a.headerlink, .book-reading-pane .book-content h2 a.headerlink, .book-reading-pane .book-content h3 a.headerlink, .book-reading-pane .book-content h4 a.headerlink, .book-reading-pane .book-content h5 a.headerlink, .book-reading-pane .book-content h6 a.headerlink,
+.folio-book-page h1 a.headerlink,
+.folio-book-page h2 a.headerlink,
+.folio-book-page h3 a.headerlink,
+.folio-book-page h4 a.headerlink,
+.folio-book-page h5 a.headerlink,
+.folio-book-page h6 a.headerlink {
+  font-size: 0.72em;
+  color: var(--book-text-dim) !important;
+  text-decoration: none !important;
+  opacity: 0;
+  padding-left: 0.4em;
+  transition: opacity 0.15s ease;
+}
+
+.book-reading-pane .book-content h1:hover a.headerlink, .book-reading-pane .book-content h2:hover a.headerlink, .book-reading-pane .book-content h3:hover a.headerlink, .book-reading-pane .book-content h4:hover a.headerlink, .book-reading-pane .book-content h5:hover a.headerlink, .book-reading-pane .book-content h6:hover a.headerlink,
+.folio-book-page h1:hover a.headerlink,
+.folio-book-page h2:hover a.headerlink,
+.folio-book-page h3:hover a.headerlink,
+.folio-book-page h4:hover a.headerlink,
+.folio-book-page h5:hover a.headerlink,
+.folio-book-page h6:hover a.headerlink {
+  opacity: 0.65;
+}
+
+.book-reading-pane .book-content h1,
+.folio-book-page h1 {
+  font-size: 2.15rem !important;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  text-align: center;
+  margin-top: 1.75rem !important;
+  margin-bottom: 0.85rem !important;
+}
+
+.book-reading-pane .book-content p.rubric,
+.folio-book-page p.rubric {
+  font-family: var(--book-font-serif);
+  font-size: 1.22rem;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  color: var(--book-text-muted);
+  text-align: center !important;
+  text-indent: 0 !important;
+  margin-top: -0.35rem !important;
+  margin-bottom: 1.4rem !important;
+  line-height: 1.35;
+}
+
+.book-reading-pane .book-content h2,
+.folio-book-page h2 {
+  font-size: 1.48rem !important;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  text-align: center;
+  margin-top: 2.1rem !important;
+  margin-bottom: 0.9rem !important;
+}
+
+.book-reading-pane .book-content h3,
+.folio-book-page h3 {
+  font-size: 1.25rem !important;
+  line-height: 1.35;
+  text-align: left;
+  margin-top: 1.75rem !important;
+  margin-bottom: 0.45rem !important;
+}
+
+.book-reading-pane .book-content h3 em,
+.folio-book-page h3 em {
+  font-weight: 400;
+  font-style: italic;
+}
+
+.book-reading-pane .book-content h4,
+.folio-book-page h4 {
+  font-size: 1.12rem !important;
+  font-style: italic;
+  text-align: left;
+  margin-top: 1.25rem !important;
+  margin-bottom: 0.45rem !important;
+}
+
+.book-reading-pane .book-content h5, .book-reading-pane .book-content h6,
+.folio-book-page h5,
+.folio-book-page h6 {
+  font-size: 1.05rem !important;
+  font-style: italic;
+  text-align: left;
+  margin-top: 1rem !important;
+  margin-bottom: 0.4rem !important;
+}
+
+.book-reading-pane .book-content p,
+.folio-book-page p {
+  text-indent: 2em;
+  margin-top: 0 !important;
+  margin-bottom: 0.45em !important;
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
+.book-reading-pane .book-content blockquote p,
+.book-reading-pane .book-content li p,
+.book-reading-pane .book-content table p,
+.book-reading-pane .book-content th p,
+.book-reading-pane .book-content td p,
+.book-reading-pane .book-content aside.footnote p,
+.book-reading-pane .book-content .footnote-list p,
+.book-reading-pane .book-content .footnotes p,
+.book-reading-pane .book-content p.rubric,
+.book-reading-pane .book-content .no-indent,
+.book-reading-pane .book-content .title-page p,
+.book-reading-pane .book-content .work-toc p,
+.book-reading-pane .book-content .chapter-toc p,
+.book-reading-pane .book-content .admonition p,
+.book-reading-pane .book-content .note p,
+.book-reading-pane .book-content p:has(> strong:first-child),
+.folio-book-page blockquote p,
+.folio-book-page li p,
+.folio-book-page table p,
+.folio-book-page th p,
+.folio-book-page td p,
+.folio-book-page aside.footnote p,
+.folio-book-page .footnote-list p,
+.folio-book-page .footnotes p,
+.folio-book-page p.rubric,
+.folio-book-page .no-indent,
+.folio-book-page .title-page p,
+.folio-book-page .work-toc p,
+.folio-book-page .chapter-toc p,
+.folio-book-page .admonition p,
+.folio-book-page .note p,
+.folio-book-page p:has(> strong:first-child) {
+  text-indent: 0 !important;
+}
+
+.book-reading-pane .book-content .line-block,
+.folio-book-page .line-block {
+  margin: 0.85em 0 0.85em 2em !important;
+  line-height: 1.55;
+}
+
+.book-reading-pane .book-content .line-block .line,
+.folio-book-page .line-block .line {
+  text-indent: 0 !important;
+}
+
+.book-reading-pane .book-content .line-block .line-block,
+.folio-book-page .line-block .line-block {
+  margin: 0 0 0 1.5em !important;
+}
+
+.book-reading-pane .book-content blockquote,
+.folio-book-page blockquote {
+  margin: 1.25em 0 !important;
+  padding: 0.75em 1.4em !important;
+  border: none !important;
+  border-left: 3px solid var(--book-quote-border) !important;
+  background-color: var(--book-quote-bg) !important;
+  color: var(--book-text) !important;
+  font-size: 0.95em !important;
+  font-style: normal;
+  line-height: 1.65;
+  border-radius: 0 4px 4px 0;
+}
+
+.book-reading-pane .book-content blockquote p,
+.folio-book-page blockquote p {
+  text-indent: 0 !important;
+  margin: 0.35em 0 !important;
+  text-align: justify;
+}
+
+.book-reading-pane .book-content blockquote p:first-child,
+.folio-book-page blockquote p:first-child {
+  margin-top: 0 !important;
+}
+
+.book-reading-pane .book-content blockquote p:last-child,
+.folio-book-page blockquote p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.book-reading-pane .book-content a,
+.folio-book-page a {
+  color: var(--book-link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+
+.book-reading-pane .book-content a:hover,
+.folio-book-page a:hover {
+  color: var(--book-link-hover);
+  text-decoration-thickness: 1.5px;
+}
+
+.book-reading-pane .book-content ul, .book-reading-pane .book-content ol,
+.folio-book-page ul,
+.folio-book-page ol {
+  margin: 0.85rem 0 1.15rem !important;
+  padding-left: 1.75rem;
+}
+
+.book-reading-pane .book-content li,
+.folio-book-page li {
+  margin: 0.3rem 0;
+  line-height: 1.65;
+}
+
+.book-reading-pane .book-content li::marker,
+.folio-book-page li::marker {
+  color: var(--book-text-muted);
+}
+
+.book-reading-pane .book-content hr,
+.book-reading-pane .book-content hr.docutils,
+.folio-book-page hr,
+.folio-book-page hr.docutils {
+  border: 0 !important;
+  height: 1px;
+  background: var(--book-border);
+  margin: 2.25rem auto !important;
+  width: 50%;
+}
+
+.book-reading-pane .book-content table,
+.book-reading-pane .book-content table.docutils,
+.folio-book-page table,
+.folio-book-page table.docutils {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.75rem 0 !important;
+  font-size: 0.94rem;
+}
+
+.book-reading-pane .book-content table th, .book-reading-pane .book-content table td,
+.book-reading-pane .book-content table.docutils th,
+.book-reading-pane .book-content table.docutils td,
+.folio-book-page table th,
+.folio-book-page table td,
+.folio-book-page table.docutils th,
+.folio-book-page table.docutils td {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid var(--book-border);
+  text-align: left !important;
+  vertical-align: top;
+}
+
+.book-reading-pane .book-content table th,
+.book-reading-pane .book-content table.docutils th,
+.folio-book-page table th,
+.folio-book-page table.docutils th {
+  font-family: var(--book-font-serif);
+  font-size: 0.88rem;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: var(--book-surface);
+  border-bottom: 2px solid var(--book-border-dark);
+  color: var(--book-text);
+}
+
+.book-reading-pane .book-content table tr:hover td,
+.book-reading-pane .book-content table.docutils tr:hover td,
+.folio-book-page table tr:hover td,
+.folio-book-page table.docutils tr:hover td {
+  background-color: var(--book-surface);
+}
+
+.book-reading-pane .book-content .chapter-toc,
+.book-reading-pane .book-content nav.contents.local,
+.book-reading-pane .book-content nav.contents,
+.folio-book-page .chapter-toc,
+.folio-book-page nav.contents.local,
+.folio-book-page nav.contents {
+  margin: 2rem 0 2.5rem !important;
+  background-color: var(--book-surface);
+  border: 1px solid var(--book-border);
+  border-left: 3px solid var(--book-border-dark);
+  border-radius: 5px;
+  padding: 0.75rem 1.25rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+}
+
+.book-reading-pane .book-content .chapter-toc p,
+.book-reading-pane .book-content nav.contents.local p,
+.book-reading-pane .book-content nav.contents p,
+.folio-book-page .chapter-toc p,
+.folio-book-page nav.contents.local p,
+.folio-book-page nav.contents p {
+  margin: 0 !important;
+  text-indent: 0 !important;
+  text-align: left !important;
+}
+
+.book-reading-pane .book-content .chapter-toc p.topic-title,
+.book-reading-pane .book-content nav.contents.local p.topic-title,
+.book-reading-pane .book-content nav.contents p.topic-title,
+.folio-book-page .chapter-toc p.topic-title,
+.folio-book-page nav.contents.local p.topic-title,
+.folio-book-page nav.contents p.topic-title {
+  font-family: var(--book-font-display);
+  font-weight: 600;
+  font-size: 0.92rem !important;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--book-text);
+  margin: 0.25rem 0 0.65rem 0 !important;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--book-border);
+  text-align: left !important;
+}
+
+.book-reading-pane .book-content .chapter-toc > ul,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list,
+.book-reading-pane .book-content nav.contents.local > ul,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list,
+.book-reading-pane .book-content nav.contents > ul,
+.book-reading-pane .book-content nav.contents .chapter-toc-list,
+.folio-book-page .chapter-toc > ul,
+.folio-book-page .chapter-toc .chapter-toc-list,
+.folio-book-page nav.contents.local > ul,
+.folio-book-page nav.contents.local .chapter-toc-list,
+.folio-book-page nav.contents > ul,
+.folio-book-page nav.contents .chapter-toc-list {
+  list-style: none !important;
+  margin: 0.65rem 0 0.25rem !important;
+  padding: 0 !important;
+  column-count: 2;
+  column-gap: 2.2rem;
+}
+
+@media (max-width: 720px) {
+  .book-reading-pane .book-content .chapter-toc > ul,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list,
+.book-reading-pane .book-content nav.contents.local > ul,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list,
+.book-reading-pane .book-content nav.contents > ul,
+.book-reading-pane .book-content nav.contents .chapter-toc-list,
+.folio-book-page .chapter-toc > ul,
+.folio-book-page .chapter-toc .chapter-toc-list,
+.folio-book-page nav.contents.local > ul,
+.folio-book-page nav.contents.local .chapter-toc-list,
+.folio-book-page nav.contents > ul,
+.folio-book-page nav.contents .chapter-toc-list {
+    column-count: 1;
+  }
+}
+
+.book-reading-pane .book-content .chapter-toc > ul > li,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li,
+.book-reading-pane .book-content nav.contents.local > ul > li,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li,
+.book-reading-pane .book-content nav.contents > ul > li,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li,
+.folio-book-page .chapter-toc > ul > li,
+.folio-book-page .chapter-toc .chapter-toc-list > li,
+.folio-book-page nav.contents.local > ul > li,
+.folio-book-page nav.contents.local .chapter-toc-list > li,
+.folio-book-page nav.contents > ul > li,
+.folio-book-page nav.contents .chapter-toc-list > li {
+  margin: 0 0 0.85rem 0 !important;
+  line-height: 1.45;
+  list-style: none !important;
+}
+
+.book-reading-pane .book-content .chapter-toc > ul > li > p > a,
+.book-reading-pane .book-content .chapter-toc > ul > li > a,
+.book-reading-pane .book-content .chapter-toc > ul > li .toc-parent-link,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li > p > a,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li > a,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li .toc-parent-link,
+.book-reading-pane .book-content nav.contents.local > ul > li > p > a,
+.book-reading-pane .book-content nav.contents.local > ul > li > a,
+.book-reading-pane .book-content nav.contents.local > ul > li .toc-parent-link,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li > p > a,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li > a,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li .toc-parent-link,
+.book-reading-pane .book-content nav.contents > ul > li > p > a,
+.book-reading-pane .book-content nav.contents > ul > li > a,
+.book-reading-pane .book-content nav.contents > ul > li .toc-parent-link,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li > p > a,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li > a,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li .toc-parent-link,
+.folio-book-page .chapter-toc > ul > li > p > a,
+.folio-book-page .chapter-toc > ul > li > a,
+.folio-book-page .chapter-toc > ul > li .toc-parent-link,
+.folio-book-page .chapter-toc .chapter-toc-list > li > p > a,
+.folio-book-page .chapter-toc .chapter-toc-list > li > a,
+.folio-book-page .chapter-toc .chapter-toc-list > li .toc-parent-link,
+.folio-book-page nav.contents.local > ul > li > p > a,
+.folio-book-page nav.contents.local > ul > li > a,
+.folio-book-page nav.contents.local > ul > li .toc-parent-link,
+.folio-book-page nav.contents.local .chapter-toc-list > li > p > a,
+.folio-book-page nav.contents.local .chapter-toc-list > li > a,
+.folio-book-page nav.contents.local .chapter-toc-list > li .toc-parent-link,
+.folio-book-page nav.contents > ul > li > p > a,
+.folio-book-page nav.contents > ul > li > a,
+.folio-book-page nav.contents > ul > li .toc-parent-link,
+.folio-book-page nav.contents .chapter-toc-list > li > p > a,
+.folio-book-page nav.contents .chapter-toc-list > li > a,
+.folio-book-page nav.contents .chapter-toc-list > li .toc-parent-link {
+  font-family: var(--book-font-serif);
+  font-weight: 600;
+  font-size: 0.94rem;
+  color: var(--book-text);
+  text-decoration: none !important;
+  display: block;
+  padding: 0.15rem 0.35rem;
+  border-radius: 3px;
+  transition: all 0.12s ease;
+}
+
+.book-reading-pane .book-content .chapter-toc > ul > li > p > a:hover,
+.book-reading-pane .book-content .chapter-toc > ul > li > a:hover,
+.book-reading-pane .book-content .chapter-toc > ul > li .toc-parent-link:hover,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li > p > a:hover,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li > a:hover,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li .toc-parent-link:hover,
+.book-reading-pane .book-content nav.contents.local > ul > li > p > a:hover,
+.book-reading-pane .book-content nav.contents.local > ul > li > a:hover,
+.book-reading-pane .book-content nav.contents.local > ul > li .toc-parent-link:hover,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li > p > a:hover,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li > a:hover,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li .toc-parent-link:hover,
+.book-reading-pane .book-content nav.contents > ul > li > p > a:hover,
+.book-reading-pane .book-content nav.contents > ul > li > a:hover,
+.book-reading-pane .book-content nav.contents > ul > li .toc-parent-link:hover,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li > p > a:hover,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li > a:hover,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li .toc-parent-link:hover,
+.folio-book-page .chapter-toc > ul > li > p > a:hover,
+.folio-book-page .chapter-toc > ul > li > a:hover,
+.folio-book-page .chapter-toc > ul > li .toc-parent-link:hover,
+.folio-book-page .chapter-toc .chapter-toc-list > li > p > a:hover,
+.folio-book-page .chapter-toc .chapter-toc-list > li > a:hover,
+.folio-book-page .chapter-toc .chapter-toc-list > li .toc-parent-link:hover,
+.folio-book-page nav.contents.local > ul > li > p > a:hover,
+.folio-book-page nav.contents.local > ul > li > a:hover,
+.folio-book-page nav.contents.local > ul > li .toc-parent-link:hover,
+.folio-book-page nav.contents.local .chapter-toc-list > li > p > a:hover,
+.folio-book-page nav.contents.local .chapter-toc-list > li > a:hover,
+.folio-book-page nav.contents.local .chapter-toc-list > li .toc-parent-link:hover,
+.folio-book-page nav.contents > ul > li > p > a:hover,
+.folio-book-page nav.contents > ul > li > a:hover,
+.folio-book-page nav.contents > ul > li .toc-parent-link:hover,
+.folio-book-page nav.contents .chapter-toc-list > li > p > a:hover,
+.folio-book-page nav.contents .chapter-toc-list > li > a:hover,
+.folio-book-page nav.contents .chapter-toc-list > li .toc-parent-link:hover {
+  color: var(--book-link);
+  background-color: var(--book-surface-alt);
+  text-decoration: none !important;
+}
+
+.book-reading-pane .book-content .chapter-toc > ul > li > ul,
+.book-reading-pane .book-content .chapter-toc > ul > li .chapter-toc-sublist,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li > ul,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li .chapter-toc-sublist,
+.book-reading-pane .book-content nav.contents.local > ul > li > ul,
+.book-reading-pane .book-content nav.contents.local > ul > li .chapter-toc-sublist,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li > ul,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li .chapter-toc-sublist,
+.book-reading-pane .book-content nav.contents > ul > li > ul,
+.book-reading-pane .book-content nav.contents > ul > li .chapter-toc-sublist,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li > ul,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li .chapter-toc-sublist,
+.folio-book-page .chapter-toc > ul > li > ul,
+.folio-book-page .chapter-toc > ul > li .chapter-toc-sublist,
+.folio-book-page .chapter-toc .chapter-toc-list > li > ul,
+.folio-book-page .chapter-toc .chapter-toc-list > li .chapter-toc-sublist,
+.folio-book-page nav.contents.local > ul > li > ul,
+.folio-book-page nav.contents.local > ul > li .chapter-toc-sublist,
+.folio-book-page nav.contents.local .chapter-toc-list > li > ul,
+.folio-book-page nav.contents.local .chapter-toc-list > li .chapter-toc-sublist,
+.folio-book-page nav.contents > ul > li > ul,
+.folio-book-page nav.contents > ul > li .chapter-toc-sublist,
+.folio-book-page nav.contents .chapter-toc-list > li > ul,
+.folio-book-page nav.contents .chapter-toc-list > li .chapter-toc-sublist {
+  list-style: none !important;
+  margin: 0.3rem 0 0.45rem 0.55rem !important;
+  padding: 0 0 0 0.7rem !important;
+  border-left: 1px solid var(--book-border);
+}
+
+.book-reading-pane .book-content .chapter-toc > ul > li > ul > li,
+.book-reading-pane .book-content .chapter-toc > ul > li .chapter-toc-sublist > li,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li > ul > li,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li,
+.book-reading-pane .book-content nav.contents.local > ul > li > ul > li,
+.book-reading-pane .book-content nav.contents.local > ul > li .chapter-toc-sublist > li,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li > ul > li,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li,
+.book-reading-pane .book-content nav.contents > ul > li > ul > li,
+.book-reading-pane .book-content nav.contents > ul > li .chapter-toc-sublist > li,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li > ul > li,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li .chapter-toc-sublist > li,
+.folio-book-page .chapter-toc > ul > li > ul > li,
+.folio-book-page .chapter-toc > ul > li .chapter-toc-sublist > li,
+.folio-book-page .chapter-toc .chapter-toc-list > li > ul > li,
+.folio-book-page .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li,
+.folio-book-page nav.contents.local > ul > li > ul > li,
+.folio-book-page nav.contents.local > ul > li .chapter-toc-sublist > li,
+.folio-book-page nav.contents.local .chapter-toc-list > li > ul > li,
+.folio-book-page nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li,
+.folio-book-page nav.contents > ul > li > ul > li,
+.folio-book-page nav.contents > ul > li .chapter-toc-sublist > li,
+.folio-book-page nav.contents .chapter-toc-list > li > ul > li,
+.folio-book-page nav.contents .chapter-toc-list > li .chapter-toc-sublist > li {
+  margin: 0.2rem 0 !important;
+  line-height: 1.4;
+  break-inside: avoid;
+  page-break-inside: avoid;
+  list-style: none !important;
+}
+
+.book-reading-pane .book-content .chapter-toc > ul > li > ul > li > p > a,
+.book-reading-pane .book-content .chapter-toc > ul > li > ul > li > a,
+.book-reading-pane .book-content .chapter-toc > ul > li > ul > li .toc-sub-link,
+.book-reading-pane .book-content .chapter-toc > ul > li .chapter-toc-sublist > li > p > a,
+.book-reading-pane .book-content .chapter-toc > ul > li .chapter-toc-sublist > li > a,
+.book-reading-pane .book-content .chapter-toc > ul > li .chapter-toc-sublist > li .toc-sub-link,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li > ul > li > p > a,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li > ul > li > a,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li > ul > li .toc-sub-link,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > p > a,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > a,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li .toc-sub-link,
+.book-reading-pane .book-content nav.contents.local > ul > li > ul > li > p > a,
+.book-reading-pane .book-content nav.contents.local > ul > li > ul > li > a,
+.book-reading-pane .book-content nav.contents.local > ul > li > ul > li .toc-sub-link,
+.book-reading-pane .book-content nav.contents.local > ul > li .chapter-toc-sublist > li > p > a,
+.book-reading-pane .book-content nav.contents.local > ul > li .chapter-toc-sublist > li > a,
+.book-reading-pane .book-content nav.contents.local > ul > li .chapter-toc-sublist > li .toc-sub-link,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li > ul > li > p > a,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li > ul > li > a,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li > ul > li .toc-sub-link,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > p > a,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > a,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li .toc-sub-link,
+.book-reading-pane .book-content nav.contents > ul > li > ul > li > p > a,
+.book-reading-pane .book-content nav.contents > ul > li > ul > li > a,
+.book-reading-pane .book-content nav.contents > ul > li > ul > li .toc-sub-link,
+.book-reading-pane .book-content nav.contents > ul > li .chapter-toc-sublist > li > p > a,
+.book-reading-pane .book-content nav.contents > ul > li .chapter-toc-sublist > li > a,
+.book-reading-pane .book-content nav.contents > ul > li .chapter-toc-sublist > li .toc-sub-link,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li > ul > li > p > a,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li > ul > li > a,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li > ul > li .toc-sub-link,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > p > a,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > a,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li .chapter-toc-sublist > li .toc-sub-link,
+.folio-book-page .chapter-toc > ul > li > ul > li > p > a,
+.folio-book-page .chapter-toc > ul > li > ul > li > a,
+.folio-book-page .chapter-toc > ul > li > ul > li .toc-sub-link,
+.folio-book-page .chapter-toc > ul > li .chapter-toc-sublist > li > p > a,
+.folio-book-page .chapter-toc > ul > li .chapter-toc-sublist > li > a,
+.folio-book-page .chapter-toc > ul > li .chapter-toc-sublist > li .toc-sub-link,
+.folio-book-page .chapter-toc .chapter-toc-list > li > ul > li > p > a,
+.folio-book-page .chapter-toc .chapter-toc-list > li > ul > li > a,
+.folio-book-page .chapter-toc .chapter-toc-list > li > ul > li .toc-sub-link,
+.folio-book-page .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > p > a,
+.folio-book-page .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > a,
+.folio-book-page .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li .toc-sub-link,
+.folio-book-page nav.contents.local > ul > li > ul > li > p > a,
+.folio-book-page nav.contents.local > ul > li > ul > li > a,
+.folio-book-page nav.contents.local > ul > li > ul > li .toc-sub-link,
+.folio-book-page nav.contents.local > ul > li .chapter-toc-sublist > li > p > a,
+.folio-book-page nav.contents.local > ul > li .chapter-toc-sublist > li > a,
+.folio-book-page nav.contents.local > ul > li .chapter-toc-sublist > li .toc-sub-link,
+.folio-book-page nav.contents.local .chapter-toc-list > li > ul > li > p > a,
+.folio-book-page nav.contents.local .chapter-toc-list > li > ul > li > a,
+.folio-book-page nav.contents.local .chapter-toc-list > li > ul > li .toc-sub-link,
+.folio-book-page nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > p > a,
+.folio-book-page nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > a,
+.folio-book-page nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li .toc-sub-link,
+.folio-book-page nav.contents > ul > li > ul > li > p > a,
+.folio-book-page nav.contents > ul > li > ul > li > a,
+.folio-book-page nav.contents > ul > li > ul > li .toc-sub-link,
+.folio-book-page nav.contents > ul > li .chapter-toc-sublist > li > p > a,
+.folio-book-page nav.contents > ul > li .chapter-toc-sublist > li > a,
+.folio-book-page nav.contents > ul > li .chapter-toc-sublist > li .toc-sub-link,
+.folio-book-page nav.contents .chapter-toc-list > li > ul > li > p > a,
+.folio-book-page nav.contents .chapter-toc-list > li > ul > li > a,
+.folio-book-page nav.contents .chapter-toc-list > li > ul > li .toc-sub-link,
+.folio-book-page nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > p > a,
+.folio-book-page nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > a,
+.folio-book-page nav.contents .chapter-toc-list > li .chapter-toc-sublist > li .toc-sub-link {
+  font-family: var(--book-font-serif);
+  font-size: 0.86rem;
+  color: var(--book-text-muted);
+  text-decoration: none !important;
+  display: block;
+  padding: 0.12rem 0.3rem;
+  border-radius: 3px;
+  transition: all 0.12s ease;
+}
+
+.book-reading-pane .book-content .chapter-toc > ul > li > ul > li > p > a:hover,
+.book-reading-pane .book-content .chapter-toc > ul > li > ul > li > a:hover,
+.book-reading-pane .book-content .chapter-toc > ul > li > ul > li .toc-sub-link:hover,
+.book-reading-pane .book-content .chapter-toc > ul > li .chapter-toc-sublist > li > p > a:hover,
+.book-reading-pane .book-content .chapter-toc > ul > li .chapter-toc-sublist > li > a:hover,
+.book-reading-pane .book-content .chapter-toc > ul > li .chapter-toc-sublist > li .toc-sub-link:hover,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li > ul > li > p > a:hover,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li > ul > li > a:hover,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li > ul > li .toc-sub-link:hover,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > p > a:hover,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > a:hover,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li .toc-sub-link:hover,
+.book-reading-pane .book-content nav.contents.local > ul > li > ul > li > p > a:hover,
+.book-reading-pane .book-content nav.contents.local > ul > li > ul > li > a:hover,
+.book-reading-pane .book-content nav.contents.local > ul > li > ul > li .toc-sub-link:hover,
+.book-reading-pane .book-content nav.contents.local > ul > li .chapter-toc-sublist > li > p > a:hover,
+.book-reading-pane .book-content nav.contents.local > ul > li .chapter-toc-sublist > li > a:hover,
+.book-reading-pane .book-content nav.contents.local > ul > li .chapter-toc-sublist > li .toc-sub-link:hover,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li > ul > li > p > a:hover,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li > ul > li > a:hover,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li > ul > li .toc-sub-link:hover,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > p > a:hover,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > a:hover,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li .toc-sub-link:hover,
+.book-reading-pane .book-content nav.contents > ul > li > ul > li > p > a:hover,
+.book-reading-pane .book-content nav.contents > ul > li > ul > li > a:hover,
+.book-reading-pane .book-content nav.contents > ul > li > ul > li .toc-sub-link:hover,
+.book-reading-pane .book-content nav.contents > ul > li .chapter-toc-sublist > li > p > a:hover,
+.book-reading-pane .book-content nav.contents > ul > li .chapter-toc-sublist > li > a:hover,
+.book-reading-pane .book-content nav.contents > ul > li .chapter-toc-sublist > li .toc-sub-link:hover,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li > ul > li > p > a:hover,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li > ul > li > a:hover,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li > ul > li .toc-sub-link:hover,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > p > a:hover,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > a:hover,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li .chapter-toc-sublist > li .toc-sub-link:hover,
+.folio-book-page .chapter-toc > ul > li > ul > li > p > a:hover,
+.folio-book-page .chapter-toc > ul > li > ul > li > a:hover,
+.folio-book-page .chapter-toc > ul > li > ul > li .toc-sub-link:hover,
+.folio-book-page .chapter-toc > ul > li .chapter-toc-sublist > li > p > a:hover,
+.folio-book-page .chapter-toc > ul > li .chapter-toc-sublist > li > a:hover,
+.folio-book-page .chapter-toc > ul > li .chapter-toc-sublist > li .toc-sub-link:hover,
+.folio-book-page .chapter-toc .chapter-toc-list > li > ul > li > p > a:hover,
+.folio-book-page .chapter-toc .chapter-toc-list > li > ul > li > a:hover,
+.folio-book-page .chapter-toc .chapter-toc-list > li > ul > li .toc-sub-link:hover,
+.folio-book-page .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > p > a:hover,
+.folio-book-page .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > a:hover,
+.folio-book-page .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li .toc-sub-link:hover,
+.folio-book-page nav.contents.local > ul > li > ul > li > p > a:hover,
+.folio-book-page nav.contents.local > ul > li > ul > li > a:hover,
+.folio-book-page nav.contents.local > ul > li > ul > li .toc-sub-link:hover,
+.folio-book-page nav.contents.local > ul > li .chapter-toc-sublist > li > p > a:hover,
+.folio-book-page nav.contents.local > ul > li .chapter-toc-sublist > li > a:hover,
+.folio-book-page nav.contents.local > ul > li .chapter-toc-sublist > li .toc-sub-link:hover,
+.folio-book-page nav.contents.local .chapter-toc-list > li > ul > li > p > a:hover,
+.folio-book-page nav.contents.local .chapter-toc-list > li > ul > li > a:hover,
+.folio-book-page nav.contents.local .chapter-toc-list > li > ul > li .toc-sub-link:hover,
+.folio-book-page nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > p > a:hover,
+.folio-book-page nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > a:hover,
+.folio-book-page nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li .toc-sub-link:hover,
+.folio-book-page nav.contents > ul > li > ul > li > p > a:hover,
+.folio-book-page nav.contents > ul > li > ul > li > a:hover,
+.folio-book-page nav.contents > ul > li > ul > li .toc-sub-link:hover,
+.folio-book-page nav.contents > ul > li .chapter-toc-sublist > li > p > a:hover,
+.folio-book-page nav.contents > ul > li .chapter-toc-sublist > li > a:hover,
+.folio-book-page nav.contents > ul > li .chapter-toc-sublist > li .toc-sub-link:hover,
+.folio-book-page nav.contents .chapter-toc-list > li > ul > li > p > a:hover,
+.folio-book-page nav.contents .chapter-toc-list > li > ul > li > a:hover,
+.folio-book-page nav.contents .chapter-toc-list > li > ul > li .toc-sub-link:hover,
+.folio-book-page nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > p > a:hover,
+.folio-book-page nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > a:hover,
+.folio-book-page nav.contents .chapter-toc-list > li .chapter-toc-sublist > li .toc-sub-link:hover {
+  color: var(--book-link);
+  background-color: var(--book-surface-alt);
+  text-decoration: none !important;
+}
+
+.book-reading-pane .book-content .chapter-toc > ul > li > ul > li > ul,
+.book-reading-pane .book-content .chapter-toc > ul > li .chapter-toc-sublist > li > ul,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li > ul > li > ul,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > ul,
+.book-reading-pane .book-content nav.contents.local > ul > li > ul > li > ul,
+.book-reading-pane .book-content nav.contents.local > ul > li .chapter-toc-sublist > li > ul,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li > ul > li > ul,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > ul,
+.book-reading-pane .book-content nav.contents > ul > li > ul > li > ul,
+.book-reading-pane .book-content nav.contents > ul > li .chapter-toc-sublist > li > ul,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li > ul > li > ul,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > ul,
+.folio-book-page .chapter-toc > ul > li > ul > li > ul,
+.folio-book-page .chapter-toc > ul > li .chapter-toc-sublist > li > ul,
+.folio-book-page .chapter-toc .chapter-toc-list > li > ul > li > ul,
+.folio-book-page .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > ul,
+.folio-book-page nav.contents.local > ul > li > ul > li > ul,
+.folio-book-page nav.contents.local > ul > li .chapter-toc-sublist > li > ul,
+.folio-book-page nav.contents.local .chapter-toc-list > li > ul > li > ul,
+.folio-book-page nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > ul,
+.folio-book-page nav.contents > ul > li > ul > li > ul,
+.folio-book-page nav.contents > ul > li .chapter-toc-sublist > li > ul,
+.folio-book-page nav.contents .chapter-toc-list > li > ul > li > ul,
+.folio-book-page nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > ul {
+  list-style: none !important;
+  margin: 0.15rem 0 0.25rem 0 !important;
+  padding: 0 0 0 0.75rem !important;
+  border-left: none;
+}
+
+.book-reading-pane .book-content .chapter-toc > ul > li > ul > li > ul > li,
+.book-reading-pane .book-content .chapter-toc > ul > li .chapter-toc-sublist > li > ul > li,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li > ul > li > ul > li,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > ul > li,
+.book-reading-pane .book-content nav.contents.local > ul > li > ul > li > ul > li,
+.book-reading-pane .book-content nav.contents.local > ul > li .chapter-toc-sublist > li > ul > li,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li > ul > li > ul > li,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > ul > li,
+.book-reading-pane .book-content nav.contents > ul > li > ul > li > ul > li,
+.book-reading-pane .book-content nav.contents > ul > li .chapter-toc-sublist > li > ul > li,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li > ul > li > ul > li,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > ul > li,
+.folio-book-page .chapter-toc > ul > li > ul > li > ul > li,
+.folio-book-page .chapter-toc > ul > li .chapter-toc-sublist > li > ul > li,
+.folio-book-page .chapter-toc .chapter-toc-list > li > ul > li > ul > li,
+.folio-book-page .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > ul > li,
+.folio-book-page nav.contents.local > ul > li > ul > li > ul > li,
+.folio-book-page nav.contents.local > ul > li .chapter-toc-sublist > li > ul > li,
+.folio-book-page nav.contents.local .chapter-toc-list > li > ul > li > ul > li,
+.folio-book-page nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > ul > li,
+.folio-book-page nav.contents > ul > li > ul > li > ul > li,
+.folio-book-page nav.contents > ul > li .chapter-toc-sublist > li > ul > li,
+.folio-book-page nav.contents .chapter-toc-list > li > ul > li > ul > li,
+.folio-book-page nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > ul > li {
+  margin: 0.15rem 0 !important;
+  line-height: 1.38;
+  break-inside: avoid;
+  page-break-inside: avoid;
+  list-style: none !important;
+}
+
+.book-reading-pane .book-content .chapter-toc > ul > li > ul > li > ul > li > p > a,
+.book-reading-pane .book-content .chapter-toc > ul > li > ul > li > ul > li > a,
+.book-reading-pane .book-content .chapter-toc > ul > li .chapter-toc-sublist > li > ul > li > p > a,
+.book-reading-pane .book-content .chapter-toc > ul > li .chapter-toc-sublist > li > ul > li > a,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li > ul > li > ul > li > p > a,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li > ul > li > ul > li > a,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > p > a,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > a,
+.book-reading-pane .book-content nav.contents.local > ul > li > ul > li > ul > li > p > a,
+.book-reading-pane .book-content nav.contents.local > ul > li > ul > li > ul > li > a,
+.book-reading-pane .book-content nav.contents.local > ul > li .chapter-toc-sublist > li > ul > li > p > a,
+.book-reading-pane .book-content nav.contents.local > ul > li .chapter-toc-sublist > li > ul > li > a,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li > ul > li > ul > li > p > a,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li > ul > li > ul > li > a,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > p > a,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > a,
+.book-reading-pane .book-content nav.contents > ul > li > ul > li > ul > li > p > a,
+.book-reading-pane .book-content nav.contents > ul > li > ul > li > ul > li > a,
+.book-reading-pane .book-content nav.contents > ul > li .chapter-toc-sublist > li > ul > li > p > a,
+.book-reading-pane .book-content nav.contents > ul > li .chapter-toc-sublist > li > ul > li > a,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li > ul > li > ul > li > p > a,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li > ul > li > ul > li > a,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > p > a,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > a,
+.folio-book-page .chapter-toc > ul > li > ul > li > ul > li > p > a,
+.folio-book-page .chapter-toc > ul > li > ul > li > ul > li > a,
+.folio-book-page .chapter-toc > ul > li .chapter-toc-sublist > li > ul > li > p > a,
+.folio-book-page .chapter-toc > ul > li .chapter-toc-sublist > li > ul > li > a,
+.folio-book-page .chapter-toc .chapter-toc-list > li > ul > li > ul > li > p > a,
+.folio-book-page .chapter-toc .chapter-toc-list > li > ul > li > ul > li > a,
+.folio-book-page .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > p > a,
+.folio-book-page .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > a,
+.folio-book-page nav.contents.local > ul > li > ul > li > ul > li > p > a,
+.folio-book-page nav.contents.local > ul > li > ul > li > ul > li > a,
+.folio-book-page nav.contents.local > ul > li .chapter-toc-sublist > li > ul > li > p > a,
+.folio-book-page nav.contents.local > ul > li .chapter-toc-sublist > li > ul > li > a,
+.folio-book-page nav.contents.local .chapter-toc-list > li > ul > li > ul > li > p > a,
+.folio-book-page nav.contents.local .chapter-toc-list > li > ul > li > ul > li > a,
+.folio-book-page nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > p > a,
+.folio-book-page nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > a,
+.folio-book-page nav.contents > ul > li > ul > li > ul > li > p > a,
+.folio-book-page nav.contents > ul > li > ul > li > ul > li > a,
+.folio-book-page nav.contents > ul > li .chapter-toc-sublist > li > ul > li > p > a,
+.folio-book-page nav.contents > ul > li .chapter-toc-sublist > li > ul > li > a,
+.folio-book-page nav.contents .chapter-toc-list > li > ul > li > ul > li > p > a,
+.folio-book-page nav.contents .chapter-toc-list > li > ul > li > ul > li > a,
+.folio-book-page nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > p > a,
+.folio-book-page nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > a {
+  font-family: var(--book-font-serif);
+  font-size: 0.82rem;
+  color: var(--book-text-muted);
+  opacity: 0.9;
+  text-decoration: none !important;
+  display: block;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  transition: all 0.12s ease;
+}
+
+.book-reading-pane .book-content .chapter-toc > ul > li > ul > li > ul > li > p > a:hover,
+.book-reading-pane .book-content .chapter-toc > ul > li > ul > li > ul > li > a:hover,
+.book-reading-pane .book-content .chapter-toc > ul > li .chapter-toc-sublist > li > ul > li > p > a:hover,
+.book-reading-pane .book-content .chapter-toc > ul > li .chapter-toc-sublist > li > ul > li > a:hover,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li > ul > li > ul > li > p > a:hover,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li > ul > li > ul > li > a:hover,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > p > a:hover,
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > a:hover,
+.book-reading-pane .book-content nav.contents.local > ul > li > ul > li > ul > li > p > a:hover,
+.book-reading-pane .book-content nav.contents.local > ul > li > ul > li > ul > li > a:hover,
+.book-reading-pane .book-content nav.contents.local > ul > li .chapter-toc-sublist > li > ul > li > p > a:hover,
+.book-reading-pane .book-content nav.contents.local > ul > li .chapter-toc-sublist > li > ul > li > a:hover,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li > ul > li > ul > li > p > a:hover,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li > ul > li > ul > li > a:hover,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > p > a:hover,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > a:hover,
+.book-reading-pane .book-content nav.contents > ul > li > ul > li > ul > li > p > a:hover,
+.book-reading-pane .book-content nav.contents > ul > li > ul > li > ul > li > a:hover,
+.book-reading-pane .book-content nav.contents > ul > li .chapter-toc-sublist > li > ul > li > p > a:hover,
+.book-reading-pane .book-content nav.contents > ul > li .chapter-toc-sublist > li > ul > li > a:hover,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li > ul > li > ul > li > p > a:hover,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li > ul > li > ul > li > a:hover,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > p > a:hover,
+.book-reading-pane .book-content nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > a:hover,
+.folio-book-page .chapter-toc > ul > li > ul > li > ul > li > p > a:hover,
+.folio-book-page .chapter-toc > ul > li > ul > li > ul > li > a:hover,
+.folio-book-page .chapter-toc > ul > li .chapter-toc-sublist > li > ul > li > p > a:hover,
+.folio-book-page .chapter-toc > ul > li .chapter-toc-sublist > li > ul > li > a:hover,
+.folio-book-page .chapter-toc .chapter-toc-list > li > ul > li > ul > li > p > a:hover,
+.folio-book-page .chapter-toc .chapter-toc-list > li > ul > li > ul > li > a:hover,
+.folio-book-page .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > p > a:hover,
+.folio-book-page .chapter-toc .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > a:hover,
+.folio-book-page nav.contents.local > ul > li > ul > li > ul > li > p > a:hover,
+.folio-book-page nav.contents.local > ul > li > ul > li > ul > li > a:hover,
+.folio-book-page nav.contents.local > ul > li .chapter-toc-sublist > li > ul > li > p > a:hover,
+.folio-book-page nav.contents.local > ul > li .chapter-toc-sublist > li > ul > li > a:hover,
+.folio-book-page nav.contents.local .chapter-toc-list > li > ul > li > ul > li > p > a:hover,
+.folio-book-page nav.contents.local .chapter-toc-list > li > ul > li > ul > li > a:hover,
+.folio-book-page nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > p > a:hover,
+.folio-book-page nav.contents.local .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > a:hover,
+.folio-book-page nav.contents > ul > li > ul > li > ul > li > p > a:hover,
+.folio-book-page nav.contents > ul > li > ul > li > ul > li > a:hover,
+.folio-book-page nav.contents > ul > li .chapter-toc-sublist > li > ul > li > p > a:hover,
+.folio-book-page nav.contents > ul > li .chapter-toc-sublist > li > ul > li > a:hover,
+.folio-book-page nav.contents .chapter-toc-list > li > ul > li > ul > li > p > a:hover,
+.folio-book-page nav.contents .chapter-toc-list > li > ul > li > ul > li > a:hover,
+.folio-book-page nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > p > a:hover,
+.folio-book-page nav.contents .chapter-toc-list > li .chapter-toc-sublist > li > ul > li > a:hover {
+  color: var(--book-link);
+  background-color: var(--book-surface-alt);
+  text-decoration: none !important;
+}
+
+.book-reading-pane .book-content .chapter-toc .chapter-toc-details summary,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-details summary,
+.book-reading-pane .book-content nav.contents .chapter-toc-details summary,
+.folio-book-page .chapter-toc .chapter-toc-details summary,
+.folio-book-page nav.contents.local .chapter-toc-details summary,
+.folio-book-page nav.contents .chapter-toc-details summary {
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.book-reading-pane .book-content .chapter-toc .chapter-toc-details summary::-webkit-details-marker,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-details summary::-webkit-details-marker,
+.book-reading-pane .book-content nav.contents .chapter-toc-details summary::-webkit-details-marker,
+.folio-book-page .chapter-toc .chapter-toc-details summary::-webkit-details-marker,
+.folio-book-page nav.contents.local .chapter-toc-details summary::-webkit-details-marker,
+.folio-book-page nav.contents .chapter-toc-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.book-reading-pane .book-content .chapter-toc .chapter-toc-summary,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-summary,
+.book-reading-pane .book-content nav.contents .chapter-toc-summary,
+.folio-book-page .chapter-toc .chapter-toc-summary,
+.folio-book-page nav.contents.local .chapter-toc-summary,
+.folio-book-page nav.contents .chapter-toc-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.25rem 0;
+}
+
+.book-reading-pane .book-content .chapter-toc .chapter-toc-title,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-title,
+.book-reading-pane .book-content nav.contents .chapter-toc-title,
+.folio-book-page .chapter-toc .chapter-toc-title,
+.folio-book-page nav.contents.local .chapter-toc-title,
+.folio-book-page nav.contents .chapter-toc-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--book-font-display);
+  font-weight: 600;
+  font-size: 0.92rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--book-text);
+}
+
+.book-reading-pane .book-content .chapter-toc .chapter-toc-title .toc-icon,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-title .toc-icon,
+.book-reading-pane .book-content nav.contents .chapter-toc-title .toc-icon,
+.folio-book-page .chapter-toc .chapter-toc-title .toc-icon,
+.folio-book-page nav.contents.local .chapter-toc-title .toc-icon,
+.folio-book-page nav.contents .chapter-toc-title .toc-icon {
+  color: var(--book-link);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.book-reading-pane .book-content .chapter-toc .chapter-toc-badge,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-badge,
+.book-reading-pane .book-content nav.contents .chapter-toc-badge,
+.folio-book-page .chapter-toc .chapter-toc-badge,
+.folio-book-page nav.contents.local .chapter-toc-badge,
+.folio-book-page nav.contents .chapter-toc-badge {
+  font-size: 0.78rem;
+  color: var(--book-text-muted);
+  background-color: var(--book-surface-alt);
+  border: 1px solid var(--book-border);
+  padding: 0.15rem 0.55rem;
+  border-radius: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.book-reading-pane .book-content .chapter-toc .chapter-toc-list,
+.book-reading-pane .book-content nav.contents.local .chapter-toc-list,
+.book-reading-pane .book-content nav.contents .chapter-toc-list,
+.folio-book-page .chapter-toc .chapter-toc-list,
+.folio-book-page nav.contents.local .chapter-toc-list,
+.folio-book-page nav.contents .chapter-toc-list {
+  padding-top: 0.75rem !important;
+  border-top: 1px solid var(--book-border);
+}
+
+.book-reading-pane .book-content .title-page,
+.folio-book-page .title-page {
+  max-width: 42rem;
+  margin: 1.5rem auto 2.75rem !important;
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+  border-top: 1px solid var(--book-border);
+  border-bottom: 1px solid var(--book-border);
+  background-color: rgba(255, 255, 255, 0.015);
+  border-radius: 4px;
+}
+
+.book-reading-pane .book-content .title-page .line-block,
+.folio-book-page .title-page .line-block {
+  margin: 0 auto !important;
+  text-align: center !important;
+  letter-spacing: 0.08em;
+  line-height: 1.85;
+  font-size: 0.98rem;
+  color: var(--book-text-muted);
+}
+
+.book-reading-pane .book-content .title-page a,
+.folio-book-page .title-page a {
+  color: var(--book-text) !important;
+  font-weight: 600;
+  text-decoration: none !important;
+  border-bottom: 1px dotted var(--book-border-dark);
+}
+
+.book-reading-pane .book-content .title-page a:hover,
+.folio-book-page .title-page a:hover {
+  color: var(--book-link-hover) !important;
+  border-bottom-color: var(--book-link-hover);
+}
+
+.book-reading-pane .book-content section#conspectus-totius-operis,
+.folio-book-page section#conspectus-totius-operis {
+  max-width: 42rem;
+  margin: 1.5rem auto 2.5rem !important;
+  text-align: center;
+}
+
+.book-reading-pane .book-content section#conspectus-totius-operis h2,
+.folio-book-page section#conspectus-totius-operis h2 {
+  margin-bottom: 0.2rem !important;
+}
+
+.book-reading-pane .book-content section#conspectus-totius-operis h3,
+.folio-book-page section#conspectus-totius-operis h3 {
+  text-align: center !important;
+  font-size: 1.22rem !important;
+  letter-spacing: 0.04em;
+  margin-top: 2rem !important;
+  margin-bottom: 0.2rem !important;
+}
+
+.book-reading-pane .book-content section#conspectus-totius-operis p,
+.folio-book-page section#conspectus-totius-operis p {
+  text-align: center !important;
+  text-indent: 0 !important;
+  margin-bottom: 0.35rem !important;
+}
+
+.book-reading-pane .book-content section#conspectus-totius-operis p em,
+.folio-book-page section#conspectus-totius-operis p em {
+  color: var(--book-text-muted);
+  font-size: 1.02rem;
+}
+
+.book-reading-pane .book-content section#conspectus-totius-operis p a,
+.folio-book-page section#conspectus-totius-operis p a {
+  text-decoration: none !important;
+  padding: 0.1rem 0.45rem;
+  border-radius: 3px;
+}
+
+.book-reading-pane .book-content section#conspectus-totius-operis p a:hover,
+.folio-book-page section#conspectus-totius-operis p a:hover {
+  background-color: var(--book-surface);
+}
+
+.book-reading-pane .book-content section[id],
+.book-reading-pane .book-content h1[id],
+.book-reading-pane .book-content h2[id],
+.book-reading-pane .book-content h3[id],
+.book-reading-pane .book-content h4[id],
+.book-reading-pane .book-content aside.footnote[id],
+.book-reading-pane .book-content span[id],
+.book-reading-pane .book-content a[id],
+.folio-book-page section[id],
+.folio-book-page h1[id],
+.folio-book-page h2[id],
+.folio-book-page h3[id],
+.folio-book-page h4[id],
+.folio-book-page aside.footnote[id],
+.folio-book-page span[id],
+.folio-book-page a[id] {
+  scroll-margin-top: 6.5rem;
+}
+
+.book-reading-pane .book-content section:target,
+.book-reading-pane .book-content aside.footnote:target,
+.folio-book-page section:target,
+.folio-book-page aside.footnote:target {
+  background-color: rgba(212, 175, 55, 0.07);
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.book-reading-pane .book-content span[id]:target + h2,
+.book-reading-pane .book-content span[id]:target + h3,
+.book-reading-pane .book-content span[id]:target + h4,
+.book-reading-pane .book-content span[id]:target + ul > li:first-child,
+.folio-book-page span[id]:target + h2,
+.folio-book-page span[id]:target + h3,
+.folio-book-page span[id]:target + h4,
+.folio-book-page span[id]:target + ul > li:first-child {
+  background-color: rgba(212, 175, 55, 0.12);
+  border-radius: 4px;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+}
+
+.book-reading-pane .book-content a.citation-ref,
+.book-reading-pane .book-content .citation-ref,
+.folio-book-page a.citation-ref,
+.folio-book-page .citation-ref {
+  color: var(--book-text) !important;
+  text-decoration: none !important;
+  border-bottom: 1px dotted rgba(222, 131, 110, 0.55);
+  cursor: pointer;
+  padding: 0 0.08em;
+  border-radius: 2px;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.book-reading-pane .book-content a.citation-ref:hover,
+.book-reading-pane .book-content .citation-ref:hover,
+.folio-book-page a.citation-ref:hover,
+.folio-book-page .citation-ref:hover {
+  color: var(--book-link-hover) !important;
+  border-bottom: 1px solid var(--book-link);
+  background-color: rgba(222, 131, 110, 0.12);
+  text-decoration: none !important;
+}
+
+.book-reading-pane .book-content a.citation-ref:target,
+.book-reading-pane .book-content .citation-ref:target,
+.folio-book-page a.citation-ref:target,
+.folio-book-page .citation-ref:target {
+  background-color: rgba(222, 131, 110, 0.24);
+  border-bottom: 1px solid var(--book-link);
+  outline: 1px solid rgba(222, 131, 110, 0.45);
+}
+
+.book-reading-pane .book-content a.term-ref,
+.book-reading-pane .book-content .term-ref,
+.book-reading-pane .book-content .glossary-term,
+.folio-book-page a.term-ref,
+.folio-book-page .term-ref,
+.folio-book-page .glossary-term {
+  color: var(--book-text) !important;
+  text-decoration: none !important;
+  border-bottom: 1px dotted rgba(212, 175, 55, 0.5);
+  cursor: pointer;
+  padding: 0 0.08em;
+  border-radius: 2px;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.book-reading-pane .book-content a.term-ref:hover,
+.book-reading-pane .book-content .term-ref:hover,
+.book-reading-pane .book-content .glossary-term:hover,
+.folio-book-page a.term-ref:hover,
+.folio-book-page .term-ref:hover,
+.folio-book-page .glossary-term:hover {
+  color: #f3d478 !important;
+  border-bottom: 1px solid var(--book-accent-gold);
+  background-color: rgba(212, 175, 55, 0.12);
+  text-decoration: none !important;
+}
+
+.book-reading-pane .book-content a.term-ref:target,
+.book-reading-pane .book-content .term-ref:target,
+.book-reading-pane .book-content .glossary-term:target,
+.folio-book-page a.term-ref:target,
+.folio-book-page .term-ref:target,
+.folio-book-page .glossary-term:target {
+  background-color: rgba(212, 175, 55, 0.24);
+  border-bottom: 1px solid var(--book-accent-gold);
+  outline: 1px solid rgba(212, 175, 55, 0.45);
+}
+
+.book-reading-pane .book-content a.person-ref,
+.book-reading-pane .book-content .person-ref,
+.folio-book-page a.person-ref,
+.folio-book-page .person-ref {
+  color: var(--book-text) !important;
+  text-decoration: none !important;
+  font-variant: small-caps;
+  letter-spacing: 0.03em;
+  border-bottom: 1px dotted rgba(156, 149, 138, 0.5);
+  cursor: pointer;
+  padding: 0 0.08em;
+  border-radius: 2px;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.book-reading-pane .book-content a.person-ref:hover,
+.book-reading-pane .book-content .person-ref:hover,
+.folio-book-page a.person-ref:hover,
+.folio-book-page .person-ref:hover {
+  color: var(--book-link-hover) !important;
+  border-bottom: 1px solid var(--book-link);
+  background-color: rgba(222, 131, 110, 0.1);
+  text-decoration: none !important;
+}
+
+.book-reading-pane .book-content a.person-ref:target,
+.book-reading-pane .book-content .person-ref:target,
+.folio-book-page a.person-ref:target,
+.folio-book-page .person-ref:target {
+  background-color: rgba(222, 131, 110, 0.22);
+  border-bottom: 1px solid var(--book-link);
+  outline: 1px solid rgba(222, 131, 110, 0.45);
+}
+
+.book-reading-pane .book-content a.footnote-reference,
+.folio-book-page a.footnote-reference {
+  font-size: 0.78em;
+  vertical-align: super;
+  line-height: 0;
+  text-decoration: none !important;
+  color: var(--book-link) !important;
+  padding: 0 0.12em;
+  font-weight: 600;
+}
+
+.book-reading-pane .book-content a.footnote-reference:hover,
+.folio-book-page a.footnote-reference:hover {
+  color: var(--book-link-hover) !important;
+  text-decoration: underline !important;
+}
+
+.book-reading-pane .book-content aside.footnote-list,
+.folio-book-page aside.footnote-list {
+  margin-top: 2.75rem !important;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--book-border);
+}
+
+.book-reading-pane .book-content aside.footnote,
+.folio-book-page aside.footnote {
+  display: grid;
+  grid-template-columns: 2.6rem 1fr;
+  gap: 0.4rem;
+  align-items: baseline;
+  font-size: 0.92rem;
+  line-height: 1.58;
+  color: var(--book-text-muted);
+  margin: 0.5rem 0 !important;
+}
+
+.book-reading-pane .book-content aside.footnote:first-of-type,
+.folio-book-page aside.footnote:first-of-type {
+  margin-top: 2.25rem !important;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--book-border);
+}
+
+aside.footnote-list .book-reading-pane .book-content aside.footnote:first-of-type, aside.footnote-list .folio-book-page aside.footnote:first-of-type {
+  margin-top: 0.5rem !important;
+  padding-top: 0;
+  border-top: none;
+}
+
+.book-reading-pane .book-content aside.footnote > .label,
+.folio-book-page aside.footnote > .label {
+  font-family: var(--book-font-serif);
+  font-weight: 600;
+  color: var(--book-link);
+  text-align: right;
+  padding-right: 0.25rem;
+  white-space: nowrap;
+}
+
+.book-reading-pane .book-content aside.footnote > .label a,
+.folio-book-page aside.footnote > .label a {
+  text-decoration: none !important;
+  color: var(--book-link) !important;
+}
+
+.book-reading-pane .book-content aside.footnote > p,
+.folio-book-page aside.footnote > p {
+  grid-column: 2;
+  text-indent: 0 !important;
+  margin: 0 0 0.3rem 0 !important;
+  text-align: justify;
+}
+
+@media (max-width: 640px) {
+  .book-header-nav {
+    grid-template-columns: auto 1fr auto;
+    gap: 0.25rem;
+  }
+  .book-nav-btn .nav-label {
+    display: none;
+  }
+  .book-reading-pane .book-content {
+    font-size: 1.08rem;
+  }
+  .book-reading-pane .book-content h1 {
+    font-size: 1.75rem !important;
+  }
+  .book-reading-pane .book-content h2 {
+    font-size: 1.32rem !important;
+  }
+  .book-reading-pane .book-content p {
+    text-align: left;
+    text-indent: 1.5em;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   4. Book Codex Footer (footer.book-footer)
+   ------------------------------------------------------------------------- */
+footer.book-footer {
+  margin-top: 3rem !important;
+  padding-top: 1.5rem !important;
+  border-top: 1px solid var(--book-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.book-footer-ornament {
+  font-size: 1.15rem;
+  color: var(--book-border-dark);
+  line-height: 1;
+  user-select: none;
+}
+
+.book-footer-nav {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 1fr) auto minmax(4.5rem, 1fr);
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.book-toc-link {
+  font-family: var(--book-font-display);
+  font-size: 0.88rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--book-text-muted) !important;
+  text-decoration: none !important;
+}
+
+.book-toc-link:hover {
+  color: var(--book-link-hover) !important;
+}
+
+/* -------------------------------------------------------------------------
+   5. Classical Proposition & Proof Structural Blocks (Euclid / Pacioli)
+   ------------------------------------------------------------------------- */
+.enunciation {
+  font-style: italic;
+  text-indent: 1.75em;
+  margin-top: 0.5em;
+  margin-bottom: 0.75em;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.assertion {
+  text-align: center !important;
+  text-indent: 0 !important;
+  margin-top: 0.35em;
+  margin-bottom: 0.35em;
+  clear: both;
+}
+
+.sub-clause {
+  text-indent: 3.5em !important;
+  margin-top: 0.15em;
+  margin-bottom: 0.15em;
+  text-align: left;
+}
+
+.justification {
+  float: right;
+  text-indent: 0 !important;
+  font-style: normal;
+  font-size: 0.95em;
+  letter-spacing: 0.02em;
+}
+
+.qed {
+  text-align: right;
+  text-indent: 0 !important;
+  margin-top: 0.6em;
+  margin-bottom: 0.6em;
+  padding-right: 1.5em;
+  font-style: normal;
+}
+
+.porism,
+.lemma,
+.scholium {
+  margin: 0.75em 0;
+  padding-left: 1em;
+  border-left: 2px solid rgba(113, 113, 122, 0.35);
+}
+
+.porism-title,
+.lemma-title,
+.scholium-title {
+  font-weight: 700;
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.25em;
+}
+
+.folio-milestone {
+  font-size: 0.75em;
+  color: #71717a;
+  text-align: right;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  margin: 0.4em 0;
+  clear: both;
+}
+
+sup.line-num {
+  font-size: 0.75em;
+  line-height: 0;
+  vertical-align: baseline;
+  position: relative;
+  top: -0.4em;
+  color: #71717a;
+  margin-right: 0.15em;
+}
+
+/* Responsive Side-by-Side / Floating Diagram Layouts */
+figure.photon-picture.diagram-right,
+figure.photon-svg.diagram-right {
+  float: right;
+  clear: right;
+  margin: 0.25em 0 1.25em 1.5em;
+  max-width: 50%;
+}
+
+@media (max-width: 640px) {
+  figure.photon-picture.diagram-right,
+figure.photon-svg.diagram-right,
+.euclid-figure-container {
+    float: none;
+    max-width: 100%;
+    margin: 0.75em auto;
+  }
+}
+
+/* Interactive Geometric Text References */
+.geom-ref,
+.geom-interactive-ref,
+.katex.geom-interactive-ref {
+  cursor: pointer;
+  position: relative;
+  border-bottom: 1.5px dotted rgba(220, 38, 38, 0.45);
+  border-radius: 2px;
+  padding: 0 1px;
+  transition: all 0.15s ease-in-out;
+}
+
+.geom-ref:hover,
+.geom-interactive-ref:hover,
+.katex.geom-interactive-ref:hover {
+  border-bottom: 1.5px solid #dc2626 !important;
+}
+
+/* Active Highlight: Turning text RED without glow */
+.geom-highlight-text,
+.geom-highlight-text *,
+.katex.geom-highlight-text,
+.katex.geom-highlight-text * {
+  color: #dc2626 !important;
+  background-color: rgba(239, 68, 68, 0.08) !important;
+  border-radius: 3px;
+  transition: color 0.1s ease-in-out, background-color 0.1s ease-in-out;
+}
+
+/* Hidden/Toggleable Semantic Overlay Elements in SVG */
+svg.euclid-graphic .geom-overlay,
+svg.euclid-graphic #highlights > * {
+  opacity: 0;
+  transition: opacity 0.12s ease, stroke 0.12s ease, fill-opacity 0.12s ease;
+}
+
+/* Active Highlight in SVG: Change color to RED without glow or overstroke */
+svg.euclid-graphic [data-ref]:hover,
+svg.euclid-graphic .highlight,
+svg.euclid-graphic .geom-highlight-active {
+  opacity: 1 !important;
+  stroke: #ef4444 !important;
+  stroke-opacity: 1 !important;
+  filter: none !important;
+  cursor: pointer;
+  transition: opacity 0.1s ease, stroke 0.1s ease;
+}
+
+svg.euclid-graphic polygon:hover,
+svg.euclid-graphic polygon.highlight,
+svg.euclid-graphic polygon.geom-highlight-active,
+svg.euclid-graphic path.polygon.geom-highlight-active,
+svg.euclid-graphic path.geom-polygon.geom-highlight-active,
+svg.euclid-graphic path.wedge.geom-highlight-active,
+svg.euclid-graphic path.angle.geom-highlight-active {
+  opacity: 1 !important;
+  fill: #ef4444 !important;
+  fill-opacity: 0.22 !important;
+  stroke: #ef4444 !important;
+  stroke-opacity: 1 !important;
+  stroke-width: 1.5px !important;
+  filter: none !important;
+}
+
+svg.euclid-graphic circle.geom-point:hover,
+svg.euclid-graphic circle.point:hover,
+svg.euclid-graphic #points circle:hover,
+svg.euclid-graphic circle.geom-point.geom-highlight-active,
+svg.euclid-graphic circle.point.geom-highlight-active,
+svg.euclid-graphic #points circle.geom-highlight-active {
+  opacity: 1 !important;
+  fill: #ef4444 !important;
+  fill-opacity: 1 !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+  filter: none !important;
+}
+
+svg.euclid-graphic text:hover,
+svg.euclid-graphic text.highlight,
+svg.euclid-graphic text.geom-highlight-active,
+svg.euclid-graphic text.geom-highlight-active *,
+svg.euclid-graphic text.geom-highlight-active tspan,
+svg.euclid-graphic text.geom-label.geom-highlight-active,
+svg.euclid-graphic text.label.geom-highlight-active {
+  opacity: 1 !important;
+  fill: #ef4444 !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+  filter: none !important;
+}
+
+/* Secondary highlight for endpoints/labels when a segment, angle, or polygon is hovered */
+svg.euclid-graphic .geom-highlight-secondary {
+  opacity: 1 !important;
+  stroke: #ef4444 !important;
+  filter: none !important;
+  transition: opacity 0.1s ease, stroke 0.1s ease, fill 0.1s ease;
+}
+
+svg.euclid-graphic text.geom-highlight-secondary,
+svg.euclid-graphic text.geom-highlight-secondary tspan,
+svg.euclid-graphic tspan.geom-highlight-secondary {
+  opacity: 1 !important;
+  fill: #ef4444 !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+  filter: none !important;
+}
+
+svg.euclid-graphic circle.geom-point.geom-highlight-secondary,
+svg.euclid-graphic circle.point.geom-highlight-secondary,
+svg.euclid-graphic #points circle.geom-highlight-secondary {
+  opacity: 1 !important;
+  fill: #ef4444 !important;
+  fill-opacity: 1 !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+  filter: none !important;
+}
+
+/* Inline Figure Wrapper in Book Page */
+.euclid-figure-container {
+  float: right;
+  clear: right;
+  margin: 0.25em 0 1.25em 1.5em;
+  max-width: 52%;
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.08);
+  user-select: none;
+  transition: max-width 0.2s ease;
+}
+
+.euclid-figure-container:hover {
+  border-color: #cbd5e1;
+}
+
+.euclid-figure-container .figure-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #f4f4f5;
+}
+
+.euclid-figure-container .figure-btn {
+  font-size: 10px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #71717a;
+  background: transparent;
+  transition: all 0.15s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.euclid-figure-container .figure-btn:hover {
+  color: #18181b;
+  background: #f4f4f5;
+}
+
+.euclid-figure-container .figure-btn.active {
+  color: #047857;
+  background: #ecfdf5;
+  font-weight: 600;
+}
+
+.euclid-figure-container.python-mode {
+  min-width: 340px;
+  max-width: 62%;
+}
+
+.euclid-figure-container .figure-svg-wrapper svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.euclid-figure-container .figure-python-wrapper {
+  background: #09090b;
+  color: #e4e4e7;
+  border-radius: 6px;
+  border: 1px solid #27272a;
+  padding: 8px 10px;
+  max-height: 300px;
+  overflow: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10.5px;
+  line-height: 1.5;
+  text-align: left;
+  user-select: text;
+}
+
+.euclid-figure-container .figure-caption {
+  font-size: 11px;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-style: italic;
+  color: #71717a;
+  text-align: center;
+  margin-top: 6px;
 }

@@ -31,6 +31,6 @@ Package Contents
 
 .. py:function:: setup(app: Any) -> Dict[str, Any]
 
-   Register geometry roles and nodes with Sphinx.
+   Register geometry and scholarly roles and nodes with Sphinx.
 
 

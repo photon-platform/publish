@@ -130,6 +130,9 @@ def create_app(
     @app.route("/media/<path:rel_path>")
     def serve_media(rel_path: str):
         """Serve folio scan PNGs, cropped graphic PNGs, and SVGs from resources/<edition>."""
+        prefix = f"{scanner.root_dir.name}/"
+        if rel_path.startswith(prefix) and not (scanner.root_dir / rel_path).exists():
+            rel_path = rel_path[len(prefix) :]
         return send_from_directory(str(scanner.root_dir), rel_path)
 
     # -------------------------------------------------------------------------

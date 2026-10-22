@@ -9,6 +9,15 @@ photon_platform.publish.rst_renderer
 
 
 
+Attributes
+----------
+
+.. autoapisummary::
+
+   photon_platform.publish.rst_renderer.parse_rst_frontmatter
+   photon_platform.publish.rst_renderer.render_rst_to_html
+
+
 Functions
 ---------
 
@@ -40,4 +49,8 @@ Module Contents
 
    Render extended Scriptorium RST source to an HTML5 fragment string in memory.
 
+
+.. py:data:: parse_rst_frontmatter
+
+.. py:data:: render_rst_to_html
 
