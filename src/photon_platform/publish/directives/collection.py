@@ -9,9 +9,10 @@ from docutils import nodes
 from sphinx.addnodes import toctree
 from typing import Dict, Any, List
 try:
-    from photon_platform.publish.images import picture_node
+    from photon_platform.publish.images import picture_node, prepare_inline_svg
 except ImportError:
     picture_node = None
+    prepare_inline_svg = None
 
 
 
@@ -381,6 +382,20 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
                                         item['excerpt_figure_alt'] = image_node.get('alt', '')
                                         item['excerpt_figure_width'] = n.get('width')
                                         break
+
+                    fig_file = item.get('excerpt_figure_filename')
+                    if (
+                        prepare_inline_svg
+                        and isinstance(fig_file, str)
+                        and fig_file.lower().endswith('.svg')
+                    ):
+                        rel_fig = fig_file.lstrip('/')
+                        svg_src_path = os.path.join(env.srcdir, rel_fig)
+                        if not os.path.isfile(svg_src_path):
+                            svg_src_path = os.path.join(builder.outdir, rel_fig)
+                        item['excerpt_svg_content'] = prepare_inline_svg(
+                            svg_src_path, as_thumbnail=True
+                        )
 
                     if 'tags' in item and isinstance(item['tags'], str):
                         item['tags'] = [tag.strip() for tag in item['tags'].split(',')]

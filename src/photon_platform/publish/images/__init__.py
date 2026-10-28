@@ -1,6 +1,12 @@
 """Image processing and directive registration."""
 
-from .directive import PictureDirective, picture_node, visit_picture_node, depart_picture_node
+from .directive import (
+    PictureDirective,
+    picture_node,
+    visit_picture_node,
+    depart_picture_node,
+    prepare_inline_svg,
+)
 from typing import Any, Dict
 
 
