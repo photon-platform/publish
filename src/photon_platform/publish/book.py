@@ -601,6 +601,94 @@ def _enhance_epub_body_html(
     return body_html
 
 
+_AUX_TRACK_BASENAMES: Set[str] = {
+    "commentary",
+    "summary",
+    "notes",
+    "folio",
+}
+
+_AUX_TRACK_PATTERNS: List[re.Pattern[str]] = [
+    re.compile(r"^.+[._-](?:commentary|summary|notes|folio)$"),
+    re.compile(r"^translation-notes-.+$"),
+]
+
+
+def _is_auxiliary_track_doc(env: Any, docname: str) -> bool:
+    """Return True if `docname` is an auxiliary companion track (e.g., commentary, notes, summary, folio)
+    that should be skipped by sequential Prev/Next book navigation.
+    """
+    basename = os.path.basename(docname)
+    if basename in _AUX_TRACK_BASENAMES:
+        return True
+    for pat in _AUX_TRACK_PATTERNS:
+        if pat.match(basename):
+            return True
+    meta = _get_doc_metadata(env, docname)
+    if str(meta.get("type", "")).strip().lower() in _AUX_TRACK_BASENAMES:
+        return True
+    return False
+
+
+def _update_book_prev_next(app: Any, pagename: str, context: Dict[str, Any]) -> None:
+    """Adjust `prev` and `next` links in `context` so sequential navigation steps through
+    primary book elements and skips auxiliary companion tracks (such as commentary or notes).
+    """
+    builder = getattr(app, "builder", None)
+    env = getattr(app, "env", None)
+    if builder is None or env is None:
+        return
+    relations: Optional[Dict[str, List[Optional[str]]]] = getattr(builder, "relations", None)
+    if not relations or not isinstance(relations, dict):
+        return
+
+    start_doc = pagename
+    if _is_auxiliary_track_doc(env, pagename):
+        doc_dir = os.path.dirname(pagename)
+        cand_index = f"{doc_dir}/index" if doc_dir else "index"
+        if cand_index in relations and not _is_auxiliary_track_doc(env, cand_index):
+            start_doc = cand_index
+
+    if start_doc not in relations:
+        return
+
+    def _find_non_aux(initial_doc: Optional[str], direction_idx: int) -> Optional[str]:
+        cur = initial_doc
+        visited: Set[str] = {start_doc}
+        while cur and cur not in visited:
+            visited.add(cur)
+            if not _is_auxiliary_track_doc(env, cur):
+                return cur
+            rel = relations.get(cur)
+            cur = rel[direction_idx] if rel and len(rel) > direction_idx else None
+        return None
+
+    def _make_link(target_doc: Optional[str]) -> Optional[Dict[str, str]]:
+        if not target_doc:
+            return None
+        try:
+            link = builder.get_relative_uri(pagename, target_doc)
+        except Exception:
+            return None
+        titles = getattr(env, "titles", {})
+        title_str = ""
+        if target_doc in titles and titles[target_doc] is not None and hasattr(builder, "render_partial"):
+            try:
+                title_str = builder.render_partial(titles[target_doc]).get("title", "")
+            except Exception:
+                title_str = ""
+        if not title_str:
+            title_str = _get_doc_title(env, target_doc, _get_doc_metadata(env, target_doc))
+        return {"link": link, "title": title_str}
+
+    start_rel = relations[start_doc]
+    prev_doc = _find_non_aux(start_rel[1] if len(start_rel) > 1 else None, 1)
+    next_doc = _find_non_aux(start_rel[2] if len(start_rel) > 2 else None, 2)
+
+    context["prev"] = _make_link(prev_doc)
+    context["next"] = _make_link(next_doc)
+
+
 def setup_book_page_context(
     app: Any,
     pagename: str,
@@ -611,6 +699,8 @@ def setup_book_page_context(
     """Sphinx `html-page-context` hook to inject Book Codex context and select `book_layout.html`."""
     book_ctx = resolve_book_context(app.env, pagename, doctree=doctree)
     context.update(book_ctx)
+    if book_ctx.get("is_book_page"):
+        _update_book_prev_next(app, pagename, context)
     if getattr(getattr(app, "builder", None), "name", "") == "epub":
         context["script_files"] = []
         if "body" in context and isinstance(context["body"], str):
