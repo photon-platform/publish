@@ -3673,11 +3673,19 @@ footer.book-footer {
    ------------------------------------------------------------------------- */
 .enunciation {
   font-style: italic;
-  text-indent: 1.75em;
+  text-indent: 0 !important;
   margin-top: 0.5em;
-  margin-bottom: 0.75em;
-  text-align: justify;
-  text-justify: inter-word;
+  margin-bottom: 1.15em;
+  text-align: center !important;
+  hyphens: none;
+  -webkit-hyphens: none;
+}
+
+.enunciation p {
+  text-indent: 0 !important;
+  text-align: center !important;
+  hyphens: none;
+  -webkit-hyphens: none;
 }
 
 .assertion {
@@ -4382,8 +4390,11 @@ svg.euclid-graphic #points circle.geom-highlight-secondary {
   width: 100%;
 }
 
-.book-reading-pane .book-content .collection.layout-cards > article.excerpt > .content > section h2 {
+.book-reading-pane .book-content .collection.layout-cards > article.excerpt > .content > section h2,
+.book-reading-pane .book-content .collection.layout-cards > article.excerpt > .content > section .enunciation,
+.book-reading-pane .book-content .collection.layout-cards > article.excerpt > .content > section p {
   text-align: center !important;
+  hyphens: none;
 }
 
 .book-reading-pane .book-content .collection.layout-banners {
