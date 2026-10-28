@@ -101,6 +101,8 @@ extensions = [
     "autoapi.extension",
 ]
 
+ogp_social_cards = {"enable": False}
+
 # autosummary_generate = True
 
 # AutoAPI options

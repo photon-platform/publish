@@ -14,8 +14,10 @@
 {%- endif %}
           </section>
         </div>
+{%- if article.date or article.category or article.tags %}
         <footer>
 {%- set meta = article %}
 {% include "article/_nav_meta.html" %}
         </footer>
+{%- endif %}
       </article>

@@ -238,11 +238,56 @@ def render_node_html(builder: Any, node: nodes.Node) -> str:
         The rendered HTML string.
 
     """
-    parts = builder.render_partial(node)
+    from sphinx.addnodes import pending_xref
+
+    node_copy = node.deepcopy()
+    for xref in list(node_copy.findall(pending_xref)):
+        xref.replace_self(list(xref.children))
+    for fn_ref in list(node_copy.findall(nodes.footnote_reference)):
+        if fn_ref.parent is not None:
+            fn_ref.parent.remove(fn_ref)
+    try:
+        from .elements import folio_node
+
+        for fn_node in list(node_copy.findall(folio_node)):
+            if fn_node.parent is not None:
+                fn_node.parent.remove(fn_node)
+    except ImportError:
+        pass
+
+    parts = builder.render_partial(node_copy)
     html = parts.get('fragment') or parts.get('html_body', '')
     html = re.sub(r'<main[^>]*>', '', html)
     html = re.sub(r'</main>', '', html)
+    html = re.sub(r'<sup class="line-num">.*?</sup>\s*', '', html)
+    html = re.sub(
+        r'<a\s+class="((?:term-ref|person-ref|citation-ref|reference)[^"]*)"[^>]*>(.*?)</a>',
+        r'<span class="\1">\2</span>',
+        html,
+    )
     return html.strip()
+
+
+def _find_first_excerpt_node(doctree: nodes.document) -> nodes.Node | None:
+    """Return the enunciation node if present, otherwise the first paragraph or block_quote node not nested inside an admonition or figure."""
+    try:
+        from .elements import enunciation_node
+
+        for enun in doctree.findall(enunciation_node):
+            return enun
+    except ImportError:
+        pass
+    for n in doctree.findall(lambda node: isinstance(node, (nodes.paragraph, nodes.block_quote))):
+        curr = n.parent
+        in_skip = False
+        while curr is not None:
+            if isinstance(curr, (nodes.Admonition, nodes.figure)):
+                in_skip = True
+                break
+            curr = curr.parent
+        if not in_skip:
+            return n
+    return None
 
 
 def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> None:
@@ -303,11 +348,8 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
                         item_doctree = None
 
                     if item_doctree:
-                        # Find first paragraph or blockquote
-                        first_text = None
-                        for n in item_doctree.traverse(lambda n: isinstance(n, (nodes.paragraph, nodes.block_quote))):
-                            first_text = n
-                            break
+                        # Find first paragraph or blockquote outside admonitions
+                        first_text = _find_first_excerpt_node(item_doctree)
                         
                         if first_text:
                             item['excerpt_text'] = render_node_html(builder, first_text)
@@ -315,7 +357,7 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
                         # Check for explicitly set featured image (from .. picture::)
                         if 'featured_image' in meta:
                              item['excerpt_figure_filename'] = meta['featured_image']
-                             # We might want to store alt text in metadata too if needed, but for now filename is key
+                             item['excerpt_figure_alt'] = meta.get('featured_image_alt') or item['title']
                         
                         # Fallback: Find first figure/picture if no featured image
                         if not item['excerpt_figure_filename']:
@@ -333,7 +375,9 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
                                 for n in item_doctree.traverse(nodes.figure):
                                     image_node = next(iter(n.traverse(nodes.image)), None)
                                     if image_node:
-                                        item['excerpt_figure_filename'] = os.path.basename(image_node['uri'])
+                                        item['excerpt_figure_filename'] = os.path.join(
+                                            builder.imagedir, os.path.basename(image_node['uri'])
+                                        )
                                         item['excerpt_figure_alt'] = image_node.get('alt', '')
                                         item['excerpt_figure_width'] = n.get('width')
                                         break
@@ -367,6 +411,9 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
         jinja_env = builder.templates.environment
         template = jinja_env.get_template(template_name)
         html = template.render(context)
+
+        if 'class="math' in html and 'math' in env.domains:
+            env.domains['math'].data.setdefault('has_equations', {})[fromdocname] = True
         
         node.replace_self(nodes.raw('', html, format='html'))
 
@@ -412,6 +459,8 @@ def generate_taxonomy_pages(app: Any) -> Any:
         Tuple containing context, template name, and output path for each page.
 
     """
+    if getattr(getattr(app, "builder", None), "name", "") == "epub":
+        return
     env = app.env
     if hasattr(env, 'all_tags'):
         for tag in env.all_tags:
@@ -438,10 +487,7 @@ def generate_taxonomy_pages(app: Any) -> Any:
                             doctree = env.get_doctree(docname)
                             
                             # Find first paragraph or blockquote
-                            first_text = None
-                            for node in doctree.traverse(lambda n: isinstance(n, (nodes.paragraph, nodes.block_quote))):
-                                first_text = node
-                                break
+                            first_text = _find_first_excerpt_node(doctree)
                             
                             if first_text:
                                 item['excerpt_text'] = render_node_html(app.builder, first_text)
@@ -450,7 +496,9 @@ def generate_taxonomy_pages(app: Any) -> Any:
                             for node in doctree.traverse(nodes.figure):
                                 image_node = next(iter(node.traverse(nodes.image)), None)
                                 if image_node:
-                                    item['excerpt_figure_filename'] = os.path.basename(image_node['uri'])
+                                    item['excerpt_figure_filename'] = os.path.join(
+                                        app.builder.imagedir, os.path.basename(image_node['uri'])
+                                    )
                                     item['excerpt_figure_alt'] = image_node.get('alt', '')
                                     item['excerpt_figure_width'] = node.get('width')
                                     break
@@ -465,7 +513,8 @@ def generate_taxonomy_pages(app: Any) -> Any:
                     'articles': articles,
                     'sort_key': 'number',
                     'reverse': True,
-                }
+                },
+                'has_maths_elements': any('class="math' in a.get('excerpt_text', '') for a in articles),
             }
             yield (f'tags/{tag}', context, 'tag_page.html')
 
@@ -494,10 +543,7 @@ def generate_taxonomy_pages(app: Any) -> Any:
                             doctree = env.get_doctree(docname)
                             
                             # Find first paragraph or blockquote
-                            first_text = None
-                            for node in doctree.traverse(lambda n: isinstance(n, (nodes.paragraph, nodes.block_quote))):
-                                first_text = node
-                                break
+                            first_text = _find_first_excerpt_node(doctree)
                             
                             if first_text:
                                 item['excerpt_text'] = render_node_html(app.builder, first_text)
@@ -506,7 +552,9 @@ def generate_taxonomy_pages(app: Any) -> Any:
                             for node in doctree.traverse(nodes.figure):
                                 image_node = next(iter(node.traverse(nodes.image)), None)
                                 if image_node:
-                                    item['excerpt_figure_filename'] = os.path.basename(image_node['uri'])
+                                    item['excerpt_figure_filename'] = os.path.join(
+                                        app.builder.imagedir, os.path.basename(image_node['uri'])
+                                    )
                                     item['excerpt_figure_alt'] = image_node.get('alt', '')
                                     item['excerpt_figure_width'] = node.get('width')
                                     break
@@ -521,7 +569,8 @@ def generate_taxonomy_pages(app: Any) -> Any:
                     'articles': articles,
                     'sort_key': 'number',
                     'reverse': True,
-                }
+                },
+                'has_maths_elements': any('class="math' in a.get('excerpt_text', '') for a in articles),
             }
             yield (f'categories/{category}', context, 'category_page.html')
 
@@ -537,32 +586,28 @@ def generate_taxonomy_pages(app: Any) -> Any:
                             'title': title_node.astext(),
                             'docname': docname,
                             'excerpt_text': '',
-                            'excerpt_figure': '',
+                            'excerpt_figure_filename': None,
                         }
                         item.update(meta)
 
                         doctree = env.get_doctree(docname)
                         
                         # Find first paragraph or blockquote
-                        first_text = None
-                        for node in doctree.traverse(lambda n: isinstance(n, (nodes.paragraph, nodes.block_quote))):
-                            first_text = node
-                            break
+                        first_text = _find_first_excerpt_node(doctree)
                         
                         if first_text:
                             item['excerpt_text'] = render_node_html(app.builder, first_text)
 
                         # Find first figure
-                        first_figure = None
                         for node in doctree.traverse(nodes.figure):
-                            # Adjust image URI to be relative to the document
-                            for img in node.traverse(nodes.image):
-                                img['uri'] = os.path.relpath(os.path.join(env.srcdir, img['uri']), os.path.join(env.srcdir, os.path.dirname(docname)))
-                            first_figure = node
-                            break
-
-                        if first_figure:
-                            item['excerpt_figure'] = render_node_html(app.builder, first_figure)
+                            image_node = next(iter(node.traverse(nodes.image)), None)
+                            if image_node:
+                                item['excerpt_figure_filename'] = os.path.join(
+                                    app.builder.imagedir, os.path.basename(image_node['uri'])
+                                )
+                                item['excerpt_figure_alt'] = image_node.get('alt', '')
+                                item['excerpt_figure_width'] = node.get('width')
+                                break
                         
                         articles.append(item)
             
@@ -574,7 +619,8 @@ def generate_taxonomy_pages(app: Any) -> Any:
                     'articles': articles,
                     'sort_key': 'number',
                     'reverse': True,
-                }
+                },
+                'has_maths_elements': any('class="math' in a.get('excerpt_text', '') for a in articles),
             }
             yield (f'types/{type_}', context, 'type_page.html')
 
@@ -591,6 +637,12 @@ def build_nav_links(
         doctree: The document tree.
 
     """
+    if not context.get('has_maths_elements') and doctree is not None:
+        for raw_node in doctree.findall(nodes.raw):
+            if 'class="math' in raw_node.astext():
+                context['has_maths_elements'] = True
+                break
+
     context['tags'] = sorted(list(app.env.all_tags)) if hasattr(app.env, 'all_tags') else []
     context['categories'] = sorted(list(app.env.all_categories)) if hasattr(app.env, 'all_categories') else []
     context['types'] = sorted(list(app.env.all_types)) if hasattr(app.env, 'all_types') else []
@@ -692,6 +744,8 @@ def inject_root_navigation(app: Any, docname: str, source: List[str]) -> None:
         source: The list of source strings (mutable).
 
     """
+    if getattr(getattr(app, "builder", None), "name", "") == "epub":
+        return
     if docname != app.config.master_doc:
         return
 
@@ -759,7 +813,7 @@ def setup(app: Any) -> Dict[str, Any]:
     app.add_directive("collection", CollectionDirective)
     app.connect('env-updated', collect_metadata)
     app.connect('html-collect-pages', generate_taxonomy_pages)
-    app.connect('html-page-context', build_nav_links)
+    app.connect('html-page-context', build_nav_links, priority=100)
     app.connect('source-read', inject_root_navigation)
     app.connect('doctree-resolved', process_collections)
     app.add_js_file('js/collection_controls.js')

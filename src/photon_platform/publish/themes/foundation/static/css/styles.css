@@ -230,6 +230,36 @@ hr {
   border-top: 1px solid var(--link-color);
 }
 
+.line-block {
+  margin-bottom: var(--fitz-half, 0.75rem);
+}
+
+.note-item {
+  margin-bottom: 1.15rem;
+  padding: 0.15rem 0 0.15rem 0.85rem;
+  border-left: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.note-item > p {
+  margin-top: 0;
+  margin-bottom: 0.45rem;
+}
+
+.note-item > p:last-child {
+  margin-bottom: 0;
+}
+
+.note-item > ul,
+.note-item > ol,
+.note-item > blockquote {
+  margin-top: 0.35rem;
+  margin-bottom: 0.45rem;
+}
+
+.note-item > :last-child {
+  margin-bottom: 0;
+}
+
 /* elements/lists *****************************/
 ul, ol, li {
   margin-left: 1em;
@@ -1099,6 +1129,8 @@ article.excerpt .more {
   margin: 0 auto;
   width: 14em;
   height: 14em;
+  max-width: none;
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1198,6 +1230,8 @@ article.excerpt .more {
 
 .collection > article.excerpt .content figure {
   width: 100%;
+  max-width: none;
+  flex: 0 0 auto;
   margin: 0;
 }
 
@@ -1221,8 +1255,9 @@ article.excerpt .more {
   .collection > article.excerpt .content figure {
     width: 10em;
     height: 10em;
+    max-width: none;
     margin-right: var(--fitz);
-    flex-shrink: 0;
+    flex: 0 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1268,9 +1303,10 @@ article.excerpt .more {
 .collection.layout-list > article.excerpt .content figure {
   width: 5em;
   height: 5em;
+  max-width: none;
   margin: 0;
   margin-right: var(--fitz);
-  flex-shrink: 0;
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1855,6 +1891,15 @@ body #search-results .context {
 /* -------------------------------------------------------------------------
    1. Book Codex Variables & Container Layout ("Website in a Website")
    ------------------------------------------------------------------------- */
+@keyframes book-target-fade {
+  0%, 40% {
+    background-color: rgba(212, 175, 55, 0.08);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
 body.is-book-page,
 article.book-layout,
 article.book-reading-pane {
@@ -2458,6 +2503,11 @@ article.book-layout nav a::before, article.book-layout nav a::after,
 .folio-book-page ol {
   margin: 0.85rem 0 1.15rem !important;
   padding-left: 1.75rem;
+}
+
+.book-reading-pane .book-content ol.arabic.simple,
+.folio-book-page ol.arabic.simple {
+  margin: 0.35rem 0 !important;
 }
 
 .book-reading-pane .book-content li,
@@ -3277,6 +3327,9 @@ article.book-layout nav a::before, article.book-layout nav a::after,
 .book-reading-pane .book-content h2[id],
 .book-reading-pane .book-content h3[id],
 .book-reading-pane .book-content h4[id],
+.book-reading-pane .book-content ol[id],
+.book-reading-pane .book-content li[id],
+.book-reading-pane .book-content p[id],
 .book-reading-pane .book-content aside.footnote[id],
 .book-reading-pane .book-content span[id],
 .book-reading-pane .book-content a[id],
@@ -3285,6 +3338,9 @@ article.book-layout nav a::before, article.book-layout nav a::after,
 .folio-book-page h2[id],
 .folio-book-page h3[id],
 .folio-book-page h4[id],
+.folio-book-page ol[id],
+.folio-book-page li[id],
+.folio-book-page p[id],
 .folio-book-page aside.footnote[id],
 .folio-book-page span[id],
 .folio-book-page a[id] {
@@ -3292,26 +3348,37 @@ article.book-layout nav a::before, article.book-layout nav a::after,
 }
 
 .book-reading-pane .book-content section:target,
+.book-reading-pane .book-content ol[id]:target,
+.book-reading-pane .book-content li[id]:target,
+.book-reading-pane .book-content p[id]:target,
 .book-reading-pane .book-content aside.footnote:target,
 .folio-book-page section:target,
+.folio-book-page ol[id]:target,
+.folio-book-page li[id]:target,
+.folio-book-page p[id]:target,
 .folio-book-page aside.footnote:target {
-  background-color: rgba(212, 175, 55, 0.07);
+  background-color: transparent;
   border-radius: 4px;
-  transition: background-color 0.3s ease;
+  animation: book-target-fade 2.4s ease-out forwards;
 }
 
 .book-reading-pane .book-content span[id]:target + h2,
 .book-reading-pane .book-content span[id]:target + h3,
 .book-reading-pane .book-content span[id]:target + h4,
+.book-reading-pane .book-content span[id]:target + ol,
+.book-reading-pane .book-content span[id]:target + p,
 .book-reading-pane .book-content span[id]:target + ul > li:first-child,
 .folio-book-page span[id]:target + h2,
 .folio-book-page span[id]:target + h3,
 .folio-book-page span[id]:target + h4,
+.folio-book-page span[id]:target + ol,
+.folio-book-page span[id]:target + p,
 .folio-book-page span[id]:target + ul > li:first-child {
-  background-color: rgba(212, 175, 55, 0.12);
+  background-color: transparent;
   border-radius: 4px;
   padding-left: 0.4rem;
   padding-right: 0.4rem;
+  animation: book-target-fade 2.4s ease-out forwards;
 }
 
 .book-reading-pane .book-content a.citation-ref,
@@ -3590,6 +3657,22 @@ footer.book-footer {
   letter-spacing: 0.02em;
 }
 
+a.justification {
+  color: var(--book-link, #de836e) !important;
+  text-decoration: none !important;
+  border-bottom: 1px dotted rgba(222, 131, 110, 0.55);
+  border-radius: 2px;
+  padding: 0 2px;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+a.justification:hover {
+  color: var(--book-link-hover, #f5a492) !important;
+  border-bottom: 1px solid var(--book-link, #de836e);
+  background-color: rgba(222, 131, 110, 0.12);
+  text-decoration: none !important;
+}
+
 .qed {
   text-align: right;
   text-indent: 0 !important;
@@ -3636,6 +3719,25 @@ sup.line-num {
 }
 
 /* Responsive Side-by-Side / Floating Diagram Layouts */
+figure.photon-svg {
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.08);
+  user-select: none;
+  margin: 0.75em auto;
+  width: fit-content;
+  max-width: 100%;
+}
+
+figure.photon-svg svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
 figure.photon-picture.diagram-right,
 figure.photon-svg.diagram-right {
   float: right;
@@ -3861,4 +3963,248 @@ svg.euclid-graphic #points circle.geom-highlight-secondary {
   color: #71717a;
   text-align: center;
   margin-top: 6px;
+}
+
+/* -------------------------------------------------------------------------
+   6. Book Codex Collections (Propositions & Chapters Gallery)
+   ------------------------------------------------------------------------- */
+.book-reading-pane .book-content .collection {
+  margin-top: 1.25rem;
+  font-size: 1rem;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
+}
+
+.book-reading-pane .book-content .collection > * {
+  background: transparent;
+  padding: 0;
+}
+
+.book-reading-pane .book-content .collection .collection-controls {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  margin-bottom: 0.25rem;
+  padding: 0;
+  background: transparent;
+}
+
+.book-reading-pane .book-content .collection .collection-controls button.layout-btn {
+  background: var(--book-surface);
+  border: 1px solid var(--book-border);
+  color: var(--book-text-muted);
+  padding: 0.3rem 0.45rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.book-reading-pane .book-content .collection .collection-controls button.layout-btn:hover, .book-reading-pane .book-content .collection .collection-controls button.layout-btn.active {
+  background: var(--book-surface-alt);
+  color: var(--book-link-hover);
+  border-color: var(--book-border-dark);
+}
+
+.book-reading-pane .book-content .collection > article.excerpt {
+  background: var(--book-surface);
+  border: 1px solid var(--book-border);
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 0;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.book-reading-pane .book-content .collection > article.excerpt:hover {
+  border-color: var(--book-border-dark);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18);
+}
+
+.book-reading-pane .book-content .collection > article.excerpt > .content {
+  margin-bottom: 0;
+  gap: 0.75rem;
+}
+
+.book-reading-pane .book-content .collection > article.excerpt > .content > figure {
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 6px;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  max-width: none;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.book-reading-pane .book-content .collection > article.excerpt > .content > figure a {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.book-reading-pane .book-content .collection > article.excerpt > .content > figure img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 2px;
+}
+
+.book-reading-pane .book-content .collection > article.excerpt > .content > section {
+  min-width: 0;
+  background: transparent !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.book-reading-pane .book-content .collection > article.excerpt > .content > section h2 {
+  font-family: var(--book-font-display) !important;
+  font-size: 1.18rem !important;
+  font-weight: 600;
+  line-height: 1.3 !important;
+  margin: 0 0 0.4rem 0 !important;
+  text-indent: 0 !important;
+}
+
+.book-reading-pane .book-content .collection > article.excerpt > .content > section h2 a {
+  color: var(--book-link) !important;
+  text-decoration: none !important;
+}
+
+.book-reading-pane .book-content .collection > article.excerpt > .content > section h2 a:hover {
+  color: var(--book-link-hover) !important;
+  text-decoration: underline !important;
+}
+
+.book-reading-pane .book-content .collection > article.excerpt > .content > section .enunciation,
+.book-reading-pane .book-content .collection > article.excerpt > .content > section p {
+  text-indent: 0 !important;
+  font-style: italic;
+  font-size: 1.02rem;
+  line-height: 1.5;
+  color: var(--book-text);
+  margin: 0 !important;
+  text-align: left !important;
+  hyphens: auto;
+}
+
+.book-reading-pane .book-content .collection > article.excerpt > .content > section .enunciation p {
+  margin-bottom: 0.25rem !important;
+}
+
+.book-reading-pane .book-content .collection > article.excerpt > .content > section .enunciation p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.book-reading-pane .book-content .collection.layout-cards {
+  grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
+  gap: 1rem;
+}
+
+.book-reading-pane .book-content .collection.layout-cards > article.excerpt > .content {
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+
+.book-reading-pane .book-content .collection.layout-cards > article.excerpt > .content > figure {
+  width: 100%;
+  height: 11.5rem;
+  margin: 0 auto 0.25rem auto;
+}
+
+.book-reading-pane .book-content .collection.layout-cards > article.excerpt > .content > section {
+  width: 100%;
+}
+
+.book-reading-pane .book-content .collection.layout-cards > article.excerpt > .content > section h2 {
+  text-align: center !important;
+}
+
+.book-reading-pane .book-content .collection.layout-banners {
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+}
+
+.book-reading-pane .book-content .collection.layout-banners > article.excerpt > .content {
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  text-align: left !important;
+  gap: 1.15rem;
+}
+
+.book-reading-pane .book-content .collection.layout-banners > article.excerpt > .content > figure {
+  width: 9.5rem;
+  height: 8rem;
+  margin: 0;
+}
+
+.book-reading-pane .book-content .collection.layout-banners > article.excerpt > .content > section {
+  flex: 1;
+}
+
+.book-reading-pane .book-content .collection.layout-banners > article.excerpt > .content > section h2 {
+  text-align: left !important;
+}
+
+@media (max-width: 560px) {
+  .book-reading-pane .book-content .collection.layout-banners > article.excerpt > .content {
+    flex-direction: column !important;
+  }
+  .book-reading-pane .book-content .collection.layout-banners > article.excerpt > .content > figure {
+    width: 100%;
+    height: 10rem;
+  }
+}
+
+.book-reading-pane .book-content .collection.layout-list {
+  grid-template-columns: 1fr;
+  gap: 0.45rem;
+}
+
+.book-reading-pane .book-content .collection.layout-list > article.excerpt {
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid var(--book-border);
+}
+
+.book-reading-pane .book-content .collection.layout-list > article.excerpt > .content {
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 0.9rem;
+}
+
+.book-reading-pane .book-content .collection.layout-list > article.excerpt > .content > figure {
+  width: 4.5rem;
+  height: 4.5rem;
+  padding: 0.25rem;
+  margin: 0;
+}
+
+.book-reading-pane .book-content .collection.layout-list > article.excerpt > .content > section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+}
+
+.book-reading-pane .book-content .collection.layout-list > article.excerpt > .content > section h2 {
+  font-size: 1.05rem !important;
+  margin: 0 !important;
+  text-align: left !important;
+  white-space: normal;
+  overflow: visible;
+}
+
+.book-reading-pane .book-content .collection.layout-list > article.excerpt > .content > section .enunciation,
+.book-reading-pane .book-content .collection.layout-list > article.excerpt > .content > section p {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--book-text-muted);
 }

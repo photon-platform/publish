@@ -50,9 +50,13 @@ def visit_picture_node(self: Any, node: nodes.Element) -> None:
     is_standalone = bool(node.get('standalone'))
 
     if is_svg or is_standalone:
-        fallback_src = _resolve_node_uri(self, node.get('fallback_src') or node.get('main_src', ''))
-        alt_text = node.get('alt', '')
-        self.body.append(f'    <img src="{fallback_src}" alt="{alt_text}"/>\n')
+        svg_content = node.get('svg_content')
+        if is_svg and svg_content and not is_standalone:
+            self.body.append(f'    {svg_content}\n')
+        else:
+            fallback_src = _resolve_node_uri(self, node.get('fallback_src') or node.get('main_src', ''))
+            alt_text = node.get('alt', '')
+            self.body.append(f'    <img src="{fallback_src}" alt="{alt_text}"/>\n')
         if node.get('caption'):
             self.body.append(f'<figcaption>{node["caption"]}</figcaption>\n')
         self.body.append('</figure>\n')
@@ -156,6 +160,8 @@ class PictureDirective(Directive):
             return [node]
 
         # Sphinx build mode
+        from pathlib import Path
+        import re
         from .processor import ImageProcessor
 
         if image_path_arg.startswith('/'):
@@ -183,12 +189,36 @@ class PictureDirective(Directive):
 
         if 'featured_image' not in self.env.metadata[self.env.docname]:
             self.env.metadata[self.env.docname]['featured_image'] = variants['thumb']
+            if self.options.get('alt'):
+                self.env.metadata[self.env.docname]['featured_image_alt'] = self.options['alt']
+
+        svg_content = None
+        if is_svg:
+            abs_svg_path = (Path(self.env.app.srcdir) / rel_path).resolve()
+            if abs_svg_path.is_file():
+                try:
+                    raw_svg = abs_svg_path.read_text(encoding='utf-8').strip()
+                    raw_svg = re.sub(r'^<\?xml[^>]*\?>\s*', '', raw_svg)
+                    raw_svg = re.sub(r'^<!DOCTYPE[^>]*>\s*', '', raw_svg)
+                    stem = abs_svg_path.stem
+                    if 'data-graphic-id=' not in raw_svg:
+                        raw_svg = re.sub(
+                            r'<svg\b',
+                            f'<svg class="euclid-graphic" data-graphic-id="{stem}"',
+                            raw_svg,
+                            count=1,
+                        )
+                    svg_content = raw_svg
+                except Exception:
+                    svg_content = None
 
         node = picture_node()
         node['main_src'] = variants['main']
         node['fallback_src'] = fallback_src
         node['linked_src'] = linked_src
         node['is_svg'] = is_svg
+        if svg_content:
+            node['svg_content'] = svg_content
         node['alt'] = self.options.get('alt', '')
         node['caption'] = self.options.get('caption', '')
         node['class'] = classes

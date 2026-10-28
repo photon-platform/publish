@@ -18,6 +18,9 @@
 {%- for css_file in css_files %}
   {{ css_tag(css_file) }}
 {%- endfor %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
   <link rel="stylesheet" href="{{ pathto('_static/css/print.css', 1) }}" type="text/css" media="print" />
   <link rel="icon" href="{{ pathto('_static/favicon.ico', 1) }}" />
 </head>

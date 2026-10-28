@@ -12,12 +12,102 @@ from docutils.writers._html_base import HTMLTranslator as BaseHTMLTranslator
 from docutils.writers.html5_polyglot import HTMLTranslator as HTML5Translator
 
 
-def parse_justification_arg(raw_arg: str) -> Tuple[str, Optional[str]]:
+VALID_BOOKS = {
+    "I",
+    "II",
+    "III",
+    "IV",
+    "V",
+    "VI",
+    "VII",
+    "VIII",
+    "IX",
+    "X",
+    "XI",
+    "XII",
+    "XIII",
+}
+
+
+def _get_current_book(env: Any) -> Optional[str]:
+    """Infer current Euclid book Roman numeral from Sphinx BuildEnvironment."""
+    if not env:
+        return None
+    docname = getattr(env, "docname", "") or ""
+    if hasattr(env, "metadata") and docname in env.metadata:
+        bk = env.metadata[docname].get("book")
+        if bk:
+            return str(bk).strip().upper()
+    m = re.search(r"(?:^|/)book_([ivxlcdm]+)(?:/|$)", docname, re.IGNORECASE)
+    if m:
+        return m.group(1).upper()
+    return None
+
+
+def infer_justification_target(
+    display: str, current_book: Optional[str] = None
+) -> Optional[str]:
+    """Infer canonical target ID(s) from justification display text when <target> is omitted."""
+    s = (display or "").strip()
+    if s.startswith("[") and s.endswith("]"):
+        s = s[1:-1].strip()
+    if not s or re.match(
+        r"^(?:Q\.\s*\$?E\$?\.|[*]?id[*]?\.|above|from above|Part\s+\d|First part|Prop\.\s*D|Simson|Pappus|\(\d+\))",
+        s,
+        re.IGNORECASE,
+    ):
+        return None
+
+    m_deff = re.search(
+        r"\b([IVXLCDM]+)\.\s*Deff?\.\s*(III|II)(?:\.\s*(\d+))?",
+        s,
+        re.IGNORECASE,
+    )
+    if m_deff and m_deff.group(1).upper() in VALID_BOOKS:
+        bk = m_deff.group(1).upper()
+        sub = m_deff.group(2).lower()
+        num = m_deff.group(3)
+        return f"{bk}.def.{sub}.{num}" if num else f"{bk}.def.{sub}"
+
+    bk_default = (current_book or "I").upper()
+    m_post = re.match(r"^Post\.\s*(\d+)\.?$", s, re.IGNORECASE)
+    if m_post:
+        return f"I.post.{m_post.group(1)}"
+    m_cn = re.match(r"^C\.\s*N\.\s*(\d+)\.?$", s, re.IGNORECASE)
+    if m_cn:
+        return f"I.cn.{m_cn.group(1)}"
+    m_def_bare = re.match(r"^Def\.\s*(\d+)\.?$", s, re.IGNORECASE)
+    if m_def_bare:
+        return f"{bk_default}.def.{m_def_bare.group(1)}"
+
+    results: List[str] = []
+    pat = re.compile(
+        r"\b([IVXLCDM]+)\.\s*(?:(Def\.?)\s*(\d+)|(\d+)(?:\s*(?:,|and|or)\s*(\d+))?)",
+        re.IGNORECASE,
+    )
+    for m in pat.finditer(s):
+        bk = m.group(1).upper()
+        if bk not in VALID_BOOKS:
+            continue
+        if m.group(2):
+            results.append(f"{bk}.def.{m.group(3)}")
+        else:
+            results.append(f"{bk}.{m.group(4)}")
+            if m.group(5):
+                results.append(f"{bk}.{m.group(5)}")
+    if results:
+        return ", ".join(dict.fromkeys(results))
+    return None
+
+
+def parse_justification_arg(
+    raw_arg: str, current_book: Optional[str] = None
+) -> Tuple[str, Optional[str]]:
     """Parse a justification string into (display_text, target_id).
 
     Supports forms:
     - ``[Def. 15] <I.def.15>`` -> ``("[Def. 15]", "I.def.15")``
-    - ``[Def. 15]`` -> ``("[Def. 15]", None)``
+    - ``[Def. 15]`` -> ``("[Def. 15]", "I.def.15")``
     - ``I.def.15`` -> ``("[I.def.15]", "I.def.15")``
     """
     text = (raw_arg or "").strip()
@@ -33,20 +123,79 @@ def parse_justification_arg(raw_arg: str) -> Tuple[str, Optional[str]]:
         return display, target
 
     if text.startswith("[") and text.endswith("]"):
-        return text, None
+        return text, infer_justification_target(text, current_book=current_book)
 
     # Bare canonical ID such as I.def.15 or I.post.3
     if re.match(r"^[A-Za-z0-9_.-]+$", text) and "." in text:
         return f"[{text}]", text
 
-    return text, None
+    return text, infer_justification_target(text, current_book=current_book)
 
 
-def format_justification_html(display: str, target: Optional[str] = None) -> str:
-    """Render a <span class="justification"> HTML fragment."""
+def _resolve_justification_href(translator: Any, target: str) -> Optional[str]:
+    """Resolve a canonical justification target (or comma-separated list) to a relative Sphinx href."""
+    if translator is None or not target:
+        return None
+    builder = getattr(translator, "builder", None)
+    if builder is None or not hasattr(builder, "env") or not hasattr(builder, "get_relative_uri"):
+        return None
+    env = builder.env
+    if env is None or not hasattr(env, "get_domain"):
+        return None
+
+    try:
+        std_domain = env.get_domain("std")
+    except Exception:
+        return None
+
+    anonlabels = getattr(std_domain, "anonlabels", {})
+    labels = getattr(std_domain, "labels", {})
+    current_docname = getattr(builder, "current_docname", "") or ""
+
+    candidates = [t.strip() for t in target.split(",") if t.strip()]
+    for cand in candidates:
+        key = cand.lower()
+        search_keys = [key]
+        if key.startswith("viii.def."):
+            search_keys.append("vii." + key[5:])
+        prefix = key
+        while "." in prefix:
+            prefix = prefix.rsplit(".", 1)[0]
+            search_keys.append(prefix)
+            if prefix.startswith("viii.def"):
+                search_keys.append("vii." + prefix[5:])
+
+        for sk in search_keys:
+            target_docname: Optional[str] = None
+            label_id: Optional[str] = None
+            if sk in anonlabels:
+                target_docname, label_id = anonlabels[sk]
+            elif sk in labels:
+                target_docname, label_id, _ = labels[sk]
+            if target_docname and label_id:
+                try:
+                    rel_uri = builder.get_relative_uri(current_docname, target_docname)
+                    return f"{rel_uri}#{label_id}" if rel_uri else f"#{label_id}"
+                except Exception:
+                    continue
+    return None
+
+
+def format_justification_html(
+    display: str, target: Optional[str] = None, translator: Any = None
+) -> str:
+    """Render an <a class="justification"> or <span class="justification"> HTML fragment."""
     esc_display = html.escape(display)
+    if not target and translator is not None:
+        env = getattr(getattr(translator, "builder", None), "env", None)
+        target = infer_justification_target(display, current_book=_get_current_book(env))
+
     if target:
         esc_target = html.escape(target, quote=True)
+        href = _resolve_justification_href(translator, target)
+        if href:
+            esc_href = html.escape(href, quote=True)
+            return f'<a class="justification" href="{esc_href}" data-ref-target="{esc_target}">{esc_display}</a>'
         return f'<span class="justification" data-ref-target="{esc_target}">{esc_display}</span>'
     return f'<span class="justification">{esc_display}</span>'
 
@@ -63,8 +212,9 @@ def record_dependency(env: Any, target: Optional[str]) -> None:
     if isinstance(deps, str):
         deps = [d.strip() for d in deps.split(",") if d.strip()]
         doc_meta["dependencies"] = deps
-    if target not in deps:
-        deps.append(target)
+    for single in (t.strip() for t in target.split(",") if t.strip()):
+        if single not in deps:
+            deps.append(single)
 
 
 class enunciation_node(nodes.General, nodes.Element):
@@ -139,7 +289,7 @@ def visit_assertion_node(self: Any, node: nodes.Element) -> None:
     """HTML visitor for assertion_node."""
     just_display = node.get("justification_display", "")
     just_target = node.get("justification_target")
-    prefix = format_justification_html(just_display, just_target) if just_display else ""
+    prefix = format_justification_html(just_display, just_target, translator=self) if just_display else ""
     _visit_single_or_multi_block(self, node, "assertion", prefix_html=prefix)
 
 
@@ -152,7 +302,7 @@ def visit_subclause_node(self: Any, node: nodes.Element) -> None:
     """HTML visitor for subclause_node."""
     just_display = node.get("justification_display", "")
     just_target = node.get("justification_target")
-    prefix = format_justification_html(just_display, just_target) if just_display else ""
+    prefix = format_justification_html(just_display, just_target, translator=self) if just_display else ""
     _visit_single_or_multi_block(self, node, "sub-clause", prefix_html=prefix)
 
 
@@ -289,11 +439,14 @@ class AssertionDirective(DualModeDirective):
         self.add_name(node)
 
         if self.arguments:
-            display, target = parse_justification_arg(self.arguments[0])
+            env = getattr(self, "env", None)
+            display, target = parse_justification_arg(
+                self.arguments[0], current_book=_get_current_book(env)
+            )
             node["justification_display"] = display
             node["justification_target"] = target
-            if hasattr(self, "env") and self.env and target:
-                record_dependency(self.env, target)
+            if env and target:
+                record_dependency(env, target)
 
         self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
@@ -504,6 +657,121 @@ def install_fixed_section_levels(custom_levels: Optional[Dict[str, int]] = None)
     _FIXED_LEVELS_INSTALLED = True
 
 
+_MATH_PROTECT_PATTERN = re.compile(
+    r"(``[^`]+``|:[A-Za-z0-9_.-]+:`[^`]+`|`[^`\n]+`_?|\$\$[\s\S]+?\$\$|\$(?!\s)[^$\n]+?(?<!\s)\$|\$[A-Za-z0-9]+\$)"
+)
+_PLACEHOLDER_TOKEN_RE = re.compile(r"PHOTONMATHPLACEHOLDER\d+END")
+
+
+def protect_rst_math_segments(
+    rst_body: str, start_counter: int = 0
+) -> Tuple[str, Dict[str, str], int]:
+    """Protect inline $...$ and display $$...$$ math outside of RST roles/backticks from Docutils escaping."""
+    placeholders: Dict[str, str] = {}
+    counter = start_counter
+
+    def _store(math_str: str) -> str:
+        nonlocal counter
+        counter += 1
+        token = f"PHOTONMATHPLACEHOLDER{counter:06d}END"
+        placeholders[token] = math_str
+        return token
+
+    def _replacer(match: re.Match) -> str:
+        seg = match.group(0)
+        if seg.startswith("$"):
+            return _store(seg)
+        return seg
+
+    protected = _MATH_PROTECT_PATTERN.sub(_replacer, rst_body)
+    if placeholders:
+        lines = protected.splitlines()
+        adorn_re = re.compile(r"^([=\-~^\"'#*+])\1{2,}$")
+        for i in range(len(lines) - 1):
+            if "PHOTONMATHPLACEHOLDER" in lines[i]:
+                m_adorn = adorn_re.match(lines[i + 1].strip())
+                if m_adorn:
+                    target_len = len(lines[i].rstrip())
+                    if len(lines[i + 1].strip()) < target_len:
+                        char = m_adorn.group(1)
+                        lines[i + 1] = char * target_len
+                        if i > 0 and adorn_re.match(lines[i - 1].strip()):
+                            lines[i - 1] = char * target_len
+        protected = "\n".join(lines) + ("\n" if rst_body.endswith("\n") else "")
+
+    return protected, placeholders, counter
+
+
+def _restore_math_string(text: str, placeholders: Dict[str, str]) -> str:
+    """Restore any PHOTONMATHPLACEHOLDER...END tokens in a string."""
+    if not text or "PHOTONMATHPLACEHOLDER" not in text:
+        return text
+    return _PLACEHOLDER_TOKEN_RE.sub(lambda m: placeholders.get(m.group(0), m.group(0)), text)
+
+
+def _on_sphinx_source_read(app: Any, docname: str, source: List[str]) -> None:
+    """Sphinx source-read hook to protect $...$ and $$...$$ segments before Docutils parsing."""
+    if not source or not source[0] or "$" not in source[0]:
+        return
+    env = getattr(app, "env", None)
+    if env is None:
+        return
+    store: Dict[str, str] = getattr(env, "_photon_math_placeholders", None)
+    if store is None:
+        store = {}
+        setattr(env, "_photon_math_placeholders", store)
+    counter = getattr(env, "_photon_math_counter", 0)
+    protected, new_placeholders, counter = protect_rst_math_segments(source[0], start_counter=counter)
+    setattr(env, "_photon_math_counter", counter)
+    if new_placeholders:
+        store.update(new_placeholders)
+        source[0] = protected
+
+
+def _on_sphinx_doctree_read(app: Any, doctree: nodes.document) -> None:
+    """Sphinx doctree-read hook to restore protected $...$ and $$...$$ segments into AST nodes."""
+    env = getattr(app, "env", None)
+    store: Optional[Dict[str, str]] = getattr(env, "_photon_math_placeholders", None) if env else None
+    if not store:
+        return
+
+    for text_node in list(doctree.findall(nodes.Text)):
+        raw_str = str(text_node)
+        if "PHOTONMATHPLACEHOLDER" in raw_str:
+            restored = _restore_math_string(raw_str, store)
+            if restored != raw_str and text_node.parent is not None:
+                text_node.parent.replace(text_node, nodes.Text(restored))
+
+    lower_token_re = re.compile(r"photonmathplaceholder\d+end")
+    for el in doctree.findall(nodes.Element):
+        for attr_key, attr_val in list(el.attributes.items()):
+            if isinstance(attr_val, str) and "PHOTONMATHPLACEHOLDER" in attr_val:
+                el.attributes[attr_key] = _restore_math_string(attr_val, store)
+            elif isinstance(attr_val, list) and attr_key in ("ids", "names"):
+                new_list = []
+                changed = False
+                for item in attr_val:
+                    if isinstance(item, str) and "photonmathplaceholder" in item.lower():
+                        changed = True
+                        def _slug_repl(m: re.Match) -> str:
+                            orig = store.get(m.group(0).upper(), "")
+                            return re.sub(r"[^a-z0-9]+", "-", orig.lower()).strip("-")
+                        cleaned = lower_token_re.sub(_slug_repl, item.lower()).strip("-")
+                        cleaned = re.sub(r"-{2,}", "-", cleaned)
+                        new_list.append(cleaned or item)
+                    else:
+                        new_list.append(item)
+                if changed:
+                    el.attributes[attr_key] = new_list
+
+    docname = getattr(env, "docname", None)
+    if docname and hasattr(env, "metadata") and docname in env.metadata:
+        meta = env.metadata[docname]
+        for k, v in list(meta.items()):
+            if isinstance(v, str) and "PHOTONMATHPLACEHOLDER" in v:
+                meta[k] = _restore_math_string(v, store)
+
+
 def register_standalone_directives() -> None:
     """Register directives, fixed section levels, and HTML node visitors with standalone Docutils."""
     install_fixed_section_levels()
@@ -524,8 +792,15 @@ def setup(app: Any) -> Dict[str, Any]:
         "config-inited",
         lambda _app, config: install_fixed_section_levels(getattr(config, "rst_fixed_section_levels", None)),
     )
+    app.connect("source-read", _on_sphinx_source_read)
+    app.connect("doctree-read", _on_sphinx_doctree_read)
     for node_cls, visit_fn, depart_fn in _NODE_VISITORS:
-        app.add_node(node_cls, html=(visit_fn, depart_fn), override=True)
+        app.add_node(
+            node_cls,
+            html=(visit_fn, depart_fn),
+            epub=(visit_fn, depart_fn),
+            override=True,
+        )
     for name, directive_cls in _DIRECTIVES.items():
         app.add_directive(name, directive_cls, override=True)
 

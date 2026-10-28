@@ -14,7 +14,12 @@ def setup(app: Any) -> Dict[str, Any]:
         Extension metadata.
 
     """
-    app.add_node(picture_node, html=(visit_picture_node, depart_picture_node), override=True)
+    app.add_node(
+        picture_node,
+        html=(visit_picture_node, depart_picture_node),
+        epub=(visit_picture_node, depart_picture_node),
+        override=True,
+    )
     app.add_directive('picture', PictureDirective, override=True)
     return {
         'version': '0.1',

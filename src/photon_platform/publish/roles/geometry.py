@@ -14,6 +14,7 @@ from docutils.writers._html_base import HTMLTranslator as BaseHTMLTranslator
 from docutils.writers.html5_polyglot import HTMLTranslator as HTML5Translator
 
 from photon_platform.publish.directives.elements import (
+    _get_current_book,
     format_justification_html,
     parse_justification_arg,
     record_dependency,
@@ -88,7 +89,7 @@ def visit_just_ref_node(self: Any, node: nodes.Element) -> None:
     """HTML visitor for just_ref_node."""
     display = str(node.get("display", node.astext()))
     target = node.get("ref_target")
-    self.body.append(format_justification_html(display, target))
+    self.body.append(format_justification_html(display, target, translator=self))
     raise nodes.SkipNode
 
 
@@ -138,12 +139,14 @@ def just_role(
 ) -> Tuple[List[nodes.Node], List[nodes.system_message]]:
     """Role `:just:` for proposition step justifications and dependency recording."""
     restored = utils.unescape(text, restore_backslashes=True)
-    display, target = parse_justification_arg(restored)
+    env = getattr(inliner.document.settings, "env", None)
+    display, target = parse_justification_arg(
+        restored, current_book=_get_current_book(env)
+    )
     node = just_ref_node(rawtext, display)
     node["display"] = display
     node["ref_target"] = target
 
-    env = getattr(inliner.document.settings, "env", None)
     if env and target:
         record_dependency(env, target)
 
@@ -205,6 +208,7 @@ def _load_book_apparatus(env: Any, book_slug: str) -> Dict[str, Dict[str, Any]]:
     srcdir = Path(getattr(env, "srcdir", "."))
     candidates = [
         srcdir.parent / "resources" / book_slug,
+        srcdir.parent.parent / "resources" / srcdir.name,
         srcdir / book_slug,
         srcdir.parent / "resources",
     ]
@@ -503,11 +507,17 @@ def setup(app: Any) -> Dict[str, Any]:
     """Register geometry and scholarly roles and nodes with Sphinx."""
     register_standalone_roles()
     for node_cls, visit_fn, depart_fn in _ROLE_NODE_VISITORS:
-        app.add_node(node_cls, html=(visit_fn, depart_fn), override=True)
+        app.add_node(
+            node_cls,
+            html=(visit_fn, depart_fn),
+            epub=(visit_fn, depart_fn),
+            override=True,
+        )
     for role_name, role_fn in _ROLES.items():
         if role_name == "term":
-            # In Sphinx, allow custom :term: or standard glossary role
+            # Override both top-level :term: and Sphinx's std:term domain role
             app.add_role(role_name, role_fn, override=True)
+            app.add_role_to_domain("std", role_name, role_fn, override=True)
         else:
             app.add_role(role_name, role_fn, override=True)
 

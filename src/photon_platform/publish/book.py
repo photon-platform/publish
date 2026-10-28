@@ -306,6 +306,301 @@ def resolve_book_context(
     }
 
 
+def _render_mathml_fallback(latex_str: str, inline: bool = True) -> str:
+    """Convert LaTeX math string to MathML for EPUB 3, with clean HTML fallback."""
+    cleaned = (latex_str or "").strip()
+    if not cleaned:
+        return ""
+    try:
+        from docutils.utils.math.latex2mathml import tex2mathml
+
+        # Normalize \text{...} with endash/spaces if needed
+        return tex2mathml(cleaned, inline=inline)
+    except Exception:
+        import html as _html
+
+        # Clean fallback if tex2mathml encounters an unsupported macro
+        fallback = (
+            cleaned.replace(r"\times", "×")
+            .replace(r"\dots", "…")
+            .replace(r"\pi", "π")
+            .replace(r"\alpha", "α")
+            .replace(r"\beta", "β")
+            .replace(r"\gamma", "γ")
+            .replace(r"\propto", "∝")
+            .replace(r"\leftrightarrow", "↔")
+            .replace(r"\to", "→")
+            .replace(r"\neq", "≠")
+            .replace(r"^\circ", "°")
+            .replace(r"\quad", " ")
+        )
+        fallback = re.sub(r"\\text\{([^}]*)\}", r"\1", fallback)
+        tag = "span" if inline else "div"
+        return f'<{tag} class="math-fallback"><em>{_html.escape(fallback)}</em></{tag}>'
+
+
+def filter_epub_book_sources(app: Any, docname: str, source: List[str]) -> None:
+    """Clean up non-book editorial references in source RST when building an EPUB."""
+    if getattr(getattr(app, "builder", None), "name", "") != "epub" or not source:
+        return
+
+    text = source[0]
+
+    # Strip excluded project/editorial pages from the book index toctree and body,
+    # and unhide toctrees so Epub3Builder populates nav.xhtml and toc.ncx.
+    if docname == "index" or docname.endswith("/index"):
+        text = re.sub(
+            r"^\* :ref:`[^`]*<(?:agent-chronicle|scan-inventory)>`\s*$\n?",
+            "",
+            text,
+            flags=re.M,
+        )
+        text = re.sub(r"^[ \t]+(?:agent-chronicle|scan-inventory)\s*$\n?", "", text, flags=re.M)
+        text = re.sub(r"^[ \t]+:hidden:\s*$\n?", "", text, flags=re.M)
+        text = text.replace(
+            "Apparatus & Editorial Documentation\n-----------------------------------",
+            "Critical Apparatus\n------------------",
+        )
+        text = text.replace(":caption: Apparatus & Editorial", ":caption: Critical Apparatus")
+
+    # Strip benchmark 3.1 draft notes from translation notes
+    if "translation-notes-" in docname:
+        text = re.sub(
+            r"\.\. note::\n+\s+For reference and comparative benchmarking[^\n]*\n+",
+            "",
+            text,
+        )
+
+    # Fix empty bold marker and trailing transitions in apparatus files
+    text = text.replace("* **** (", "* **op.** (")
+    text = re.sub(r"\n+----+\s*$", "\n", text)
+
+    source[0] = text
+
+
+def resolve_book_doctree(app: Any, doctree: Any, fromdocname: str) -> None:
+    """Consolidate footnote targets and apply EPUB 3 doctree transformations."""
+    if nodes is None or doctree is None:
+        return
+
+    # 1. Consolidate standalone target nodes immediately preceding footnote nodes
+    # so Docutils groups all chapter footnotes into a single <aside class="footnote-list">
+    for fn_node in list(doctree.traverse(nodes.footnote)):
+        parent = fn_node.parent
+        if parent is None:
+            continue
+        idx = parent.index(fn_node)
+        if idx > 0:
+            prev = parent[idx - 1]
+            if isinstance(prev, nodes.target) and not prev.children and prev.get("ids"):
+                for tid in prev["ids"]:
+                    if tid not in fn_node["ids"]:
+                        fn_node["ids"].append(tid)
+                parent.remove(prev)
+
+    if getattr(getattr(app, "builder", None), "name", "") != "epub":
+        return
+
+    # 2. Rewrite relative .html concordance back-links to .xhtml and mark internal=True
+    for ref_node in list(doctree.traverse(nodes.reference)):
+        refuri = ref_node.get("refuri", "")
+        if refuri and not refuri.startswith(("http://", "https://", "mailto:", "ftp://", "data:")):
+            if ".html" in refuri:
+                ref_node["refuri"] = re.sub(r"\.html(?=#|$)", ".xhtml", refuri)
+            ref_node["internal"] = True
+
+    # 3. Convert inline and display math nodes to native EPUB 3 MathML
+    if hasattr(nodes, "math"):
+        for math_node in list(doctree.traverse(nodes.math)):
+            if math_node.parent is not None:
+                mml = _render_mathml_fallback(math_node.astext(), inline=True)
+                raw_node = nodes.raw("", mml, format="html")
+                math_node.parent.replace(math_node, raw_node)
+
+    if hasattr(nodes, "math_block"):
+        for mb_node in list(doctree.traverse(nodes.math_block)):
+            if mb_node.parent is not None:
+                mml = _render_mathml_fallback(mb_node.astext(), inline=False)
+                raw_node = nodes.raw("", f'<div class="math-block">{mml}</div>\n', format="html")
+                mb_node.parent.replace(mb_node, raw_node)
+
+
+def resolve_epub_missing_reference(app: Any, env: Any, node: Any, contnode: Any) -> Optional[Any]:
+    """Gracefully degrade excluded website references (e.g. about-*) to plain text in EPUB builds."""
+    if getattr(getattr(app, "builder", None), "name", "") == "epub":
+        return contnode
+    return None
+
+
+def _build_epub_tracks_bar_html(
+    app: Any,
+    pagename: str,
+    book_ctx: Dict[str, Any],
+) -> str:
+    """Build an in-page Track & Apparatus navigation bar for EPUB 3 pages."""
+    import html as _html
+
+    builder = getattr(app, "builder", None)
+    if builder is None or not hasattr(builder, "get_relative_uri"):
+        return ""
+
+    env = getattr(app, "env", None)
+    found_docs: Set[str] = set(getattr(env, "found_docs", set())) if env else set()
+    book_root = book_ctx.get("book_root") or getattr(app.config, "master_doc", "index")
+
+    if pagename == book_root:
+        return ""
+
+    tracks = book_ctx.get("book_tracks", [])
+    parts_html: List[str] = []
+
+    if tracks:
+        track_items: List[str] = []
+        for tr in tracks:
+            label = _html.escape(str(tr["label"]))
+            if tr.get("active"):
+                track_items.append(
+                    f'<strong class="book-track-item is-active" aria-current="page">{label}</strong>'
+                )
+            else:
+                rel_uri = _html.escape(builder.get_relative_uri(pagename, tr["docname"]), quote=True)
+                track_items.append(f'<a class="book-track-item" href="{rel_uri}">{label}</a>')
+        parts_html.append(' <span class="book-track-sep">&middot;</span> '.join(track_items))
+
+    # Add Conspectus & Apparatus quick links
+    book_prefix = os.path.dirname(book_root)
+    def _qual_book(name: str) -> str:
+        return f"{book_prefix}/{name}" if book_prefix else name
+
+    util_links: List[str] = []
+    if book_root in found_docs and pagename != book_root:
+        toc_uri = _html.escape(builder.get_relative_uri(pagename, book_root), quote=True)
+        util_links.append(f'<a class="book-track-item book-util-link" href="{toc_uri}">Conspectus</a>')
+
+    for app_doc, app_label in (
+        ("bibliography", "Bibliography"),
+        ("persons", "Persons"),
+        ("glossary", "Glossary"),
+    ):
+        cand = _qual_book(app_doc)
+        if cand not in found_docs and app_doc in found_docs:
+            cand = app_doc
+        if cand in found_docs:
+            if pagename == cand:
+                util_links.append(
+                    f'<strong class="book-track-item is-active" aria-current="page">{app_label}</strong>'
+                )
+            else:
+                app_uri = _html.escape(builder.get_relative_uri(pagename, cand), quote=True)
+                util_links.append(f'<a class="book-track-item book-util-link" href="{app_uri}">{app_label}</a>')
+
+    if util_links:
+        parts_html.append(' <span class="book-track-sep">&middot;</span> '.join(util_links))
+
+    if not parts_html:
+        return ""
+
+    inner = ' <span class="book-track-divider">|</span> '.join(parts_html)
+    return f'<nav class="book-tracks-nav epub-tracks-nav" aria-label="Edition Tracks">{inner}</nav>\n'
+
+
+def _enhance_epub_body_html(
+    app: Any,
+    pagename: str,
+    body_html: str,
+    book_ctx: Dict[str, Any],
+) -> str:
+    """Enhance rendered HTML body for EPUB 3 / Thorium Reader."""
+    if not body_html:
+        return body_html
+
+    # 1. Add epub:type="noteref" and epub:type="footnote" for Thorium Reader pop-up footnotes
+    body_html = re.sub(
+        r'(<a\b[^>]*\bclass="[^"]*(?<![-\w])footnote-reference(?![-\w])[^"]*"[^>]*)(?<!epub:type="noteref")>',
+        r'\1 epub:type="noteref">',
+        body_html,
+    )
+    body_html = re.sub(
+        r'(<aside\b[^>]*\bclass="[^"]*(?<![-\w])footnote(?![-\w])[^"]*"[^>]*)(?<!epub:type="footnote")>',
+        r'\1 epub:type="footnote">',
+        body_html,
+    )
+
+    # 2. Inject section-level [LA] <-> [EN] counterpart links on matching headings
+    builder = getattr(app, "builder", None)
+    tracks = book_ctx.get("book_tracks", [])
+    track_map = {tr["key"]: tr["docname"] for tr in tracks}
+    active_keys = [tr["key"] for tr in tracks if tr.get("active")]
+    active_key = active_keys[0] if active_keys else None
+
+    if (
+        builder is not None
+        and hasattr(builder, "get_relative_uri")
+        and active_key in ("en", "la")
+        and "en" in track_map
+        and "la" in track_map
+    ):
+        counterpart_key = "la" if active_key == "en" else "en"
+        counterpart_label = "LA" if active_key == "en" else "EN"
+        counterpart_title = "Read this section in Latin" if active_key == "en" else "Read this section in English"
+        counterpart_uri = builder.get_relative_uri(pagename, track_map[counterpart_key])
+
+        std_domain = app.env.domains.get("std") if hasattr(app.env, "domains") else None
+        known_labels = set()
+        if std_domain is not None:
+            known_labels.update(getattr(std_domain, "anonlabels", {}).keys())
+            known_labels.update(getattr(std_domain, "labels", {}).keys())
+
+        sec_pattern = re.compile(
+            r'(<span id="((?:caput-\d+|appendix)-'
+            + active_key
+            + r'-s[^"]+)"></span>\s*<h([2-6])[^>]*>)(.*?)(</h\3>)',
+            flags=re.S,
+        )
+
+        def _add_sec_counterpart(m: re.Match) -> str:
+            prefix_html, sec_id, _hlevel, heading_inner, close_tag = (
+                m.group(1),
+                m.group(2),
+                m.group(3),
+                m.group(4),
+                m.group(5),
+            )
+            target_sec_id = re.sub(
+                rf"^((?:caput-\d+|appendix))-{active_key}-(s.+)$",
+                rf"\1-{counterpart_key}-\2",
+                sec_id,
+            )
+            if known_labels and target_sec_id not in known_labels:
+                return m.group(0)
+            href = f"{counterpart_uri}#{target_sec_id}"
+            badge = (
+                f' <a class="section-track-link" href="{href}" '
+                f'title="{counterpart_title}">[{counterpart_label}]</a>'
+            )
+            return f"{prefix_html}{heading_inner}{badge}{close_tag}"
+
+        body_html = sec_pattern.sub(_add_sec_counterpart, body_html)
+
+    # 3. Inject in-page Track & Apparatus navigation bar after chapter rubric or h1
+    tracks_bar = _build_epub_tracks_bar_html(app, pagename, book_ctx)
+    if tracks_bar:
+        if '<p class="rubric">' in body_html:
+            body_html = re.sub(
+                r'(<p class="rubric">.*?</p>\s*)',
+                r"\1" + tracks_bar.replace("\\", "\\\\"),
+                body_html,
+                count=1,
+                flags=re.S,
+            )
+        elif "</h1>" in body_html:
+            body_html = body_html.replace("</h1>", "</h1>\n" + tracks_bar, 1)
+        else:
+            body_html = tracks_bar + body_html
+
+    return body_html
+
+
 def setup_book_page_context(
     app: Any,
     pagename: str,
@@ -316,13 +611,21 @@ def setup_book_page_context(
     """Sphinx `html-page-context` hook to inject Book Codex context and select `book_layout.html`."""
     book_ctx = resolve_book_context(app.env, pagename, doctree=doctree)
     context.update(book_ctx)
+    if getattr(getattr(app, "builder", None), "name", "") == "epub":
+        context["script_files"] = []
+        if "body" in context and isinstance(context["body"], str):
+            context["body"] = _enhance_epub_body_html(app, pagename, context["body"], book_ctx)
+        return None
     if book_ctx.get("is_book_page") and templatename == "page.html":
         return "book_layout.html"
     return None
 
 
 def setup(app: Any) -> Dict[str, Any]:
-    """Register the book subtree inheritance hook with Sphinx."""
+    """Register the book subtree inheritance and EPUB 3 hooks with Sphinx."""
+    app.connect("source-read", filter_epub_book_sources)
+    app.connect("doctree-resolved", resolve_book_doctree)
+    app.connect("missing-reference", resolve_epub_missing_reference)
     app.connect("html-page-context", setup_book_page_context)
     return {
         "version": "0.1",

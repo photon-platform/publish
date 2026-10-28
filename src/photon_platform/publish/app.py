@@ -21,6 +21,14 @@ def test(port):
     publish.test(port=port)
 
 @cli.command()
+@click.option('--book', default=None, help='Book subdirectory in docsrc/ (auto-detected if omitted).')
+@click.option('--output', '-o', default=None, help='Optional output path for the generated .epub file.')
+def epub(book, output):
+    """Builds an EPUB 3 edition for the book subtree in docsrc/."""
+    publish.build_epub(book=book, output=output)
+
+
+@cli.command()
 @click.option('--host', default='127.0.0.1', help='Host interface to bind (default: 127.0.0.1).')
 @click.option('--port', default=5050, type=int, help='Port to serve the Folio Review app on (default: 5050).')
 @click.option('--root', default=None, help='Path to resources/<edition> or repository root (auto-detected if omitted).')
@@ -39,6 +47,7 @@ def folio(host, port, root, title, edition, debug):
         f"Folio Review at http://{host}:{port}"
     )
     app.run(host=host, port=port, debug=debug, use_reloader=True)
+
 
 
 

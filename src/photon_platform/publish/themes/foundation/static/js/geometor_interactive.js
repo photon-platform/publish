@@ -31,7 +31,26 @@
       );
     },
 
+    renderMath() {
+      const container = this.getRootContainer();
+      if (!container || typeof window.renderMathInElement !== 'function') return;
+      try {
+        window.renderMathInElement(container, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+            { left: '\\(', right: '\\)', display: false },
+            { left: '\\[', right: '\\]', display: true },
+          ],
+          throwOnError: false,
+        });
+      } catch (err) {
+        console.warn('KaTeX auto-render error:', err);
+      }
+    },
+
     init() {
+      this.renderMath();
       this.inlineFiguresInTranscription();
       this.buildSvgIndex();
       this.bindTextElements();
