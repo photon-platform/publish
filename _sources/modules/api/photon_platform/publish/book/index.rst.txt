@@ -25,6 +25,9 @@ Functions
    photon_platform.publish.book.peek_metadata
    photon_platform.publish.book.detect_companion_tracks
    photon_platform.publish.book.resolve_book_context
+   photon_platform.publish.book.filter_epub_book_sources
+   photon_platform.publish.book.resolve_book_doctree
+   photon_platform.publish.book.resolve_epub_missing_reference
    photon_platform.publish.book.setup_book_page_context
    photon_platform.publish.book.setup
 
@@ -57,6 +60,21 @@ Module Contents
    Resolve book subtree inheritance and companion tracks for `pagename`.
 
 
+.. py:function:: filter_epub_book_sources(app: Any, docname: str, source: List[str]) -> None
+
+   Clean up non-book editorial references in source RST when building an EPUB.
+
+
+.. py:function:: resolve_book_doctree(app: Any, doctree: Any, fromdocname: str) -> None
+
+   Consolidate footnote targets and apply EPUB 3 doctree transformations.
+
+
+.. py:function:: resolve_epub_missing_reference(app: Any, env: Any, node: Any, contnode: Any) -> Optional[Any]
+
+   Gracefully degrade excluded website references (e.g. about-*) to plain text in EPUB builds.
+
+
 .. py:function:: setup_book_page_context(app: Any, pagename: str, templatename: str, context: Dict[str, Any], doctree: Optional[docutils.nodes.document]) -> Optional[str]
 
    Sphinx `html-page-context` hook to inject Book Codex context and select `book_layout.html`.
@@ -64,6 +82,6 @@ Module Contents
 
 .. py:function:: setup(app: Any) -> Dict[str, Any]
 
-   Register the book subtree inheritance hook with Sphinx.
+   Register the book subtree inheritance and EPUB 3 hooks with Sphinx.
 
 

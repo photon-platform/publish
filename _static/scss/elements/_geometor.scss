@@ -8,6 +8,15 @@
 /* -------------------------------------------------------------------------
    1. Book Codex Variables & Container Layout ("Website in a Website")
    ------------------------------------------------------------------------- */
+@keyframes book-target-fade {
+  0%, 40% {
+    background-color: rgba(212, 175, 55, 0.08);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
 body.is-book-page,
 article.book-layout,
 article.book-reading-pane {
@@ -529,6 +538,10 @@ article.book-layout nav,
     padding-left: 1.75rem;
   }
 
+  ol.arabic.simple {
+    margin: 0.35rem 0 !important;
+  }
+
   li {
     margin: 0.3rem 0;
     line-height: 1.65;
@@ -849,6 +862,9 @@ article.book-layout nav,
   h2[id],
   h3[id],
   h4[id],
+  ol[id],
+  li[id],
+  p[id],
   aside.footnote[id],
   span[id],
   a[id] {
@@ -856,20 +872,26 @@ article.book-layout nav,
   }
 
   section:target,
+  ol[id]:target,
+  li[id]:target,
+  p[id]:target,
   aside.footnote:target {
-    background-color: rgba(212, 175, 55, 0.07);
+    background-color: transparent;
     border-radius: 4px;
-    transition: background-color 0.3s ease;
+    animation: book-target-fade 2.4s ease-out forwards;
   }
 
   span[id]:target + h2,
   span[id]:target + h3,
   span[id]:target + h4,
+  span[id]:target + ol,
+  span[id]:target + p,
   span[id]:target + ul > li:first-child {
-    background-color: rgba(212, 175, 55, 0.12);
+    background-color: transparent;
     border-radius: 4px;
     padding-left: 0.4rem;
     padding-right: 0.4rem;
+    animation: book-target-fade 2.4s ease-out forwards;
   }
 
   /* Semantic Apparatus Links & Spans (:cite:, :term:, :person:) */
@@ -1121,6 +1143,22 @@ footer.book-footer {
   letter-spacing: 0.02em;
 }
 
+a.justification {
+  color: var(--book-link, #de836e) !important;
+  text-decoration: none !important;
+  border-bottom: 1px dotted rgba(222, 131, 110, 0.55);
+  border-radius: 2px;
+  padding: 0 2px;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+
+  &:hover {
+    color: var(--book-link-hover, #f5a492) !important;
+    border-bottom: 1px solid var(--book-link, #de836e);
+    background-color: rgba(222, 131, 110, 0.12);
+    text-decoration: none !important;
+  }
+}
+
 .qed {
   text-align: right;
   text-indent: 0 !important;
@@ -1167,6 +1205,25 @@ sup.line-num {
 }
 
 /* Responsive Side-by-Side / Floating Diagram Layouts */
+figure.photon-svg {
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.08);
+  user-select: none;
+  margin: 0.75em auto;
+  width: fit-content;
+  max-width: 100%;
+
+  svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+}
+
 figure.photon-picture.diagram-right,
 figure.photon-svg.diagram-right {
   float: right;
@@ -1393,3 +1450,248 @@ svg.euclid-graphic #points circle.geom-highlight-secondary {
   text-align: center;
   margin-top: 6px;
 }
+
+/* -------------------------------------------------------------------------
+   6. Book Codex Collections (Propositions & Chapters Gallery)
+   ------------------------------------------------------------------------- */
+.book-reading-pane .book-content .collection {
+  margin-top: 1.25rem;
+  font-size: 1rem;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
+
+  > * {
+    background: transparent;
+    padding: 0;
+  }
+
+  .collection-controls {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    margin-bottom: 0.25rem;
+    padding: 0;
+    background: transparent;
+
+    button.layout-btn {
+      background: var(--book-surface);
+      border: 1px solid var(--book-border);
+      color: var(--book-text-muted);
+      padding: 0.3rem 0.45rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+
+      &:hover,
+      &.active {
+        background: var(--book-surface-alt);
+        color: var(--book-link-hover);
+        border-color: var(--book-border-dark);
+      }
+    }
+  }
+
+  > article.excerpt {
+    background: var(--book-surface);
+    border: 1px solid var(--book-border);
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 0;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+      border-color: var(--book-border-dark);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18);
+    }
+
+    > .content {
+      margin-bottom: 0;
+      gap: 0.75rem;
+
+      > figure {
+        background: #ffffff;
+        border: 1px solid #e4e4e7;
+        border-radius: 6px;
+        padding: 0.5rem;
+        box-sizing: border-box;
+        max-width: none;
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        a {
+          display: flex;
+          width: 100%;
+          height: 100%;
+          align-items: center;
+          justify-content: center;
+        }
+
+        img {
+          max-width: 100%;
+          max-height: 100%;
+          width: auto;
+          height: auto;
+          object-fit: contain;
+          border-radius: 2px;
+        }
+      }
+
+      > section {
+        min-width: 0;
+        background: transparent !important;
+        margin: 0 !important;
+        padding: 0 !important;
+
+        h2 {
+          font-family: var(--book-font-display) !important;
+          font-size: 1.18rem !important;
+          font-weight: 600;
+          line-height: 1.3 !important;
+          margin: 0 0 0.4rem 0 !important;
+          text-indent: 0 !important;
+
+          a {
+            color: var(--book-link) !important;
+            text-decoration: none !important;
+
+            &:hover {
+              color: var(--book-link-hover) !important;
+              text-decoration: underline !important;
+            }
+          }
+        }
+
+        .enunciation,
+        p {
+          text-indent: 0 !important;
+          font-style: italic;
+          font-size: 1.02rem;
+          line-height: 1.5;
+          color: var(--book-text);
+          margin: 0 !important;
+          text-align: left !important;
+          hyphens: auto;
+        }
+
+        .enunciation p {
+          margin-bottom: 0.25rem !important;
+
+          &:last-child {
+            margin-bottom: 0 !important;
+          }
+        }
+      }
+    }
+  }
+
+  &.layout-cards {
+    grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
+    gap: 1rem;
+
+    > article.excerpt > .content {
+      flex-direction: column !important;
+      align-items: center !important;
+      text-align: center !important;
+
+      > figure {
+        width: 100%;
+        height: 11.5rem;
+        margin: 0 auto 0.25rem auto;
+      }
+
+      > section {
+        width: 100%;
+
+        h2 {
+          text-align: center !important;
+        }
+      }
+    }
+  }
+
+  &.layout-banners {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+
+    > article.excerpt > .content {
+      flex-direction: row !important;
+      align-items: flex-start !important;
+      text-align: left !important;
+      gap: 1.15rem;
+
+      > figure {
+        width: 9.5rem;
+        height: 8rem;
+        margin: 0;
+      }
+
+      > section {
+        flex: 1;
+
+        h2 {
+          text-align: left !important;
+        }
+      }
+
+      @media (max-width: 560px) {
+        flex-direction: column !important;
+
+        > figure {
+          width: 100%;
+          height: 10rem;
+        }
+      }
+    }
+  }
+
+  &.layout-list {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+
+    > article.excerpt {
+      padding: 0.6rem 0.85rem;
+      border-bottom: 1px solid var(--book-border);
+
+      > .content {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        gap: 0.9rem;
+
+        > figure {
+          width: 4.5rem;
+          height: 4.5rem;
+          padding: 0.25rem;
+          margin: 0;
+        }
+
+        > section {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.15rem;
+
+          h2 {
+            font-size: 1.05rem !important;
+            margin: 0 !important;
+            text-align: left !important;
+            white-space: normal;
+            overflow: visible;
+          }
+
+          .enunciation,
+          p {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: var(--book-text-muted);
+          }
+        }
+      }
+    }
+  }
+}
+

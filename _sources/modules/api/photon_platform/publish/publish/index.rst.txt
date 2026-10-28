@@ -19,6 +19,8 @@ Functions
    photon_platform.publish.publish.build
    photon_platform.publish.publish.clean
    photon_platform.publish.publish.test
+   photon_platform.publish.publish.discover_books
+   photon_platform.publish.publish.build_epub
 
 
 Module Contents
@@ -47,5 +49,15 @@ Module Contents
 .. py:function:: test(port: int = 8000) -> None
 
    Build and serve the documentation locally.
+
+
+.. py:function:: discover_books(docsrc_dir: str) -> list[dict[str, str]]
+
+   Discover book subtrees (marked with :layout: book or :book_title:) inside docsrc.
+
+
+.. py:function:: build_epub(book: str | None = None, output: str | None = None) -> list[str]
+
+   Build an EPUB 3 edition for a book subtree in docsrc.
 
 

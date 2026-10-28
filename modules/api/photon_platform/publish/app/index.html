@@ -8,8 +8,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>photon_platform.publish.app &mdash; Project name not set  documentation</title>
   <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../../../../_static/css/styles.css?v=fe81bde1" />
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/css/styles.css?v=941b5149" />
   <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=4ae1632d" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
   <link rel="stylesheet" href="../../../../../_static/css/print.css" type="text/css" media="print" />
   <link rel="icon" href="../../../../../_static/favicon.ico" />
 </head>
@@ -83,7 +86,10 @@
           <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.app.test" title="photon_platform.publish.app.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></a>(port)</p></td>
           <td><p>Builds and serves the documentation locally.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.app.folio" title="photon_platform.publish.app.folio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">folio</span></code></a>(host, port, root, title, edition, debug)</p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.app.epub" title="photon_platform.publish.app.epub"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epub</span></code></a>(book, output)</p></td>
+          <td><p>Builds an EPUB 3 edition for the book subtree in docsrc/.</p></td>
+          </tr>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.app.folio" title="photon_platform.publish.app.folio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">folio</span></code></a>(host, port, root, title, edition, debug)</p></td>
           <td><p>Launches the interactive Folio Review &amp; Vetting web application for resources/.</p></td>
           </tr>
           </tbody>
@@ -107,6 +113,12 @@
           <dt class="sig sig-object py" id="photon_platform.publish.app.test">
           <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.app.</span></span><span class="sig-name descname"><span class="pre">test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.app.test" title="Link to this definition">¶</a></dt>
           <dd><p>Builds and serves the documentation locally.</p>
+          </dd></dl>
+
+          <dl class="py function">
+          <dt class="sig sig-object py" id="photon_platform.publish.app.epub">
+          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.app.</span></span><span class="sig-name descname"><span class="pre">epub</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">book</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.app.epub" title="Link to this definition">¶</a></dt>
+          <dd><p>Builds an EPUB 3 edition for the book subtree in docsrc/.</p>
           </dd></dl>
 
           <dl class="py function">
@@ -182,8 +194,8 @@
         <li><a href="../../../../../about.html">About</a></li>
         <li><a href="../../../../../connect.html">Connect</a></li>
         <li><a href="../../../../../changelog.html">Changelog</a></li>
-        <li><a href="../../../../../glossary.html">Glossary</a></li>
         <li><a href="../../../../../todos/index.html">todos</a></li>
+        <li><a href="../../../../../glossary.html">Glossary</a></li>
         <li><a href="../../../../../orphan.html">Orphan Page</a></li>
       </ul>
     </div>
@@ -201,7 +213,7 @@
   <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>
-  <script src="../../../../../_static/js/geometor_interactive.js?v=20b4c21a"></script>
+  <script src="../../../../../_static/js/geometor_interactive.js?v=524d80a8"></script>
   <script src="../../../../../_static/js/search_highlight.js"></script>
 
 </body>

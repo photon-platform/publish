@@ -14,6 +14,7 @@ Attributes
 
 .. autoapisummary::
 
+   photon_platform.publish.directives.elements.VALID_BOOKS
    photon_platform.publish.directives.elements.FIXED_SECTION_LEVELS
 
 
@@ -46,6 +47,7 @@ Functions
 
 .. autoapisummary::
 
+   photon_platform.publish.directives.elements.infer_justification_target
    photon_platform.publish.directives.elements.parse_justification_arg
    photon_platform.publish.directives.elements.format_justification_html
    photon_platform.publish.directives.elements.record_dependency
@@ -66,6 +68,7 @@ Functions
    photon_platform.publish.directives.elements.visit_folio_node
    photon_platform.publish.directives.elements.depart_folio_node
    photon_platform.publish.directives.elements.install_fixed_section_levels
+   photon_platform.publish.directives.elements.protect_rst_math_segments
    photon_platform.publish.directives.elements.register_standalone_directives
    photon_platform.publish.directives.elements.setup
 
@@ -73,19 +76,26 @@ Functions
 Module Contents
 ---------------
 
-.. py:function:: parse_justification_arg(raw_arg: str) -> Tuple[str, Optional[str]]
+.. py:data:: VALID_BOOKS
+
+.. py:function:: infer_justification_target(display: str, current_book: Optional[str] = None) -> Optional[str]
+
+   Infer canonical target ID(s) from justification display text when <target> is omitted.
+
+
+.. py:function:: parse_justification_arg(raw_arg: str, current_book: Optional[str] = None) -> Tuple[str, Optional[str]]
 
    Parse a justification string into (display_text, target_id).
 
    Supports forms:
    - ``[Def. 15] <I.def.15>`` -> ``("[Def. 15]", "I.def.15")``
-   - ``[Def. 15]`` -> ``("[Def. 15]", None)``
+   - ``[Def. 15]`` -> ``("[Def. 15]", "I.def.15")``
    - ``I.def.15`` -> ``("[I.def.15]", "I.def.15")``
 
 
-.. py:function:: format_justification_html(display: str, target: Optional[str] = None) -> str
+.. py:function:: format_justification_html(display: str, target: Optional[str] = None, translator: Any = None) -> str
 
-   Render a <span class="justification"> HTML fragment.
+   Render an <a class="justification"> or <span class="justification"> HTML fragment.
 
 
 .. py:function:: record_dependency(env: Any, target: Optional[str]) -> None
@@ -486,6 +496,11 @@ Module Contents
 .. py:function:: install_fixed_section_levels(custom_levels: Optional[Dict[str, int]] = None) -> None
 
    Install fixed underline-character to heading-level mapping into Docutils and Sphinx.
+
+
+.. py:function:: protect_rst_math_segments(rst_body: str, start_counter: int = 0) -> Tuple[str, Dict[str, str], int]
+
+   Protect inline $...$ and display $$...$$ math outside of RST roles/backticks from Docutils escaping.
 
 
 .. py:function:: register_standalone_directives() -> None
