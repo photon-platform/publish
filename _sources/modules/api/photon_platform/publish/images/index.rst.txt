@@ -35,6 +35,7 @@ Functions
 
    photon_platform.publish.images.visit_picture_node
    photon_platform.publish.images.depart_picture_node
+   photon_platform.publish.images.prepare_inline_svg
    photon_platform.publish.images.setup
 
 
@@ -116,6 +117,16 @@ Package Contents
 
    :param self: The translator instance.
    :param node: The picture_node being visited.
+
+
+.. py:function:: prepare_inline_svg(svg_path: pathlib.Path | str, as_thumbnail: bool = False) -> str | None
+
+   Read an SVG file and prepare it for inline HTML rendering controlled by global CSS.
+
+   Strips XML/DOCTYPE headers, embedded <style> blocks, and hardcoded background <rect>
+   elements so theme CSS variables (--geom-fg, --geom-bg, etc.) govern light/dark mode.
+   When as_thumbnail is True, also strips hidden highlight overlays and element IDs to
+   avoid duplicate DOM IDs on collection index pages.
 
 
 .. py:function:: setup(app: Any) -> Dict[str, Any]

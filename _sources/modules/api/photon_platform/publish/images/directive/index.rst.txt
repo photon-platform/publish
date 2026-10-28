@@ -23,6 +23,7 @@ Functions
 
 .. autoapisummary::
 
+   photon_platform.publish.images.directive.prepare_inline_svg
    photon_platform.publish.images.directive.visit_picture_node
    photon_platform.publish.images.directive.depart_picture_node
    photon_platform.publish.images.directive.register_standalone_picture
@@ -30,6 +31,16 @@ Functions
 
 Module Contents
 ---------------
+
+.. py:function:: prepare_inline_svg(svg_path: pathlib.Path | str, as_thumbnail: bool = False) -> str | None
+
+   Read an SVG file and prepare it for inline HTML rendering controlled by global CSS.
+
+   Strips XML/DOCTYPE headers, embedded <style> blocks, and hardcoded background <rect>
+   elements so theme CSS variables (--geom-fg, --geom-bg, etc.) govern light/dark mode.
+   When as_thumbnail is True, also strips hidden highlight overlays and element IDs to
+   avoid duplicate DOM IDs on collection index pages.
+
 
 .. py:class:: picture_node(rawsource: str = '', *children, **attributes: Any)
 
