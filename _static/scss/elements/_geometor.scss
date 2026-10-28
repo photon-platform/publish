@@ -180,10 +180,10 @@ header.book-header {
 
 .book-header-bar {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem 0.75rem;
+  gap: 0.25rem;
   line-height: 1.25;
   text-align: center;
 }
@@ -241,10 +241,34 @@ header.book-header {
   color: var(--book-text-muted);
 }
 
+.book-header-breadcrumbs,
 .book-header-badges {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 0.4rem;
+}
+
+.book-crumb-link {
+  font-family: var(--book-font-display);
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--book-text-muted) !important;
+  text-decoration: none !important;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: var(--book-link-hover) !important;
+  }
+}
+
+.book-crumb-sep {
+  color: var(--book-border-dark);
+  font-size: 0.78rem;
+  user-select: none;
 }
 
 .book-badge {
