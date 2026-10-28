@@ -1,12 +1,81 @@
 """Directives for image processing."""
 
 import os
+import re
+from pathlib import Path
 from typing import Any, List
 
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
 from docutils.writers._html_base import HTMLTranslator as BaseHTMLTranslator
 from docutils.writers.html5_polyglot import HTMLTranslator as HTML5Translator
+
+
+def prepare_inline_svg(svg_path: Path | str, as_thumbnail: bool = False) -> str | None:
+    """Read an SVG file and prepare it for inline HTML rendering controlled by global CSS.
+
+    Strips XML/DOCTYPE headers, embedded <style> blocks, and hardcoded background <rect>
+    elements so theme CSS variables (--geom-fg, --geom-bg, etc.) govern light/dark mode.
+    When as_thumbnail is True, also strips hidden highlight overlays and element IDs to
+    avoid duplicate DOM IDs on collection index pages.
+    """
+    path = Path(svg_path)
+    if not path.is_file():
+        return None
+    try:
+        raw_svg = path.read_text(encoding='utf-8').strip()
+        raw_svg = re.sub(r'^<\?xml[^>]*\?>\s*', '', raw_svg)
+        raw_svg = re.sub(r'^<!DOCTYPE[^>]*>\s*', '', raw_svg)
+        # Strip embedded <style> blocks so global CSS controls colors and light/dark mode
+        raw_svg = re.sub(r'\s*<style[^>]*>.*?</style>', '', raw_svg, flags=re.S)
+        # Strip full-bleed background rects
+        raw_svg = re.sub(
+            r'\s*(?:<!--\s*Background\s*-->\s*)?<rect\b[^>]*(?:width="100%"[^>]*height="100%"|class="(?:bg|facsimile-bg)")[^>]*/>',
+            '',
+            raw_svg,
+        )
+        stem = path.stem
+        if 'data-graphic-id=' not in raw_svg:
+            raw_svg = re.sub(
+                r'<svg\b',
+                f'<svg class="euclid-graphic" data-graphic-id="{stem}"',
+                raw_svg,
+                count=1,
+            )
+        elif 'class="euclid-graphic"' not in raw_svg and 'euclid-graphic' not in raw_svg:
+            raw_svg = re.sub(
+                r'<svg\b',
+                '<svg class="euclid-graphic"',
+                raw_svg,
+                count=1,
+            )
+
+        if as_thumbnail:
+            # Strip hidden interactive highlight overlay group
+            raw_svg = re.sub(
+                r'\s*(?:<!--[^>]*Highlight[^>]*-->\s*)?<g\s+id="highlights"[^>]*>.*?</g>',
+                '',
+                raw_svg,
+                flags=re.S,
+            )
+            # Separate opening <svg ...> tag from body to strip inner IDs and data-ref attributes
+            m = re.match(r'^(<svg\b[^>]*>)(.*)$', raw_svg, flags=re.S)
+            if m:
+                svg_open, svg_body = m.group(1), m.group(2)
+                svg_open = svg_open.replace(
+                    'class="euclid-graphic"',
+                    'class="euclid-graphic euclid-thumbnail"',
+                )
+                svg_body = re.sub(
+                    r'\s+(?:id|data-ref|data-aliases|data-type)="[^"]*"',
+                    '',
+                    svg_body,
+                )
+                raw_svg = svg_open + svg_body
+
+        return raw_svg.strip()
+    except Exception:
+        return None
 
 
 class picture_node(nodes.General, nodes.Element):
@@ -195,22 +264,7 @@ class PictureDirective(Directive):
         svg_content = None
         if is_svg:
             abs_svg_path = (Path(self.env.app.srcdir) / rel_path).resolve()
-            if abs_svg_path.is_file():
-                try:
-                    raw_svg = abs_svg_path.read_text(encoding='utf-8').strip()
-                    raw_svg = re.sub(r'^<\?xml[^>]*\?>\s*', '', raw_svg)
-                    raw_svg = re.sub(r'^<!DOCTYPE[^>]*>\s*', '', raw_svg)
-                    stem = abs_svg_path.stem
-                    if 'data-graphic-id=' not in raw_svg:
-                        raw_svg = re.sub(
-                            r'<svg\b',
-                            f'<svg class="euclid-graphic" data-graphic-id="{stem}"',
-                            raw_svg,
-                            count=1,
-                        )
-                    svg_content = raw_svg
-                except Exception:
-                    svg_content = None
+            svg_content = prepare_inline_svg(abs_svg_path)
 
         node = picture_node()
         node['main_src'] = variants['main']
