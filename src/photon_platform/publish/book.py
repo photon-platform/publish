@@ -286,6 +286,60 @@ def resolve_book_context(
 
     tracks = detect_companion_tracks(env, pagename)
 
+    # Build hierarchical breadcrumbs between book_root and the current unit
+    found_docs: Set[str] = set(getattr(env, "found_docs", set()))
+    unit_doc = pagename
+    if doc_dir and os.path.basename(pagename) != "index":
+        cand_unit_idx = f"{doc_dir}/index"
+        if (
+            _is_auxiliary_track_doc(env, pagename)
+            or any(tr.get("docname") == cand_unit_idx for tr in tracks)
+        ) and (not found_docs or cand_unit_idx in found_docs):
+            unit_doc = cand_unit_idx
+
+    crumb_docnames: List[str] = []
+    seen_crumb_dirs: Set[str] = set()
+    after_root = False
+    for anc in ancestor_docnames:
+        if anc == book_root:
+            after_root = True
+            continue
+        if not after_root:
+            continue
+        if anc == unit_doc or anc == pagename:
+            break
+        exists = (
+            (anc in found_docs)
+            if found_docs
+            else (bool(_get_doc_metadata(env, anc)) or anc in getattr(env, "titles", {}))
+        )
+        if not exists:
+            continue
+        anc_dir = os.path.dirname(anc) if os.path.basename(anc) == "index" else anc
+        if anc_dir in seen_crumb_dirs:
+            continue
+        seen_crumb_dirs.add(anc_dir)
+        crumb_docnames.append(anc)
+
+    book_breadcrumbs: List[Dict[str, str]] = []
+    prev_crumb_label = ""
+    for anc in crumb_docnames:
+        anc_meta = _get_doc_metadata(env, anc)
+        raw_label = _get_doc_title(env, anc, anc_meta).strip().rstrip(".")
+        if ":" in raw_label and (
+            str(anc_meta.get("type", "")).strip().lower() in {"volume", "book", "part", "chapter"}
+            or raw_label.lower().startswith(("volume ", "vol. ", "book ", "chapter ", "part "))
+        ):
+            raw_label = raw_label.split(":", 1)[0].strip()
+        if prev_crumb_label and raw_label.lower().startswith(prev_crumb_label.lower()):
+            trimmed = re.sub(
+                r"^[.:\-\u2013\u2014\s]+", "", raw_label[len(prev_crumb_label) :]
+            ).strip()
+            if trimmed:
+                raw_label = trimmed
+        prev_crumb_label = raw_label
+        book_breadcrumbs.append({"docname": anc, "title": raw_label})
+
     if doctree is not None and nodes is not None and hasattr(doctree, "traverse"):
         for node in list(doctree.traverse(nodes.container)):
             if "track-nav" in node.get("classes", []) and node.parent is not None:
@@ -303,6 +357,7 @@ def resolve_book_context(
         "book": book_num,
         "volume": volume,
         "book_tracks": tracks,
+        "book_breadcrumbs": book_breadcrumbs,
     }
 
 

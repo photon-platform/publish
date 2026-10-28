@@ -8,12 +8,15 @@
             <a class="book-portal-link" href="{{ pathto(master_doc) }}" title="Return to Project Portal">&larr; {{ repo_name|default(project)|default('Home') }}</a>
             <span class="book-header-sep">/</span>
             <a class="book-title-link" href="{{ pathto(book_root|default(master_doc)) }}">{{ book_title|default(docstitle) }}</a>
-{%- if book_subtitle %}
-            <span class="book-subtitle">&middot; {{ book_subtitle }}</span>
-{%- endif %}
           </div>
-{%- if canonical_id or folio %}
-          <div class="book-header-badges">
+{%- if book_breadcrumbs or canonical_id or folio %}
+          <div class="book-header-breadcrumbs book-header-badges" role="navigation" aria-label="Book Breadcrumbs">
+{%-   for crumb in book_breadcrumbs|default([]) %}
+            <a class="book-crumb-link" href="{{ pathto(crumb.docname) }}">{{ crumb.title }}</a>
+{%-     if not loop.last or canonical_id or folio %}
+            <span class="book-crumb-sep">/</span>
+{%-     endif %}
+{%-   endfor %}
 {%-   if canonical_id %}
             <span class="book-badge canonical-badge">{{ canonical_id }}</span>
 {%-   endif %}
@@ -30,9 +33,6 @@
 {%- endif %}
           </div>
           <div class="book-nav-center">
-{%- if title and pagename != book_root %}
-            <div class="book-doc-title">{{ title|striptags }}</div>
-{%- endif %}
 {%- if book_tracks %}
             <nav class="book-tracks-nav" aria-label="Document Tracks">
 {%-   for tr in book_tracks %}
