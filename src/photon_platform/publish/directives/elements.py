@@ -60,6 +60,10 @@ def infer_justification_target(
     ):
         return None
 
+    g_matches = re.findall(r"\bG\.(\d+)\b", s, re.IGNORECASE)
+    if g_matches:
+        return ", ".join(dict.fromkeys(f"G.{num}" for num in g_matches))
+
     m_deff = re.search(
         r"\b([IVXLCDM]+)\.\s*Deff?\.\s*(III|II)(?:\.\s*(\d+))?",
         s,
@@ -285,6 +289,33 @@ def format_justification_html(
         target = infer_justification_target(display, current_book=_get_current_book(env))
 
     if target:
+        candidates = [t.strip() for t in target.split(",") if t.strip()]
+        inner_disp = display.strip()
+        if inner_disp.startswith("[") and inner_disp.endswith("]"):
+            disp_parts = [p.strip() for p in inner_disp[1:-1].split(",") if p.strip()]
+        else:
+            disp_parts = []
+
+        if len(candidates) > 1 and len(disp_parts) == len(candidates):
+            rendered_items: List[str] = []
+            for d_part, cand in zip(disp_parts, candidates):
+                esc_d = html.escape(d_part)
+                esc_cand = html.escape(cand, quote=True)
+                tip = _resolve_justification_tooltip(translator, cand) or cand
+                esc_tip = html.escape(tip, quote=True)
+                href = _resolve_justification_href(translator, cand)
+                if href:
+                    esc_href = html.escape(href, quote=True)
+                    rendered_items.append(
+                        f'<a class="justification-link" href="{esc_href}" '
+                        f'data-ref-target="{esc_cand}" title="{esc_tip}">{esc_d}</a>'
+                    )
+                else:
+                    rendered_items.append(
+                        f'<span data-ref-target="{esc_cand}" title="{esc_tip}">{esc_d}</span>'
+                    )
+            return f'<span class="justification">[{", ".join(rendered_items)}]</span>'
+
         esc_target = html.escape(target, quote=True)
         tooltip = _resolve_justification_tooltip(translator, target) or target
         esc_title = html.escape(tooltip, quote=True)
@@ -329,6 +360,10 @@ class assertion_node(nodes.General, nodes.Element):
 
 class subclause_node(nodes.General, nodes.Element):
     """AST node for an indented proof sub-clause with optional justification."""
+
+
+class step_node(nodes.General, nodes.Element):
+    """AST node for a structured pseudocode construction/proof step."""
 
 
 class qed_node(nodes.General, nodes.Element):
@@ -418,6 +453,34 @@ def visit_subclause_node(self: Any, node: nodes.Element) -> None:
 
 def depart_subclause_node(self: Any, node: nodes.Element) -> None:
     """HTML departure visitor for subclause_node."""
+    self.body.append("</div>\n")
+
+
+def visit_step_node(self: Any, node: nodes.Element) -> None:
+    """HTML visitor for step_node."""
+    step_kind = str(node.get("step_kind") or "step").strip().lower()
+    just_display = node.get("justification_display", "")
+    just_target = node.get("justification_target")
+    just_html = (
+        format_justification_html(just_display, just_target, translator=self)
+        if just_display
+        else ""
+    )
+    badge_html = f'<span class="geom-step-badge geom-badge-{html.escape(step_kind, quote=True)}">{html.escape(step_kind)}</span> '
+    extra: Dict[str, str] = {"data-step-kind": step_kind}
+    if node.get("assert_equal"):
+        extra["data-assert-equal"] = node["assert_equal"]
+    _visit_single_or_multi_block(
+        self,
+        node,
+        f"geom-step geom-step-{step_kind}",
+        prefix_html=just_html + badge_html,
+        extra_attrs=extra,
+    )
+
+
+def depart_step_node(self: Any, node: nodes.Element) -> None:
+    """HTML departure visitor for step_node."""
     self.body.append("</div>\n")
 
 
@@ -657,6 +720,77 @@ class SubclauseDirective(AssertionDirective):
     node_class = subclause_node
 
 
+_STEP_KINDS = {
+    "given",
+    "let",
+    "construct",
+    "intersect",
+    "assert",
+    "case",
+    "conclude",
+    "qed",
+    "qef",
+    "note",
+}
+
+
+class StepDirective(DualModeDirective):
+    """Directive for structured pseudocode construction/proof steps: ``.. step:: [kind] [optional_justification]``."""
+
+    has_content = True
+    required_arguments = 0
+    optional_arguments = 1
+    final_argument_whitespace = True
+    option_spec = {
+        "class": directives.class_option,
+        "name": directives.unchanged,
+        "kind": directives.unchanged,
+        "equal": directives.unchanged,
+        "assert": directives.unchanged,
+    }
+
+    def run(self) -> List[nodes.Node]:
+        """Parse pseudocode step kind, optional justification, and body."""
+        node = step_node()
+        node["classes"] = list(self.options.get("class", []))
+        self.add_name(node)
+
+        step_kind = (self.options.get("kind") or "").strip().lower()
+        just_raw = ""
+
+        if self.arguments:
+            raw_arg = self.arguments[0].strip()
+            parts = raw_arg.split(None, 1)
+            first_word = parts[0].lower() if parts else ""
+            if first_word in _STEP_KINDS:
+                if not step_kind:
+                    step_kind = first_word
+                just_raw = parts[1].strip() if len(parts) > 1 else ""
+            else:
+                just_raw = raw_arg
+
+        if not step_kind:
+            step_kind = "step"
+        node["step_kind"] = step_kind
+
+        assert_equal = (self.options.get("equal") or self.options.get("assert") or "").strip()
+        if assert_equal:
+            node["assert_equal"] = assert_equal
+
+        if just_raw:
+            env = getattr(self, "env", None)
+            display, target = parse_justification_arg(
+                just_raw, current_book=_get_current_book(env)
+            )
+            node["justification_display"] = display
+            node["justification_target"] = target
+            if env and target:
+                record_dependency(env, target)
+
+        self.state.nested_parse(self.content, self.content_offset, node)
+        return [node]
+
+
 class QedDirective(DualModeDirective):
     """Directive for proof conclusions: ``.. qed:: [optional_label]``."""
 
@@ -758,6 +892,7 @@ _NODE_VISITORS = [
     (enunciation_node, visit_enunciation_node, depart_enunciation_node),
     (assertion_node, visit_assertion_node, depart_assertion_node),
     (subclause_node, visit_subclause_node, depart_subclause_node),
+    (step_node, visit_step_node, depart_step_node),
     (qed_node, visit_qed_node, depart_qed_node),
     (porism_node, visit_porism_node, depart_porism_node),
     (lemma_node, visit_lemma_node, depart_lemma_node),
@@ -770,6 +905,7 @@ _DIRECTIVES = {
     "assertion": AssertionDirective,
     "subclause": SubclauseDirective,
     "sub-clause": SubclauseDirective,
+    "step": StepDirective,
     "qed": QedDirective,
     "porism": PorismDirective,
     "lemma": LemmaDirective,

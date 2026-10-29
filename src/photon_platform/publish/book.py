@@ -68,6 +68,9 @@ def _get_doc_title(env: Any, docname: str, meta: Optional[Dict[str, Any]] = None
 _TRACK_SUFFIX_PATTERNS: List[Tuple[str, str, str]] = [
     (r"^translation-notes-(.+)$", "notes", "Notes"),
     (r"^(.+)[._-]proposition$", "proposition", "Proposition"),
+    (r"^(.+)[._-]pseudocode$", "pseudocode", "Pseudocode"),
+    (r"^(.+)[._-]code$", "code", "Code"),
+    (r"^(.+)[._-]heath$", "heath", "Heath"),
     (r"^(.+)[._-]en$", "en", "English"),
     (r"^(.+)[._-]it$", "it", "Italiano (1509)"),
     (r"^(.+)[._-]de$", "de", "Deutsch (1889)"),
@@ -85,7 +88,21 @@ def _extract_unit_stem(basename: str, doc_dir: str) -> str:
         m = re.match(pattern, basename)
         if m:
             return m.group(1)
-    if basename in {"index", "proposition", "commentary", "summary", "notes", "folio", "en", "it", "de", "la"}:
+    if basename in {
+        "index",
+        "proposition",
+        "pseudocode",
+        "code",
+        "heath",
+        "commentary",
+        "summary",
+        "notes",
+        "folio",
+        "en",
+        "it",
+        "de",
+        "la",
+    }:
         return os.path.basename(doc_dir) if doc_dir else basename
     return basename
 
@@ -94,7 +111,8 @@ def detect_companion_tracks(env: Any, pagename: str) -> List[Dict[str, Any]]:
     """Detect companion tracks for `pagename` in `env.found_docs`.
 
     Supports:
-    - Euclid / Elements tracks: ``index`` / ``proposition``, ``commentary``, ``notes``, ``folio``
+    - Elements 2.0 tracks: ``index`` (Pseudocode), ``code`` (Code), ``heath`` (Heath)
+    - Euclid tracks: ``index`` / ``proposition``, ``commentary``, ``notes``, ``folio``
       or ``<pagename>.commentary``, ``<pagename>.notes``
     - Pacioli tracks: ``<stem>_en``, ``<stem>_it``, ``<stem>_de``, ``<stem>_notes``, ``index``
     - Hoenen tracks: ``<stem>`` (Latin), ``<stem>-en``, ``<stem>-summary``, ``translation-notes-<stem>``
@@ -112,15 +130,36 @@ def detect_companion_tracks(env: Any, pagename: str) -> List[Dict[str, Any]]:
 
     # Determine if bare `<stem>` is the Latin/original primary track (e.g. Hoenen `caput-1/caput-1`)
     has_hyphen_or_under_en = _qual(f"{stem}-en") in found_docs or _qual(f"{stem}_en") in found_docs
+    has_elements_siblings = any(
+        _qual(name) in found_docs
+        for name in ("heath", "code", f"{stem}.heath", f"{stem}.code")
+    )
     has_proposition_siblings = any(
         _qual(name) in found_docs
         for name in ("commentary", f"{stem}.commentary", f"{stem}_commentary", f"{stem}-commentary")
     )
 
-    index_label = "Proposition" if has_proposition_siblings else "Overview"
+    if has_elements_siblings:
+        index_label = "Pseudocode"
+    elif has_proposition_siblings:
+        index_label = "Proposition"
+    else:
+        index_label = "Overview"
 
     candidate_specs: List[Tuple[str, str, List[str]]] = [
-        ("proposition", index_label, [_qual("index"), _qual("proposition"), _qual(f"{stem}.proposition")]),
+        ("proposition", index_label, [_qual("index"), _qual("pseudocode"), _qual("proposition"), _qual(f"{stem}.proposition")]),
+        ("code", "Code", [
+            _qual(f"{stem}.code"),
+            _qual(f"{stem}_code"),
+            _qual(f"{stem}-code"),
+            _qual("code"),
+        ]),
+        ("heath", "Heath", [
+            _qual(f"{stem}.heath"),
+            _qual(f"{stem}_heath"),
+            _qual(f"{stem}-heath"),
+            _qual("heath"),
+        ]),
         ("la", "Latin", ([_qual(stem)] if has_hyphen_or_under_en and stem != "index" else []) + [
             _qual(f"{stem}.la"),
             _qual(f"{stem}_la"),
@@ -661,6 +700,8 @@ def _enhance_epub_body_html(
 
 
 _AUX_TRACK_BASENAMES: Set[str] = {
+    "code",
+    "heath",
     "commentary",
     "summary",
     "notes",
@@ -668,7 +709,7 @@ _AUX_TRACK_BASENAMES: Set[str] = {
 }
 
 _AUX_TRACK_PATTERNS: List[re.Pattern[str]] = [
-    re.compile(r"^.+[._-](?:commentary|summary|notes|folio)$"),
+    re.compile(r"^.+[._-](?:code|heath|commentary|summary|notes|folio)$"),
     re.compile(r"^translation-notes-.+$"),
 ]
 
@@ -722,11 +763,20 @@ def _update_book_prev_next(app: Any, pagename: str, context: Dict[str, Any]) -> 
             cur = rel[direction_idx] if rel and len(rel) > direction_idx else None
         return None
 
+    cur_basename = os.path.basename(pagename)
+    found_docs: Set[str] = set(getattr(env, "found_docs", set()))
+
     def _make_link(target_doc: Optional[str]) -> Optional[Dict[str, str]]:
         if not target_doc:
             return None
+        link_doc = target_doc
+        if cur_basename in ("code", "heath") and os.path.basename(target_doc) == "index":
+            target_dir = os.path.dirname(target_doc)
+            cand_track = f"{target_dir}/{cur_basename}" if target_dir else cur_basename
+            if cand_track in found_docs:
+                link_doc = cand_track
         try:
-            link = builder.get_relative_uri(pagename, target_doc)
+            link = builder.get_relative_uri(pagename, link_doc)
         except Exception:
             return None
         titles = getattr(env, "titles", {})

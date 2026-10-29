@@ -26,6 +26,12 @@ def prepare_inline_svg(svg_path: Path | str, as_thumbnail: bool = False) -> str 
         raw_svg = path.read_text(encoding='utf-8').strip()
         raw_svg = re.sub(r'^<\?xml[^>]*\?>\s*', '', raw_svg)
         raw_svg = re.sub(r'^<!DOCTYPE[^>]*>\s*', '', raw_svg)
+        # Self-contained interactive SVGs (e.g. geometor-etc-drawing) should render as static
+        # <img> thumbnails in collections, and preserve their own <style>/<script> on article pages.
+        if 'geometor-etc-drawing' in raw_svg:
+            if as_thumbnail:
+                return None
+            return raw_svg.strip()
         # Strip embedded <style> blocks so global CSS controls colors and light/dark mode
         raw_svg = re.sub(r'\s*<style[^>]*>.*?</style>', '', raw_svg, flags=re.S)
         # Strip full-bleed background rects
