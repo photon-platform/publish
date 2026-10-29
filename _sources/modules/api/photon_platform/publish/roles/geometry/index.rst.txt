@@ -21,6 +21,7 @@ Classes
    photon_platform.publish.roles.geometry.term_ref_node
    photon_platform.publish.roles.geometry.person_ref_node
    photon_platform.publish.roles.geometry.eq_ref_node
+   photon_platform.publish.roles.geometry.fn_ref_node
 
 
 Functions
@@ -56,6 +57,9 @@ Functions
    photon_platform.publish.roles.geometry.visit_eq_ref_node
    photon_platform.publish.roles.geometry.depart_eq_ref_node
    photon_platform.publish.roles.geometry.eq_role
+   photon_platform.publish.roles.geometry.visit_fn_ref_node
+   photon_platform.publish.roles.geometry.depart_fn_ref_node
+   photon_platform.publish.roles.geometry.fn_role
    photon_platform.publish.roles.geometry.register_standalone_roles
    photon_platform.publish.roles.geometry.setup
 
@@ -267,6 +271,29 @@ Module Contents
 .. py:function:: eq_role(name: str, rawtext: str, text: str, lineno: int, inliner: Any, options: Optional[Dict[str, Any]] = None, content: Optional[List[str]] = None) -> Tuple[List[docutils.nodes.Node], List[docutils.nodes.system_message]]
 
    Role `:eq:` for interactive equality references wrapping 'equal' (or 'equilateral', etc.).
+
+
+.. py:class:: fn_ref_node(rawsource: str = '', text: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.Inline`, :py:obj:`docutils.nodes.TextElement`
+
+
+   Inline AST node for geometric construction/theorem function references (:fn:).
+
+
+.. py:function:: visit_fn_ref_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for fn_ref_node.
+
+
+.. py:function:: depart_fn_ref_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for fn_ref_node.
+
+
+.. py:function:: fn_role(name: str, rawtext: str, text: str, lineno: int, inliner: Any, options: Optional[Dict[str, Any]] = None, content: Optional[List[str]] = None) -> Tuple[List[docutils.nodes.Node], List[docutils.nodes.system_message]]
+
+   Role `:fn:` for composable construction/rule function calls linking to G-nodes.
 
 
 .. py:function:: register_standalone_roles() -> None

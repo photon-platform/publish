@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=156d9f89" />
+  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=5c8bf1f0" />
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -98,59 +98,65 @@
           <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.enunciation_node" title="photon_platform.publish.directives.elements.enunciation_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enunciation_node</span></code></a></p></td>
           <td><p>AST node for an enunciation (protasis) block.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.assertion_node" title="photon_platform.publish.directives.elements.assertion_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">assertion_node</span></code></a></p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.signature_node" title="photon_platform.publish.directives.elements.signature_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signature_node</span></code></a></p></td>
+          <td><p>AST node for a formal proposition/element signature contract block.</p></td>
+          </tr>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.assertion_node" title="photon_platform.publish.directives.elements.assertion_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">assertion_node</span></code></a></p></td>
           <td><p>AST node for a centered proof step / assertion with optional justification.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.subclause_node" title="photon_platform.publish.directives.elements.subclause_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subclause_node</span></code></a></p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.subclause_node" title="photon_platform.publish.directives.elements.subclause_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subclause_node</span></code></a></p></td>
           <td><p>AST node for an indented proof sub-clause with optional justification.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.step_node" title="photon_platform.publish.directives.elements.step_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step_node</span></code></a></p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.step_node" title="photon_platform.publish.directives.elements.step_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step_node</span></code></a></p></td>
           <td><p>AST node for a structured pseudocode construction/proof step.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.qed_node" title="photon_platform.publish.directives.elements.qed_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">qed_node</span></code></a></p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.qed_node" title="photon_platform.publish.directives.elements.qed_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">qed_node</span></code></a></p></td>
           <td><p>AST node for a conclusion sign-off (Q.E.D. / Q.E.F.).</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.porism_node" title="photon_platform.publish.directives.elements.porism_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">porism_node</span></code></a></p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.porism_node" title="photon_platform.publish.directives.elements.porism_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">porism_node</span></code></a></p></td>
           <td><p>AST node for a corollary / porism block.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.lemma_node" title="photon_platform.publish.directives.elements.lemma_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lemma_node</span></code></a></p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.lemma_node" title="photon_platform.publish.directives.elements.lemma_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lemma_node</span></code></a></p></td>
           <td><p>AST node for a lemma block.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.scholium_node" title="photon_platform.publish.directives.elements.scholium_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scholium_node</span></code></a></p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.scholium_node" title="photon_platform.publish.directives.elements.scholium_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scholium_node</span></code></a></p></td>
           <td><p>AST node for a scholium block.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.folio_node" title="photon_platform.publish.directives.elements.folio_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">folio_node</span></code></a></p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.folio_node" title="photon_platform.publish.directives.elements.folio_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">folio_node</span></code></a></p></td>
           <td><p>AST node for a diplomatic folio transition milestone.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.DualModeDirective" title="photon_platform.publish.directives.elements.DualModeDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DualModeDirective</span></code></a></p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.DualModeDirective" title="photon_platform.publish.directives.elements.DualModeDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DualModeDirective</span></code></a></p></td>
           <td><p>Base directive class compatible with both Sphinx and standalone Docutils.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.EnunciationDirective" title="photon_platform.publish.directives.elements.EnunciationDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EnunciationDirective</span></code></a></p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.EnunciationDirective" title="photon_platform.publish.directives.elements.EnunciationDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EnunciationDirective</span></code></a></p></td>
           <td><p>Directive for proposition enunciations (protasis): <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">enunciation::</span></code>.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.AssertionDirective" title="photon_platform.publish.directives.elements.AssertionDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AssertionDirective</span></code></a></p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.AssertionDirective" title="photon_platform.publish.directives.elements.AssertionDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AssertionDirective</span></code></a></p></td>
           <td><p>Directive for proof steps / assertions: <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">assertion::</span> <span class="pre">[optional_justification]</span></code>.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.SubclauseDirective" title="photon_platform.publish.directives.elements.SubclauseDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SubclauseDirective</span></code></a></p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.SubclauseDirective" title="photon_platform.publish.directives.elements.SubclauseDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SubclauseDirective</span></code></a></p></td>
           <td><p>Directive for indented proof sub-clauses: <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">subclause::</span> <span class="pre">[optional_justification]</span></code>.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.StepDirective" title="photon_platform.publish.directives.elements.StepDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StepDirective</span></code></a></p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.StepDirective" title="photon_platform.publish.directives.elements.StepDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StepDirective</span></code></a></p></td>
           <td><p>Directive for structured pseudocode construction/proof steps: <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">step::</span> <span class="pre">[kind]</span> <span class="pre">[optional_justification]</span></code>.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.QedDirective" title="photon_platform.publish.directives.elements.QedDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QedDirective</span></code></a></p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.QedDirective" title="photon_platform.publish.directives.elements.QedDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QedDirective</span></code></a></p></td>
           <td><p>Directive for proof conclusions: <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">qed::</span> <span class="pre">[optional_label]</span></code>.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.PorismDirective" title="photon_platform.publish.directives.elements.PorismDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PorismDirective</span></code></a></p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.PorismDirective" title="photon_platform.publish.directives.elements.PorismDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PorismDirective</span></code></a></p></td>
           <td><p>Directive for corollaries / porisms: <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">porism::</span> <span class="pre">[optional_title]</span></code>.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.LemmaDirective" title="photon_platform.publish.directives.elements.LemmaDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LemmaDirective</span></code></a></p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.LemmaDirective" title="photon_platform.publish.directives.elements.LemmaDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LemmaDirective</span></code></a></p></td>
           <td><p>Directive for lemmas: <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">lemma::</span> <span class="pre">[optional_title]</span></code>.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.ScholiumDirective" title="photon_platform.publish.directives.elements.ScholiumDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScholiumDirective</span></code></a></p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.ScholiumDirective" title="photon_platform.publish.directives.elements.ScholiumDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScholiumDirective</span></code></a></p></td>
           <td><p>Directive for scholia: <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">scholium::</span> <span class="pre">[optional_title]</span></code>.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.FolioDirective" title="photon_platform.publish.directives.elements.FolioDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FolioDirective</span></code></a></p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.FolioDirective" title="photon_platform.publish.directives.elements.FolioDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FolioDirective</span></code></a></p></td>
           <td><p>Directive for folio transition milestones: <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">folio::</span> <span class="pre">&lt;folio_id&gt;</span></code>.</p></td>
+          </tr>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.SignatureDirective" title="photon_platform.publish.directives.elements.SignatureDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SignatureDirective</span></code></a></p></td>
+          <td><p>Directive for formal proposition/element signature contracts: <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">signature::</span> <span class="pre">[optional_kind]</span></code>.</p></td>
           </tr>
           </tbody>
           </table>
@@ -179,6 +185,12 @@
           </tr>
           <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.depart_enunciation_node" title="photon_platform.publish.directives.elements.depart_enunciation_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_enunciation_node</span></code></a>(→ None)</p></td>
           <td><p>HTML departure visitor for enunciation_node.</p></td>
+          </tr>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.visit_signature_node" title="photon_platform.publish.directives.elements.visit_signature_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_signature_node</span></code></a>(→ None)</p></td>
+          <td><p>HTML visitor for signature_node.</p></td>
+          </tr>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.depart_signature_node" title="photon_platform.publish.directives.elements.depart_signature_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_signature_node</span></code></a>(→ None)</p></td>
+          <td><p>HTML departure visitor for signature_node.</p></td>
           </tr>
           <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.elements.visit_assertion_node" title="photon_platform.publish.directives.elements.visit_assertion_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_assertion_node</span></code></a>(→ None)</p></td>
           <td><p>HTML visitor for assertion_node.</p></td>
@@ -292,6 +304,13 @@
           </dd></dl>
 
           <dl class="py class">
+          <dt class="sig sig-object py" id="photon_platform.publish.directives.elements.signature_node">
+          <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.elements.</span></span><span class="sig-name descname"><span class="pre">signature_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rawsource</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">children</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.elements.signature_node" title="Link to this definition">¶</a></dt>
+          <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.General</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.Element</span></code></p>
+          <p>AST node for a formal proposition/element signature contract block.</p>
+          </dd></dl>
+
+          <dl class="py class">
           <dt class="sig sig-object py" id="photon_platform.publish.directives.elements.assertion_node">
           <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.elements.</span></span><span class="sig-name descname"><span class="pre">assertion_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rawsource</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">children</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.elements.assertion_node" title="Link to this definition">¶</a></dt>
           <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.General</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.Element</span></code></p>
@@ -357,6 +376,18 @@
           <dt class="sig sig-object py" id="photon_platform.publish.directives.elements.depart_enunciation_node">
           <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.elements.</span></span><span class="sig-name descname"><span class="pre">depart_enunciation_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">docutils.nodes.Element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.directives.elements.depart_enunciation_node" title="Link to this definition">¶</a></dt>
           <dd><p>HTML departure visitor for enunciation_node.</p>
+          </dd></dl>
+
+          <dl class="py function">
+          <dt class="sig sig-object py" id="photon_platform.publish.directives.elements.visit_signature_node">
+          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.elements.</span></span><span class="sig-name descname"><span class="pre">visit_signature_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">docutils.nodes.Element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.directives.elements.visit_signature_node" title="Link to this definition">¶</a></dt>
+          <dd><p>HTML visitor for signature_node.</p>
+          </dd></dl>
+
+          <dl class="py function">
+          <dt class="sig sig-object py" id="photon_platform.publish.directives.elements.depart_signature_node">
+          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.elements.</span></span><span class="sig-name descname"><span class="pre">depart_signature_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">docutils.nodes.Element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.directives.elements.depart_signature_node" title="Link to this definition">¶</a></dt>
+          <dd><p>HTML departure visitor for signature_node.</p>
           </dd></dl>
 
           <dl class="py function">
@@ -730,6 +761,49 @@
 
           </dd></dl>
 
+          <dl class="py class">
+          <dt class="sig sig-object py" id="photon_platform.publish.directives.elements.SignatureDirective">
+          <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.elements.</span></span><span class="sig-name descname"><span class="pre">SignatureDirective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_machine</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.elements.SignatureDirective" title="Link to this definition">¶</a></dt>
+          <dd><p>Bases: <a class="reference internal" href="#photon_platform.publish.directives.elements.DualModeDirective" title="photon_platform.publish.directives.elements.DualModeDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DualModeDirective</span></code></a></p>
+          <p>Directive for formal proposition/element signature contracts: <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">signature::</span> <span class="pre">[optional_kind]</span></code>.</p>
+          <dl class="py attribute">
+          <dt class="sig sig-object py" id="photon_platform.publish.directives.elements.SignatureDirective.has_content">
+          <span class="sig-name descname"><span class="pre">has_content</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#photon_platform.publish.directives.elements.SignatureDirective.has_content" title="Link to this definition">¶</a></dt>
+          <dd><p>May the directive have content?</p>
+          </dd></dl>
+
+          <dl class="py attribute">
+          <dt class="sig sig-object py" id="photon_platform.publish.directives.elements.SignatureDirective.required_arguments">
+          <span class="sig-name descname"><span class="pre">required_arguments</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></span><a class="headerlink" href="#photon_platform.publish.directives.elements.SignatureDirective.required_arguments" title="Link to this definition">¶</a></dt>
+          <dd><p>Number of required directive arguments.</p>
+          </dd></dl>
+
+          <dl class="py attribute">
+          <dt class="sig sig-object py" id="photon_platform.publish.directives.elements.SignatureDirective.optional_arguments">
+          <span class="sig-name descname"><span class="pre">optional_arguments</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></span><a class="headerlink" href="#photon_platform.publish.directives.elements.SignatureDirective.optional_arguments" title="Link to this definition">¶</a></dt>
+          <dd><p>Number of optional arguments after the required arguments.</p>
+          </dd></dl>
+
+          <dl class="py attribute">
+          <dt class="sig sig-object py" id="photon_platform.publish.directives.elements.SignatureDirective.final_argument_whitespace">
+          <span class="sig-name descname"><span class="pre">final_argument_whitespace</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#photon_platform.publish.directives.elements.SignatureDirective.final_argument_whitespace" title="Link to this definition">¶</a></dt>
+          <dd><p>May the final argument contain whitespace?</p>
+          </dd></dl>
+
+          <dl class="py attribute">
+          <dt class="sig sig-object py" id="photon_platform.publish.directives.elements.SignatureDirective.option_spec">
+          <span class="sig-name descname"><span class="pre">option_spec</span></span><a class="headerlink" href="#photon_platform.publish.directives.elements.SignatureDirective.option_spec" title="Link to this definition">¶</a></dt>
+          <dd><p>Mapping of option names to validator functions.</p>
+          </dd></dl>
+
+          <dl class="py method">
+          <dt class="sig sig-object py" id="photon_platform.publish.directives.elements.SignatureDirective.run">
+          <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">docutils.nodes.Node</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.directives.elements.SignatureDirective.run" title="Link to this definition">¶</a></dt>
+          <dd><p>Parse formal signature contract block.</p>
+          </dd></dl>
+
+          </dd></dl>
+
           <dl class="py data">
           <dt class="sig sig-object py" id="photon_platform.publish.directives.elements.FIXED_SECTION_LEVELS">
           <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.elements.</span></span><span class="sig-name descname"><span class="pre">FIXED_SECTION_LEVELS</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#photon_platform.publish.directives.elements.FIXED_SECTION_LEVELS" title="Link to this definition">¶</a></dt>
@@ -851,7 +925,7 @@
   <script src="../../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>
-  <script src="../../../../../../_static/js/geometor_interactive.js?v=421e4467"></script>
+  <script src="../../../../../../_static/js/geometor_interactive.js?v=4430a5d4"></script>
   <script src="../../../../../../_static/js/search_highlight.js"></script>
 
 </body>

@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=156d9f89" />
+  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=5c8bf1f0" />
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -102,6 +102,9 @@
           </tr>
           <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.eq_ref_node" title="photon_platform.publish.roles.geometry.eq_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eq_ref_node</span></code></a></p></td>
           <td><p>Inline AST node for equality assertion references (:eq:).</p></td>
+          </tr>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.fn_ref_node" title="photon_platform.publish.roles.geometry.fn_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fn_ref_node</span></code></a></p></td>
+          <td><p>Inline AST node for geometric construction/theorem function references (:fn:).</p></td>
           </tr>
           </tbody>
           </table>
@@ -194,10 +197,19 @@
           <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.eq_role" title="photon_platform.publish.roles.geometry.eq_role"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eq_role</span></code></a>(→ Tuple[List[docutils.nodes.Node], ...)</p></td>
           <td><p>Role <cite>:eq:</cite> for interactive equality references wrapping 'equal' (or 'equilateral', etc.).</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.register_standalone_roles" title="photon_platform.publish.roles.geometry.register_standalone_roles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_standalone_roles</span></code></a>(→ None)</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.visit_fn_ref_node" title="photon_platform.publish.roles.geometry.visit_fn_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_fn_ref_node</span></code></a>(→ None)</p></td>
+          <td><p>HTML visitor for fn_ref_node.</p></td>
+          </tr>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.depart_fn_ref_node" title="photon_platform.publish.roles.geometry.depart_fn_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_fn_ref_node</span></code></a>(→ None)</p></td>
+          <td><p>HTML departure visitor for fn_ref_node.</p></td>
+          </tr>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.fn_role" title="photon_platform.publish.roles.geometry.fn_role"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fn_role</span></code></a>(→ Tuple[List[docutils.nodes.Node], ...)</p></td>
+          <td><p>Role <cite>:fn:</cite> for composable construction/rule function calls linking to G-nodes.</p></td>
+          </tr>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.register_standalone_roles" title="photon_platform.publish.roles.geometry.register_standalone_roles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_standalone_roles</span></code></a>(→ None)</p></td>
           <td><p>Register roles and HTML node visitors with standalone Docutils.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.setup" title="photon_platform.publish.roles.geometry.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(→ Dict[str, Any])</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.setup" title="photon_platform.publish.roles.geometry.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(→ Dict[str, Any])</p></td>
           <td><p>Register geometry and scholarly roles and nodes with Sphinx.</p></td>
           </tr>
           </tbody>
@@ -430,6 +442,31 @@
           <dd><p>Role <cite>:eq:</cite> for interactive equality references wrapping ‘equal’ (or ‘equilateral’, etc.).</p>
           </dd></dl>
 
+          <dl class="py class">
+          <dt class="sig sig-object py" id="photon_platform.publish.roles.geometry.fn_ref_node">
+          <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.roles.geometry.</span></span><span class="sig-name descname"><span class="pre">fn_ref_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rawsource</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">children</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.roles.geometry.fn_ref_node" title="Link to this definition">¶</a></dt>
+          <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.Inline</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.TextElement</span></code></p>
+          <p>Inline AST node for geometric construction/theorem function references (:fn:).</p>
+          </dd></dl>
+
+          <dl class="py function">
+          <dt class="sig sig-object py" id="photon_platform.publish.roles.geometry.visit_fn_ref_node">
+          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.roles.geometry.</span></span><span class="sig-name descname"><span class="pre">visit_fn_ref_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">docutils.nodes.Element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.roles.geometry.visit_fn_ref_node" title="Link to this definition">¶</a></dt>
+          <dd><p>HTML visitor for fn_ref_node.</p>
+          </dd></dl>
+
+          <dl class="py function">
+          <dt class="sig sig-object py" id="photon_platform.publish.roles.geometry.depart_fn_ref_node">
+          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.roles.geometry.</span></span><span class="sig-name descname"><span class="pre">depart_fn_ref_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">docutils.nodes.Element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.roles.geometry.depart_fn_ref_node" title="Link to this definition">¶</a></dt>
+          <dd><p>HTML departure visitor for fn_ref_node.</p>
+          </dd></dl>
+
+          <dl class="py function">
+          <dt class="sig sig-object py" id="photon_platform.publish.roles.geometry.fn_role">
+          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.roles.geometry.</span></span><span class="sig-name descname"><span class="pre">fn_role</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">rawtext</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">inliner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">docutils.nodes.Node</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">docutils.nodes.system_message</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.roles.geometry.fn_role" title="Link to this definition">¶</a></dt>
+          <dd><p>Role <cite>:fn:</cite> for composable construction/rule function calls linking to G-nodes.</p>
+          </dd></dl>
+
           <dl class="py function">
           <dt class="sig sig-object py" id="photon_platform.publish.roles.geometry.register_standalone_roles">
           <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.roles.geometry.</span></span><span class="sig-name descname"><span class="pre">register_standalone_roles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.roles.geometry.register_standalone_roles" title="Link to this definition">¶</a></dt>
@@ -534,7 +571,7 @@
   <script src="../../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>
-  <script src="../../../../../../_static/js/geometor_interactive.js?v=421e4467"></script>
+  <script src="../../../../../../_static/js/geometor_interactive.js?v=4430a5d4"></script>
   <script src="../../../../../../_static/js/search_highlight.js"></script>
 
 </body>

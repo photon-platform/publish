@@ -24,6 +24,7 @@ Classes
 .. autoapisummary::
 
    photon_platform.publish.directives.elements.enunciation_node
+   photon_platform.publish.directives.elements.signature_node
    photon_platform.publish.directives.elements.assertion_node
    photon_platform.publish.directives.elements.subclause_node
    photon_platform.publish.directives.elements.step_node
@@ -42,6 +43,7 @@ Classes
    photon_platform.publish.directives.elements.LemmaDirective
    photon_platform.publish.directives.elements.ScholiumDirective
    photon_platform.publish.directives.elements.FolioDirective
+   photon_platform.publish.directives.elements.SignatureDirective
 
 
 Functions
@@ -56,6 +58,8 @@ Functions
    photon_platform.publish.directives.elements.record_dependency
    photon_platform.publish.directives.elements.visit_enunciation_node
    photon_platform.publish.directives.elements.depart_enunciation_node
+   photon_platform.publish.directives.elements.visit_signature_node
+   photon_platform.publish.directives.elements.depart_signature_node
    photon_platform.publish.directives.elements.visit_assertion_node
    photon_platform.publish.directives.elements.depart_assertion_node
    photon_platform.publish.directives.elements.visit_subclause_node
@@ -119,6 +123,14 @@ Module Contents
 
 
    AST node for an enunciation (protasis) block.
+
+
+.. py:class:: signature_node(rawsource: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
+
+
+   AST node for a formal proposition/element signature contract block.
 
 
 .. py:class:: assertion_node(rawsource: str = '', *children, **attributes: Any)
@@ -193,6 +205,16 @@ Module Contents
 .. py:function:: depart_enunciation_node(self: Any, node: docutils.nodes.Element) -> None
 
    HTML departure visitor for enunciation_node.
+
+
+.. py:function:: visit_signature_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for signature_node.
+
+
+.. py:function:: depart_signature_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for signature_node.
 
 
 .. py:function:: visit_assertion_node(self: Any, node: docutils.nodes.Element) -> None
@@ -562,6 +584,53 @@ Module Contents
    .. py:method:: run() -> List[docutils.nodes.Node]
 
       Create folio milestone node.
+
+
+
+.. py:class:: SignatureDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`DualModeDirective`
+
+
+   Directive for formal proposition/element signature contracts: ``.. signature:: [optional_kind]``.
+
+
+   .. py:attribute:: has_content
+      :value: True
+
+
+      May the directive have content?
+
+
+   .. py:attribute:: required_arguments
+      :value: 0
+
+
+      Number of required directive arguments.
+
+
+   .. py:attribute:: optional_arguments
+      :value: 1
+
+
+      Number of optional arguments after the required arguments.
+
+
+   .. py:attribute:: final_argument_whitespace
+      :value: True
+
+
+      May the final argument contain whitespace?
+
+
+   .. py:attribute:: option_spec
+
+      Mapping of option names to validator functions.
+
+
+   .. py:method:: run() -> List[docutils.nodes.Node]
+
+      Parse formal signature contract block.
 
 
 
