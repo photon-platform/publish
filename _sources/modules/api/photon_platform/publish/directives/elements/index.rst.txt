@@ -33,6 +33,7 @@ Classes
    photon_platform.publish.directives.elements.lemma_node
    photon_platform.publish.directives.elements.scholium_node
    photon_platform.publish.directives.elements.folio_node
+   photon_platform.publish.directives.elements.collapse_node
    photon_platform.publish.directives.elements.DualModeDirective
    photon_platform.publish.directives.elements.EnunciationDirective
    photon_platform.publish.directives.elements.AssertionDirective
@@ -44,6 +45,7 @@ Classes
    photon_platform.publish.directives.elements.ScholiumDirective
    photon_platform.publish.directives.elements.FolioDirective
    photon_platform.publish.directives.elements.SignatureDirective
+   photon_platform.publish.directives.elements.CollapseDirective
 
 
 Functions
@@ -76,6 +78,8 @@ Functions
    photon_platform.publish.directives.elements.depart_scholium_node
    photon_platform.publish.directives.elements.visit_folio_node
    photon_platform.publish.directives.elements.depart_folio_node
+   photon_platform.publish.directives.elements.visit_collapse_node
+   photon_platform.publish.directives.elements.depart_collapse_node
    photon_platform.publish.directives.elements.install_fixed_section_levels
    photon_platform.publish.directives.elements.protect_rst_math_segments
    photon_platform.publish.directives.elements.register_standalone_directives
@@ -195,6 +199,14 @@ Module Contents
 
 
    AST node for a diplomatic folio transition milestone.
+
+
+.. py:class:: collapse_node(rawsource: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
+
+
+   AST node for a collapsible <details> section with optional count badge.
 
 
 .. py:function:: visit_enunciation_node(self: Any, node: docutils.nodes.Element) -> None
@@ -631,6 +643,63 @@ Module Contents
    .. py:method:: run() -> List[docutils.nodes.Node]
 
       Parse formal signature contract block.
+
+
+
+.. py:function:: visit_collapse_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for collapse_node.
+
+
+.. py:function:: depart_collapse_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for collapse_node.
+
+
+.. py:class:: CollapseDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`DualModeDirective`
+
+
+   Directive for collapsible <details> apparatus blocks: ``.. collapse:: <title>``.
+
+
+   .. py:attribute:: has_content
+      :value: True
+
+
+      May the directive have content?
+
+
+   .. py:attribute:: required_arguments
+      :value: 0
+
+
+      Number of required directive arguments.
+
+
+   .. py:attribute:: optional_arguments
+      :value: 1
+
+
+      Number of optional arguments after the required arguments.
+
+
+   .. py:attribute:: final_argument_whitespace
+      :value: True
+
+
+      May the final argument contain whitespace?
+
+
+   .. py:attribute:: option_spec
+
+      Mapping of option names to validator functions.
+
+
+   .. py:method:: run() -> List[docutils.nodes.Node]
+
+      Parse collapsible <details> section.
 
 
 
