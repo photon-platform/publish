@@ -71,12 +71,30 @@ class line_num_node(nodes.Inline, nodes.TextElement):
     """Inline AST node for diplomatic line numbers (:line:)."""
 
 
+def format_geom_tooltip(target: str) -> str:
+    """Strip <folio>.<gid>: prefixes from a :g: target string to return the underlying element ID(s)."""
+    parts = []
+    for raw_part in (target or "").split(";"):
+        part = raw_part.strip()
+        if not part:
+            continue
+        expr = part.split(":", 1)[-1].strip() if ":" in part else part
+        if expr:
+            parts.append(expr)
+    return "; ".join(parts)
+
+
 def visit_geom_ref_node(self: Any, node: nodes.Element) -> None:
     """HTML visitor for geom_ref_node."""
     target = str(node.get("ref_target", ""))
     display = str(node.get("display", node.astext()))
     esc_target = escape_data_ref_attr(target)
-    self.body.append(f'<span class="geom-ref" data-ref="{esc_target}">{display}</span>')
+    esc_display = html.escape(display, quote=False)
+    tooltip = format_geom_tooltip(target)
+    title_attr = f' title="{html.escape(tooltip, quote=True)}"' if tooltip else ""
+    self.body.append(
+        f'<span class="geom-ref" data-ref="{esc_target}"{title_attr}>{esc_display}</span>'
+    )
     raise nodes.SkipNode
 
 
@@ -498,12 +516,15 @@ class eq_ref_node(nodes.Inline, nodes.TextElement):
 
 def visit_eq_ref_node(self: Any, node: nodes.Element) -> None:
     """HTML visitor for eq_ref_node."""
-    spec = escape_data_ref_attr(str(node.get("eq_spec", "")))
+    raw_spec = str(node.get("eq_spec", ""))
+    spec = escape_data_ref_attr(raw_spec)
     display = str(node.get("display", node.astext()))
     if display:
         inner_html = format_inline_emphasis_html(display)
+        eq_tooltip = re.sub(r"\b(?:\d{4}\.)?g\d+:\s*", "", raw_spec).strip()
+        title_attr = f' title="{html.escape(eq_tooltip, quote=True)}"' if eq_tooltip else ""
         self.body.append(
-            f'<span class="geom-eq-ref" data-assert-equal="{spec}">{inner_html}</span>'
+            f'<span class="geom-eq-ref" data-assert-equal="{spec}"{title_attr}>{inner_html}</span>'
         )
     else:
         self.body.append(

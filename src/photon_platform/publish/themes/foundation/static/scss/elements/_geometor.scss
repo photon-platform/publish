@@ -1575,6 +1575,7 @@ svg.euclid-graphic {
 .katex.geom-interactive-ref {
   cursor: pointer;
   position: relative;
+  white-space: nowrap;
   border-bottom: 1.5px dotted var(--geom-accent-border, rgba(232, 184, 90, 0.55));
   border-radius: 2px;
   padding: 0 1px;

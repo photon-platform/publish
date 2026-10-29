@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import html
+import json
 import re
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from docutils import nodes
@@ -181,6 +183,98 @@ def _resolve_justification_href(translator: Any, target: str) -> Optional[str]:
     return None
 
 
+def truncate_enunciation(text: str, max_chars: int = 180) -> str:
+    """Collapse whitespace and truncate a long enunciation cleanly at a word boundary."""
+    cleaned = re.sub(r"\s+", " ", (text or "").strip())
+    if len(cleaned) <= max_chars:
+        return cleaned
+    cut = cleaned[:max_chars].rsplit(" ", 1)[0].rstrip(".,;:")
+    return f"{cut}…"
+
+
+def _load_book_enunciations(env: Any, book_slug: str) -> Dict[str, Tuple[str, str]]:
+    """Load and cache enunciations.json for a book (mapping lowercase id -> (canonical_id, text))."""
+    cache_attr = "_photon_enunciations_cache"
+    cache = getattr(env, cache_attr, None) if env is not None else None
+    if cache is None:
+        cache = {}
+        if env is not None:
+            setattr(env, cache_attr, cache)
+    if book_slug in cache:
+        return cache[book_slug]
+
+    registry: Dict[str, Tuple[str, str]] = {}
+    if env is not None:
+        srcdir = Path(getattr(env, "srcdir", "."))
+        candidates = [
+            srcdir.parent / "resources" / book_slug,
+            srcdir.parent.parent / "resources" / srcdir.name,
+            srcdir / book_slug,
+            srcdir.parent / "resources",
+        ]
+        for base in candidates:
+            fpath = base / "enunciations.json"
+            if fpath.is_file():
+                try:
+                    raw_map = json.loads(fpath.read_text(encoding="utf-8"))
+                    if isinstance(raw_map, dict):
+                        for k, v in raw_map.items():
+                            if isinstance(k, str) and isinstance(v, str) and v.strip():
+                                registry[k.strip().lower()] = (k.strip(), v.strip())
+                except Exception:
+                    pass
+                break
+
+    cache[book_slug] = registry
+    return registry
+
+
+def _lookup_single_enunciation(
+    env: Any, book_slug: str, cand: str, max_chars: int = 180
+) -> Optional[str]:
+    """Look up a single canonical Euclid ID in the enunciations registry or Sphinx metadata."""
+    key = (cand or "").strip().lower()
+    if not key:
+        return None
+    registry = _load_book_enunciations(env, book_slug or "heath")
+    search_keys = [key]
+    if key.startswith("viii.def."):
+        search_keys.append("vii." + key[5:])
+
+    for sk in search_keys:
+        if sk in registry:
+            canon_id, text = registry[sk]
+            short_text = truncate_enunciation(text, max_chars=max_chars)
+            return f"{cand.strip()}: {short_text}"
+
+    # Fallback: check Sphinx metadata if dynamically populated during build
+    if env is not None and hasattr(env, "metadata"):
+        for meta in env.metadata.values():
+            cid = str(meta.get("canonical_id", "")).strip()
+            excerpt = str(meta.get("excerpt", "")).strip()
+            if cid and excerpt and cid.lower() in search_keys:
+                return f"{cand.strip()}: {truncate_enunciation(excerpt, max_chars=max_chars)}"
+    return None
+
+
+def _resolve_justification_tooltip(
+    translator: Any, target: str, max_chars: int = 180
+) -> Optional[str]:
+    """Resolve a canonical justification target (or comma-separated list) to a truncated enunciation tooltip."""
+    if not target:
+        return None
+    builder = getattr(translator, "builder", None) if translator is not None else None
+    env = getattr(builder, "env", None) if builder is not None else None
+    current_docname = getattr(builder, "current_docname", "") or ""
+    first_seg = current_docname.split("/")[0] if "/" in current_docname else "heath"
+
+    parts: List[str] = []
+    for cand in (t.strip() for t in target.split(",") if t.strip()):
+        resolved = _lookup_single_enunciation(env, first_seg, cand, max_chars=max_chars)
+        parts.append(resolved if resolved else cand)
+    return " | ".join(parts) if parts else None
+
+
 def format_justification_html(
     display: str, target: Optional[str] = None, translator: Any = None
 ) -> str:
@@ -192,11 +286,19 @@ def format_justification_html(
 
     if target:
         esc_target = html.escape(target, quote=True)
+        tooltip = _resolve_justification_tooltip(translator, target) or target
+        esc_title = html.escape(tooltip, quote=True)
         href = _resolve_justification_href(translator, target)
         if href:
             esc_href = html.escape(href, quote=True)
-            return f'<a class="justification" href="{esc_href}" data-ref-target="{esc_target}">{esc_display}</a>'
-        return f'<span class="justification" data-ref-target="{esc_target}">{esc_display}</span>'
+            return (
+                f'<a class="justification" href="{esc_href}" '
+                f'data-ref-target="{esc_target}" title="{esc_title}">{esc_display}</a>'
+            )
+        return (
+            f'<span class="justification" data-ref-target="{esc_target}" '
+            f'title="{esc_title}">{esc_display}</span>'
+        )
     return f'<span class="justification">{esc_display}</span>'
 
 
@@ -786,6 +888,28 @@ def _on_sphinx_doctree_read(app: Any, doctree: nodes.document) -> None:
                 meta[k] = _restore_math_string(v, store)
 
 
+def _on_sphinx_doctree_resolved(
+    app: Any, doctree: nodes.document, fromdocname: str
+) -> None:
+    """Attach enunciation tooltips (reftitle) to internal :ref: nodes targeting Euclid elements."""
+    env = getattr(app, "env", None)
+    if env is None:
+        return
+    first_seg = fromdocname.split("/")[0] if "/" in fromdocname else "heath"
+    for ref_node in doctree.findall(nodes.reference):
+        if ref_node.get("reftitle"):
+            continue
+        label_text = ref_node.astext().strip()
+        tooltip = _lookup_single_enunciation(env, first_seg, label_text)
+        if not tooltip:
+            refuri = str(ref_node.get("refuri", ""))
+            if "#" in refuri:
+                anchor = refuri.split("#", 1)[1].replace("-", ".")
+                tooltip = _lookup_single_enunciation(env, first_seg, anchor)
+        if tooltip:
+            ref_node["reftitle"] = tooltip
+
+
 def register_standalone_directives() -> None:
     """Register directives, fixed section levels, and HTML node visitors with standalone Docutils."""
     install_fixed_section_levels()
@@ -808,6 +932,7 @@ def setup(app: Any) -> Dict[str, Any]:
     )
     app.connect("source-read", _on_sphinx_source_read)
     app.connect("doctree-read", _on_sphinx_doctree_read)
+    app.connect("doctree-resolved", _on_sphinx_doctree_resolved)
     for node_cls, visit_fn, depart_fn in _NODE_VISITORS:
         app.add_node(
             node_cls,

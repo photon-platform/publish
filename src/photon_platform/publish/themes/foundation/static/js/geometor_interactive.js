@@ -635,6 +635,14 @@
 
         span.classList.add('geom-interactive-ref');
         span.setAttribute('data-geom-keys', allCanonicalKeys.join('||'));
+        if (!span.hasAttribute('title')) {
+          const shortIds = refList
+            .map((r) => (r.includes(':') ? r.split(':').slice(1).join(':').trim() : r))
+            .filter(Boolean);
+          if (shortIds.length > 0) {
+            span.setAttribute('title', shortIds.join('; '));
+          }
+        }
 
         span.addEventListener('mouseenter', () => {
           this.highlightFromText(refList, span, defaultGid);
@@ -681,6 +689,14 @@
 
           kel.classList.add('geom-interactive-ref');
           kel.setAttribute('data-geom-keys', allCanonicalKeys.join('||'));
+          if (!kel.hasAttribute('title')) {
+            const shortIds = resolvedRefs
+              .map((r) => (r.includes(':') ? r.split(':').slice(1).join(':').trim() : r))
+              .filter(Boolean);
+            if (shortIds.length > 0) {
+              kel.setAttribute('title', shortIds.join('; '));
+            }
+          }
 
           kel.addEventListener('mouseenter', () => {
             this.highlightFromText(resolvedRefs, kel, `${folioId}.g1`);
