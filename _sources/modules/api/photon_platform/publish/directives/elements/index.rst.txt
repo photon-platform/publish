@@ -49,6 +49,7 @@ Functions
 
    photon_platform.publish.directives.elements.infer_justification_target
    photon_platform.publish.directives.elements.parse_justification_arg
+   photon_platform.publish.directives.elements.truncate_enunciation
    photon_platform.publish.directives.elements.format_justification_html
    photon_platform.publish.directives.elements.record_dependency
    photon_platform.publish.directives.elements.visit_enunciation_node
@@ -91,6 +92,11 @@ Module Contents
    - ``[Def. 15] <I.def.15>`` -> ``("[Def. 15]", "I.def.15")``
    - ``[Def. 15]`` -> ``("[Def. 15]", "I.def.15")``
    - ``I.def.15`` -> ``("[I.def.15]", "I.def.15")``
+
+
+.. py:function:: truncate_enunciation(text: str, max_chars: int = 180) -> str
+
+   Collapse whitespace and truncate a long enunciation cleanly at a word boundary.
 
 
 .. py:function:: format_justification_html(display: str, target: Optional[str] = None, translator: Any = None) -> str

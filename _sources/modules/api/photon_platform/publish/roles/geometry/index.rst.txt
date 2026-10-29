@@ -30,6 +30,7 @@ Functions
 
    photon_platform.publish.roles.geometry.escape_data_ref_attr
    photon_platform.publish.roles.geometry.parse_geom_role_text
+   photon_platform.publish.roles.geometry.format_geom_tooltip
    photon_platform.publish.roles.geometry.visit_geom_ref_node
    photon_platform.publish.roles.geometry.depart_geom_ref_node
    photon_platform.publish.roles.geometry.visit_just_ref_node
@@ -99,6 +100,11 @@ Module Contents
 
 
    Inline AST node for diplomatic line numbers (:line:).
+
+
+.. py:function:: format_geom_tooltip(target: str) -> str
+
+   Strip <folio>.<gid>: prefixes from a :g: target string to return the underlying element ID(s).
 
 
 .. py:function:: visit_geom_ref_node(self: Any, node: docutils.nodes.Element) -> None

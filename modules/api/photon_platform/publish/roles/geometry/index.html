@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>photon_platform.publish.roles.geometry &mdash; Project name not set  documentation</title>
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=c2226d0d" />
+  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=ddb76559" />
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -37,10 +37,10 @@
           <a href="../../../../../../mission/index.html"  >mission</a>
         </li>
         <li>
-          <a href="../../../../../../usage/index.html"  >usage</a>
+          <a href="../../../../../index.html"  >modules</a>
         </li>
         <li>
-          <a href="../../../../../index.html"  >modules</a>
+          <a href="../../../../../../usage/index.html"  >usage</a>
         </li>
         <li>
           <a href="../../../../../../log/index.html"  >log</a>
@@ -113,82 +113,85 @@
           <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.parse_geom_role_text" title="photon_platform.publish.roles.geometry.parse_geom_role_text"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_geom_role_text</span></code></a>(→ Tuple[str, str])</p></td>
           <td><p>Parse :g: role content <code class="docutils literal notranslate"><span class="pre">display</span> <span class="pre">&lt;target&gt;</span></code> or bare <code class="docutils literal notranslate"><span class="pre">target</span></code> into <code class="docutils literal notranslate"><span class="pre">(display,</span> <span class="pre">target)</span></code>.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.visit_geom_ref_node" title="photon_platform.publish.roles.geometry.visit_geom_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_geom_ref_node</span></code></a>(→ None)</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.format_geom_tooltip" title="photon_platform.publish.roles.geometry.format_geom_tooltip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_geom_tooltip</span></code></a>(→ str)</p></td>
+          <td><p>Strip &lt;folio&gt;.&lt;gid&gt;: prefixes from a :g: target string to return the underlying element ID(s).</p></td>
+          </tr>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.visit_geom_ref_node" title="photon_platform.publish.roles.geometry.visit_geom_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_geom_ref_node</span></code></a>(→ None)</p></td>
           <td><p>HTML visitor for geom_ref_node.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.depart_geom_ref_node" title="photon_platform.publish.roles.geometry.depart_geom_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_geom_ref_node</span></code></a>(→ None)</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.depart_geom_ref_node" title="photon_platform.publish.roles.geometry.depart_geom_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_geom_ref_node</span></code></a>(→ None)</p></td>
           <td><p>HTML departure visitor for geom_ref_node.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.visit_just_ref_node" title="photon_platform.publish.roles.geometry.visit_just_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_just_ref_node</span></code></a>(→ None)</p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.visit_just_ref_node" title="photon_platform.publish.roles.geometry.visit_just_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_just_ref_node</span></code></a>(→ None)</p></td>
           <td><p>HTML visitor for just_ref_node.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.depart_just_ref_node" title="photon_platform.publish.roles.geometry.depart_just_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_just_ref_node</span></code></a>(→ None)</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.depart_just_ref_node" title="photon_platform.publish.roles.geometry.depart_just_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_just_ref_node</span></code></a>(→ None)</p></td>
           <td><p>HTML departure visitor for just_ref_node.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.visit_line_num_node" title="photon_platform.publish.roles.geometry.visit_line_num_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_line_num_node</span></code></a>(→ None)</p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.visit_line_num_node" title="photon_platform.publish.roles.geometry.visit_line_num_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_line_num_node</span></code></a>(→ None)</p></td>
           <td><p>HTML visitor for line_num_node.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.depart_line_num_node" title="photon_platform.publish.roles.geometry.depart_line_num_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_line_num_node</span></code></a>(→ None)</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.depart_line_num_node" title="photon_platform.publish.roles.geometry.depart_line_num_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_line_num_node</span></code></a>(→ None)</p></td>
           <td><p>HTML departure visitor for line_num_node.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.g_role" title="photon_platform.publish.roles.geometry.g_role"><code class="xref py py-obj docutils literal notranslate"><span class="pre">g_role</span></code></a>(→ Tuple[List[docutils.nodes.Node], ...)</p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.g_role" title="photon_platform.publish.roles.geometry.g_role"><code class="xref py py-obj docutils literal notranslate"><span class="pre">g_role</span></code></a>(→ Tuple[List[docutils.nodes.Node], ...)</p></td>
           <td><p>Role <cite>:g:</cite> for interactive geometric references.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.just_role" title="photon_platform.publish.roles.geometry.just_role"><code class="xref py py-obj docutils literal notranslate"><span class="pre">just_role</span></code></a>(→ Tuple[List[docutils.nodes.Node], ...)</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.just_role" title="photon_platform.publish.roles.geometry.just_role"><code class="xref py py-obj docutils literal notranslate"><span class="pre">just_role</span></code></a>(→ Tuple[List[docutils.nodes.Node], ...)</p></td>
           <td><p>Role <cite>:just:</cite> for proposition step justifications and dependency recording.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.format_inline_emphasis_html" title="photon_platform.publish.roles.geometry.format_inline_emphasis_html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_inline_emphasis_html</span></code></a>(→ str)</p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.format_inline_emphasis_html" title="photon_platform.publish.roles.geometry.format_inline_emphasis_html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_inline_emphasis_html</span></code></a>(→ str)</p></td>
           <td><p>Escape HTML and convert <code class="docutils literal notranslate"><span class="pre">**bold**</span></code> and <code class="docutils literal notranslate"><span class="pre">*italic*</span></code> spans into <code class="docutils literal notranslate"><span class="pre">&lt;strong&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;em&gt;</span></code>.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.parse_display_target" title="photon_platform.publish.roles.geometry.parse_display_target"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_display_target</span></code></a>(→ Tuple[str, str])</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.parse_display_target" title="photon_platform.publish.roles.geometry.parse_display_target"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_display_target</span></code></a>(→ Tuple[str, str])</p></td>
           <td><p>Parse <code class="docutils literal notranslate"><span class="pre">display</span> <span class="pre">&lt;target&gt;</span></code> or bare <code class="docutils literal notranslate"><span class="pre">display</span></code> into <code class="docutils literal notranslate"><span class="pre">(display,</span> <span class="pre">target)</span></code>.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.visit_cite_ref_node" title="photon_platform.publish.roles.geometry.visit_cite_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_cite_ref_node</span></code></a>(→ None)</p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.visit_cite_ref_node" title="photon_platform.publish.roles.geometry.visit_cite_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_cite_ref_node</span></code></a>(→ None)</p></td>
           <td><p>HTML visitor for cite_ref_node.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.depart_cite_ref_node" title="photon_platform.publish.roles.geometry.depart_cite_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_cite_ref_node</span></code></a>(→ None)</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.depart_cite_ref_node" title="photon_platform.publish.roles.geometry.depart_cite_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_cite_ref_node</span></code></a>(→ None)</p></td>
           <td><p>HTML departure visitor for cite_ref_node.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.visit_term_ref_node" title="photon_platform.publish.roles.geometry.visit_term_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_term_ref_node</span></code></a>(→ None)</p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.visit_term_ref_node" title="photon_platform.publish.roles.geometry.visit_term_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_term_ref_node</span></code></a>(→ None)</p></td>
           <td><p>HTML visitor for term_ref_node.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.depart_term_ref_node" title="photon_platform.publish.roles.geometry.depart_term_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_term_ref_node</span></code></a>(→ None)</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.depart_term_ref_node" title="photon_platform.publish.roles.geometry.depart_term_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_term_ref_node</span></code></a>(→ None)</p></td>
           <td><p>HTML departure visitor for term_ref_node.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.visit_person_ref_node" title="photon_platform.publish.roles.geometry.visit_person_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_person_ref_node</span></code></a>(→ None)</p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.visit_person_ref_node" title="photon_platform.publish.roles.geometry.visit_person_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_person_ref_node</span></code></a>(→ None)</p></td>
           <td><p>HTML visitor for person_ref_node.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.depart_person_ref_node" title="photon_platform.publish.roles.geometry.depart_person_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_person_ref_node</span></code></a>(→ None)</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.depart_person_ref_node" title="photon_platform.publish.roles.geometry.depart_person_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_person_ref_node</span></code></a>(→ None)</p></td>
           <td><p>HTML departure visitor for person_ref_node.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.cite_role" title="photon_platform.publish.roles.geometry.cite_role"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cite_role</span></code></a>(→ Tuple[List[docutils.nodes.Node], ...)</p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.cite_role" title="photon_platform.publish.roles.geometry.cite_role"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cite_role</span></code></a>(→ Tuple[List[docutils.nodes.Node], ...)</p></td>
           <td><p>Role <cite>:cite:</cite> for bibliographic and locus citations.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.term_role" title="photon_platform.publish.roles.geometry.term_role"><code class="xref py py-obj docutils literal notranslate"><span class="pre">term_role</span></code></a>(→ Tuple[List[docutils.nodes.Node], ...)</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.term_role" title="photon_platform.publish.roles.geometry.term_role"><code class="xref py py-obj docutils literal notranslate"><span class="pre">term_role</span></code></a>(→ Tuple[List[docutils.nodes.Node], ...)</p></td>
           <td><p>Role <cite>:term:</cite> for glossary and foreign philosophical/mathematical terms.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.person_role" title="photon_platform.publish.roles.geometry.person_role"><code class="xref py py-obj docutils literal notranslate"><span class="pre">person_role</span></code></a>(→ Tuple[List[docutils.nodes.Node], ...)</p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.person_role" title="photon_platform.publish.roles.geometry.person_role"><code class="xref py py-obj docutils literal notranslate"><span class="pre">person_role</span></code></a>(→ Tuple[List[docutils.nodes.Node], ...)</p></td>
           <td><p>Role <cite>:person:</cite> for historical mathematicians, philosophers, and commentators.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.line_role" title="photon_platform.publish.roles.geometry.line_role"><code class="xref py py-obj docutils literal notranslate"><span class="pre">line_role</span></code></a>(→ Tuple[List[docutils.nodes.Node], ...)</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.line_role" title="photon_platform.publish.roles.geometry.line_role"><code class="xref py py-obj docutils literal notranslate"><span class="pre">line_role</span></code></a>(→ Tuple[List[docutils.nodes.Node], ...)</p></td>
           <td><p>Role <cite>:line:</cite> for diplomatic line numbers.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.parse_eq_role_text" title="photon_platform.publish.roles.geometry.parse_eq_role_text"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_eq_role_text</span></code></a>(→ Tuple[str, str])</p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.parse_eq_role_text" title="photon_platform.publish.roles.geometry.parse_eq_role_text"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_eq_role_text</span></code></a>(→ Tuple[str, str])</p></td>
           <td><p>Parse :eq: role content <code class="docutils literal notranslate"><span class="pre">display</span> <span class="pre">&lt;spec&gt;</span></code> into <code class="docutils literal notranslate"><span class="pre">(display,</span> <span class="pre">spec)</span></code>.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.visit_eq_ref_node" title="photon_platform.publish.roles.geometry.visit_eq_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_eq_ref_node</span></code></a>(→ None)</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.visit_eq_ref_node" title="photon_platform.publish.roles.geometry.visit_eq_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visit_eq_ref_node</span></code></a>(→ None)</p></td>
           <td><p>HTML visitor for eq_ref_node.</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.depart_eq_ref_node" title="photon_platform.publish.roles.geometry.depart_eq_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_eq_ref_node</span></code></a>(→ None)</p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.depart_eq_ref_node" title="photon_platform.publish.roles.geometry.depart_eq_ref_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">depart_eq_ref_node</span></code></a>(→ None)</p></td>
           <td><p>HTML departure visitor for eq_ref_node.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.eq_role" title="photon_platform.publish.roles.geometry.eq_role"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eq_role</span></code></a>(→ Tuple[List[docutils.nodes.Node], ...)</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.eq_role" title="photon_platform.publish.roles.geometry.eq_role"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eq_role</span></code></a>(→ Tuple[List[docutils.nodes.Node], ...)</p></td>
           <td><p>Role <cite>:eq:</cite> for interactive equality references wrapping 'equal' (or 'equilateral', etc.).</p></td>
           </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.register_standalone_roles" title="photon_platform.publish.roles.geometry.register_standalone_roles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_standalone_roles</span></code></a>(→ None)</p></td>
+          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.register_standalone_roles" title="photon_platform.publish.roles.geometry.register_standalone_roles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_standalone_roles</span></code></a>(→ None)</p></td>
           <td><p>Register roles and HTML node visitors with standalone Docutils.</p></td>
           </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.setup" title="photon_platform.publish.roles.geometry.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(→ Dict[str, Any])</p></td>
+          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.roles.geometry.setup" title="photon_platform.publish.roles.geometry.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(→ Dict[str, Any])</p></td>
           <td><p>Register geometry and scholarly roles and nodes with Sphinx.</p></td>
           </tr>
           </tbody>
@@ -232,6 +235,12 @@
           <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.roles.geometry.</span></span><span class="sig-name descname"><span class="pre">line_num_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rawsource</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">children</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.roles.geometry.line_num_node" title="Link to this definition">¶</a></dt>
           <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.Inline</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.TextElement</span></code></p>
           <p>Inline AST node for diplomatic line numbers (:line:).</p>
+          </dd></dl>
+
+          <dl class="py function">
+          <dt class="sig sig-object py" id="photon_platform.publish.roles.geometry.format_geom_tooltip">
+          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.roles.geometry.</span></span><span class="sig-name descname"><span class="pre">format_geom_tooltip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.roles.geometry.format_geom_tooltip" title="Link to this definition">¶</a></dt>
+          <dd><p>Strip &lt;folio&gt;.&lt;gid&gt;: prefixes from a :g: target string to return the underlying element ID(s).</p>
           </dd></dl>
 
           <dl class="py function">
@@ -474,6 +483,12 @@
         <li><a href="../../../../../../tags/usage.html">usage</a></li>
       </ul>
     </aside>
+    <aside class="aside-categories">
+      <h3>Categories</h3>
+      <ul>
+        <li><a href="../../../../../../categories/publish.html">publish</a></li>
+      </ul>
+    </aside>
     <aside class="aside-types">
       <h3>Types</h3>
       <ul>
@@ -488,8 +503,8 @@
         <li><a href="../../../../../../about.html">About</a></li>
         <li><a href="../../../../../../connect.html">Connect</a></li>
         <li><a href="../../../../../../changelog.html">Changelog</a></li>
-        <li><a href="../../../../../../glossary.html">Glossary</a></li>
         <li><a href="../../../../../../todos/index.html">todos</a></li>
+        <li><a href="../../../../../../glossary.html">Glossary</a></li>
         <li><a href="../../../../../../orphan.html">Orphan Page</a></li>
       </ul>
     </div>
@@ -507,7 +522,7 @@
   <script src="../../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>
-  <script src="../../../../../../_static/js/geometor_interactive.js?v=fe1898e5"></script>
+  <script src="../../../../../../_static/js/geometor_interactive.js?v=832534ec"></script>
   <script src="../../../../../../_static/js/search_highlight.js"></script>
 
 </body>
