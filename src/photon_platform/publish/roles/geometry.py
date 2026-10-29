@@ -15,6 +15,8 @@ from docutils.writers.html5_polyglot import HTMLTranslator as HTML5Translator
 
 from photon_platform.publish.directives.elements import (
     _get_current_book,
+    _resolve_justification_href,
+    _resolve_justification_tooltip,
     format_justification_html,
     parse_justification_arg,
     record_dependency,
@@ -569,6 +571,64 @@ def eq_role(
     return [node], []
 
 
+class fn_ref_node(nodes.Inline, nodes.TextElement):
+    """Inline AST node for geometric construction/theorem function references (:fn:)."""
+
+
+def visit_fn_ref_node(self: Any, node: nodes.Element) -> None:
+    """HTML visitor for fn_ref_node."""
+    display = str(node.get("display", node.astext()))
+    target = str(node.get("ref_target", ""))
+    esc_display = html.escape(display)
+    esc_target = html.escape(target, quote=True)
+    tooltip = _resolve_justification_tooltip(self, target) or target
+    esc_title = html.escape(tooltip, quote=True)
+    href = _resolve_justification_href(self, target)
+    if href and not href.startswith("#"):
+        esc_href = html.escape(href, quote=True)
+        self.body.append(
+            f'<a class="geom-fn" href="{esc_href}" '
+            f'data-ref-target="{esc_target}" title="{esc_title}">{esc_display}</a>'
+        )
+    else:
+        self.body.append(
+            f'<span class="geom-fn geom-fn-def" '
+            f'data-ref-target="{esc_target}" title="{esc_title}">{esc_display}</span>'
+        )
+    raise nodes.SkipNode
+
+
+def depart_fn_ref_node(self: Any, node: nodes.Element) -> None:
+    """HTML departure visitor for fn_ref_node."""
+    pass
+
+
+def fn_role(
+    name: str,
+    rawtext: str,
+    text: str,
+    lineno: int,
+    inliner: Any,
+    options: Optional[Dict[str, Any]] = None,
+    content: Optional[List[str]] = None,
+) -> Tuple[List[nodes.Node], List[nodes.system_message]]:
+    """Role `:fn:` for composable construction/rule function calls linking to G-nodes."""
+    restored = utils.unescape(text, restore_backslashes=True).strip()
+    display, target = parse_display_target(restored)
+    node = fn_ref_node(rawtext, display)
+    node["display"] = display
+    node["ref_target"] = target
+
+    env = getattr(inliner.document.settings, "env", None)
+    if env and target:
+        docname = getattr(env, "docname", "") or ""
+        doc_parts = set(docname.split("/"))
+        if target not in doc_parts:
+            record_dependency(env, target)
+
+    return [node], []
+
+
 _ROLE_NODE_VISITORS = [
     (geom_ref_node, visit_geom_ref_node, depart_geom_ref_node),
     (just_ref_node, visit_just_ref_node, depart_just_ref_node),
@@ -577,6 +637,7 @@ _ROLE_NODE_VISITORS = [
     (term_ref_node, visit_term_ref_node, depart_term_ref_node),
     (person_ref_node, visit_person_ref_node, depart_person_ref_node),
     (eq_ref_node, visit_eq_ref_node, depart_eq_ref_node),
+    (fn_ref_node, visit_fn_ref_node, depart_fn_ref_node),
 ]
 
 _ROLES = {
@@ -587,6 +648,7 @@ _ROLES = {
     "term": term_role,
     "person": person_role,
     "eq": eq_role,
+    "fn": fn_role,
 }
 
 

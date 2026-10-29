@@ -146,69 +146,114 @@ def detect_companion_tracks(env: Any, pagename: str) -> List[Dict[str, Any]]:
     else:
         index_label = "Overview"
 
+    is_unit_dir = not doc_dir or stem == os.path.basename(doc_dir)
+
+    def _cands(stemmed: List[str], bare: List[str]) -> List[str]:
+        return stemmed + (bare if is_unit_dir else [])
+
     candidate_specs: List[Tuple[str, str, List[str]]] = [
-        ("proposition", index_label, [_qual("index"), _qual("pseudocode"), _qual("proposition"), _qual(f"{stem}.proposition")]),
-        ("code", "Code", [
-            _qual(f"{stem}.code"),
-            _qual(f"{stem}_code"),
-            _qual(f"{stem}-code"),
-            _qual("code"),
-        ]),
-        ("heath", "Heath", [
-            _qual(f"{stem}.heath"),
-            _qual(f"{stem}_heath"),
-            _qual(f"{stem}-heath"),
-            _qual("heath"),
-        ]),
-        ("la", "Latin", ([_qual(stem)] if has_hyphen_or_under_en and stem != "index" else []) + [
-            _qual(f"{stem}.la"),
-            _qual(f"{stem}_la"),
-            _qual(f"{stem}-la"),
-            _qual("la"),
-        ]),
-        ("en", "English", [
-            _qual(f"{stem}.en"),
-            _qual(f"{stem}_en"),
-            _qual(f"{stem}-en"),
-            _qual("en"),
-        ]),
-        ("it", "Italiano", [
-            _qual(f"{stem}.it"),
-            _qual(f"{stem}_it"),
-            _qual(f"{stem}-it"),
-            _qual("it"),
-        ]),
-        ("de", "Deutsch", [
-            _qual(f"{stem}.de"),
-            _qual(f"{stem}_de"),
-            _qual(f"{stem}-de"),
-            _qual("de"),
-        ]),
-        ("commentary", "Commentary", [
-            _qual(f"{stem}.commentary"),
-            _qual(f"{stem}_commentary"),
-            _qual(f"{stem}-commentary"),
-            _qual("commentary"),
-        ]),
-        ("summary", "Summary", [
-            _qual(f"{stem}.summary"),
-            _qual(f"{stem}_summary"),
-            _qual(f"{stem}-summary"),
-            _qual("summary"),
-        ]),
-        ("notes", "Notes", [
-            _qual(f"{stem}.notes"),
-            _qual(f"{stem}_notes"),
-            _qual(f"{stem}-notes"),
-            _qual(f"translation-notes-{stem}"),
-            _qual("notes"),
-        ]),
-        ("folio", "Folio", [
-            _qual(f"{stem}.folio"),
-            _qual(f"{stem}_folio"),
-            _qual(f"{stem}-folio"),
-            _qual("folio"),
-        ]),
+        (
+            "proposition",
+            index_label,
+            _cands(
+                [_qual(f"{stem}.proposition")],
+                [_qual("index"), _qual("pseudocode"), _qual("proposition")],
+            ),
+        ),
+        (
+            "code",
+            "Code",
+            _cands(
+                [_qual(f"{stem}.code"), _qual(f"{stem}_code"), _qual(f"{stem}-code")],
+                [_qual("code")],
+            ),
+        ),
+        (
+            "heath",
+            "Heath",
+            _cands(
+                [_qual(f"{stem}.heath"), _qual(f"{stem}_heath"), _qual(f"{stem}-heath")],
+                [_qual("heath")],
+            ),
+        ),
+        (
+            "la",
+            "Latin",
+            [_qual(stem)] if has_hyphen_or_under_en and stem != "index" else [],
+        ),
+        (
+            "en",
+            "English",
+            _cands(
+                [_qual(f"{stem}.en"), _qual(f"{stem}_en"), _qual(f"{stem}-en")],
+                [_qual("en")],
+            ),
+        ),
+        (
+            "it",
+            "Italiano",
+            _cands(
+                [_qual(f"{stem}.it"), _qual(f"{stem}_it"), _qual(f"{stem}-it")],
+                [_qual("it")],
+            ),
+        ),
+        (
+            "de",
+            "Deutsch",
+            _cands(
+                [_qual(f"{stem}.de"), _qual(f"{stem}_de"), _qual(f"{stem}-de")],
+                [_qual("de")],
+            ),
+        ),
+        (
+            "la",
+            "Latin",
+            _cands(
+                [_qual(f"{stem}.la"), _qual(f"{stem}_la"), _qual(f"{stem}-la")],
+                [_qual("la")],
+            ),
+        ),
+        (
+            "commentary",
+            "Commentary",
+            _cands(
+                [
+                    _qual(f"{stem}.commentary"),
+                    _qual(f"{stem}_commentary"),
+                    _qual(f"{stem}-commentary"),
+                ],
+                [_qual("commentary")],
+            ),
+        ),
+        (
+            "summary",
+            "Summary",
+            _cands(
+                [_qual(f"{stem}.summary"), _qual(f"{stem}_summary"), _qual(f"{stem}-summary")],
+                [_qual("summary")],
+            ),
+        ),
+        (
+            "notes",
+            "Notes",
+            _cands(
+                [
+                    _qual(f"{stem}.notes"),
+                    _qual(f"{stem}_notes"),
+                    _qual(f"{stem}-notes"),
+                    _qual(f"translation-notes-{stem}"),
+                ],
+                [_qual("notes")],
+            ),
+        ),
+        (
+            "folio",
+            "Folio",
+            _cands(
+                [_qual(f"{stem}.folio"), _qual(f"{stem}_folio"), _qual(f"{stem}-folio")],
+                [_qual("folio")],
+            ),
+        ),
     ]
 
     tracks: List[Dict[str, Any]] = []
@@ -331,7 +376,11 @@ def resolve_book_context(
     # Build hierarchical breadcrumbs between book_root and the current unit
     found_docs: Set[str] = set(getattr(env, "found_docs", set()))
     unit_doc = pagename
-    if doc_dir and os.path.basename(pagename) != "index":
+    if (
+        doc_dir
+        and os.path.basename(pagename) != "index"
+        and _extract_unit_stem(os.path.basename(pagename), doc_dir) == os.path.basename(doc_dir)
+    ):
         cand_unit_idx = f"{doc_dir}/index"
         if (
             _is_auxiliary_track_doc(env, pagename)
@@ -706,17 +755,20 @@ _AUX_TRACK_BASENAMES: Set[str] = {
     "summary",
     "notes",
     "folio",
+    "it",
+    "de",
+    "la",
 }
 
 _AUX_TRACK_PATTERNS: List[re.Pattern[str]] = [
-    re.compile(r"^.+[._-](?:code|heath|commentary|summary|notes|folio)$"),
+    re.compile(r"^.+[._-](?:code|heath|commentary|summary|notes|folio|it|de|la)$"),
     re.compile(r"^translation-notes-.+$"),
 ]
 
 
 def _is_auxiliary_track_doc(env: Any, docname: str) -> bool:
-    """Return True if `docname` is an auxiliary companion track (e.g., commentary, notes, summary, folio)
-    that should be skipped by sequential Prev/Next book navigation.
+    """Return True if `docname` is an auxiliary companion track (e.g., commentary, notes, summary, folio,
+    or secondary language track) that should be skipped by sequential Prev/Next book navigation.
     """
     basename = os.path.basename(docname)
     if basename in _AUX_TRACK_BASENAMES:
@@ -732,7 +784,7 @@ def _is_auxiliary_track_doc(env: Any, docname: str) -> bool:
 
 def _update_book_prev_next(app: Any, pagename: str, context: Dict[str, Any]) -> None:
     """Adjust `prev` and `next` links in `context` so sequential navigation steps through
-    primary book elements and skips auxiliary companion tracks (such as commentary or notes).
+    primary book elements and preserves the active companion track when available.
     """
     builder = getattr(app, "builder", None)
     env = getattr(app, "env", None)
@@ -742,12 +794,28 @@ def _update_book_prev_next(app: Any, pagename: str, context: Dict[str, Any]) -> 
     if not relations or not isinstance(relations, dict):
         return
 
+    cur_tracks = detect_companion_tracks(env, pagename)
+    active_track_key: Optional[str] = None
+    for tr in cur_tracks:
+        if tr.get("active") or tr.get("docname") == pagename:
+            active_track_key = tr.get("key")
+            break
+
     start_doc = pagename
     if _is_auxiliary_track_doc(env, pagename):
-        doc_dir = os.path.dirname(pagename)
-        cand_index = f"{doc_dir}/index" if doc_dir else "index"
-        if cand_index in relations and not _is_auxiliary_track_doc(env, cand_index):
-            start_doc = cand_index
+        resolved_primary: Optional[str] = None
+        for tr in cur_tracks:
+            cand_doc = tr.get("docname")
+            if cand_doc and cand_doc in relations and not _is_auxiliary_track_doc(env, cand_doc):
+                resolved_primary = cand_doc
+                break
+        if resolved_primary:
+            start_doc = resolved_primary
+        else:
+            doc_dir = os.path.dirname(pagename)
+            cand_index = f"{doc_dir}/index" if doc_dir else "index"
+            if cand_index in relations and not _is_auxiliary_track_doc(env, cand_index):
+                start_doc = cand_index
 
     if start_doc not in relations:
         return
@@ -770,7 +838,17 @@ def _update_book_prev_next(app: Any, pagename: str, context: Dict[str, Any]) -> 
         if not target_doc:
             return None
         link_doc = target_doc
-        if cur_basename in ("code", "heath") and os.path.basename(target_doc) == "index":
+        if active_track_key:
+            target_tracks = detect_companion_tracks(env, target_doc)
+            for tr in target_tracks:
+                if tr.get("key") == active_track_key and tr.get("docname") in found_docs:
+                    link_doc = tr["docname"]
+                    break
+        if (
+            link_doc == target_doc
+            and cur_basename in ("code", "heath")
+            and os.path.basename(target_doc) == "index"
+        ):
             target_dir = os.path.dirname(target_doc)
             cand_track = f"{target_dir}/{cur_basename}" if target_dir else cur_basename
             if cand_track in found_docs:

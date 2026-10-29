@@ -291,6 +291,36 @@ def format_justification_html(
     if target:
         candidates = [t.strip() for t in target.split(",") if t.strip()]
         inner_disp = display.strip()
+
+        # Rule-style justification: ∵ rule_name or ∵ rule1, rule2
+        if inner_disp.startswith("∵"):
+            rule_str = inner_disp[1:].strip()
+            rule_parts = [p.strip() for p in rule_str.split(",") if p.strip()]
+            if len(rule_parts) != len(candidates):
+                rule_parts = [rule_str] if rule_str else candidates
+            rendered_rules: List[str] = []
+            for idx, r_part in enumerate(rule_parts):
+                cand = candidates[idx] if idx < len(candidates) else candidates[0]
+                esc_r = html.escape(r_part)
+                esc_cand = html.escape(cand, quote=True)
+                tip = _resolve_justification_tooltip(translator, cand) or cand
+                esc_tip = html.escape(tip, quote=True)
+                href = _resolve_justification_href(translator, cand)
+                if href:
+                    esc_href = html.escape(href, quote=True)
+                    rendered_rules.append(
+                        f'<a class="justification-link geom-rule" href="{esc_href}" '
+                        f'data-ref-target="{esc_cand}" title="{esc_tip}">{esc_r}</a>'
+                    )
+                else:
+                    rendered_rules.append(
+                        f'<span class="geom-rule" data-ref-target="{esc_cand}" title="{esc_tip}">{esc_r}</span>'
+                    )
+            return (
+                f'<span class="justification geom-rule-just">'
+                f'<span class="geom-because">∵</span> {", ".join(rendered_rules)}</span>'
+            )
+
         if inner_disp.startswith("[") and inner_disp.endswith("]"):
             disp_parts = [p.strip() for p in inner_disp[1:-1].split(",") if p.strip()]
         else:
@@ -352,6 +382,10 @@ def record_dependency(env: Any, target: Optional[str]) -> None:
 
 class enunciation_node(nodes.General, nodes.Element):
     """AST node for an enunciation (protasis) block."""
+
+
+class signature_node(nodes.General, nodes.Element):
+    """AST node for a formal proposition/element signature contract block."""
 
 
 class assertion_node(nodes.General, nodes.Element):
@@ -426,6 +460,18 @@ def visit_enunciation_node(self: Any, node: nodes.Element) -> None:
 def depart_enunciation_node(self: Any, node: nodes.Element) -> None:
     """HTML departure visitor for enunciation_node."""
     self.body.append("</div>\n")
+
+
+def visit_signature_node(self: Any, node: nodes.Element) -> None:
+    """HTML visitor for signature_node."""
+    sig_kind = str(node.get("sig_kind") or "signature").strip().lower()
+    base_cls = f"geom-signature geom-signature-{sig_kind}"
+    _visit_container_block(self, node, base_cls)
+
+
+def depart_signature_node(self: Any, node: nodes.Element) -> None:
+    """HTML departure visitor for signature_node."""
+    _depart_container_block(self, node)
 
 
 def visit_assertion_node(self: Any, node: nodes.Element) -> None:
@@ -632,7 +678,8 @@ def visit_folio_node(self: Any, node: nodes.Element) -> None:
         f'data-folio="{folio_id}" data-page="{page}">'
         f"{inner_html}</div>\n"
     )
-    raise nodes.SkipNode
+    if not len(node.children):
+        raise nodes.SkipNode
 
 
 def depart_folio_node(self: Any, node: nodes.Element) -> None:
@@ -879,17 +926,53 @@ class FolioDirective(DualModeDirective):
         folio_id = self.arguments[0].strip()
         page = (self.options.get("page") or "").strip()
         url = (self.options.get("url") or "").strip()
+        initial = (self.options.get("initial") or "").strip()
         node = folio_node()
         node["folio_id"] = folio_id
         node["page"] = page
         if url:
             node["url"] = url
         node["classes"] = list(self.options.get("class", []))
+        if initial:
+            img_node = nodes.image(
+                uri=initial,
+                alt=f"Folio {folio_id} Initial",
+                classes=["folio-initial-cap"],
+            )
+            node += img_node
+        return [node]
+
+
+class SignatureDirective(DualModeDirective):
+    """Directive for formal proposition/element signature contracts: ``.. signature:: [optional_kind]``."""
+
+    has_content = True
+    required_arguments = 0
+    optional_arguments = 1
+    final_argument_whitespace = True
+    option_spec = {
+        "class": directives.class_option,
+        "name": directives.unchanged,
+        "kind": directives.unchanged,
+    }
+
+    def run(self) -> List[nodes.Node]:
+        """Parse formal signature contract block."""
+        node = signature_node()
+        node["classes"] = list(self.options.get("class", []))
+        sig_kind = (
+            self.options.get("kind")
+            or (self.arguments[0] if self.arguments else "signature")
+        ).strip().lower()
+        node["sig_kind"] = sig_kind
+        self.add_name(node)
+        self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
 
 
 _NODE_VISITORS = [
     (enunciation_node, visit_enunciation_node, depart_enunciation_node),
+    (signature_node, visit_signature_node, depart_signature_node),
     (assertion_node, visit_assertion_node, depart_assertion_node),
     (subclause_node, visit_subclause_node, depart_subclause_node),
     (step_node, visit_step_node, depart_step_node),
@@ -902,6 +985,7 @@ _NODE_VISITORS = [
 
 _DIRECTIVES = {
     "enunciation": EnunciationDirective,
+    "signature": SignatureDirective,
     "assertion": AssertionDirective,
     "subclause": SubclauseDirective,
     "sub-clause": SubclauseDirective,

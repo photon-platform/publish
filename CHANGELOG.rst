@@ -2,6 +2,14 @@ changelog
 =========
 
 
+0.3.18
+======
+
+- feat(book): Add multi-language companion track detection (``_en``, ``_it``, ``_de``, ``_la``, ``_notes``), unit-scoped bare track resolution, and track-preserving ``Prev`` / ``Next`` navigation across Book Codex documents.
+- feat(elements): Emit Sphinx ``nodes.image`` with class ``folio-initial-cap`` in ``FolioDirective`` when ``:initial:`` is specified so woodcut drop-caps are copied into ``_images/`` and styled as floated initial caps.
+- feat(elements,geometry): Add ``.. signature::`` and ``.. function::`` directives, ``:sig:`` role, and step-by-step SVG playback controls in ``geometor_interactive.js``.
+
+
 0.3.15
 ======
 
