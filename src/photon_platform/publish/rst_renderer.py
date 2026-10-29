@@ -85,9 +85,35 @@ def ensure_standalone_extensions() -> None:
     global _REGISTERED
     if _REGISTERED or not _HAS_DOCUTILS:
         return
+    from docutils.parsers.rst import Directive, directives
+
+    class _StandaloneGraphvizDirective(Directive):
+        has_content = True
+        required_arguments = 0
+        optional_arguments = 1
+        final_argument_whitespace = True
+        option_spec = {
+            "alt": directives.unchanged,
+            "align": directives.unchanged,
+            "caption": directives.unchanged,
+            "name": directives.unchanged,
+            "class": directives.class_option,
+        }
+
+        def run(self) -> List[Any]:
+            dot_code = "\n".join(self.content)
+            return [
+                nodes.raw(
+                    "",
+                    f'<div class="graphviz"><pre class="graphviz-dot">{html.escape(dot_code)}</pre></div>',
+                    format="html",
+                )
+            ]
+
     register_standalone_directives()
     register_standalone_roles()
     register_standalone_picture()
+    directives.register_directive("graphviz", _StandaloneGraphvizDirective)
     roles.register_local_role("ref", _standalone_ref_role)
     roles.register_local_role("fnref", _standalone_fnref_role)
     _REGISTERED = True

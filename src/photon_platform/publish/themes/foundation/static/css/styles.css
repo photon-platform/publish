@@ -4644,3 +4644,27 @@ svg.euclid-graphic text.geom-assert-secondary tspan {
   line-height: 1.4;
   color: var(--book-text-muted);
 }
+
+/* -------------------------------------------------------------------------
+   16. Graphviz Dependency Diagrams (.graphviz)
+   ------------------------------------------------------------------------- */
+div.graphviz {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 1.25rem 0;
+  padding: 0.75rem;
+  background-color: var(--book-surface, rgba(0, 0, 0, 0.15));
+  border: 1px solid var(--book-border, rgba(255, 255, 255, 0.1));
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+div.graphviz object.graphviz,
+div.graphviz svg.graphviz {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
