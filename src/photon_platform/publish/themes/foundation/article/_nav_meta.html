@@ -3,10 +3,11 @@
 {%-   if meta.date %}
           <span class="date">Date: {{ meta.date }}</span>
 {%-   endif %}
-{%-   if meta.category %}
+{%-   set categories_list = meta.categories if meta.categories else meta.category %}
+{%-   if categories_list %}
           <span class="category">
             Category:
-{%-     for category in meta.category %}
+{%-     for category in categories_list %}
             <a href="{{ pathto('categories/' ~ category) }}">{{ category }}</a>
 {%-     endfor %}
           </span>

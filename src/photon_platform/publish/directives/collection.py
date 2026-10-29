@@ -398,9 +398,12 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
                         )
 
                     if 'tags' in item and isinstance(item['tags'], str):
-                        item['tags'] = [tag.strip() for tag in item['tags'].split(',')]
+                        item['tags'] = [tag.strip() for tag in item['tags'].split(',') if tag.strip()]
                     if 'categories' in item and isinstance(item['categories'], str):
-                        item['categories'] = [cat.strip() for cat in item['categories'].split(',')]
+                        item['categories'] = [cat.strip() for cat in item['categories'].split(',') if cat.strip()]
+                    if 'category' in item and isinstance(item['category'], str):
+                        item['category'] = [cat.strip() for cat in item['category'].split(',') if cat.strip()]
+                        item.setdefault('categories', item['category'])
                     collection_items.append(item)
 
         if sort_key:
@@ -433,6 +436,89 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
         node.replace_self(nodes.raw('', html, format='html'))
 
 
+def _split_meta_list(val: Any) -> List[str]:
+    if not val:
+        return []
+    if isinstance(val, str):
+        return [v.strip() for v in val.split(',') if v.strip()]
+    if isinstance(val, (list, tuple, set)):
+        return [str(v).strip() for v in val if str(v).strip()]
+    return []
+
+
+def _build_taxonomy_article_item(app: Any, env: Any, docname: str, meta: Dict[str, Any], title_node: nodes.Node) -> Dict[str, Any]:
+    item: Dict[str, Any] = {
+        'title': title_node.astext(),
+        'docname': docname,
+        'excerpt_text': '',
+        'excerpt_figure_filename': None,
+    }
+    item.update(meta)
+    if 'tags' in item:
+        item['tags'] = _split_meta_list(item['tags'])
+    if 'categories' in item:
+        item['categories'] = _split_meta_list(item['categories'])
+    if 'category' in item:
+        item['category'] = _split_meta_list(item['category'])
+        item.setdefault('categories', item['category'])
+
+    try:
+        doctree = env.get_doctree(docname)
+    except Exception:
+        doctree = None
+
+    if doctree:
+        first_text = _find_first_excerpt_node(doctree)
+        if first_text:
+            item['excerpt_text'] = render_node_html(app.builder, first_text)
+
+        if 'featured_image' in meta:
+            item['excerpt_figure_filename'] = meta['featured_image']
+            item['excerpt_figure_alt'] = meta.get('featured_image_alt') or item['title']
+
+        if not item['excerpt_figure_filename'] and picture_node:
+            for n in doctree.traverse(picture_node):
+                if 'main_src' in n:
+                    item['excerpt_figure_filename'] = n['main_src']
+                    item['excerpt_figure_alt'] = n.get('alt', '')
+                    break
+
+        if not item['excerpt_figure_filename']:
+            for node in doctree.traverse(nodes.figure):
+                image_node = next(iter(node.traverse(nodes.image)), None)
+                if image_node:
+                    item['excerpt_figure_filename'] = os.path.join(
+                        app.builder.imagedir, os.path.basename(image_node['uri'])
+                    )
+                    item['excerpt_figure_alt'] = image_node.get('alt', '')
+                    item['excerpt_figure_width'] = node.get('width')
+                    break
+
+    fig_file = item.get('excerpt_figure_filename')
+    if (
+        prepare_inline_svg
+        and isinstance(fig_file, str)
+        and fig_file.lower().endswith('.svg')
+    ):
+        rel_fig = fig_file.lstrip('/')
+        svg_src_path = os.path.join(env.srcdir, rel_fig)
+        if not os.path.isfile(svg_src_path):
+            svg_src_path = os.path.join(app.builder.outdir, rel_fig)
+        item['excerpt_svg_content'] = prepare_inline_svg(
+            svg_src_path, as_thumbnail=True
+        )
+    return item
+
+
+def _sort_taxonomy_articles(articles: List[Dict[str, Any]]) -> None:
+    if any('number' in a for a in articles):
+        articles.sort(key=lambda x: safe_numeric(x.get('number', 0)), reverse=True)
+    elif any('order' in a for a in articles):
+        articles.sort(key=lambda x: safe_numeric(x.get('order', 999999)))
+    else:
+        articles.sort(key=lambda x: str(x.get('title', '')))
+
+
 def collect_metadata(app: Any, env: Any) -> None:
     """Collect all tags and categories from document metadata.
 
@@ -448,21 +534,13 @@ def collect_metadata(app: Any, env: Any) -> None:
     for docname in env.found_docs:
         meta = env.metadata.get(docname, {})
         if 'tags' in meta:
-            tags_meta = meta['tags']
-            if isinstance(tags_meta, str):
-                tags = [tag.strip() for tag in tags_meta.split(',')]
-            else:
-                tags = tags_meta
-            env.all_tags.update(tags)
+            env.all_tags.update(_split_meta_list(meta['tags']))
         if 'categories' in meta:
-            categories_meta = meta['categories']
-            if isinstance(categories_meta, str):
-                categories = [cat.strip() for cat in categories_meta.split(',')]
-            else:
-                categories = categories_meta
-            env.all_categories.update(categories)
-        if 'type' in meta:
-            env.all_types.add(meta['type'])
+            env.all_categories.update(_split_meta_list(meta['categories']))
+        if 'category' in meta:
+            env.all_categories.update(_split_meta_list(meta['category']))
+        if 'type' in meta and meta['type']:
+            env.all_types.add(str(meta['type']).strip())
 
 def generate_taxonomy_pages(app: Any) -> Any:
     """Dynamically generate pages for each tag and category.
@@ -482,45 +560,12 @@ def generate_taxonomy_pages(app: Any) -> Any:
             articles = []
             for docname in env.found_docs:
                 meta = env.metadata.get(docname, {})
-                if 'tags' in meta:
-                    tags_meta = meta['tags']
-                    if isinstance(tags_meta, str):
-                        tags = [t.strip() for t in tags_meta.split(',')]
-                    else:
-                        tags = tags_meta
-                    if tag in tags:
-                        title_node = env.titles.get(docname)
-                        if title_node:
-                            item = {
-                                'title': title_node.astext(),
-                                'docname': docname,
-                                'excerpt_text': '',
-                                'excerpt_figure_filename': None,
-                            }
-                            item.update(meta)
-
-                            doctree = env.get_doctree(docname)
-                            
-                            # Find first paragraph or blockquote
-                            first_text = _find_first_excerpt_node(doctree)
-                            
-                            if first_text:
-                                item['excerpt_text'] = render_node_html(app.builder, first_text)
-
-                            # Find first figure
-                            for node in doctree.traverse(nodes.figure):
-                                image_node = next(iter(node.traverse(nodes.image)), None)
-                                if image_node:
-                                    item['excerpt_figure_filename'] = os.path.join(
-                                        app.builder.imagedir, os.path.basename(image_node['uri'])
-                                    )
-                                    item['excerpt_figure_alt'] = image_node.get('alt', '')
-                                    item['excerpt_figure_width'] = node.get('width')
-                                    break
-                            
-                            articles.append(item)
+                if 'tags' in meta and tag in _split_meta_list(meta['tags']):
+                    title_node = env.titles.get(docname)
+                    if title_node:
+                        articles.append(_build_taxonomy_article_item(app, env, docname, meta, title_node))
             
-            articles.sort(key=lambda x: safe_numeric(x.get('number', 0)), reverse=True) # Sort by 'number' descending
+            _sort_taxonomy_articles(articles)
 
             context = {
                 'collection': {
@@ -538,45 +583,13 @@ def generate_taxonomy_pages(app: Any) -> Any:
             articles = []
             for docname in env.found_docs:
                 meta = env.metadata.get(docname, {})
-                if 'categories' in meta:
-                    categories_meta = meta['categories']
-                    if isinstance(categories_meta, str):
-                        categories = [c.strip() for c in categories_meta.split(',')]
-                    else:
-                        categories = categories_meta
-                    if category in categories:
-                        title_node = env.titles.get(docname)
-                        if title_node:
-                            item = {
-                                'title': title_node.astext(),
-                                'docname': docname,
-                                'excerpt_text': '',
-                                'excerpt_figure_filename': None,
-                            }
-                            item.update(meta)
-
-                            doctree = env.get_doctree(docname)
-                            
-                            # Find first paragraph or blockquote
-                            first_text = _find_first_excerpt_node(doctree)
-                            
-                            if first_text:
-                                item['excerpt_text'] = render_node_html(app.builder, first_text)
-
-                            # Find first figure
-                            for node in doctree.traverse(nodes.figure):
-                                image_node = next(iter(node.traverse(nodes.image)), None)
-                                if image_node:
-                                    item['excerpt_figure_filename'] = os.path.join(
-                                        app.builder.imagedir, os.path.basename(image_node['uri'])
-                                    )
-                                    item['excerpt_figure_alt'] = image_node.get('alt', '')
-                                    item['excerpt_figure_width'] = node.get('width')
-                                    break
-                            
-                            articles.append(item)
+                cats = _split_meta_list(meta.get('categories')) or _split_meta_list(meta.get('category'))
+                if category in cats:
+                    title_node = env.titles.get(docname)
+                    if title_node:
+                        articles.append(_build_taxonomy_article_item(app, env, docname, meta, title_node))
             
-            articles.sort(key=lambda x: safe_numeric(x.get('number', 0)), reverse=True) # Sort by 'number' descending
+            _sort_taxonomy_articles(articles)
 
             context = {
                 'collection': {
@@ -597,36 +610,9 @@ def generate_taxonomy_pages(app: Any) -> Any:
                 if 'type' in meta and meta['type'] == type_:
                     title_node = env.titles.get(docname)
                     if title_node:
-                        item = {
-                            'title': title_node.astext(),
-                            'docname': docname,
-                            'excerpt_text': '',
-                            'excerpt_figure_filename': None,
-                        }
-                        item.update(meta)
-
-                        doctree = env.get_doctree(docname)
-                        
-                        # Find first paragraph or blockquote
-                        first_text = _find_first_excerpt_node(doctree)
-                        
-                        if first_text:
-                            item['excerpt_text'] = render_node_html(app.builder, first_text)
-
-                        # Find first figure
-                        for node in doctree.traverse(nodes.figure):
-                            image_node = next(iter(node.traverse(nodes.image)), None)
-                            if image_node:
-                                item['excerpt_figure_filename'] = os.path.join(
-                                    app.builder.imagedir, os.path.basename(image_node['uri'])
-                                )
-                                item['excerpt_figure_alt'] = image_node.get('alt', '')
-                                item['excerpt_figure_width'] = node.get('width')
-                                break
-                        
-                        articles.append(item)
+                        articles.append(_build_taxonomy_article_item(app, env, docname, meta, title_node))
             
-            articles.sort(key=lambda x: safe_numeric(x.get('number', 0)), reverse=True) # Sort by 'number' descending
+            _sort_taxonomy_articles(articles)
 
             context = {
                 'collection': {
@@ -664,9 +650,12 @@ def build_nav_links(
 
     if 'meta' in context and context['meta']:
         if 'tags' in context['meta'] and isinstance(context['meta']['tags'], str):
-            context['meta']['tags'] = [tag.strip() for tag in context['meta']['tags'].split(',')]
+            context['meta']['tags'] = _split_meta_list(context['meta']['tags'])
         if 'categories' in context['meta'] and isinstance(context['meta']['categories'], str):
-            context['meta']['categories'] = [cat.strip() for cat in context['meta']['categories'].split(',')]
+            context['meta']['categories'] = _split_meta_list(context['meta']['categories'])
+        if 'category' in context['meta'] and isinstance(context['meta']['category'], str):
+            context['meta']['category'] = _split_meta_list(context['meta']['category'])
+            context['meta'].setdefault('categories', context['meta']['category'])
 
     header_nav_list = []
     footer_nav_list = []
