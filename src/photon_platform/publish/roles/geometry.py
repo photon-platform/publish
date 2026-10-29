@@ -35,10 +35,10 @@ def parse_geom_role_text(raw_content: str) -> Tuple[str, str]:
     """Parse :g: role content ``display <target>`` or bare ``target`` into ``(display, target)``.
 
     Handles targets that themselves contain angle brackets, such as:
-    - ``$AB$ <0255.g1:/ A B />`` -> ``("$AB$", "0255.g1:/ A B /")``
-    - ``$ABC$ <0255.g1:< A B C >>`` -> ``("$ABC$", "0255.g1:< A B C >")``
-    - ``$A$ <0309.g1:< K A G )>`` -> ``("$A$", "0309.g1:< K A G )")``
-    - ``0255.g1:/ A B /`` -> ``("$AB$", "0255.g1:/ A B /")``
+    - ``AB <0255.g1:/ A B />`` -> ``("AB", "0255.g1:/ A B /")``
+    - ``ABC <0255.g1:< A B C >>`` -> ``("ABC", "0255.g1:< A B C >")``
+    - ``A <0309.g1:< K A G )>`` -> ``("A", "0309.g1:< K A G )")``
+    - ``0255.g1:/ A B /`` -> ``("AB", "0255.g1:/ A B /")``
     """
     text = (raw_content or "").strip()
     if not text:
@@ -48,6 +48,8 @@ def parse_geom_role_text(raw_content: str) -> Tuple[str, str]:
     match = re.match(r"^(.+?)\s+<(.+)>$", text)
     if match:
         display = match.group(1).strip()
+        if len(display) >= 2 and display.startswith("$") and display.endswith("$"):
+            display = display[1:-1].strip()
         target = match.group(2).strip()
         return display, target
 
@@ -55,7 +57,7 @@ def parse_geom_role_text(raw_content: str) -> Tuple[str, str]:
     target = text
     expr = target.split(":", 1)[-1].strip() if ":" in target else target
     letters = "".join(re.findall(r"[A-Za-z0-9]+", expr))
-    display = f"${letters}$" if letters else target
+    display = letters if letters else target
     return display, target
 
 
@@ -84,12 +86,23 @@ def format_geom_tooltip(target: str) -> str:
     return "; ".join(parts)
 
 
+def format_geom_display_html(display: str) -> str:
+    """Format :g: display text as HTML, stripping any outer $...$ and converting _sub / ^sup."""
+    text = (display or "").strip()
+    if len(text) >= 2 and text.startswith("$") and text.endswith("$"):
+        text = text[1:-1].strip()
+    esc = html.escape(text, quote=False)
+    esc = re.sub(r"_([A-Za-z0-9]+)", r"<sub>\1</sub>", esc)
+    esc = re.sub(r"\^([A-Za-z0-9]+)", r"<sup>\1</sup>", esc)
+    return esc
+
+
 def visit_geom_ref_node(self: Any, node: nodes.Element) -> None:
     """HTML visitor for geom_ref_node."""
     target = str(node.get("ref_target", ""))
     display = str(node.get("display", node.astext()))
     esc_target = escape_data_ref_attr(target)
-    esc_display = html.escape(display, quote=False)
+    esc_display = format_geom_display_html(display)
     tooltip = format_geom_tooltip(target)
     title_attr = f' title="{html.escape(tooltip, quote=True)}"' if tooltip else ""
     self.body.append(
