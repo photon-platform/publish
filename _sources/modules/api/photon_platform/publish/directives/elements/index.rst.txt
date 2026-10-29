@@ -479,7 +479,7 @@ Module Contents
 
 
    .. py:attribute:: final_argument_whitespace
-      :value: False
+      :value: True
 
 
       May the final argument contain whitespace?
