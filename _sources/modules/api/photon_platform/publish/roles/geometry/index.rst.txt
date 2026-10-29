@@ -31,6 +31,7 @@ Functions
    photon_platform.publish.roles.geometry.escape_data_ref_attr
    photon_platform.publish.roles.geometry.parse_geom_role_text
    photon_platform.publish.roles.geometry.format_geom_tooltip
+   photon_platform.publish.roles.geometry.format_geom_display_html
    photon_platform.publish.roles.geometry.visit_geom_ref_node
    photon_platform.publish.roles.geometry.depart_geom_ref_node
    photon_platform.publish.roles.geometry.visit_just_ref_node
@@ -72,10 +73,10 @@ Module Contents
    Parse :g: role content ``display <target>`` or bare ``target`` into ``(display, target)``.
 
    Handles targets that themselves contain angle brackets, such as:
-   - ``$AB$ <0255.g1:/ A B />`` -> ``("$AB$", "0255.g1:/ A B /")``
-   - ``$ABC$ <0255.g1:< A B C >>`` -> ``("$ABC$", "0255.g1:< A B C >")``
-   - ``$A$ <0309.g1:< K A G )>`` -> ``("$A$", "0309.g1:< K A G )")``
-   - ``0255.g1:/ A B /`` -> ``("$AB$", "0255.g1:/ A B /")``
+   - ``AB <0255.g1:/ A B />`` -> ``("AB", "0255.g1:/ A B /")``
+   - ``ABC <0255.g1:< A B C >>`` -> ``("ABC", "0255.g1:< A B C >")``
+   - ``A <0309.g1:< K A G )>`` -> ``("A", "0309.g1:< K A G )")``
+   - ``0255.g1:/ A B /`` -> ``("AB", "0255.g1:/ A B /")``
 
 
 .. py:class:: geom_ref_node(rawsource: str = '', text: str = '', *children, **attributes: Any)
@@ -105,6 +106,11 @@ Module Contents
 .. py:function:: format_geom_tooltip(target: str) -> str
 
    Strip <folio>.<gid>: prefixes from a :g: target string to return the underlying element ID(s).
+
+
+.. py:function:: format_geom_display_html(display: str) -> str
+
+   Format :g: display text as HTML, stripping any outer $...$ and converting _sub / ^sup.
 
 
 .. py:function:: visit_geom_ref_node(self: Any, node: docutils.nodes.Element) -> None

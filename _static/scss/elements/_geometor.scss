@@ -18,6 +18,7 @@
 }
 
 :root {
+  --geom-font-sans: 'Fira Sans Condensed', 'Fira Sans', sans-serif;
   --geom-fg: #18181b;
   --geom-bg: #ffffff;
   --geom-point-stroke: #ffffff;
@@ -77,6 +78,7 @@ article.book-reading-pane {
   --book-font-serif: 'EB Garamond', Garamond, 'Palatino Linotype', Palatino, 'Georgia', 'Times New Roman', serif;
   --book-font-display: 'EB Garamond', Garamond, 'Georgia', serif;
   --book-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --geom-font-sans: 'Fira Sans Condensed', 'Fira Sans', sans-serif;
 
   /* Geometric SVG Palette (Light lines matching text on dark codex background) */
   --geom-fg: var(--book-text, #d6cfc5);
@@ -1390,8 +1392,9 @@ figure.photon-svg.diagram-right {
 
 /* Global Base Styles for Inlined Geometric SVGs (Light/Dark Mode via --geom-* vars) */
 svg.euclid-graphic {
-  font-family: var(--book-font-serif, 'EB Garamond', 'Times New Roman', 'Georgia', serif);
-  font-style: italic;
+  font-family: var(--geom-font-sans, 'Fira Sans Condensed', 'Fira Sans', sans-serif);
+  font-style: normal;
+  font-weight: 700;
   background-color: var(--geom-bg, transparent);
 
   &.euclid-thumbnail {
@@ -1557,16 +1560,19 @@ svg.euclid-graphic {
   .geom-label,
   .label,
   .lbl {
+    font-family: var(--geom-font-sans, 'Fira Sans Condensed', 'Fira Sans', sans-serif);
     font-size: 14.5px;
-    font-weight: bold;
+    font-weight: 700;
+    font-style: normal;
     fill: var(--geom-fg, #d6cfc5);
     stroke: none;
     user-select: none;
   }
 
   .geom-label-roman {
+    font-family: var(--geom-font-sans, 'Fira Sans Condensed', 'Fira Sans', sans-serif);
     font-size: 14.5px;
-    font-weight: bold;
+    font-weight: 700;
     font-style: normal;
     fill: var(--geom-fg, #d6cfc5);
     stroke: none;
@@ -1574,17 +1580,20 @@ svg.euclid-graphic {
   }
 
   .geom-label-sm {
+    font-family: var(--geom-font-sans, 'Fira Sans Condensed', 'Fira Sans', sans-serif);
     font-size: 11px;
-    font-weight: bold;
+    font-weight: 700;
+    font-style: normal;
     fill: var(--geom-fg, #d6cfc5);
     stroke: none;
     user-select: none;
   }
 
   .geom-label-sub {
+    font-family: var(--geom-font-sans, 'Fira Sans Condensed', 'Fira Sans', sans-serif);
     font-size: 11px;
     font-style: normal;
-    font-weight: bold;
+    font-weight: 700;
     fill: var(--geom-fg, #d6cfc5);
     stroke: none;
   }
@@ -1619,6 +1628,10 @@ svg.euclid-graphic {
 .geom-ref,
 .geom-interactive-ref,
 .katex.geom-interactive-ref {
+  font-family: var(--geom-font-sans, 'Fira Sans Condensed', 'Fira Sans', sans-serif);
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: 0.01em;
   cursor: pointer;
   position: relative;
   white-space: nowrap;
@@ -1626,6 +1639,12 @@ svg.euclid-graphic {
   border-radius: 2px;
   padding: 0 1px;
   transition: all 0.15s ease-in-out;
+
+  sub,
+  sup {
+    font-size: 0.75em;
+    line-height: 0;
+  }
 }
 
 .geom-ref:hover,
