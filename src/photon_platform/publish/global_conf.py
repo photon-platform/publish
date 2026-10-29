@@ -102,6 +102,7 @@ extensions = [
 ]
 
 ogp_social_cards = {"enable": False}
+graphviz_output_format = "svg"
 
 # autosummary_generate = True
 

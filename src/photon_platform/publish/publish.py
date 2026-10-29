@@ -268,6 +268,7 @@ def build_epub(book: str | None = None, output: str | None = None) -> list[str]:
                 "sphinx.ext.graphviz",
                 "sphinx.ext.todo",
             ],
+            "graphviz_output_format": "svg",
             "epub_exclude_files": [
                 "_static/opensearch.xml",
                 "_static/doctools.js",
