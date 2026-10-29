@@ -3793,7 +3793,8 @@ footer.book-footer .meta a:hover {
   letter-spacing: 0.02em;
 }
 
-a.justification {
+a.justification,
+a.justification-link {
   color: var(--book-link, #de836e) !important;
   text-decoration: none !important;
   border-bottom: 1px dotted rgba(222, 131, 110, 0.55);
@@ -3802,7 +3803,8 @@ a.justification {
   transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
 }
 
-a.justification:hover {
+a.justification:hover,
+a.justification-link:hover {
   color: var(--book-link-hover, #f5a492) !important;
   border-bottom: 1px solid var(--book-link, #de836e);
   background-color: rgba(222, 131, 110, 0.12);
@@ -4742,4 +4744,139 @@ div.graphviz svg.graphviz {
   height: auto;
   display: block;
   margin: 0 auto;
+}
+
+/* -------------------------------------------------------------------------
+   17. Pseudocode Construction Steps (.geom-step) & Step-by-Step SVG Player
+   ------------------------------------------------------------------------- */
+.geom-step {
+  position: relative;
+  text-indent: 0 !important;
+  text-align: left !important;
+  padding: 0.28rem 0.55rem 0.28rem 5.4rem;
+  margin: 0.22rem 0;
+  border-radius: 4px;
+  border-left: 2.5px solid var(--book-border, #3d3934);
+  background-color: rgba(255, 255, 255, 0.015);
+  cursor: pointer;
+  line-height: 1.55;
+  transition: background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.geom-step p {
+  text-indent: 0 !important;
+  text-align: left !important;
+  margin: 0.15rem 0 !important;
+}
+
+.geom-step:hover {
+  background-color: var(--book-surface, rgba(255, 255, 255, 0.04));
+  border-left-color: var(--book-border-dark, #544f47);
+}
+
+.geom-step.geom-step-active {
+  background-color: rgba(232, 184, 90, 0.09);
+  border-left-color: var(--geom-accent, #e8b85a);
+}
+
+.geom-step.geom-step-assert.geom-step-active, .geom-step.geom-step-conclude.geom-step-active {
+  background-color: rgba(94, 194, 126, 0.09);
+  border-left-color: var(--geom-assert, #5ec27e);
+}
+
+.geom-step.geom-step-future {
+  opacity: 0.52;
+}
+
+.geom-step-badge {
+  display: inline-block;
+  width: 4.5rem;
+  margin-left: -4.85rem;
+  margin-right: 0.35rem;
+  font-family: var(--book-font-mono, monospace);
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: right;
+  color: var(--book-text-muted, #9c958a);
+  user-select: none;
+  vertical-align: baseline;
+}
+
+.geom-step-badge.geom-badge-given, .geom-step-badge.geom-badge-let {
+  color: #93c5fd;
+}
+
+.geom-step-badge.geom-badge-construct {
+  color: var(--geom-accent, #e8b85a);
+}
+
+.geom-step-badge.geom-badge-intersect {
+  color: #f9a8d4;
+}
+
+.geom-step-badge.geom-badge-assert {
+  color: var(--geom-assert, #5ec27e);
+}
+
+.geom-step-badge.geom-badge-conclude, .geom-step-badge.geom-badge-qed, .geom-step-badge.geom-badge-qef {
+  color: #c4b5fd;
+}
+
+.geom-step-player {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--book-border, #3d3934);
+  font-family: var(--book-font-mono, monospace);
+  font-size: 0.72rem;
+  color: var(--book-text-muted, #9c958a);
+  user-select: none;
+}
+
+.geom-step-player .geom-step-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.geom-step-player .geom-step-btn {
+  background: var(--book-surface, #272629);
+  border: 1px solid var(--book-border, #3d3934);
+  color: var(--book-text, #d6cfc5);
+  border-radius: 3px;
+  padding: 0.12rem 0.42rem;
+  font-family: var(--book-font-mono, monospace);
+  font-size: 0.72rem;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.geom-step-player .geom-step-btn:hover {
+  background: var(--book-surface-alt, #313035);
+  border-color: var(--book-border-dark, #544f47);
+  color: var(--geom-accent, #e8b85a);
+}
+
+.geom-step-player .geom-step-btn.is-active {
+  background: rgba(232, 184, 90, 0.16);
+  border-color: var(--geom-accent, #e8b85a);
+  color: var(--geom-accent, #e8b85a);
+  font-weight: 600;
+}
+
+.geom-step-player .geom-step-status {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  padding: 0 0.25rem;
+}
+
+svg.euclid-graphic .geom-step-hidden:not(.geom-highlight-active):not(.geom-highlight-secondary):not(.geom-assert-active):not(.geom-assert-secondary) {
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
