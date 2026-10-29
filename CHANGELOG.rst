@@ -2,6 +2,13 @@ changelog
 =========
 
 
+0.3.15
+======
+
+- fix(geometry): HTML-escape ``:g:`` display text so GEOMETOR symbolic indications (``< A B C >``, ``< B A C )``) render properly and add ``white-space: nowrap`` to ``.geom-ref``.
+- feat(collection): Support both ``:categories:`` and ``:category:`` metadata, inline SVG thumbnails on taxonomy pages, and ``original_id`` / footer metadata badges in ``book_layout.html``.
+
+
 0.3.12
 ======
 

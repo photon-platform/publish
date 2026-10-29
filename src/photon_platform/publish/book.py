@@ -281,6 +281,9 @@ def resolve_book_context(
     canonical_id = str(
         page_meta.get("canonical_id") or unit_index_meta.get("canonical_id") or ""
     ).strip()
+    original_id = str(
+        page_meta.get("original_id") or unit_index_meta.get("original_id") or ""
+    ).strip()
     book_num = str(page_meta.get("book") or unit_index_meta.get("book") or "").strip()
     volume = str(page_meta.get("volume") or unit_index_meta.get("volume") or "").strip()
 
@@ -354,6 +357,7 @@ def resolve_book_context(
         "folio": folio,
         "page": page_num,
         "canonical_id": canonical_id,
+        "original_id": original_id,
         "book": book_num,
         "volume": volume,
         "book_tracks": tracks,

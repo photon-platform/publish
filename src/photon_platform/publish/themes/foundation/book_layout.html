@@ -9,16 +9,19 @@
             <span class="book-header-sep">/</span>
             <a class="book-title-link" href="{{ pathto(book_root|default(master_doc)) }}">{{ book_title|default(docstitle) }}</a>
           </div>
-{%- if book_breadcrumbs or canonical_id or folio %}
+{%- if book_breadcrumbs or canonical_id or original_id or folio %}
           <div class="book-header-breadcrumbs book-header-badges" role="navigation" aria-label="Book Breadcrumbs">
 {%-   for crumb in book_breadcrumbs|default([]) %}
             <a class="book-crumb-link" href="{{ pathto(crumb.docname) }}">{{ crumb.title }}</a>
-{%-     if not loop.last or canonical_id or folio %}
+{%-     if not loop.last or canonical_id or original_id or folio %}
             <span class="book-crumb-sep">/</span>
 {%-     endif %}
 {%-   endfor %}
 {%-   if canonical_id %}
             <span class="book-badge canonical-badge">{{ canonical_id }}</span>
+{%-   endif %}
+{%-   if original_id and original_id != canonical_id %}
+            <span class="book-badge folio-badge">{{ original_id }}</span>
 {%-   endif %}
 {%-   if folio %}
             <span class="book-badge folio-badge">Folio {{ folio }}{% if page %} | p. {{ page }}{% endif %}</span>
@@ -59,6 +62,9 @@
         {{ body | indent(8) }}
       </div>
       <footer class="book-footer">
+{%- if meta and (meta.category or meta.categories or meta.tags) %}
+{% include "article/_nav_meta.html" %}
+{%- endif %}
         <div class="book-footer-ornament">&#10086;</div>
         <div class="book-footer-nav">
           <div class="book-nav-prev">

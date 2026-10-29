@@ -476,15 +476,98 @@ def depart_scholium_node(self: Any, node: nodes.Element) -> None:
     _depart_container_block(self, node)
 
 
+def _load_folio_png_index(env: Any) -> Dict[Tuple[str, str], str]:
+    """Index all 4-digit folio .png files under project_root/resources by (volume_slug, folio_num)."""
+    cache_attr = "_photon_folio_png_cache"
+    if env is not None:
+        cached = getattr(env, cache_attr, None)
+        if cached is not None:
+            return cached
+
+    index: Dict[Tuple[str, str], str] = {}
+    if env is not None:
+        project_root = Path(getattr(env, "srcdir", ".")).resolve().parent
+        res_dir = project_root / "resources"
+        if res_dir.is_dir():
+            for png_path in sorted(res_dir.rglob("[0-9][0-9][0-9][0-9].png")):
+                rel_posix = png_path.relative_to(project_root).as_posix()
+                stem = png_path.stem
+                vol_key = ""
+                for part in png_path.parts:
+                    if part.lower().startswith("volume_"):
+                        vol_key = part.lower()
+                        break
+                if vol_key:
+                    index[(vol_key, stem)] = rel_posix
+                index.setdefault(("", stem), rel_posix)
+        setattr(env, cache_attr, index)
+    return index
+
+
+def _resolve_folio_png_url(translator: Any, folio_id: str) -> Optional[str]:
+    """Resolve a folio ID to its raw GitHub PNG URL if a matching scan exists in resources/."""
+    m_num = re.search(r"\b(\d{4})\b", folio_id or "")
+    if not m_num:
+        return None
+    folio_num = m_num.group(1)
+
+    builder = getattr(translator, "builder", None) if translator is not None else None
+    env = getattr(builder, "env", None) if builder is not None else None
+    if env is None:
+        return None
+
+    index = _load_folio_png_index(env)
+    if not index:
+        return None
+
+    current_docname = getattr(builder, "current_docname", "") or ""
+    vol_key = ""
+    for part in current_docname.split("/"):
+        if part.lower().startswith("volume_"):
+            vol_key = part.lower()
+            break
+    if not vol_key and hasattr(env, "metadata") and current_docname in env.metadata:
+        vol_meta = str(env.metadata[current_docname].get("volume", "")).strip()
+        if vol_meta:
+            vol_key = f"volume_{vol_meta.lower()}"
+
+    rel_path = index.get((vol_key, folio_num)) or index.get(("", folio_num))
+    if not rel_path:
+        return None
+
+    project_root = Path(getattr(env, "srcdir", ".")).resolve().parent
+    html_ctx = getattr(getattr(env, "config", None), "html_context", {}) or {}
+    gh_user = html_ctx.get("github_user") or getattr(env.config, "org", "") or "geometor"
+    gh_repo = html_ctx.get("github_repo") or getattr(env.config, "repo", "") or project_root.name
+    gh_branch = html_ctx.get("github_version") or "main"
+    return f"https://raw.githubusercontent.com/{gh_user}/{gh_repo}/{gh_branch}/{rel_path}"
+
+
 def visit_folio_node(self: Any, node: nodes.Element) -> None:
     """HTML visitor for folio_node."""
-    folio_id = html.escape(str(node.get("folio_id", "")), quote=True)
-    page = html.escape(str(node.get("page", "")), quote=True)
+    raw_folio_id = str(node.get("folio_id", ""))
+    raw_page = str(node.get("page", ""))
+    folio_id = html.escape(raw_folio_id, quote=True)
+    page = html.escape(raw_page, quote=True)
     page_str = f" | p. {page}" if page else ""
+    label_html = f"[Folio {folio_id}{page_str}]"
+
+    png_url = node.get("url") or _resolve_folio_png_url(self, raw_folio_id)
+    if png_url:
+        esc_url = html.escape(str(png_url), quote=True)
+        title_text = f"View Folio {raw_folio_id}" + (f" (p. {raw_page})" if raw_page else "") + " PNG"
+        esc_title = html.escape(title_text, quote=True)
+        inner_html = (
+            f'<a class="folio-link" href="{esc_url}" target="_blank" '
+            f'rel="noopener" title="{esc_title}">{label_html}</a>'
+        )
+    else:
+        inner_html = label_html
+
     self.body.append(
         f'<div class="folio-milestone" id="folio-{folio_id}" '
         f'data-folio="{folio_id}" data-page="{page}">'
-        f"[Folio {folio_id}{page_str}]</div>\n"
+        f"{inner_html}</div>\n"
     )
     raise nodes.SkipNode
 
@@ -649,9 +732,11 @@ class FolioDirective(DualModeDirective):
     has_content = False
     required_arguments = 1
     optional_arguments = 0
-    final_argument_whitespace = False
+    final_argument_whitespace = True
     option_spec = {
         "page": directives.unchanged,
+        "url": directives.unchanged,
+        "initial": directives.unchanged,
         "class": directives.class_option,
     }
 
@@ -659,9 +744,12 @@ class FolioDirective(DualModeDirective):
         """Create folio milestone node."""
         folio_id = self.arguments[0].strip()
         page = (self.options.get("page") or "").strip()
+        url = (self.options.get("url") or "").strip()
         node = folio_node()
         node["folio_id"] = folio_id
         node["page"] = page
+        if url:
+            node["url"] = url
         node["classes"] = list(self.options.get("class", []))
         return [node]
 

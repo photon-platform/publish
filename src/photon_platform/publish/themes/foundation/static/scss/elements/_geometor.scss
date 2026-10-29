@@ -1170,6 +1170,41 @@ footer.book-footer {
   flex-direction: column;
   align-items: center;
   gap: 0.85rem;
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1.25rem;
+    font-family: var(--book-font-mono);
+    font-size: 0.78rem;
+    color: var(--book-text-muted);
+    text-align: center;
+
+    span.category,
+    span.tags {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    a {
+      color: var(--book-text-muted) !important;
+      text-decoration: none !important;
+      background: var(--book-surface);
+      border: 1px solid var(--book-border);
+      border-radius: 3px;
+      padding: 0.08rem 0.4rem;
+      transition: all 0.15s ease;
+
+      &:hover {
+        color: var(--book-link-hover) !important;
+        border-color: var(--book-border-dark);
+        background: var(--book-surface-alt);
+      }
+    }
+  }
 }
 
 .book-footer-ornament {
@@ -1292,6 +1327,17 @@ a.justification {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   margin: 0.4em 0;
   clear: both;
+
+  a.folio-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--book-link, #d4a038);
+      text-decoration: underline;
+    }
+  }
 }
 
 sup.line-num {
@@ -2020,6 +2066,10 @@ svg.euclid-graphic text.geom-assert-secondary tspan {
         }
       }
     }
+
+    > footer {
+      display: none !important;
+    }
   }
 
   &.layout-cards {
@@ -2028,6 +2078,7 @@ svg.euclid-graphic text.geom-assert-secondary tspan {
 
     > article.excerpt > .content {
       flex-direction: column !important;
+      justify-content: flex-start !important;
       align-items: center !important;
       text-align: center !important;
 
