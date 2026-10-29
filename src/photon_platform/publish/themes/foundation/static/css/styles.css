@@ -1905,7 +1905,12 @@ body #search-results .context {
   --geom-bg: #ffffff;
   --geom-point-stroke: #ffffff;
   --geom-poly-fill: #000000;
-  --geom-accent: #ef4444;
+  --geom-accent: #c88a1e;
+  --geom-accent-bg: rgba(200, 138, 30, 0.12);
+  --geom-accent-border: rgba(200, 138, 30, 0.55);
+  --geom-assert: #16a34a;
+  --geom-assert-bg: rgba(22, 163, 74, 0.10);
+  --geom-assert-border: rgba(22, 163, 74, 0.50);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -1914,7 +1919,12 @@ body #search-results .context {
     --geom-bg: transparent;
     --geom-point-stroke: #1e1e20;
     --geom-poly-fill: #d6cfc5;
-    --geom-accent: #ef4444;
+    --geom-accent: #e8b85a;
+    --geom-accent-bg: rgba(232, 184, 90, 0.12);
+    --geom-accent-border: rgba(232, 184, 90, 0.55);
+    --geom-assert: #5ec27e;
+    --geom-assert-bg: rgba(94, 194, 126, 0.12);
+    --geom-assert-border: rgba(94, 194, 126, 0.55);
   }
 }
 
@@ -1949,7 +1959,12 @@ article.book-reading-pane {
   --geom-bg: transparent;
   --geom-point-stroke: var(--book-bg, #1e1e20);
   --geom-poly-fill: var(--book-text, #d6cfc5);
-  --geom-accent: #ef4444;
+  --geom-accent: #e8b85a;
+  --geom-accent-bg: rgba(232, 184, 90, 0.12);
+  --geom-accent-border: rgba(232, 184, 90, 0.55);
+  --geom-assert: #5ec27e;
+  --geom-assert-bg: rgba(94, 194, 126, 0.12);
+  --geom-assert-border: rgba(94, 194, 126, 0.55);
 }
 
 body.light-mode,
@@ -1958,7 +1973,12 @@ body.light-mode,
   --geom-bg: #ffffff;
   --geom-point-stroke: #ffffff;
   --geom-poly-fill: #000000;
-  --geom-accent: #ef4444;
+  --geom-accent: #c88a1e;
+  --geom-accent-bg: rgba(200, 138, 30, 0.12);
+  --geom-accent-border: rgba(200, 138, 30, 0.55);
+  --geom-assert: #16a34a;
+  --geom-assert-bg: rgba(22, 163, 74, 0.10);
+  --geom-assert-border: rgba(22, 163, 74, 0.50);
 }
 
 @media print {
@@ -1970,7 +1990,8 @@ article.book-reading-pane,
     --geom-bg: #ffffff;
     --geom-point-stroke: #ffffff;
     --geom-poly-fill: #000000;
-    --geom-accent: #dc2626;
+    --geom-accent: #b47814;
+    --geom-assert: #15803d;
   }
 }
 
@@ -3965,12 +3986,27 @@ svg.euclid-graphic .geom-polygon-gnomon {
 svg.euclid-graphic .wedge,
 svg.euclid-graphic .angle,
 svg.euclid-graphic .graphic-wedge {
-  fill: var(--geom-accent, #ef4444);
+  fill: var(--geom-accent, #e8b85a);
   fill-opacity: 0.24;
-  stroke: var(--geom-accent, #ef4444);
+  stroke: var(--geom-accent, #e8b85a);
   stroke-width: 2;
   stroke-linejoin: round;
   transition: opacity 0.12s ease, fill-opacity 0.12s ease;
+}
+
+svg.euclid-graphic .geom-ang-arc {
+  fill: none !important;
+  stroke: var(--geom-assert, #5ec27e);
+  stroke-width: 2;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+svg.euclid-graphic .geom-tick-mark {
+  stroke: var(--geom-assert, #5ec27e);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  fill: none;
 }
 
 svg.euclid-graphic .geom-point,
@@ -4046,13 +4082,13 @@ svg.euclid-graphic[data-graphic-id="0003.g1"] .geom-label {
   opacity: 0;
 }
 
-/* Interactive Geometric Text References */
+/* Interactive Geometric Text References (Gold) */
 .geom-ref,
 .geom-interactive-ref,
 .katex.geom-interactive-ref {
   cursor: pointer;
   position: relative;
-  border-bottom: 1.5px dotted rgba(220, 38, 38, 0.45);
+  border-bottom: 1.5px dotted var(--geom-accent-border, rgba(232, 184, 90, 0.55));
   border-radius: 2px;
   padding: 0 1px;
   transition: all 0.15s ease-in-out;
@@ -4061,16 +4097,52 @@ svg.euclid-graphic[data-graphic-id="0003.g1"] .geom-label {
 .geom-ref:hover,
 .geom-interactive-ref:hover,
 .katex.geom-interactive-ref:hover {
-  border-bottom: 1.5px solid #dc2626 !important;
+  border-bottom: 1.5px solid var(--geom-accent, #e8b85a) !important;
 }
 
-/* Active Highlight: Turning text RED without glow */
+/* Active Element Highlight: Turning text GOLD without glow */
 .geom-highlight-text,
 .geom-highlight-text *,
 .katex.geom-highlight-text,
 .katex.geom-highlight-text * {
-  color: #dc2626 !important;
-  background-color: rgba(239, 68, 68, 0.08) !important;
+  color: var(--geom-accent, #e8b85a) !important;
+  background-color: var(--geom-accent-bg, rgba(232, 184, 90, 0.12)) !important;
+  border-radius: 3px;
+  transition: color 0.1s ease-in-out, background-color 0.1s ease-in-out;
+}
+
+/* Interactive Assertion / Equality References (Green) */
+.geom-eq-ref {
+  cursor: pointer;
+  position: relative;
+  border-bottom: 1.5px dotted var(--geom-assert-border, rgba(94, 194, 126, 0.55));
+  border-radius: 2px;
+  padding: 0 1px;
+  transition: all 0.15s ease-in-out;
+}
+
+.geom-eq-ref:hover {
+  border-bottom: 1.5px solid var(--geom-assert, #5ec27e) !important;
+}
+
+.geom-assert-block {
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 0.1rem 0.35rem;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.geom-assert-block-active {
+  background-color: var(--geom-assert-bg, rgba(94, 194, 126, 0.12));
+}
+
+.geom-assert-text,
+.geom-assert-text *,
+.katex.geom-assert-text,
+.katex.geom-assert-text * {
+  color: var(--geom-assert, #5ec27e) !important;
+  background-color: var(--geom-assert-bg, rgba(94, 194, 126, 0.12)) !important;
+  border-bottom-color: var(--geom-assert, #5ec27e) !important;
   border-radius: 3px;
   transition: color 0.1s ease-in-out, background-color 0.1s ease-in-out;
 }
@@ -4083,12 +4155,12 @@ svg.euclid-graphic #highlights > * {
   transition: opacity 0.12s ease, stroke 0.12s ease, fill-opacity 0.12s ease;
 }
 
-/* Active Highlight in SVG: Change color to RED without glow or overstroke */
+/* Active Element Highlight in SVG: GOLD */
 svg.euclid-graphic [data-ref]:hover,
 svg.euclid-graphic .highlight,
 svg.euclid-graphic .geom-highlight-active {
   opacity: 1 !important;
-  stroke: var(--geom-accent, #ef4444) !important;
+  stroke: var(--geom-accent, #e8b85a) !important;
   stroke-opacity: 1 !important;
   filter: none !important;
   cursor: pointer;
@@ -4103,9 +4175,9 @@ svg.euclid-graphic path.geom-polygon.geom-highlight-active,
 svg.euclid-graphic path.wedge.geom-highlight-active,
 svg.euclid-graphic path.angle.geom-highlight-active {
   opacity: 1 !important;
-  fill: var(--geom-accent, #ef4444) !important;
+  fill: var(--geom-accent, #e8b85a) !important;
   fill-opacity: 0.22 !important;
-  stroke: var(--geom-accent, #ef4444) !important;
+  stroke: var(--geom-accent, #e8b85a) !important;
   stroke-opacity: 1 !important;
   stroke-width: 1.5px !important;
   filter: none !important;
@@ -4118,7 +4190,7 @@ svg.euclid-graphic circle.geom-point.geom-highlight-active,
 svg.euclid-graphic circle.point.geom-highlight-active,
 svg.euclid-graphic #points circle.geom-highlight-active {
   opacity: 1 !important;
-  fill: var(--geom-accent, #ef4444) !important;
+  fill: var(--geom-accent, #e8b85a) !important;
   fill-opacity: 1 !important;
   stroke: none !important;
   stroke-width: 0 !important;
@@ -4133,16 +4205,16 @@ svg.euclid-graphic text.geom-highlight-active tspan,
 svg.euclid-graphic text.geom-label.geom-highlight-active,
 svg.euclid-graphic text.label.geom-highlight-active {
   opacity: 1 !important;
-  fill: var(--geom-accent, #ef4444) !important;
+  fill: var(--geom-accent, #e8b85a) !important;
   stroke: none !important;
   stroke-width: 0 !important;
   filter: none !important;
 }
 
-/* Secondary highlight for endpoints/labels when a segment, angle, or polygon is hovered */
+/* Secondary highlight for endpoints/labels when a segment, angle, or polygon is hovered (GOLD) */
 svg.euclid-graphic .geom-highlight-secondary {
   opacity: 1 !important;
-  stroke: var(--geom-accent, #ef4444) !important;
+  stroke: var(--geom-accent, #e8b85a) !important;
   filter: none !important;
   transition: opacity 0.1s ease, stroke 0.1s ease, fill 0.1s ease;
 }
@@ -4151,7 +4223,7 @@ svg.euclid-graphic text.geom-highlight-secondary,
 svg.euclid-graphic text.geom-highlight-secondary tspan,
 svg.euclid-graphic tspan.geom-highlight-secondary {
   opacity: 1 !important;
-  fill: var(--geom-accent, #ef4444) !important;
+  fill: var(--geom-accent, #e8b85a) !important;
   stroke: none !important;
   stroke-width: 0 !important;
   filter: none !important;
@@ -4161,8 +4233,77 @@ svg.euclid-graphic circle.geom-point.geom-highlight-secondary,
 svg.euclid-graphic circle.point.geom-highlight-secondary,
 svg.euclid-graphic #points circle.geom-highlight-secondary {
   opacity: 1 !important;
-  fill: var(--geom-accent, #ef4444) !important;
+  fill: var(--geom-accent, #e8b85a) !important;
   fill-opacity: 1 !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+  filter: none !important;
+}
+
+/* Active Assertion / Equality Highlight in SVG: GREEN + Center Tick Markers */
+svg.euclid-graphic .geom-assert-active {
+  opacity: 1 !important;
+  stroke: var(--geom-assert, #5ec27e) !important;
+  stroke-opacity: 1 !important;
+  filter: none !important;
+  transition: opacity 0.1s ease, stroke 0.1s ease;
+}
+
+svg.euclid-graphic polygon.geom-assert-active,
+svg.euclid-graphic path.polygon.geom-assert-active,
+svg.euclid-graphic path.geom-polygon.geom-assert-active,
+svg.euclid-graphic path.wedge.geom-assert-active,
+svg.euclid-graphic path.angle.geom-assert-active {
+  opacity: 1 !important;
+  fill: var(--geom-assert, #5ec27e) !important;
+  fill-opacity: 0.22 !important;
+  stroke: var(--geom-assert, #5ec27e) !important;
+  stroke-opacity: 1 !important;
+  stroke-width: 1.5px !important;
+  filter: none !important;
+}
+
+svg.euclid-graphic path.geom-ang-arc.geom-assert-active {
+  opacity: 1 !important;
+  fill: none !important;
+  stroke: var(--geom-assert, #5ec27e) !important;
+  stroke-width: 1.8px !important;
+}
+
+svg.euclid-graphic path.geom-assert-active.geom-tick-1 {
+  marker-mid: url(#geom-tick-1) !important;
+}
+
+svg.euclid-graphic path.geom-assert-active.geom-tick-2 {
+  marker-mid: url(#geom-tick-2) !important;
+}
+
+svg.euclid-graphic path.geom-assert-active.geom-tick-3 {
+  marker-mid: url(#geom-tick-3) !important;
+}
+
+svg.euclid-graphic circle.geom-point.geom-assert-active,
+svg.euclid-graphic circle.point.geom-assert-active,
+svg.euclid-graphic #points circle.geom-assert-active,
+svg.euclid-graphic circle.geom-point.geom-assert-secondary,
+svg.euclid-graphic circle.point.geom-assert-secondary,
+svg.euclid-graphic #points circle.geom-assert-secondary {
+  opacity: 1 !important;
+  fill: var(--geom-assert, #5ec27e) !important;
+  fill-opacity: 1 !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+  filter: none !important;
+}
+
+svg.euclid-graphic text.geom-assert-active,
+svg.euclid-graphic text.geom-assert-active *,
+svg.euclid-graphic text.geom-assert-active tspan,
+svg.euclid-graphic text.geom-assert-secondary,
+svg.euclid-graphic text.geom-assert-secondary *,
+svg.euclid-graphic text.geom-assert-secondary tspan {
+  opacity: 1 !important;
+  fill: var(--geom-assert, #5ec27e) !important;
   stroke: none !important;
   stroke-width: 0 !important;
   filter: none !important;

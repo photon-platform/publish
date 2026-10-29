@@ -472,6 +472,69 @@ def line_role(
     return [node], []
 
 
+def parse_eq_role_text(raw_content: str) -> Tuple[str, str]:
+    """Parse :eq: role content ``display <spec>`` into ``(display, spec)``.
+
+    Handles specs that themselves contain angle brackets (such as ``< A B C >``), e.g.:
+    - ``equal <0255.g1:[ A C ] = 0255.g1:[ A B ]>`` -> ``("equal", "0255.g1:[ A C ] = 0255.g1:[ A B ]")``
+    - ``equal <0265.g1:< A B C > = 0265.g1:< A C B >>`` -> ``("equal", "0265.g1:< A B C > = 0265.g1:< A C B >")``
+    """
+    text = (raw_content or "").strip()
+    if not text:
+        return "", ""
+
+    match = re.match(r"^([^<>]+?)\s+<(.+)>$", text)
+    if match:
+        display = match.group(1).strip()
+        spec = match.group(2).strip()
+        return display, spec
+
+    return "", text
+
+
+class eq_ref_node(nodes.Inline, nodes.TextElement):
+    """Inline AST node for equality assertion references (:eq:)."""
+
+
+def visit_eq_ref_node(self: Any, node: nodes.Element) -> None:
+    """HTML visitor for eq_ref_node."""
+    spec = escape_data_ref_attr(str(node.get("eq_spec", "")))
+    display = str(node.get("display", node.astext()))
+    if display:
+        inner_html = format_inline_emphasis_html(display)
+        self.body.append(
+            f'<span class="geom-eq-ref" data-assert-equal="{spec}">{inner_html}</span>'
+        )
+    else:
+        self.body.append(
+            f'<span class="geom-eq-marker" data-assert-equal="{spec}" hidden></span>'
+        )
+    raise nodes.SkipNode
+
+
+def depart_eq_ref_node(self: Any, node: nodes.Element) -> None:
+    """HTML departure visitor for eq_ref_node."""
+    pass
+
+
+def eq_role(
+    name: str,
+    rawtext: str,
+    text: str,
+    lineno: int,
+    inliner: Any,
+    options: Optional[Dict[str, Any]] = None,
+    content: Optional[List[str]] = None,
+) -> Tuple[List[nodes.Node], List[nodes.system_message]]:
+    """Role `:eq:` for interactive equality references wrapping 'equal' (or 'equilateral', etc.)."""
+    restored = utils.unescape(text, restore_backslashes=True).strip()
+    display, spec = parse_eq_role_text(restored)
+    node = eq_ref_node(rawtext, display)
+    node["display"] = display
+    node["eq_spec"] = spec
+    return [node], []
+
+
 _ROLE_NODE_VISITORS = [
     (geom_ref_node, visit_geom_ref_node, depart_geom_ref_node),
     (just_ref_node, visit_just_ref_node, depart_just_ref_node),
@@ -479,6 +542,7 @@ _ROLE_NODE_VISITORS = [
     (cite_ref_node, visit_cite_ref_node, depart_cite_ref_node),
     (term_ref_node, visit_term_ref_node, depart_term_ref_node),
     (person_ref_node, visit_person_ref_node, depart_person_ref_node),
+    (eq_ref_node, visit_eq_ref_node, depart_eq_ref_node),
 ]
 
 _ROLES = {
@@ -488,6 +552,7 @@ _ROLES = {
     "cite": cite_role,
     "term": term_role,
     "person": person_role,
+    "eq": eq_role,
 }
 
 

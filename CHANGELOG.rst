@@ -2,6 +2,13 @@ changelog
 =========
 
 
+0.3.12
+======
+
+- feat(geometry): Add inline ``:eq:`` equality role and ``:equal:`` / ``:assert:`` directive options for green assertion highlighting and SVG ``marker-mid`` center tick marks on equal segments and angles.
+- style(geometry): Shift element reference accent highlight (``--geom-accent``) from red to warm gold.
+
+
 0.3.7
 =====
 

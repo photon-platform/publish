@@ -254,14 +254,20 @@ def _visit_single_or_multi_block(
     node: nodes.Element,
     base_class: str,
     prefix_html: str = "",
+    extra_attrs: Optional[Dict[str, str]] = None,
 ) -> None:
     """Render a semantic block as <div class="...">, unwrapping single paragraphs for clean typography."""
     classes = [base_class] + list(node.get("classes", []))
     cls_str = " ".join(dict.fromkeys(c for c in classes if c))
     ids = node.get("ids", [])
     id_attr = f' id="{html.escape(ids[0], quote=True)}"' if ids else ""
+    extra_str = ""
+    if extra_attrs:
+        for k, v in extra_attrs.items():
+            if v:
+                extra_str += f' {k}="{html.escape(str(v), quote=True)}"'
 
-    translator.body.append(f'<div class="{html.escape(cls_str, quote=True)}"{id_attr}>')
+    translator.body.append(f'<div class="{html.escape(cls_str, quote=True)}"{id_attr}{extra_str}>')
     if prefix_html:
         translator.body.append(prefix_html)
 
@@ -290,7 +296,8 @@ def visit_assertion_node(self: Any, node: nodes.Element) -> None:
     just_display = node.get("justification_display", "")
     just_target = node.get("justification_target")
     prefix = format_justification_html(just_display, just_target, translator=self) if just_display else ""
-    _visit_single_or_multi_block(self, node, "assertion", prefix_html=prefix)
+    extra = {"data-assert-equal": node["assert_equal"]} if node.get("assert_equal") else None
+    _visit_single_or_multi_block(self, node, "assertion", prefix_html=prefix, extra_attrs=extra)
 
 
 def depart_assertion_node(self: Any, node: nodes.Element) -> None:
@@ -303,7 +310,8 @@ def visit_subclause_node(self: Any, node: nodes.Element) -> None:
     just_display = node.get("justification_display", "")
     just_target = node.get("justification_target")
     prefix = format_justification_html(just_display, just_target, translator=self) if just_display else ""
-    _visit_single_or_multi_block(self, node, "sub-clause", prefix_html=prefix)
+    extra = {"data-assert-equal": node["assert_equal"]} if node.get("assert_equal") else None
+    _visit_single_or_multi_block(self, node, "sub-clause", prefix_html=prefix, extra_attrs=extra)
 
 
 def depart_subclause_node(self: Any, node: nodes.Element) -> None:
@@ -430,6 +438,8 @@ class AssertionDirective(DualModeDirective):
     option_spec = {
         "class": directives.class_option,
         "name": directives.unchanged,
+        "equal": directives.unchanged,
+        "assert": directives.unchanged,
     }
 
     def run(self) -> List[nodes.Node]:
@@ -437,6 +447,10 @@ class AssertionDirective(DualModeDirective):
         node = self.node_class()
         node["classes"] = list(self.options.get("class", []))
         self.add_name(node)
+
+        assert_equal = (self.options.get("equal") or self.options.get("assert") or "").strip()
+        if assert_equal:
+            node["assert_equal"] = assert_equal
 
         if self.arguments:
             env = getattr(self, "env", None)
