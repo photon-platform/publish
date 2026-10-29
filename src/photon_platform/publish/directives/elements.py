@@ -28,6 +28,8 @@ VALID_BOOKS = {
     "XI",
     "XII",
     "XIII",
+    "XIV",
+    "XV",
 }
 
 
@@ -139,7 +141,7 @@ def parse_justification_arg(
 
 
 def _resolve_justification_href(translator: Any, target: str) -> Optional[str]:
-    """Resolve a canonical justification target (or comma-separated list) to a relative Sphinx href."""
+    """Resolve a canonical justification target (or comma-separated list) to a relative or intersphinx href."""
     if translator is None or not target:
         return None
     builder = getattr(translator, "builder", None)
@@ -158,6 +160,15 @@ def _resolve_justification_href(translator: Any, target: str) -> Optional[str]:
     labels = getattr(std_domain, "labels", {})
     current_docname = getattr(builder, "current_docname", "") or ""
 
+    named_invs = getattr(env, "intersphinx_named_inventory", {}) or {}
+    main_inv = getattr(env, "intersphinx_inventory", {}) or {}
+    inv_search_list: List[Dict[str, Any]] = []
+    for inv_name in ("euclid", "elements"):
+        if inv_name in named_invs and isinstance(named_invs[inv_name], dict):
+            inv_search_list.append(named_invs[inv_name])
+    if isinstance(main_inv, dict) and main_inv:
+        inv_search_list.append(main_inv)
+
     candidates = [t.strip() for t in target.split(",") if t.strip()]
     for cand in candidates:
         key = cand.lower()
@@ -171,6 +182,7 @@ def _resolve_justification_href(translator: Any, target: str) -> Optional[str]:
             if prefix.startswith("viii.def"):
                 search_keys.append("vii." + prefix[5:])
 
+        # 1. Resolve against local std domain labels first
         for sk in search_keys:
             target_docname: Optional[str] = None
             label_id: Optional[str] = None
@@ -184,6 +196,23 @@ def _resolve_justification_href(translator: Any, target: str) -> Optional[str]:
                     return f"{rel_uri}#{label_id}" if rel_uri else f"#{label_id}"
                 except Exception:
                     continue
+
+        # 2. Fallback: resolve against intersphinx inventories (e.g., geometor/euclid or geometor/elements)
+        for sk in search_keys:
+            for inv in inv_search_list:
+                std_labels = inv.get("std:label", {})
+                if not isinstance(std_labels, dict):
+                    continue
+                inv_item = std_labels.get(sk)
+                if inv_item is None:
+                    for k_inv, v_inv in std_labels.items():
+                        if k_inv.lower() == sk:
+                            inv_item = v_inv
+                            break
+                if inv_item is not None:
+                    uri = getattr(inv_item, "uri", None)
+                    if uri:
+                        return str(uri)
     return None
 
 
@@ -197,7 +226,9 @@ def truncate_enunciation(text: str, max_chars: int = 180) -> str:
 
 
 def _load_book_enunciations(env: Any, book_slug: str) -> Dict[str, Tuple[str, str]]:
-    """Load and cache enunciations.json for a book (mapping lowercase id -> (canonical_id, text))."""
+    """Load and cache enunciations.json for a book (mapping lowercase id -> (canonical_id, text)),
+    including fallback Euclid enunciations from sibling euclid/resources/heath/enunciations.json.
+    """
     cache_attr = "_photon_enunciations_cache"
     cache = getattr(env, cache_attr, None) if env is not None else None
     if cache is None:
@@ -210,6 +241,23 @@ def _load_book_enunciations(env: Any, book_slug: str) -> Dict[str, Tuple[str, st
     registry: Dict[str, Tuple[str, str]] = {}
     if env is not None:
         srcdir = Path(getattr(env, "srcdir", "."))
+        euclid_fallbacks = [
+            srcdir.parent.parent / "euclid" / "resources" / "heath",
+            srcdir.parent.parent.parent / "euclid" / "resources" / "heath",
+        ]
+        for base in euclid_fallbacks:
+            fpath = base / "enunciations.json"
+            if fpath.is_file():
+                try:
+                    raw_map = json.loads(fpath.read_text(encoding="utf-8"))
+                    if isinstance(raw_map, dict):
+                        for k, v in raw_map.items():
+                            if isinstance(k, str) and isinstance(v, str) and v.strip():
+                                registry[k.strip().lower()] = (k.strip(), v.strip())
+                except Exception:
+                    pass
+                break
+
         candidates = [
             srcdir.parent / "resources" / book_slug,
             srcdir.parent.parent / "resources" / srcdir.name,
@@ -418,6 +466,10 @@ class scholium_node(nodes.General, nodes.Element):
 
 class folio_node(nodes.General, nodes.Element):
     """AST node for a diplomatic folio transition milestone."""
+
+
+class collapse_node(nodes.General, nodes.Element):
+    """AST node for a collapsible <details> section with optional count badge."""
 
 
 def _visit_single_or_multi_block(
@@ -970,6 +1022,60 @@ class SignatureDirective(DualModeDirective):
         return [node]
 
 
+def visit_collapse_node(self: Any, node: nodes.Element) -> None:
+    """HTML visitor for collapse_node."""
+    classes = ["book-collapse"] + list(node.get("classes", []))
+    cls_str = " ".join(dict.fromkeys(c for c in classes if c))
+    ids = node.get("ids", [])
+    id_attr = f' id="{html.escape(ids[0], quote=True)}"' if ids else ""
+    open_attr = " open" if node.get("is_open") else ""
+    title = html.escape(str(node.get("title") or "Details"))
+    badge = str(node.get("badge") or "").strip()
+    badge_html = (
+        f'<span class="book-collapse-badge">{html.escape(badge)}</span>'
+        if badge
+        else ""
+    )
+    self.body.append(
+        f'<details class="{html.escape(cls_str, quote=True)}"{id_attr}{open_attr}>\n'
+        f'<summary class="book-collapse-summary">'
+        f'<span class="book-collapse-title"><span class="collapse-icon">▸</span> {title}</span>'
+        f"{badge_html}</summary>\n"
+        f'<div class="book-collapse-body">\n'
+    )
+
+
+def depart_collapse_node(self: Any, node: nodes.Element) -> None:
+    """HTML departure visitor for collapse_node."""
+    self.body.append("</div>\n</details>\n")
+
+
+class CollapseDirective(DualModeDirective):
+    """Directive for collapsible <details> apparatus blocks: ``.. collapse:: <title>``."""
+
+    has_content = True
+    required_arguments = 0
+    optional_arguments = 1
+    final_argument_whitespace = True
+    option_spec = {
+        "class": directives.class_option,
+        "name": directives.unchanged,
+        "badge": directives.unchanged,
+        "open": directives.flag,
+    }
+
+    def run(self) -> List[nodes.Node]:
+        """Parse collapsible <details> section."""
+        node = collapse_node()
+        node["classes"] = list(self.options.get("class", []))
+        node["title"] = (self.arguments[0] if self.arguments else "Details").strip()
+        node["badge"] = (self.options.get("badge") or "").strip()
+        node["is_open"] = "open" in self.options
+        self.add_name(node)
+        self.state.nested_parse(self.content, self.content_offset, node)
+        return [node]
+
+
 _NODE_VISITORS = [
     (enunciation_node, visit_enunciation_node, depart_enunciation_node),
     (signature_node, visit_signature_node, depart_signature_node),
@@ -981,6 +1087,7 @@ _NODE_VISITORS = [
     (lemma_node, visit_lemma_node, depart_lemma_node),
     (scholium_node, visit_scholium_node, depart_scholium_node),
     (folio_node, visit_folio_node, depart_folio_node),
+    (collapse_node, visit_collapse_node, depart_collapse_node),
 ]
 
 _DIRECTIVES = {
@@ -995,6 +1102,7 @@ _DIRECTIVES = {
     "lemma": LemmaDirective,
     "scholium": ScholiumDirective,
     "folio": FolioDirective,
+    "collapse": CollapseDirective,
 }
 
 
@@ -1199,13 +1307,14 @@ def _on_sphinx_doctree_read(app: Any, doctree: nodes.document) -> None:
 def _on_sphinx_doctree_resolved(
     app: Any, doctree: nodes.document, fromdocname: str
 ) -> None:
-    """Attach enunciation tooltips (reftitle) to internal :ref: nodes targeting Euclid elements."""
+    """Attach enunciation tooltips (reftitle) to internal and intersphinx :ref: nodes targeting Euclid elements."""
     env = getattr(app, "env", None)
     if env is None:
         return
     first_seg = fromdocname.split("/")[0] if "/" in fromdocname else "heath"
     for ref_node in doctree.findall(nodes.reference):
-        if ref_node.get("reftitle"):
+        existing_title = str(ref_node.get("reftitle", ""))
+        if existing_title and not existing_title.startswith("(in "):
             continue
         label_text = ref_node.astext().strip()
         tooltip = _lookup_single_enunciation(env, first_seg, label_text)

@@ -19,25 +19,51 @@ def setup_globals(org: str, org_name: str, repo: str, repo_name: str) -> None:
         repo_name: The display name of the repository.
 
     """
-    globals().update(
-        {
-            "org": org,
-            "org_name": org_name,
-            "repo": repo,
-            "repo_name": repo_name,
-            "blog_title": f"{org_name} • {repo_name}",
-            "html_title": f"{org_name} • {repo_name}",
-            "project": f"{org_name} • {repo_name}",
-            "version": "",  # The short X.Y version.
-            "release": "",  # The full version, including alpha/beta/rc tags.
-            "copyright": f"{year}, {org_name}",
-            "author": org_name,
-            "blog_baseurl": f"https://{org}.github.io/{repo}",
-            "html_base_url": f"https://{org}.github.io/{repo}",
-            "html_baseurl": f"https://{org}.github.io/{repo}",
-            "blog_authors": {"phi": ("phi ARCHITECT", None)},
-        }
-    )
+    caller_globals = sys._getframe(1).f_globals
+    existing_version = caller_globals.get("version") or globals().get("version") or ""
+    existing_release = caller_globals.get("release") or existing_version
+
+    config_updates = {
+        "org": org,
+        "org_name": org_name,
+        "repo": repo,
+        "repo_name": repo_name,
+        "blog_title": f"{org_name} • {repo_name}",
+        "html_title": f"{org_name} • {repo_name}",
+        "project": f"{org_name} • {repo_name}",
+        "version": existing_version,
+        "release": existing_release,
+        "copyright": f"{year}, {org_name}",
+        "author": org_name,
+        "blog_baseurl": f"https://{org}.github.io/{repo}",
+        "html_base_url": f"https://{org}.github.io/{repo}",
+        "html_baseurl": f"https://{org}.github.io/{repo}",
+        "blog_authors": {"phi": ("phi ARCHITECT", None)},
+    }
+    globals().update(config_updates)
+    caller_globals.update(config_updates)
+
+    # Register sister GEOMETOR intersphinx inventories (euclid, elements) with local fallback
+    base_root = project_root or os.getcwd()
+    if "intersphinx_mapping" in globals():
+        for sister_repo in ("euclid", "elements"):
+            if repo == sister_repo:
+                intersphinx_mapping.pop(sister_repo, None)
+                continue
+            local_inv = os.path.abspath(
+                os.path.join(base_root, "..", sister_repo, "docs", "objects.inv")
+            )
+            if os.path.isfile(local_inv):
+                intersphinx_mapping[sister_repo] = (
+                    f"https://geometor.github.io/{sister_repo}",
+                    (local_inv, None),
+                )
+            elif org == "geometor":
+                intersphinx_mapping[sister_repo] = (
+                    f"https://geometor.github.io/{sister_repo}",
+                    None,
+                )
+
     # Add exclusion for the main package index to avoid duplicates with modules/index.rst
     # We assume the structure modules/api/<namespace>/<repo>/index.rst
     # We use the 'include' variable parsed from pyproject.toml

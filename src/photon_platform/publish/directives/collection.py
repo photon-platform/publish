@@ -270,19 +270,21 @@ def render_node_html(builder: Any, node: nodes.Node) -> str:
 
 
 def _find_first_excerpt_node(doctree: nodes.document) -> nodes.Node | None:
-    """Return the enunciation node if present, otherwise the first paragraph or block_quote node not nested inside an admonition or figure."""
+    """Return the enunciation node if present, otherwise the first paragraph or block_quote node not nested inside an admonition, figure, signature, or collapse."""
+    skip_types: tuple[type, ...] = (nodes.Admonition, nodes.figure)
     try:
-        from .elements import enunciation_node
+        from .elements import collapse_node, enunciation_node, signature_node
 
         for enun in doctree.findall(enunciation_node):
             return enun
+        skip_types = (nodes.Admonition, nodes.figure, signature_node, collapse_node)
     except ImportError:
         pass
     for n in doctree.findall(lambda node: isinstance(node, (nodes.paragraph, nodes.block_quote))):
         curr = n.parent
         in_skip = False
         while curr is not None:
-            if isinstance(curr, (nodes.Admonition, nodes.figure)):
+            if isinstance(curr, skip_types):
                 in_skip = True
                 break
             curr = curr.parent

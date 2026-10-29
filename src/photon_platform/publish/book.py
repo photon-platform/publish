@@ -130,9 +130,9 @@ def detect_companion_tracks(env: Any, pagename: str) -> List[Dict[str, Any]]:
 
     # Determine if bare `<stem>` is the Latin/original primary track (e.g. Hoenen `caput-1/caput-1`)
     has_hyphen_or_under_en = _qual(f"{stem}-en") in found_docs or _qual(f"{stem}_en") in found_docs
-    has_elements_siblings = any(
-        _qual(name) in found_docs
-        for name in ("heath", "code", f"{stem}.heath", f"{stem}.code")
+    has_elements_siblings = (
+        any(_qual(name) in found_docs for name in ("heath", f"{stem}.heath"))
+        or os.path.basename(doc_dir).startswith("G.")
     )
     has_proposition_siblings = any(
         _qual(name) in found_docs

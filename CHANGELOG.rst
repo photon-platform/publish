@@ -2,6 +2,15 @@ changelog
 =========
 
 
+0.3.19
+======
+
+- feat(global_conf): Propagate ``setup_globals()`` configuration to the calling ``conf.py`` frame and automatically register ``euclid`` and ``elements`` intersphinx inventories with local sibling ``objects.inv`` fallback.
+- feat(elements): Resolve ``:just:`` and ``.. assertion::`` Euclid proposition/definition/postulate/common-notion references against ``intersphinx`` inventories (e.g., ``geometor/euclid``) when not defined locally, and attach Euclid enunciation tooltips to both ``:just:`` and intersphinx ``:ref:`` links.
+- feat(elements,styles): Add ``.. collapse::`` and ``.. note_item::`` blocks and skip ``signature`` / ``collapse`` nodes when extracting collection card excerpts.
+
+
+
 0.3.18
 ======
 

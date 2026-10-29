@@ -2082,6 +2082,10 @@ svg.euclid-graphic text.geom-assert-secondary tspan {
           height: auto;
           object-fit: contain;
           border-radius: 2px;
+          background-color: transparent !important;
+          border: none !important;
+          padding: 0 !important;
+          box-shadow: none !important;
         }
       }
 
@@ -2551,3 +2555,132 @@ a.geom-fn {
     }
   }
 }
+
+/* -------------------------------------------------------------------------
+   19. Collapsible Scholarly Apparatus Blocks (details.book-collapse) & Notes (.note-item)
+   ------------------------------------------------------------------------- */
+details.book-collapse {
+  margin: 0.75rem 0 1.25rem;
+  background-color: var(--book-surface, #272629);
+  border: 1px solid var(--book-border, #3d3934);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+
+  &:hover {
+    border-color: var(--book-border-dark, #544f47);
+  }
+
+  > summary.book-collapse-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.55rem 0.9rem;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    transition: background-color 0.15s ease;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &:hover {
+      background-color: var(--book-surface-alt, #313035);
+    }
+  }
+
+  .book-collapse-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--book-font-display, 'Cormorant Garamond', Georgia, serif);
+    font-weight: 600;
+    font-size: 0.96rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--book-text, #d6cfc5);
+
+    .collapse-icon {
+      display: inline-block;
+      color: var(--book-link, #de836e);
+      font-size: 0.95rem;
+      line-height: 1;
+      transition: transform 0.15s ease;
+    }
+  }
+
+  .book-collapse-badge {
+    font-family: var(--book-font-mono, monospace);
+    font-size: 0.75rem;
+    color: var(--book-text-muted, #9c958a);
+    background-color: var(--book-surface-alt, #313035);
+    border: 1px solid var(--book-border, #3d3934);
+    padding: 0.12rem 0.55rem;
+    border-radius: 12px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  &[open] {
+    > summary.book-collapse-summary {
+      border-bottom: 1px solid var(--book-border, #3d3934);
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    .collapse-icon {
+      transform: rotate(90deg);
+    }
+  }
+
+  .book-collapse-body {
+    padding: 0.75rem 1rem;
+    font-size: 0.98rem;
+    line-height: 1.6;
+
+    p {
+      text-indent: 0 !important;
+      text-align: left !important;
+      margin: 0.3rem 0 !important;
+    }
+
+    ul,
+    ol {
+      margin: 0.2rem 0 !important;
+      padding-left: 1.25rem;
+    }
+
+    li {
+      margin-bottom: 0.32rem;
+      line-height: 1.55;
+
+      p {
+        margin: 0 !important;
+      }
+    }
+
+    &.line-catalog p,
+    .line-catalog p {
+      font-family: var(--book-font-mono, monospace);
+      font-size: 0.86rem;
+      line-height: 1.75;
+      color: var(--book-text, #d6cfc5);
+    }
+  }
+}
+
+.book-reading-pane .book-content .note-item {
+  margin: 0.65rem 0;
+  padding: 0.35rem 0.85rem;
+  border-left: 2px solid var(--book-border-dark, #544f47);
+  background-color: rgba(255, 255, 255, 0.015);
+  border-radius: 0 4px 4px 0;
+
+  p {
+    text-indent: 0 !important;
+    text-align: left !important;
+    margin: 0.25rem 0 !important;
+  }
+}
+
