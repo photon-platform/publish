@@ -91,11 +91,17 @@ def format_geom_tooltip(target: str) -> str:
 def format_geom_display_html(display: str) -> str:
     """Format :g: display text as HTML, stripping any outer $...$ and converting _sub / ^sup."""
     text = (display or "").strip()
-    if len(text) >= 2 and text.startswith("$") and text.endswith("$"):
+    if len(display) >= 2 and text.startswith("$") and text.endswith("$"):
         text = text[1:-1].strip()
     esc = html.escape(text, quote=False)
-    esc = re.sub(r"_([A-Za-z0-9]+)", r"<sub>\1</sub>", esc)
-    esc = re.sub(r"\^([A-Za-z0-9]+)", r"<sup>\1</sup>", esc)
+    esc = re.sub(r"_\{([^}]+)\}", r"<sub>\1</sub>", esc)
+    esc = re.sub(r"\^\{([^}]+)\}", r"<sup>\1</sup>", esc)
+    esc = re.sub(
+        r"_(\d+|[a-z]+|[A-Z])", r"<sub>\1</sub>", esc
+    )
+    esc = re.sub(
+        r"\^(\d+|[a-z]+|[A-Z])", r"<sup>\1</sup>", esc
+    )
     return esc
 
 
