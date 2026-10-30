@@ -3,7 +3,7 @@ name: Build and Deploy Sphinx
 on:
   push:
     branches:
-      - main  
+      - main
 
 jobs:
   build-and-deploy:
@@ -17,7 +17,7 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y graphviz
 
     - name: photon-platform/action-deploy-sphinx-gh-pages
-      uses: photon-platform/action-deploy-sphinx-gh-pages@v18
+      uses: photon-platform/action-deploy-sphinx-gh-pages@v20
       with:
         modules_repo_urls: 'https://github.com/photon-platform/publish.git'
-        python_version: '3.13'  
+        python_version: '3.13'
