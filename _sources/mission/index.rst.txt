@@ -1,12 +1,14 @@
 :navigation: header
-:order: 1
+:order: 10
 
+=======
 mission
 =======
 
-    provide tools to model classical geometric constructions
+``photon-platform.publish`` provides a unified scholarly publishing framework built on Sphinx, Jinja2, and SCSS. Its mission is to transform structured ReStructuredText, symbolic mathematics, interactive geometric diagrams, and multi-track historical/computational books into cohesive, high-craft digital editions.
 
-.. collection:: 
-    :title: Goals
-    :type: goal
-    :sort: order
+goals
+-----
+
+.. collection::
+   :sort: order

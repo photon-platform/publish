@@ -1,16 +1,10 @@
 :navigation: footer
-:order: 1
+:order: 10
 
-.. _about:
-
-
-About
+=====
+about
 =====
 
-I have always been deeply interested in architecture and have had the privilege of practicing it in many different domains. 
+``photon-platform.publish`` is the core documentation and Book Codex publishing engine of the **PHOTON Platform**, created and maintained by **phi ARCHITECT**.
 
-
-Architecture is order. 
-
-.. It can be in the material world. 
-
+It unifies global Sphinx configuration (``global_conf.py``), the **Foundation** Classical Scriptorium theme, dynamic ``.. collection::`` and taxonomy generation, inline responsive SVG/image processing, and multi-track Book Codex rendering (``:layout: book``) across the **PHOTON** and **GEOMETOR** ecosystems.

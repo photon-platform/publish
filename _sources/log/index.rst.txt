@@ -1,8 +1,11 @@
 :navigation: header
-:order: 3
+:order: 30
 
+===
 log
 ===
+
+Chronological development and design log for ``photon-platform.publish``.
 
 .. collection::
    :type: log
