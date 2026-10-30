@@ -9,10 +9,13 @@
 {%- for p in nav_list %}
 {%-   set docname = p.docname %}
 {%-   set title = p.title %}
-{%-   set selected = 'aria-selected="true"' if pagename.startswith(docname) else '' %}
-{%-   set current = 'aria-current="true"' if docname == pagename else '' %}
+{%-   set nav_prefix = docname[:-5] if docname.endswith('/index') else (docname ~ '/') %}
+{%-   set is_current = (pagename == docname) %}
+{%-   set is_selected = is_current or (docname != master_doc and pagename.startswith(nav_prefix)) or (book_root is defined and book_root == docname) %}
+{%-   set selected = 'aria-selected="true"' if is_selected else '' %}
+{%-   set current = 'aria-current="page"' if is_current else '' %}
         <li>
-          <a href="{{ pathto(docname) }}" {{ selected }} {{ current }}>{{ title }}</a>
+          <a href="{{ pathto(docname) }}"{% if is_selected %} class="is-active"{% endif %} {{ selected }} {{ current }}>{{ title }}</a>
         </li>
 {%- endfor %}
       </ul>

@@ -1,7 +1,13 @@
     <div class="footer-nav">
       <ul>
 {%- for p in footer_nav_list %}
-        <li><a href="{{ pathto(p.docname) }}">{{ p.title }}</a></li>
+{%-   set docname = p.docname %}
+{%-   set nav_prefix = docname[:-5] if docname.endswith('/index') else (docname ~ '/') %}
+{%-   set is_current = (pagename == docname) %}
+{%-   set is_selected = is_current or (docname != master_doc and pagename.startswith(nav_prefix)) %}
+{%-   set selected = 'aria-selected="true"' if is_selected else '' %}
+{%-   set current = 'aria-current="page"' if is_current else '' %}
+        <li><a href="{{ pathto(docname) }}"{% if is_selected %} class="is-active"{% endif %} {{ selected }} {{ current }}>{{ p.title }}</a></li>
 {%- endfor %}
       </ul>
     </div>

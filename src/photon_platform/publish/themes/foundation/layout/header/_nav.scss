@@ -1,5 +1,4 @@
 nav {
-
   display: flex;
   flex-flow: column nowrap;
   align-items: stretch;
@@ -8,107 +7,107 @@ nav {
     align-self: stretch;
     cursor: pointer;
     display: flex;
-    // margin: var(--fitz-half);
     margin: 0;
-    // padding:  var(--fitz-half);
-    padding: var(--fitz);
-    justify-content: flex-end; // Right align the hamburger
-    font-size: 0; // Hide text
+    padding: 0.4rem 0.65rem;
+    justify-content: center;
+    align-items: center;
+    font-size: 0;
+    color: var(--book-text-muted);
+    background: var(--book-surface);
+    border: 1px solid var(--book-border);
+    border-radius: 4px;
 
     &::after {
       display: block;
-      text-align: right;
-      font-size: 1rem; // Restore font size for icon
+      text-align: center;
+      font-size: 1rem;
       font-family: var(--font-icon);
-      content: '≡'; // Hamburger icon
+      content: '≡';
     }
 
     &:hover {
-      background: var(--color-key-lighter);
+      color: var(--book-link-hover);
+      background: var(--book-surface-alt);
+      border-color: var(--book-border-dark);
     }
   }
 
-  input {
-    display: none;
+  input,
+  input[type="checkbox"] {
+    display: none !important;
 
     &:checked {
-      &~label::after {
-        content: 'x'; // Close icon
+      & ~ label::after {
+        content: '×';
       }
 
-      &~ul {
-        display: block;
+      & ~ ul {
+        display: flex;
       }
     }
   }
 
   ul {
     display: none;
-    transform-origin: top;
+    flex-direction: column;
+    gap: 0.22rem;
     width: 100%;
-    margin: 0;
-    list-style: none;
+    margin: 0.4rem 0 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
 
     li {
-      margin: 0;
-      padding: 0;
-
-      +li {
-      }
+      margin: 0 !important;
+      padding: 0 !important;
+      list-style: none !important;
     }
   }
 
   a {
     display: flex;
-    --offset: 1em;
-    padding: var(--fitz);
-    flex-basis: 100%;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0.38rem 0.7rem;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    font-family: var(--book-font-display);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.3;
+    color: var(--book-text-muted);
+    text-decoration: none !important;
+    transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
 
-    &::before,
-    &::after {
-      padding-top: .1em;
-      content: ' ';
-      display: inline-block;
-      width: var(--offset);
-      flex: 0 0 var(--offset);
-      font-family: var(--font-icon);
-      text-align: center;
-
+    &:hover {
+      color: var(--book-link-hover);
+      background-color: var(--book-surface);
+      border-color: var(--book-border-light);
+      text-decoration: none !important;
     }
 
-    &[aria-selected="true"] {
-      font-weight: 700;
-
-      &::before {
-        content: '>';
-      }
-
-      &::after {
-        content: '<';
-      }
-    }
-
-    &[aria-current="true"] {
-      font-weight: 700;
+    &[aria-selected="true"],
+    &[aria-current="page"],
+    &[aria-current="true"],
+    &.is-active {
+      color: var(--book-text);
+      font-weight: 600;
+      background-color: var(--book-surface);
+      border: 1px solid var(--book-border);
+      border-left: 3px solid var(--geom-accent, #e8b85a);
+      padding-left: calc(0.7rem - 2px);
     }
   }
 
-  // Reverting to Media Query because Nav width depends on content, causing CQ loop/failure.
   @media (min-width: 48em) {
     label {
-      display: none; // Hide toggle on desktop
-    }
-
-    input {
-      &:checked {
-        &~ul {
-          display: block; 
-        }
-      }
+      display: none !important;
     }
 
     ul {
-      display: block; // Always show menu on desktop
+      display: flex;
+      margin-top: 0 !important;
     }
   }
 }

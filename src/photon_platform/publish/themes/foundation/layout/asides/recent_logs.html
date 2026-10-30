@@ -1,9 +1,10 @@
 {%- if recent_logs %}
-    <aside>
+    <aside class="aside-recent-logs">
       <h3>Recent Logs</h3>
       <ul>
 {%-     for item in recent_logs %}
-        <li><a href="{{ pathto(item.docname) }}">{{ item.title }}</a></li>
+{%-       set is_active = (pagename == item.docname) %}
+        <li><a href="{{ pathto(item.docname) }}"{% if is_active %} class="is-active" aria-current="page" aria-selected="true"{% endif %}>{{ item.title }}</a></li>
 {%-     endfor %}
       </ul>
     </aside>

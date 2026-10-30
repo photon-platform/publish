@@ -1,109 +1,98 @@
   > header {
-    grid-area: header; 
+    grid-area: header;
     container-type: inline-size;
     container-name: header;
 
     display: flex;
     flex-flow: column nowrap;
-    gap: var(--fitz);
-    justify-content: center;
-    align-items: center;
+    gap: 0.75rem;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 1.15rem 0.9rem 0.75rem;
+    background-color: var(--sidebar-bg);
+    border-bottom: 1px solid var(--book-border-light);
 
-    .logo {
+    @media (min-width: 48em) and (orientation: landscape) {
+      border-bottom: none;
+    }
+
+    > .logo {
       display: flex;
       flex-flow: column nowrap;
       align-items: center;
-      gap: var(--fitz-half);
+      gap: 0.35rem;
       text-align: center;
-    }
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--book-border);
 
-    .org-repo {
-      font-size: 1.2rem;
-      font-weight: bold;
-      display: flex;
-      gap: var(--fitz-half);
-      justify-content: center;
-    }
-
-    @container header (min-width: 40em) {
-      flex-flow: row nowrap;
-      justify-content: space-between;
-
-      .logo {
-        flex-flow: row nowrap;
-        text-align: left;
-        gap: 1rem;
-      }
-    }
-  }
-
-
-  > header {
-    display: flex;
-    flex-flow: row wrap;
-    
-    > .logo {
-      flex: 1;
       a {
-        display: block;
-        padding: var(--fitz);
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0.2rem;
+        text-decoration: none;
 
         img {
-          height: 3em;
-          margin: .5em auto;
+          height: 3.1rem;
+          width: auto;
+          margin: 0 auto;
+          border-radius: 4px;
+          transition: transform 0.15s ease, opacity 0.15s ease;
+        }
+
+        &:hover img {
+          opacity: 0.92;
         }
 
         h1 {
-          font-size: 1.1em;
-          letter-spacing: .1em;
-          padding-left: .5em;
+          font-family: var(--book-font-display);
+          font-size: 1.05rem;
+          font-weight: 600;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: var(--book-text);
           text-align: center;
+          margin: 0;
+        }
+      }
+
+      .org-repo {
+        font-family: var(--book-font-display);
+        font-size: 0.98rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        color: var(--book-text);
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        justify-content: center;
+
+        .org {
+          color: var(--book-text-muted);
+          font-weight: 500;
+        }
+
+        .repo {
+          color: var(--book-text);
+          font-weight: 600;
         }
       }
     }
 
     > nav {
-      order: 3;
-      flex: 1 100%;
+      order: 2;
+      width: 100%;
       display: flex;
-      flex-flow: row wrap;
-      justify-content: center;
+      flex-flow: column nowrap;
+      align-items: stretch;
 
       h1 {
         display: none;
       }
-
-      label::after {
-        // display: block;
-        width: 100%;
-        text-align: center;
-      }
-
-      ul {
-        // display: flex;
-        flex-flow: row wrap;
-        // li {
-          // flex-basis: auto;
-        // }
-      }
-
-      a {
-        // padding: .25em 1em;
-        // margin-left: .1em;
-        letter-spacing: .1em;
-        text-transform: uppercase;
-        justify-content: center;
-      }
     }
 
     > .motto {
-      flex: 1;
-      padding: var(--fitz);
-
-      p {
-        font-size: .8em;
-        text-align: center;
-      }
+      display: none;
     }
   }
 

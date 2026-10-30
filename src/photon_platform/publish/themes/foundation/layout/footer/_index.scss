@@ -2,29 +2,81 @@
   > footer {
     grid-area: footer;
     display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-    align-items: center;
-    // width: 100%;
-    padding-top: 1em;
-    border-top: 1px solid var(--border-color);
-    margin-top: 1em;
-    padding: 1em 0;
-    text-align: center;
-    font-size: 0.9em;
-    color: var(--link-hover-color);
-    text-decoration: none;
-    border-color: var(--link-hover-color);
-    
-    // margin: 2rem 0;             /* top and bottom margin */
-    padding: .5rem 1rem;       /* padding inside the footer */
-    
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-flow: column nowrap;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding: 0.85rem 0.9rem 1.15rem;
+    border-top: 1px solid var(--book-border);
+    background-color: var(--sidebar-bg);
+    font-family: var(--book-font-serif);
+    font-size: 0.85rem;
+    color: var(--book-text-dim);
 
     hr {
       display: none;
     }
 
+    .footer-nav {
+      width: 100%;
+
+      ul {
+        list-style: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex;
+        flex-direction: column;
+        gap: 0.16rem;
+
+        li {
+          margin: 0 !important;
+          padding: 0 !important;
+          list-style: none !important;
+
+          a {
+            display: flex;
+            align-items: center;
+            padding: 0.3rem 0.65rem;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            font-family: var(--book-font-display);
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--book-text-muted);
+            text-decoration: none !important;
+            transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+
+            &:hover {
+              color: var(--book-link-hover);
+              background-color: var(--book-surface);
+              border-color: var(--book-border-light);
+              text-decoration: none !important;
+            }
+
+            &[aria-selected="true"],
+            &[aria-current="page"],
+            &[aria-current="true"],
+            &.is-active {
+              color: var(--book-text);
+              font-weight: 600;
+              background-color: var(--book-surface);
+              border: 1px solid var(--book-border);
+              border-left: 3px solid var(--geom-accent, #e8b85a);
+              padding-left: calc(0.65rem - 2px);
+            }
+          }
+        }
+      }
+    }
+
+    div[role="contentinfo"] {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--book-text-dim);
+
+      p {
+        margin: 0;
+      }
+    }
   }

@@ -3,7 +3,9 @@
       <h3>Tags</h3>
       <ul>
 {%-     for tag in tags %}
-        <li><a href="{{ pathto('tags/' ~ tag) }}">{{ tag }}</a></li>
+{%-       set tag_doc = 'tags/' ~ tag %}
+{%-       set is_active = (pagename == tag_doc) %}
+        <li><a href="{{ pathto(tag_doc) }}"{% if is_active %} class="is-active" aria-current="page" aria-selected="true"{% endif %}>{{ tag }}</a></li>
 {%-     endfor %}
       </ul>
     </aside>

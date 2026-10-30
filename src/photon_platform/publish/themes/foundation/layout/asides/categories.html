@@ -3,7 +3,9 @@
       <h3>Categories</h3>
       <ul>
 {%-     for category in categories %}
-        <li><a href="{{ pathto('categories/' ~ category) }}">{{ category }}</a></li>
+{%-       set cat_doc = 'categories/' ~ category %}
+{%-       set is_active = (pagename == cat_doc) %}
+        <li><a href="{{ pathto(cat_doc) }}"{% if is_active %} class="is-active" aria-current="page" aria-selected="true"{% endif %}>{{ category }}</a></li>
 {%-     endfor %}
       </ul>
     </aside>

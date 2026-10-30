@@ -17,6 +17,8 @@ Attributes
    photon_platform.publish.global_conf.html_context
    photon_platform.publish.global_conf.year
    photon_platform.publish.global_conf.extensions
+   photon_platform.publish.global_conf.ogp_social_cards
+   photon_platform.publish.global_conf.graphviz_output_format
    photon_platform.publish.global_conf.current_dir
    photon_platform.publish.global_conf.project_root
    photon_platform.publish.global_conf.pyproject_path
@@ -75,6 +77,12 @@ Module Contents
 
 .. py:data:: extensions
    :value: ['sphinx.ext.intersphinx', 'sphinx.ext.githubpages', 'sphinx.ext.graphviz',...
+
+
+.. py:data:: ogp_social_cards
+
+.. py:data:: graphviz_output_format
+   :value: 'svg'
 
 
 .. py:data:: current_dir

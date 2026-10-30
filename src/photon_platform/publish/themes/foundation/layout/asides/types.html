@@ -3,7 +3,9 @@
       <h3>Types</h3>
       <ul>
 {%-     for type in types %}
-        <li><a href="{{ pathto('types/' ~ type) }}">{{ type }}</a></li>
+{%-       set type_doc = 'types/' ~ type %}
+{%-       set is_active = (pagename == type_doc) %}
+        <li><a href="{{ pathto(type_doc) }}"{% if is_active %} class="is-active" aria-current="page" aria-selected="true"{% endif %}>{{ type }}</a></li>
 {%-     endfor %}
       </ul>
     </aside>

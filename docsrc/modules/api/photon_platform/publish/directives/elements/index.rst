@@ -14,6 +14,7 @@ Attributes
 
 .. autoapisummary::
 
+   photon_platform.publish.directives.elements.VALID_BOOKS
    photon_platform.publish.directives.elements.FIXED_SECTION_LEVELS
 
 
@@ -23,22 +24,28 @@ Classes
 .. autoapisummary::
 
    photon_platform.publish.directives.elements.enunciation_node
+   photon_platform.publish.directives.elements.signature_node
    photon_platform.publish.directives.elements.assertion_node
    photon_platform.publish.directives.elements.subclause_node
+   photon_platform.publish.directives.elements.step_node
    photon_platform.publish.directives.elements.qed_node
    photon_platform.publish.directives.elements.porism_node
    photon_platform.publish.directives.elements.lemma_node
    photon_platform.publish.directives.elements.scholium_node
    photon_platform.publish.directives.elements.folio_node
+   photon_platform.publish.directives.elements.collapse_node
    photon_platform.publish.directives.elements.DualModeDirective
    photon_platform.publish.directives.elements.EnunciationDirective
    photon_platform.publish.directives.elements.AssertionDirective
    photon_platform.publish.directives.elements.SubclauseDirective
+   photon_platform.publish.directives.elements.StepDirective
    photon_platform.publish.directives.elements.QedDirective
    photon_platform.publish.directives.elements.PorismDirective
    photon_platform.publish.directives.elements.LemmaDirective
    photon_platform.publish.directives.elements.ScholiumDirective
    photon_platform.publish.directives.elements.FolioDirective
+   photon_platform.publish.directives.elements.SignatureDirective
+   photon_platform.publish.directives.elements.CollapseDirective
 
 
 Functions
@@ -46,15 +53,21 @@ Functions
 
 .. autoapisummary::
 
+   photon_platform.publish.directives.elements.infer_justification_target
    photon_platform.publish.directives.elements.parse_justification_arg
+   photon_platform.publish.directives.elements.truncate_enunciation
    photon_platform.publish.directives.elements.format_justification_html
    photon_platform.publish.directives.elements.record_dependency
    photon_platform.publish.directives.elements.visit_enunciation_node
    photon_platform.publish.directives.elements.depart_enunciation_node
+   photon_platform.publish.directives.elements.visit_signature_node
+   photon_platform.publish.directives.elements.depart_signature_node
    photon_platform.publish.directives.elements.visit_assertion_node
    photon_platform.publish.directives.elements.depart_assertion_node
    photon_platform.publish.directives.elements.visit_subclause_node
    photon_platform.publish.directives.elements.depart_subclause_node
+   photon_platform.publish.directives.elements.visit_step_node
+   photon_platform.publish.directives.elements.depart_step_node
    photon_platform.publish.directives.elements.visit_qed_node
    photon_platform.publish.directives.elements.depart_qed_node
    photon_platform.publish.directives.elements.visit_porism_node
@@ -65,7 +78,10 @@ Functions
    photon_platform.publish.directives.elements.depart_scholium_node
    photon_platform.publish.directives.elements.visit_folio_node
    photon_platform.publish.directives.elements.depart_folio_node
+   photon_platform.publish.directives.elements.visit_collapse_node
+   photon_platform.publish.directives.elements.depart_collapse_node
    photon_platform.publish.directives.elements.install_fixed_section_levels
+   photon_platform.publish.directives.elements.protect_rst_math_segments
    photon_platform.publish.directives.elements.register_standalone_directives
    photon_platform.publish.directives.elements.setup
 
@@ -73,19 +89,31 @@ Functions
 Module Contents
 ---------------
 
-.. py:function:: parse_justification_arg(raw_arg: str) -> Tuple[str, Optional[str]]
+.. py:data:: VALID_BOOKS
+
+.. py:function:: infer_justification_target(display: str, current_book: Optional[str] = None) -> Optional[str]
+
+   Infer canonical target ID(s) from justification display text when <target> is omitted.
+
+
+.. py:function:: parse_justification_arg(raw_arg: str, current_book: Optional[str] = None) -> Tuple[str, Optional[str]]
 
    Parse a justification string into (display_text, target_id).
 
    Supports forms:
    - ``[Def. 15] <I.def.15>`` -> ``("[Def. 15]", "I.def.15")``
-   - ``[Def. 15]`` -> ``("[Def. 15]", None)``
+   - ``[Def. 15]`` -> ``("[Def. 15]", "I.def.15")``
    - ``I.def.15`` -> ``("[I.def.15]", "I.def.15")``
 
 
-.. py:function:: format_justification_html(display: str, target: Optional[str] = None) -> str
+.. py:function:: truncate_enunciation(text: str, max_chars: int = 180) -> str
 
-   Render a <span class="justification"> HTML fragment.
+   Collapse whitespace and truncate a long enunciation cleanly at a word boundary.
+
+
+.. py:function:: format_justification_html(display: str, target: Optional[str] = None, translator: Any = None) -> str
+
+   Render an <a class="justification"> or <span class="justification"> HTML fragment.
 
 
 .. py:function:: record_dependency(env: Any, target: Optional[str]) -> None
@@ -99,6 +127,14 @@ Module Contents
 
 
    AST node for an enunciation (protasis) block.
+
+
+.. py:class:: signature_node(rawsource: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
+
+
+   AST node for a formal proposition/element signature contract block.
 
 
 .. py:class:: assertion_node(rawsource: str = '', *children, **attributes: Any)
@@ -115,6 +151,14 @@ Module Contents
 
 
    AST node for an indented proof sub-clause with optional justification.
+
+
+.. py:class:: step_node(rawsource: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
+
+
+   AST node for a structured pseudocode construction/proof step.
 
 
 .. py:class:: qed_node(rawsource: str = '', *children, **attributes: Any)
@@ -157,6 +201,14 @@ Module Contents
    AST node for a diplomatic folio transition milestone.
 
 
+.. py:class:: collapse_node(rawsource: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
+
+
+   AST node for a collapsible <details> section with optional count badge.
+
+
 .. py:function:: visit_enunciation_node(self: Any, node: docutils.nodes.Element) -> None
 
    HTML visitor for enunciation_node.
@@ -165,6 +217,16 @@ Module Contents
 .. py:function:: depart_enunciation_node(self: Any, node: docutils.nodes.Element) -> None
 
    HTML departure visitor for enunciation_node.
+
+
+.. py:function:: visit_signature_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for signature_node.
+
+
+.. py:function:: depart_signature_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for signature_node.
 
 
 .. py:function:: visit_assertion_node(self: Any, node: docutils.nodes.Element) -> None
@@ -185,6 +247,16 @@ Module Contents
 .. py:function:: depart_subclause_node(self: Any, node: docutils.nodes.Element) -> None
 
    HTML departure visitor for subclause_node.
+
+
+.. py:function:: visit_step_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for step_node.
+
+
+.. py:function:: depart_step_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for step_node.
 
 
 .. py:function:: visit_qed_node(self: Any, node: docutils.nodes.Element) -> None
@@ -353,6 +425,53 @@ Module Contents
    .. py:attribute:: node_class
 
 
+.. py:class:: StepDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`DualModeDirective`
+
+
+   Directive for structured pseudocode construction/proof steps: ``.. step:: [kind] [optional_justification]``.
+
+
+   .. py:attribute:: has_content
+      :value: True
+
+
+      May the directive have content?
+
+
+   .. py:attribute:: required_arguments
+      :value: 0
+
+
+      Number of required directive arguments.
+
+
+   .. py:attribute:: optional_arguments
+      :value: 1
+
+
+      Number of optional arguments after the required arguments.
+
+
+   .. py:attribute:: final_argument_whitespace
+      :value: True
+
+
+      May the final argument contain whitespace?
+
+
+   .. py:attribute:: option_spec
+
+      Mapping of option names to validator functions.
+
+
+   .. py:method:: run() -> List[docutils.nodes.Node]
+
+      Parse pseudocode step kind, optional justification, and body.
+
+
+
 .. py:class:: QedDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
 
    Bases: :py:obj:`DualModeDirective`
@@ -463,7 +582,7 @@ Module Contents
 
 
    .. py:attribute:: final_argument_whitespace
-      :value: False
+      :value: True
 
 
       May the final argument contain whitespace?
@@ -480,12 +599,121 @@ Module Contents
 
 
 
+.. py:class:: SignatureDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`DualModeDirective`
+
+
+   Directive for formal proposition/element signature contracts: ``.. signature:: [optional_kind]``.
+
+
+   .. py:attribute:: has_content
+      :value: True
+
+
+      May the directive have content?
+
+
+   .. py:attribute:: required_arguments
+      :value: 0
+
+
+      Number of required directive arguments.
+
+
+   .. py:attribute:: optional_arguments
+      :value: 1
+
+
+      Number of optional arguments after the required arguments.
+
+
+   .. py:attribute:: final_argument_whitespace
+      :value: True
+
+
+      May the final argument contain whitespace?
+
+
+   .. py:attribute:: option_spec
+
+      Mapping of option names to validator functions.
+
+
+   .. py:method:: run() -> List[docutils.nodes.Node]
+
+      Parse formal signature contract block.
+
+
+
+.. py:function:: visit_collapse_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for collapse_node.
+
+
+.. py:function:: depart_collapse_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for collapse_node.
+
+
+.. py:class:: CollapseDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`DualModeDirective`
+
+
+   Directive for collapsible <details> apparatus blocks: ``.. collapse:: <title>``.
+
+
+   .. py:attribute:: has_content
+      :value: True
+
+
+      May the directive have content?
+
+
+   .. py:attribute:: required_arguments
+      :value: 0
+
+
+      Number of required directive arguments.
+
+
+   .. py:attribute:: optional_arguments
+      :value: 1
+
+
+      Number of optional arguments after the required arguments.
+
+
+   .. py:attribute:: final_argument_whitespace
+      :value: True
+
+
+      May the final argument contain whitespace?
+
+
+   .. py:attribute:: option_spec
+
+      Mapping of option names to validator functions.
+
+
+   .. py:method:: run() -> List[docutils.nodes.Node]
+
+      Parse collapsible <details> section.
+
+
+
 .. py:data:: FIXED_SECTION_LEVELS
    :type:  Dict[str, int]
 
 .. py:function:: install_fixed_section_levels(custom_levels: Optional[Dict[str, int]] = None) -> None
 
    Install fixed underline-character to heading-level mapping into Docutils and Sphinx.
+
+
+.. py:function:: protect_rst_math_segments(rst_body: str, start_counter: int = 0) -> Tuple[str, Dict[str, str], int]
+
+   Protect inline $...$ and display $$...$$ math outside of RST roles/backticks from Docutils escaping.
 
 
 .. py:function:: register_standalone_directives() -> None

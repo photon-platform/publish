@@ -20,6 +20,8 @@ Classes
    photon_platform.publish.roles.geometry.cite_ref_node
    photon_platform.publish.roles.geometry.term_ref_node
    photon_platform.publish.roles.geometry.person_ref_node
+   photon_platform.publish.roles.geometry.eq_ref_node
+   photon_platform.publish.roles.geometry.fn_ref_node
 
 
 Functions
@@ -29,6 +31,8 @@ Functions
 
    photon_platform.publish.roles.geometry.escape_data_ref_attr
    photon_platform.publish.roles.geometry.parse_geom_role_text
+   photon_platform.publish.roles.geometry.format_geom_tooltip
+   photon_platform.publish.roles.geometry.format_geom_display_html
    photon_platform.publish.roles.geometry.visit_geom_ref_node
    photon_platform.publish.roles.geometry.depart_geom_ref_node
    photon_platform.publish.roles.geometry.visit_just_ref_node
@@ -49,6 +53,13 @@ Functions
    photon_platform.publish.roles.geometry.term_role
    photon_platform.publish.roles.geometry.person_role
    photon_platform.publish.roles.geometry.line_role
+   photon_platform.publish.roles.geometry.parse_eq_role_text
+   photon_platform.publish.roles.geometry.visit_eq_ref_node
+   photon_platform.publish.roles.geometry.depart_eq_ref_node
+   photon_platform.publish.roles.geometry.eq_role
+   photon_platform.publish.roles.geometry.visit_fn_ref_node
+   photon_platform.publish.roles.geometry.depart_fn_ref_node
+   photon_platform.publish.roles.geometry.fn_role
    photon_platform.publish.roles.geometry.register_standalone_roles
    photon_platform.publish.roles.geometry.setup
 
@@ -66,10 +77,10 @@ Module Contents
    Parse :g: role content ``display <target>`` or bare ``target`` into ``(display, target)``.
 
    Handles targets that themselves contain angle brackets, such as:
-   - ``$AB$ <0255.g1:/ A B />`` -> ``("$AB$", "0255.g1:/ A B /")``
-   - ``$ABC$ <0255.g1:< A B C >>`` -> ``("$ABC$", "0255.g1:< A B C >")``
-   - ``$A$ <0309.g1:< K A G )>`` -> ``("$A$", "0309.g1:< K A G )")``
-   - ``0255.g1:/ A B /`` -> ``("$AB$", "0255.g1:/ A B /")``
+   - ``AB <0255.g1:/ A B />`` -> ``("AB", "0255.g1:/ A B /")``
+   - ``ABC <0255.g1:< A B C >>`` -> ``("ABC", "0255.g1:< A B C >")``
+   - ``A <0309.g1:< K A G )>`` -> ``("A", "0309.g1:< K A G )")``
+   - ``0255.g1:/ A B /`` -> ``("AB", "0255.g1:/ A B /")``
 
 
 .. py:class:: geom_ref_node(rawsource: str = '', text: str = '', *children, **attributes: Any)
@@ -94,6 +105,16 @@ Module Contents
 
 
    Inline AST node for diplomatic line numbers (:line:).
+
+
+.. py:function:: format_geom_tooltip(target: str) -> str
+
+   Strip <folio>.<gid>: prefixes from a :g: target string to return the underlying element ID(s).
+
+
+.. py:function:: format_geom_display_html(display: str) -> str
+
+   Format :g: display text as HTML, stripping any outer $...$ and converting _sub / ^sup.
 
 
 .. py:function:: visit_geom_ref_node(self: Any, node: docutils.nodes.Element) -> None
@@ -218,6 +239,61 @@ Module Contents
 .. py:function:: line_role(name: str, rawtext: str, text: str, lineno: int, inliner: Any, options: Optional[Dict[str, Any]] = None, content: Optional[List[str]] = None) -> Tuple[List[docutils.nodes.Node], List[docutils.nodes.system_message]]
 
    Role `:line:` for diplomatic line numbers.
+
+
+.. py:function:: parse_eq_role_text(raw_content: str) -> Tuple[str, str]
+
+   Parse :eq: role content ``display <spec>`` into ``(display, spec)``.
+
+   Handles specs that themselves contain angle brackets (such as ``< A B C >``), e.g.:
+   - ``equal <0255.g1:[ A C ] = 0255.g1:[ A B ]>`` -> ``("equal", "0255.g1:[ A C ] = 0255.g1:[ A B ]")``
+   - ``equal <0265.g1:< A B C > = 0265.g1:< A C B >>`` -> ``("equal", "0265.g1:< A B C > = 0265.g1:< A C B >")``
+
+
+.. py:class:: eq_ref_node(rawsource: str = '', text: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.Inline`, :py:obj:`docutils.nodes.TextElement`
+
+
+   Inline AST node for equality assertion references (:eq:).
+
+
+.. py:function:: visit_eq_ref_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for eq_ref_node.
+
+
+.. py:function:: depart_eq_ref_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for eq_ref_node.
+
+
+.. py:function:: eq_role(name: str, rawtext: str, text: str, lineno: int, inliner: Any, options: Optional[Dict[str, Any]] = None, content: Optional[List[str]] = None) -> Tuple[List[docutils.nodes.Node], List[docutils.nodes.system_message]]
+
+   Role `:eq:` for interactive equality references wrapping 'equal' (or 'equilateral', etc.).
+
+
+.. py:class:: fn_ref_node(rawsource: str = '', text: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.Inline`, :py:obj:`docutils.nodes.TextElement`
+
+
+   Inline AST node for geometric construction/theorem function references (:fn:).
+
+
+.. py:function:: visit_fn_ref_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for fn_ref_node.
+
+
+.. py:function:: depart_fn_ref_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for fn_ref_node.
+
+
+.. py:function:: fn_role(name: str, rawtext: str, text: str, lineno: int, inliner: Any, options: Optional[Dict[str, Any]] = None, content: Optional[List[str]] = None) -> Tuple[List[docutils.nodes.Node], List[docutils.nodes.system_message]]
+
+   Role `:fn:` for composable construction/rule function calls linking to G-nodes.
 
 
 .. py:function:: register_standalone_roles() -> None

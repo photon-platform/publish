@@ -2,6 +2,14 @@ changelog
 =========
 
 
+0.3.20
+======
+
+- style(foundation): Unify the Foundation theme palette, typography (``EB Garamond``, ``Fira Sans Condensed``, ``Fira Code``), and page templates (``article/index.html``, ``category_page.html``, ``tag_page.html``, ``type_page.html``, ``search.html``) with the Classical Scriptorium Book Codex aesthetic across all project pages.
+- style(asides,header,footer): Harmonize left and right sidebar panels and menu item styling with codex pill highlights, warm recessed surfaces, and gold active accents; hide the mobile toggle checkbox on desktop (`display: none !important`).
+- fix(nav): Highlight active section links in ``header/nav.html`` and ``footer/nav.html`` when viewing any child page underneath a section index (e.g., ``heath/index`` -> ``heath/...``) or book root, and mark active taxonomy/log links in right-sidebar asides.
+
+
 0.3.19
 ======
 

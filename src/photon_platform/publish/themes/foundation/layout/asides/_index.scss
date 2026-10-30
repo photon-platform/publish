@@ -1,8 +1,73 @@
   > .asides {
     grid-area: asides;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 1.15rem;
+    padding: 1.15rem 0.9rem;
+    background-color: var(--sidebar-bg);
 
     > aside {
-      padding: var(--fitz);
-      margin: var(--fitz);
+      padding: 0;
+      margin: 0;
+
+      > h3 {
+        font-family: var(--book-font-display);
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--book-text-muted);
+        margin: 0 0 0.45rem 0;
+        padding-bottom: 0.35rem;
+        border-bottom: 1px solid var(--book-border);
+      }
+
+      > ul {
+        list-style: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+
+        > li {
+          margin: 0 !important;
+          padding: 0 !important;
+          list-style: none !important;
+
+          > a {
+            display: flex;
+            align-items: center;
+            padding: 0.28rem 0.65rem;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            font-family: var(--book-font-serif);
+            font-size: 0.94rem;
+            line-height: 1.32;
+            color: var(--book-text-muted);
+            text-decoration: none !important;
+            transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+
+            &:hover {
+              color: var(--book-link-hover);
+              background-color: var(--book-surface);
+              border-color: var(--book-border-light);
+              text-decoration: none !important;
+            }
+
+            &[aria-selected="true"],
+            &[aria-current="page"],
+            &[aria-current="true"],
+            &.is-active {
+              color: var(--book-text);
+              font-weight: 600;
+              background-color: var(--book-surface);
+              border: 1px solid var(--book-border);
+              border-left: 3px solid var(--geom-accent, #e8b85a);
+              padding-left: calc(0.65rem - 2px);
+            }
+          }
+        }
+      }
     }
   }

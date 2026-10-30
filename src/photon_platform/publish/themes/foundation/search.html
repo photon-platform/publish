@@ -9,8 +9,18 @@
 {% set display_vcs_links = False %}
 
 {% block body %}
-  <article class="search-page">
-    <div class="content body" role="main">
+  <article class="search-page book-layout book-reading-pane">
+    <header class="book-header">
+      <div class="book-header-bar">
+        <div class="book-header-identity">
+          <a class="book-portal-link" href="{{ pathto(master_doc) }}" title="Return to Project Portal">&larr; {{ repo_name|default(project)|default('Home') }}</a>
+          <span class="book-header-sep">/</span>
+          <span class="book-title-link">{{ _('Search') }}</span>
+        </div>
+      </div>
+    </header>
+    <div class="content body book-content" role="main">
+      <h1>{{ _('Search') }}</h1>
       <noscript>
         <div id="fallback" class="admonition warning">
           <p class="last">
@@ -39,6 +49,9 @@
         {#- This is where the JavaScript will inject the results -#}
       </div>
     </div>
+    <footer class="book-footer">
+      <div class="book-footer-ornament">&#10086;</div>
+    </footer>
   </article>
 {% endblock %}
 

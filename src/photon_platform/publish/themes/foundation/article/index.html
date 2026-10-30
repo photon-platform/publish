@@ -1,26 +1,47 @@
-    <article{% if is_book_page %} class="book-layout book-reading-pane"{% endif %}{% if folio %} data-folio="{{ folio }}"{% endif %}{% if canonical_id %} data-canonical-id="{{ canonical_id }}"{% endif %}>
-      <header{% if is_book_page %} class="book-header"{% endif %}>
-{%- if is_book_page %}
+    <article class="book-layout book-reading-pane"{% if folio %} data-folio="{{ folio }}"{% endif %}{% if canonical_id %} data-canonical-id="{{ canonical_id }}"{% endif %}>
+      <header class="book-header">
         <div class="book-header-bar">
           <div class="book-header-identity">
+{%- if pagename != master_doc %}
             <a class="book-portal-link" href="{{ pathto(master_doc) }}" title="Return to Project Portal">&larr; {{ repo_name|default(project)|default('Home') }}</a>
             <span class="book-header-sep">/</span>
-            <a class="book-title-link" href="{{ pathto(book_root|default(master_doc)) }}">{{ book_title|default(docstitle) }}</a>
-{%-   if book_subtitle %}
+{%- endif %}
+            <a class="book-title-link" href="{{ pathto(book_root|default(master_doc)) }}">{{ (book_title if is_book_page and book_title else project)|default(docstitle) }}</a>
+{%- if book_subtitle %}
             <span class="book-subtitle">&middot; {{ book_subtitle }}</span>
-{%-   endif %}
+{%- endif %}
           </div>
-{%-   if canonical_id or folio %}
-          <div class="book-header-badges">
-{%-     if canonical_id %}
+{%- set has_crumbs = (book_breadcrumbs is defined and book_breadcrumbs) or (parents is defined and parents) %}
+{%- if has_crumbs or canonical_id or original_id or folio %}
+          <div class="book-header-breadcrumbs book-header-badges" role="navigation" aria-label="Breadcrumbs">
+{%-   if book_breadcrumbs is defined and book_breadcrumbs %}
+{%-     for crumb in book_breadcrumbs %}
+            <a class="book-crumb-link" href="{{ pathto(crumb.docname) }}">{{ crumb.title }}</a>
+{%-       if not loop.last or canonical_id or original_id or folio %}
+            <span class="book-crumb-sep">/</span>
+{%-       endif %}
+{%-     endfor %}
+{%-   elif parents is defined and parents %}
+{%-     for doc in parents %}
+            <a class="book-crumb-link" href="{{ doc.link|e }}">{{ doc.title }}</a>
+{%-       if not loop.last or canonical_id or original_id or folio %}
+            <span class="book-crumb-sep">/</span>
+{%-       endif %}
+{%-     endfor %}
+{%-   endif %}
+{%-   if canonical_id %}
             <span class="book-badge canonical-badge">{{ canonical_id }}</span>
-{%-     endif %}
-{%-     if folio %}
-            <span class="book-badge folio-badge">Folio {{ folio }}{% if page %} | p. {{ page }}{% endif %}</span>
-{%-     endif %}
-          </div>
 {%-   endif %}
+{%-   if original_id and original_id != canonical_id %}
+            <span class="book-badge folio-badge">{{ original_id }}</span>
+{%-   endif %}
+{%-   if folio %}
+            <span class="book-badge folio-badge">Folio {{ folio }}{% if page %} | p. {{ page }}{% endif %}</span>
+{%-   endif %}
+          </div>
+{%- endif %}
         </div>
+{%- if prev or next or book_tracks %}
         <div class="book-header-nav">
           <div class="book-nav-prev">
 {%-   if prev %}
@@ -28,9 +49,6 @@
 {%-   endif %}
           </div>
           <div class="book-nav-center">
-{%-   if title and pagename != book_root %}
-            <div class="book-doc-title">{{ title|striptags }}</div>
-{%-   endif %}
 {%-   if book_tracks %}
             <nav class="book-tracks-nav" aria-label="Document Tracks">
 {%-     for tr in book_tracks %}
@@ -52,35 +70,30 @@
 {%-   endif %}
           </div>
         </div>
-{%- else %}
-{% include "article/_nav_breadcrumbs.html" %}
-{% include "article/_nav_prev_next.html" %}
 {%- endif %}
       </header>
-      <div class="content body{% if is_book_page %} book-content folio-book-page{% endif %}" role="main">
-        {{ body | indent(10) }}
+      <div class="content body book-content{% if is_book_page %} folio-book-page{% endif %}" role="main">
+        {{ body | indent(8) }}
       </div>
-      <footer{% if is_book_page %} class="book-footer"{% endif %}>
-{%- if is_book_page %}
+      <footer class="book-footer">
+{%- if meta and (meta.date or meta.category or meta.categories or meta.tags) %}
+{% include "article/_nav_meta.html" %}
+{%- endif %}
         <div class="book-footer-ornament">&#10086;</div>
         <div class="book-footer-nav">
           <div class="book-nav-prev">
-{%-   if prev %}
+{%- if prev %}
             <a class="book-nav-btn" href="{{ prev.link|e }}" title="{{ prev.title|striptags|e }}">&larr; <span class="nav-label">{{ prev.title|striptags }}</span></a>
-{%-   endif %}
+{%- endif %}
           </div>
           <div class="book-nav-center">
-            <a class="book-toc-link" href="{{ pathto(book_root|default(master_doc)) }}">{{ book_title|default(docstitle) }}</a>
+            <a class="book-toc-link" href="{{ pathto(book_root|default(master_doc)) }}">{{ (book_title if is_book_page and book_title else project)|default(docstitle) }}</a>
           </div>
           <div class="book-nav-next">
-{%-   if next %}
+{%- if next %}
             <a class="book-nav-btn" href="{{ next.link|e }}" title="{{ next.title|striptags|e }}"><span class="nav-label">{{ next.title|striptags }}</span> &rarr;</a>
-{%-   endif %}
+{%- endif %}
           </div>
         </div>
-{%- else %}
-{% include "article/_nav_meta.html" %}
-{% include "article/_nav_prev_next.html" %}
-{%- endif %}
       </footer>
     </article>

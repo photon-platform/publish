@@ -46,6 +46,7 @@
   }
 }
 
+:root,
 body.is-book-page,
 article.book-layout,
 article.book-reading-pane {
@@ -540,7 +541,7 @@ article.book-layout nav,
     margin-bottom: 0.4rem !important;
   }
 
-  /* Paragraphs & Classical 2em First-Line Indentation */
+  /* Paragraphs & Classical 2em First-Line Indentation (for folio-book-page) */
   p {
     text-indent: 2em;
     margin-top: 0 !important;
@@ -549,6 +550,12 @@ article.book-layout nav,
     text-justify: inter-word;
     hyphens: auto;
     -webkit-hyphens: auto;
+  }
+
+  &:not(.folio-book-page) p {
+    text-indent: 0 !important;
+    margin-bottom: 0.85em !important;
+    text-align: left;
   }
 
   /* Explicit resets where first-line paragraph indentation is NOT desired */

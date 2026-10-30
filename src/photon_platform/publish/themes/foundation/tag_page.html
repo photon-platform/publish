@@ -1,11 +1,25 @@
 {% extends "layout.html" %}
 {% block body %}
-<section class="collection tags" role="main">
-    <header>
-        <h1>{{ collection.title }}</h1>
+  <article class="book-layout book-reading-pane">
+    <header class="book-header">
+      <div class="book-header-bar">
+        <div class="book-header-identity">
+          <a class="book-portal-link" href="{{ pathto(master_doc) }}" title="Return to Project Portal">&larr; {{ repo_name|default(project)|default('Home') }}</a>
+          <span class="book-header-sep">/</span>
+          <span class="book-title-link">{{ collection.title }}</span>
+        </div>
+      </div>
     </header>
-    {% for article in collection.articles %}
-    {% include "article/excerpt.html" %}
-    {% endfor %}
-</section>
+    <div class="content body book-content" role="main">
+      <h1>{{ collection.title }}</h1>
+      <section class="collection tags">
+        {% for article in collection.articles %}
+        {% include "article/excerpt.html" %}
+        {% endfor %}
+      </section>
+    </div>
+    <footer class="book-footer">
+      <div class="book-footer-ornament">&#10086;</div>
+    </footer>
+  </article>
 {% endblock %}

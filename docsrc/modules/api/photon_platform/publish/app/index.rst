@@ -17,6 +17,7 @@ Functions
    photon_platform.publish.app.cli
    photon_platform.publish.app.build
    photon_platform.publish.app.test
+   photon_platform.publish.app.epub
    photon_platform.publish.app.folio
 
 
@@ -36,6 +37,11 @@ Module Contents
 .. py:function:: test(port)
 
    Builds and serves the documentation locally.
+
+
+.. py:function:: epub(book, output)
+
+   Builds an EPUB 3 edition for the book subtree in docsrc/.
 
 
 .. py:function:: folio(host, port, root, title, edition, debug)
