@@ -9,9 +9,9 @@
   <title>Taxonomy &amp; Indexes &mdash; PHOTON • publish</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../_static/css/styles.css?v=51fa7472" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/styles.css?v=3d8cc37d" />
   <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -20,7 +20,7 @@
   <link rel="icon" href="../../_static/favicon.ico" />
 </head>
 
-<body>
+<body class="book-theme-classical-serif">
   <header>
     <div class="logo">
       <a href="../../index.html">
@@ -40,7 +40,7 @@
           <a href="../../mission/index.html"  >mission</a>
         </li>
         <li>
-          <a href="../index.html"  >usage</a>
+          <a href="../index.html" class="is-active" aria-selected="true" >usage</a>
         </li>
         <li>
           <a href="../../modules/index.html"  >modules</a>
@@ -55,68 +55,78 @@
     </nav>
     <div class="motto"></div>
   </header>
-  <main>
-    <article>
-      <header>
-      <nav class="breadcrumbs">
-        <span><a href="../../index.html">Home</a></span>
-          <span>/</span>
-        <span><a href="../index.html">usage</a></span>
-      </nav>
-        <nav class="context">
-          <div class="prev">
-             <a href="structure.html" title="Structure &amp; Vision" >Prev</a>
+  <main class="book-main">
+    <article class="book-layout book-reading-pane">
+      <header class="book-header">
+        <div class="book-header-bar">
+          <div class="book-header-identity">
+            <a class="book-portal-link" href="../../index.html" title="Return to Project Portal">&larr; publish</a>
+            <span class="book-header-sep">/</span>
+            <a class="book-title-link" href="../../index.html">PHOTON • publish</a>
           </div>
-          <div class="next">
-            <a href="../../modules/index.html" title="modules" >Next</a>
+          <div class="book-header-breadcrumbs book-header-badges" role="navigation" aria-label="Breadcrumbs">
+            <a class="book-crumb-link" href="../index.html">usage</a>
           </div>
-        </nav>
+        </div>
+        <div class="book-header-nav">
+          <div class="book-nav-prev">
+            <a class="book-nav-btn" href="structure.html" title="Structure &amp; Vision">&larr; <span class="nav-label">Prev</span></a>
+          </div>
+          <div class="book-nav-center">
+          </div>
+          <div class="book-nav-next">
+            <a class="book-nav-btn" href="../../modules/index.html" title="modules"><span class="nav-label">Next</span> &rarr;</a>
+          </div>
+        </div>
       </header>
-      <div class="content body" role="main">
+      <div class="content body book-content" role="main">
         <section class="level-1" id="taxonomy-indexes">
-          <h1>Taxonomy &amp; Indexes<a class="headerlink" href="#taxonomy-indexes" title="Link to this heading">¶</a></h1>
-          <p>Publish automatically generates taxonomy pages for <strong>Tags</strong>, <strong>Categories</strong>, and <strong>Types</strong> based on the metadata in your RST files.</p>
-          <section class="level-2" id="adding-metadata">
-          <h2>Adding Metadata<a class="headerlink" href="#adding-metadata" title="Link to this heading">¶</a></h2>
-          <p>To add metadata to a page, use the standard RST field list at the top of the file:</p>
-          <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="nc">:tags:</span> sphinx, python, documentation
-          <span class="nc">:categories:</span> development, guide
-          <span class="nc">:type:</span> article
-          </pre></div>
-          </div>
-          </section>
-          <section class="level-2" id="auto-generated-pages">
-          <h2>Auto-Generated Pages<a class="headerlink" href="#auto-generated-pages" title="Link to this heading">¶</a></h2>
-          <p>Based on the metadata above, Publish will generate:</p>
-          <ul class="simple">
-          <li><p><strong>Tag Pages:</strong> <code class="docutils literal notranslate"><span class="pre">tags/sphinx.html</span></code>, <code class="docutils literal notranslate"><span class="pre">tags/python.html</span></code>, etc.</p></li>
-          <li><p><strong>Category Pages:</strong> <code class="docutils literal notranslate"><span class="pre">categories/development.html</span></code>, etc.</p></li>
-          <li><p><strong>Type Pages:</strong> <code class="docutils literal notranslate"><span class="pre">types/article.html</span></code></p></li>
-          </ul>
-          <p>These pages list all content associated with that term.</p>
-          </section>
-          <section class="level-2" id="standard-indexes">
-          <h2>Standard Indexes<a class="headerlink" href="#standard-indexes" title="Link to this heading">¶</a></h2>
-          <p>Sphinx also provides standard indexes:</p>
-          <ul class="simple">
-          <li><p><a class="reference internal" href="../../genindex.html"><span class="std std-ref">Index</span></a> (General Index)</p></li>
-          <li><p><a class="reference internal" href="../../py-modindex.html"><span class="std std-ref">Module Index</span></a> (Module Index)</p></li>
-          <li><p><a class="reference internal" href="../../search.html"><span class="std std-ref">Search Page</span></a> (Search Page)</p></li>
-          </ul>
-          </section>
-          </section>
+        <h1>Taxonomy &amp; Indexes<a class="headerlink" href="#taxonomy-indexes" title="Link to this heading">¶</a></h1>
+        <p>Publish automatically generates taxonomy pages for <strong>Tags</strong>, <strong>Categories</strong>, and <strong>Types</strong> based on the metadata in your RST files.</p>
+        <section class="level-2" id="adding-metadata">
+        <h2>Adding Metadata<a class="headerlink" href="#adding-metadata" title="Link to this heading">¶</a></h2>
+        <p>To add metadata to a page, use the standard RST field list at the top of the file:</p>
+        <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="nc">:tags:</span> sphinx, python, documentation
+        <span class="nc">:categories:</span> development, guide
+        <span class="nc">:type:</span> article
+        </pre></div>
+        </div>
+        </section>
+        <section class="level-2" id="auto-generated-pages">
+        <h2>Auto-Generated Pages<a class="headerlink" href="#auto-generated-pages" title="Link to this heading">¶</a></h2>
+        <p>Based on the metadata above, Publish will generate:</p>
+        <ul class="simple">
+        <li><p><strong>Tag Pages:</strong> <code class="docutils literal notranslate"><span class="pre">tags/sphinx.html</span></code>, <code class="docutils literal notranslate"><span class="pre">tags/python.html</span></code>, etc.</p></li>
+        <li><p><strong>Category Pages:</strong> <code class="docutils literal notranslate"><span class="pre">categories/development.html</span></code>, etc.</p></li>
+        <li><p><strong>Type Pages:</strong> <code class="docutils literal notranslate"><span class="pre">types/article.html</span></code></p></li>
+        </ul>
+        <p>These pages list all content associated with that term.</p>
+        </section>
+        <section class="level-2" id="standard-indexes">
+        <h2>Standard Indexes<a class="headerlink" href="#standard-indexes" title="Link to this heading">¶</a></h2>
+        <p>Sphinx also provides standard indexes:</p>
+        <ul class="simple">
+        <li><p><a class="reference internal" href="../../genindex.html"><span class="std std-ref">Index</span></a> (General Index)</p></li>
+        <li><p><a class="reference internal" href="../../py-modindex.html"><span class="std std-ref">Module Index</span></a> (Module Index)</p></li>
+        <li><p><a class="reference internal" href="../../search.html"><span class="std std-ref">Search Page</span></a> (Search Page)</p></li>
+        </ul>
+        </section>
+        </section>
 
       </div>
-      <footer>
-
-        <nav class="context">
-          <div class="prev">
-             <a href="structure.html" title="Structure &amp; Vision" >Prev</a>
+      <footer class="book-footer">
+        <div class="book-footer-ornament">&#10086;</div>
+        <div class="book-footer-nav">
+          <div class="book-nav-prev">
+            <a class="book-nav-btn" href="structure.html" title="Structure &amp; Vision">&larr; <span class="nav-label">Structure & Vision</span></a>
           </div>
-          <div class="next">
-            <a href="../../modules/index.html" title="modules" >Next</a>
+          <div class="book-nav-center">
+            <a class="book-toc-link" href="../../index.html">PHOTON • publish</a>
           </div>
-        </nav>
+          <div class="book-nav-next">
+            <a class="book-nav-btn" href="../../modules/index.html" title="modules"><span class="nav-label">modules</span> &rarr;</a>
+          </div>
+        </div>
       </footer>
     </article>
   </main>
@@ -139,7 +149,7 @@
         </form>
       </div>
     </aside>
-    <aside>
+    <aside class="aside-recent-logs">
       <h3>Recent Logs</h3>
       <ul>
         <li><a href="../../log/24.126-084512/index.html">add global_conf.py</a></li>
@@ -173,12 +183,12 @@
   <footer>
     <div class="footer-nav">
       <ul>
-        <li><a href="../../about.html">About</a></li>
-        <li><a href="../../connect.html">Connect</a></li>
-        <li><a href="../../changelog.html">Changelog</a></li>
-        <li><a href="../../glossary.html">Glossary</a></li>
-        <li><a href="../../todos/index.html">todos</a></li>
-        <li><a href="../../orphan.html">Orphan Page</a></li>
+        <li><a href="../../about.html"  >About</a></li>
+        <li><a href="../../connect.html"  >Connect</a></li>
+        <li><a href="../../changelog.html"  >Changelog</a></li>
+        <li><a href="../../glossary.html"  >Glossary</a></li>
+        <li><a href="../../todos/index.html"  >todos</a></li>
+        <li><a href="../../orphan.html"  >Orphan Page</a></li>
       </ul>
     </div>
     <hr />
@@ -191,7 +201,7 @@
 
   <script src="../../_static/jquery.js?v=5d32c60e"></script>
   <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-  <script src="../../_static/documentation_options.js?v=189d1112"></script>
+  <script src="../../_static/documentation_options.js?v=3226d6c8"></script>
   <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../_static/js/collection_controls.js?v=b6b5297a"></script>

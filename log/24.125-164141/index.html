@@ -9,9 +9,9 @@
   <title>introducing publish &mdash; PHOTON • publish</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../_static/css/styles.css?v=51fa7472" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/styles.css?v=3d8cc37d" />
   <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -20,7 +20,7 @@
   <link rel="icon" href="../../_static/favicon.ico" />
 </head>
 
-<body>
+<body class="book-theme-classical-serif">
   <header>
     <div class="logo">
       <a href="../../index.html">
@@ -46,7 +46,7 @@
           <a href="../../modules/index.html"  >modules</a>
         </li>
         <li>
-          <a href="../index.html"  >log</a>
+          <a href="../index.html" class="is-active" aria-selected="true" >log</a>
         </li>
         <li>
           <a href="../../refs/index.html"  >refs</a>
@@ -55,39 +55,46 @@
     </nav>
     <div class="motto"></div>
   </header>
-  <main>
-    <article>
-      <header>
-      <nav class="breadcrumbs">
-        <span><a href="../../index.html">Home</a></span>
-          <span>/</span>
-        <span><a href="../index.html">log</a></span>
-      </nav>
-        <nav class="context">
-          <div class="prev">
-             <a href="../24.126-084330/index.html" title="test" >Prev</a>
+  <main class="book-main">
+    <article class="book-layout book-reading-pane">
+      <header class="book-header">
+        <div class="book-header-bar">
+          <div class="book-header-identity">
+            <a class="book-portal-link" href="../../index.html" title="Return to Project Portal">&larr; publish</a>
+            <span class="book-header-sep">/</span>
+            <a class="book-title-link" href="../../index.html">PHOTON • publish</a>
           </div>
-          <div class="next">
-            <a href="../../refs/index.html" title="refs" >Next</a>
+          <div class="book-header-breadcrumbs book-header-badges" role="navigation" aria-label="Breadcrumbs">
+            <a class="book-crumb-link" href="../index.html">log</a>
           </div>
-        </nav>
+        </div>
+        <div class="book-header-nav">
+          <div class="book-nav-prev">
+            <a class="book-nav-btn" href="../24.126-084330/index.html" title="test">&larr; <span class="nav-label">Prev</span></a>
+          </div>
+          <div class="book-nav-center">
+          </div>
+          <div class="book-nav-next">
+            <a class="book-nav-btn" href="../../refs/index.html" title="refs"><span class="nav-label">Next</span> &rarr;</a>
+          </div>
+        </div>
       </header>
-      <div class="content body" role="main">
+      <div class="content body book-content" role="main">
         <section class="level-1" id="introducing-publish">
-          <h1>introducing publish<a class="headerlink" href="#introducing-publish" title="Link to this heading">¶</a></h1>
-          <p>As the architect behind <cite>publish</cite>, my primary goal is to create a unified platform that simplifies and enhances the Sphinx documentation process across multiple projects. The genesis of this initiative is rooted in the complexities I encountered managing disparate Sphinx setups, each with its unique configurations and themes.</p>
-          <p>The mission of <cite>publish</cite> is guided by four key principles:</p>
-          <ol class="arabic simple">
-          <li><p><strong>Consolidation</strong>: By centralizing configurations and custom components, <cite>publish</cite> aims to provide a streamlined approach to managing Sphinx projects. This will not only reduce setup times but also minimize the redundancy across projects.</p></li>
-          <li><p><strong>Integration</strong>: One of the pivotal features of <cite>publish</cite> is the integration of Grav themes converted into Jinja templates. This process will ensure that the aesthetics and functionality of previous projects are not lost but instead are enhanced within the Sphinx ecosystem.</p></li>
-          <li><p><strong>Flexibility</strong>: Extending Ablog to support a broader range of content types is crucial. This enhancement will cater to the evolving needs of modern documentation, allowing <cite>publish</cite> to handle not just blog posts but also events, tasks, and other time-sensitive content efficiently.</p></li>
-          <li><p><strong>Ease of Use</strong>: <cite>publish</cite> is designed to be user-friendly, supporting both seasoned users and newcomers to Sphinx. The goal is to provide clear documentation and tools that facilitate easy adaptation and use.</p></li>
-          </ol>
-          <p>By achieving these objectives, <cite>publish</cite> will serve as a cornerstone for future documentation projects, embodying efficiency, flexibility, and consistency. The journey of building this tool is as much about enhancing the technical documentation landscape as it is about fostering a community of users who benefit from robust, scalable, and integrated documentation solutions.</p>
-          </section>
+        <h1>introducing publish<a class="headerlink" href="#introducing-publish" title="Link to this heading">¶</a></h1>
+        <p>As the architect behind <cite>publish</cite>, my primary goal is to create a unified platform that simplifies and enhances the Sphinx documentation process across multiple projects. The genesis of this initiative is rooted in the complexities I encountered managing disparate Sphinx setups, each with its unique configurations and themes.</p>
+        <p>The mission of <cite>publish</cite> is guided by four key principles:</p>
+        <ol class="arabic simple">
+        <li><p><strong>Consolidation</strong>: By centralizing configurations and custom components, <cite>publish</cite> aims to provide a streamlined approach to managing Sphinx projects. This will not only reduce setup times but also minimize the redundancy across projects.</p></li>
+        <li><p><strong>Integration</strong>: One of the pivotal features of <cite>publish</cite> is the integration of Grav themes converted into Jinja templates. This process will ensure that the aesthetics and functionality of previous projects are not lost but instead are enhanced within the Sphinx ecosystem.</p></li>
+        <li><p><strong>Flexibility</strong>: Extending Ablog to support a broader range of content types is crucial. This enhancement will cater to the evolving needs of modern documentation, allowing <cite>publish</cite> to handle not just blog posts but also events, tasks, and other time-sensitive content efficiently.</p></li>
+        <li><p><strong>Ease of Use</strong>: <cite>publish</cite> is designed to be user-friendly, supporting both seasoned users and newcomers to Sphinx. The goal is to provide clear documentation and tools that facilitate easy adaptation and use.</p></li>
+        </ol>
+        <p>By achieving these objectives, <cite>publish</cite> will serve as a cornerstone for future documentation projects, embodying efficiency, flexibility, and consistency. The journey of building this tool is as much about enhancing the technical documentation landscape as it is about fostering a community of users who benefit from robust, scalable, and integrated documentation solutions.</p>
+        </section>
 
       </div>
-      <footer>
+      <footer class="book-footer">
 
         <div class="meta">
           <span class="date">Date: 24.125-164141</span>
@@ -96,14 +103,18 @@
             <a href="../../tags/introduction.html">introduction</a>
           </span>
         </div>
-        <nav class="context">
-          <div class="prev">
-             <a href="../24.126-084330/index.html" title="test" >Prev</a>
+        <div class="book-footer-ornament">&#10086;</div>
+        <div class="book-footer-nav">
+          <div class="book-nav-prev">
+            <a class="book-nav-btn" href="../24.126-084330/index.html" title="test">&larr; <span class="nav-label">test</span></a>
           </div>
-          <div class="next">
-            <a href="../../refs/index.html" title="refs" >Next</a>
+          <div class="book-nav-center">
+            <a class="book-toc-link" href="../../index.html">PHOTON • publish</a>
           </div>
-        </nav>
+          <div class="book-nav-next">
+            <a class="book-nav-btn" href="../../refs/index.html" title="refs"><span class="nav-label">refs</span> &rarr;</a>
+          </div>
+        </div>
       </footer>
     </article>
   </main>
@@ -126,12 +137,12 @@
         </form>
       </div>
     </aside>
-    <aside>
+    <aside class="aside-recent-logs">
       <h3>Recent Logs</h3>
       <ul>
         <li><a href="../24.126-084512/index.html">add global_conf.py</a></li>
         <li><a href="../24.126-084330/index.html">test</a></li>
-        <li><a href="#">introducing publish</a></li>
+        <li><a href="#" class="is-active" aria-current="page" aria-selected="true">introducing publish</a></li>
       </ul>
     </aside>
     <aside class="aside-tags">
@@ -160,12 +171,12 @@
   <footer>
     <div class="footer-nav">
       <ul>
-        <li><a href="../../about.html">About</a></li>
-        <li><a href="../../connect.html">Connect</a></li>
-        <li><a href="../../changelog.html">Changelog</a></li>
-        <li><a href="../../glossary.html">Glossary</a></li>
-        <li><a href="../../todos/index.html">todos</a></li>
-        <li><a href="../../orphan.html">Orphan Page</a></li>
+        <li><a href="../../about.html"  >About</a></li>
+        <li><a href="../../connect.html"  >Connect</a></li>
+        <li><a href="../../changelog.html"  >Changelog</a></li>
+        <li><a href="../../glossary.html"  >Glossary</a></li>
+        <li><a href="../../todos/index.html"  >todos</a></li>
+        <li><a href="../../orphan.html"  >Orphan Page</a></li>
       </ul>
     </div>
     <hr />
@@ -178,7 +189,7 @@
 
   <script src="../../_static/jquery.js?v=5d32c60e"></script>
   <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-  <script src="../../_static/documentation_options.js?v=189d1112"></script>
+  <script src="../../_static/documentation_options.js?v=3226d6c8"></script>
   <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../_static/js/collection_controls.js?v=b6b5297a"></script>

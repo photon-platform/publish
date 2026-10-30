@@ -9,9 +9,9 @@
   <title>Collections &mdash; PHOTON • publish</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../_static/css/styles.css?v=51fa7472" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/styles.css?v=3d8cc37d" />
   <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -20,7 +20,7 @@
   <link rel="icon" href="../../_static/favicon.ico" />
 </head>
 
-<body>
+<body class="book-theme-classical-serif">
   <header>
     <div class="logo">
       <a href="../../index.html">
@@ -40,7 +40,7 @@
           <a href="../../mission/index.html"  >mission</a>
         </li>
         <li>
-          <a href="../index.html"  >usage</a>
+          <a href="../index.html" class="is-active" aria-selected="true" >usage</a>
         </li>
         <li>
           <a href="../../modules/index.html"  >modules</a>
@@ -55,78 +55,88 @@
     </nav>
     <div class="motto"></div>
   </header>
-  <main>
-    <article>
-      <header>
-      <nav class="breadcrumbs">
-        <span><a href="../../index.html">Home</a></span>
-          <span>/</span>
-        <span><a href="../index.html">usage</a></span>
-      </nav>
-        <nav class="context">
-          <div class="prev">
-             <a href="../figures/wide.html" title="wide" >Prev</a>
+  <main class="book-main">
+    <article class="book-layout book-reading-pane">
+      <header class="book-header">
+        <div class="book-header-bar">
+          <div class="book-header-identity">
+            <a class="book-portal-link" href="../../index.html" title="Return to Project Portal">&larr; publish</a>
+            <span class="book-header-sep">/</span>
+            <a class="book-title-link" href="../../index.html">PHOTON • publish</a>
           </div>
-          <div class="next">
-            <a href="diagrams.html" title="Diagrams" >Next</a>
+          <div class="book-header-breadcrumbs book-header-badges" role="navigation" aria-label="Breadcrumbs">
+            <a class="book-crumb-link" href="../index.html">usage</a>
           </div>
-        </nav>
+        </div>
+        <div class="book-header-nav">
+          <div class="book-nav-prev">
+            <a class="book-nav-btn" href="../figures/wide.html" title="wide">&larr; <span class="nav-label">Prev</span></a>
+          </div>
+          <div class="book-nav-center">
+          </div>
+          <div class="book-nav-next">
+            <a class="book-nav-btn" href="diagrams.html" title="Diagrams"><span class="nav-label">Next</span> &rarr;</a>
+          </div>
+        </div>
       </header>
-      <div class="content body" role="main">
+      <div class="content body book-content" role="main">
         <section class="level-1" id="collections">
-          <h1>Collections<a class="headerlink" href="#collections" title="Link to this heading">¶</a></h1>
-          <p>The <code class="docutils literal notranslate"><span class="pre">collection</span></code> directive is a powerful tool for aggregating and listing content. It allows you to create dynamic indexes of your content based on metadata.</p>
-          <section class="level-2" id="basic-usage">
-          <h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Link to this heading">¶</a></h2>
-          <p>To list all pages in the current directory and subdirectories:</p>
-          <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">collection</span><span class="p">::</span>
-          </pre></div>
-          </div>
-          </section>
-          <section class="level-2" id="filtering-by-type">
-          <h2>Filtering by Type<a class="headerlink" href="#filtering-by-type" title="Link to this heading">¶</a></h2>
-          <p>You can filter content by the <code class="docutils literal notranslate"><span class="pre">type</span></code> metadata field. For example, to list only logs:</p>
-          <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">collection</span><span class="p">::</span>
-              <span class="nc">:type:</span> log
-          </pre></div>
-          </div>
-          </section>
-          <section class="level-2" id="sorting-and-limiting">
-          <h2>Sorting and Limiting<a class="headerlink" href="#sorting-and-limiting" title="Link to this heading">¶</a></h2>
-          <p>You can sort the collection by any metadata field and limit the number of items shown.</p>
-          <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">collection</span><span class="p">::</span>
-              <span class="nc">:sort:</span> date
-              <span class="nc">:reverse:</span>
-              <span class="nc">:limit:</span> 5
-          </pre></div>
-          </div>
-          </section>
-          <section class="level-2" id="custom-templates">
-          <h2>Custom Templates<a class="headerlink" href="#custom-templates" title="Link to this heading">¶</a></h2>
-          <p>You can specify a custom template to render the collection.</p>
-          <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">collection</span><span class="p">::</span>
-              <span class="nc">:template:</span> custom_list.html
-          </pre></div>
-          </div>
-          </section>
-          <section class="level-2" id="example">
-          <h2>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h2>
-          <p>Here is a live example of a collection listing the most recent logs (if any exist):</p>
-              <section class="collection ">
-              </section></section>
-          </section>
+        <h1>Collections<a class="headerlink" href="#collections" title="Link to this heading">¶</a></h1>
+        <p>The <code class="docutils literal notranslate"><span class="pre">collection</span></code> directive is a powerful tool for aggregating and listing content. It allows you to create dynamic indexes of your content based on metadata.</p>
+        <section class="level-2" id="basic-usage">
+        <h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Link to this heading">¶</a></h2>
+        <p>To list all pages in the current directory and subdirectories:</p>
+        <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">collection</span><span class="p">::</span>
+        </pre></div>
+        </div>
+        </section>
+        <section class="level-2" id="filtering-by-type">
+        <h2>Filtering by Type<a class="headerlink" href="#filtering-by-type" title="Link to this heading">¶</a></h2>
+        <p>You can filter content by the <code class="docutils literal notranslate"><span class="pre">type</span></code> metadata field. For example, to list only logs:</p>
+        <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">collection</span><span class="p">::</span>
+            <span class="nc">:type:</span> log
+        </pre></div>
+        </div>
+        </section>
+        <section class="level-2" id="sorting-and-limiting">
+        <h2>Sorting and Limiting<a class="headerlink" href="#sorting-and-limiting" title="Link to this heading">¶</a></h2>
+        <p>You can sort the collection by any metadata field and limit the number of items shown.</p>
+        <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">collection</span><span class="p">::</span>
+            <span class="nc">:sort:</span> date
+            <span class="nc">:reverse:</span>
+            <span class="nc">:limit:</span> 5
+        </pre></div>
+        </div>
+        </section>
+        <section class="level-2" id="custom-templates">
+        <h2>Custom Templates<a class="headerlink" href="#custom-templates" title="Link to this heading">¶</a></h2>
+        <p>You can specify a custom template to render the collection.</p>
+        <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">collection</span><span class="p">::</span>
+            <span class="nc">:template:</span> custom_list.html
+        </pre></div>
+        </div>
+        </section>
+        <section class="level-2" id="example">
+        <h2>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h2>
+        <p>Here is a live example of a collection listing the most recent logs (if any exist):</p>
+            <section class="collection ">
+            </section></section>
+        </section>
 
       </div>
-      <footer>
-
-        <nav class="context">
-          <div class="prev">
-             <a href="../figures/wide.html" title="wide" >Prev</a>
+      <footer class="book-footer">
+        <div class="book-footer-ornament">&#10086;</div>
+        <div class="book-footer-nav">
+          <div class="book-nav-prev">
+            <a class="book-nav-btn" href="../figures/wide.html" title="wide">&larr; <span class="nav-label">wide</span></a>
           </div>
-          <div class="next">
-            <a href="diagrams.html" title="Diagrams" >Next</a>
+          <div class="book-nav-center">
+            <a class="book-toc-link" href="../../index.html">PHOTON • publish</a>
           </div>
-        </nav>
+          <div class="book-nav-next">
+            <a class="book-nav-btn" href="diagrams.html" title="Diagrams"><span class="nav-label">Diagrams</span> &rarr;</a>
+          </div>
+        </div>
       </footer>
     </article>
   </main>
@@ -149,7 +159,7 @@
         </form>
       </div>
     </aside>
-    <aside>
+    <aside class="aside-recent-logs">
       <h3>Recent Logs</h3>
       <ul>
         <li><a href="../../log/24.126-084512/index.html">add global_conf.py</a></li>
@@ -183,12 +193,12 @@
   <footer>
     <div class="footer-nav">
       <ul>
-        <li><a href="../../about.html">About</a></li>
-        <li><a href="../../connect.html">Connect</a></li>
-        <li><a href="../../changelog.html">Changelog</a></li>
-        <li><a href="../../glossary.html">Glossary</a></li>
-        <li><a href="../../todos/index.html">todos</a></li>
-        <li><a href="../../orphan.html">Orphan Page</a></li>
+        <li><a href="../../about.html"  >About</a></li>
+        <li><a href="../../connect.html"  >Connect</a></li>
+        <li><a href="../../changelog.html"  >Changelog</a></li>
+        <li><a href="../../glossary.html"  >Glossary</a></li>
+        <li><a href="../../todos/index.html"  >todos</a></li>
+        <li><a href="../../orphan.html"  >Orphan Page</a></li>
       </ul>
     </div>
     <hr />
@@ -201,7 +211,7 @@
 
   <script src="../../_static/jquery.js?v=5d32c60e"></script>
   <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-  <script src="../../_static/documentation_options.js?v=189d1112"></script>
+  <script src="../../_static/documentation_options.js?v=3226d6c8"></script>
   <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../_static/js/collection_controls.js?v=b6b5297a"></script>

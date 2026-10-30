@@ -9,9 +9,9 @@
   <title>Search &mdash; PHOTON • publish</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="_static/css/styles.css?v=51fa7472" />
+  <link rel="stylesheet" type="text/css" href="_static/css/styles.css?v=3d8cc37d" />
   <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -20,7 +20,7 @@
   <link rel="icon" href="_static/favicon.ico" />
 </head>
 
-<body>
+<body class="book-theme-classical-serif">
   <header>
     <div class="logo">
       <a href="index.html">
@@ -55,9 +55,19 @@
     </nav>
     <div class="motto"></div>
   </header>
-  <main>
-  <article class="search-page">
-    <div class="content body" role="main">
+  <main class="book-main">
+  <article class="search-page book-layout book-reading-pane">
+    <header class="book-header">
+      <div class="book-header-bar">
+        <div class="book-header-identity">
+          <a class="book-portal-link" href="index.html" title="Return to Project Portal">&larr; publish</a>
+          <span class="book-header-sep">/</span>
+          <span class="book-title-link">Search</span>
+        </div>
+      </div>
+    </header>
+    <div class="content body book-content" role="main">
+      <h1>Search</h1>
       <noscript>
         <div id="fallback" class="admonition warning">
           <p class="last">
@@ -84,6 +94,9 @@
 
       <div id="search-results"></div>
     </div>
+    <footer class="book-footer">
+      <div class="book-footer-ornament">&#10086;</div>
+    </footer>
   </article>
 
   </main>
@@ -106,7 +119,7 @@
         </form>
       </div>
     </aside>
-    <aside>
+    <aside class="aside-recent-logs">
       <h3>Recent Logs</h3>
       <ul>
         <li><a href="log/24.126-084512/index.html">add global_conf.py</a></li>
@@ -140,12 +153,12 @@
   <footer>
     <div class="footer-nav">
       <ul>
-        <li><a href="about.html">About</a></li>
-        <li><a href="connect.html">Connect</a></li>
-        <li><a href="changelog.html">Changelog</a></li>
-        <li><a href="glossary.html">Glossary</a></li>
-        <li><a href="todos/index.html">todos</a></li>
-        <li><a href="orphan.html">Orphan Page</a></li>
+        <li><a href="about.html"  >About</a></li>
+        <li><a href="connect.html"  >Connect</a></li>
+        <li><a href="changelog.html"  >Changelog</a></li>
+        <li><a href="glossary.html"  >Glossary</a></li>
+        <li><a href="todos/index.html"  >todos</a></li>
+        <li><a href="orphan.html"  >Orphan Page</a></li>
       </ul>
     </div>
     <hr />
@@ -159,7 +172,7 @@
   
   <script src="_static/jquery.js?v=5d32c60e"></script>
   <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-  <script src="_static/documentation_options.js?v=189d1112"></script>
+  <script src="_static/documentation_options.js?v=3226d6c8"></script>
   <script src="_static/doctools.js?v=fd6eb6e6"></script>
   <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="_static/js/collection_controls.js?v=b6b5297a"></script>

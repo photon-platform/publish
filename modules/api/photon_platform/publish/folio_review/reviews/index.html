@@ -9,9 +9,9 @@
   <title>photon_platform.publish.folio_review.reviews &mdash; PHOTON • publish</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=51fa7472" />
+  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=3d8cc37d" />
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -20,7 +20,7 @@
   <link rel="icon" href="../../../../../../_static/favicon.ico" />
 </head>
 
-<body>
+<body class="book-theme-classical-serif">
   <header>
     <div class="logo">
       <a href="../../../../../../index.html">
@@ -43,7 +43,7 @@
           <a href="../../../../../../usage/index.html"  >usage</a>
         </li>
         <li>
-          <a href="../../../../../index.html"  >modules</a>
+          <a href="../../../../../index.html" class="is-active" aria-selected="true" >modules</a>
         </li>
         <li>
           <a href="../../../../../../log/index.html"  >log</a>
@@ -55,87 +55,97 @@
     </nav>
     <div class="motto"></div>
   </header>
-  <main>
-    <article>
-      <header>
-      <nav class="breadcrumbs">
-        <span><a href="../../../../../../index.html">Home</a></span>
-          <span>/</span>
-        <span><a href="../../../../../index.html">modules</a></span>
-          <span>/</span>
-        <span><a href="../index.html">photon_platform.publish.folio_review</a></span>
-      </nav>
-        <nav class="context">
-          <div class="prev">
-             <a href="../app/index.html" title="photon_platform.publish.folio_review.app" >Prev</a>
+  <main class="book-main">
+    <article class="book-layout book-reading-pane">
+      <header class="book-header">
+        <div class="book-header-bar">
+          <div class="book-header-identity">
+            <a class="book-portal-link" href="../../../../../../index.html" title="Return to Project Portal">&larr; publish</a>
+            <span class="book-header-sep">/</span>
+            <a class="book-title-link" href="../../../../../../index.html">PHOTON • publish</a>
           </div>
-          <div class="next">
-            <a href="../rst_utils/index.html" title="photon_platform.publish.folio_review.rst_utils" >Next</a>
+          <div class="book-header-breadcrumbs book-header-badges" role="navigation" aria-label="Breadcrumbs">
+            <a class="book-crumb-link" href="../../../../../index.html">modules</a>
+            <span class="book-crumb-sep">/</span>
+            <a class="book-crumb-link" href="../index.html">photon_platform.publish.folio_review</a>
           </div>
-        </nav>
+        </div>
+        <div class="book-header-nav">
+          <div class="book-nav-prev">
+            <a class="book-nav-btn" href="../app/index.html" title="photon_platform.publish.folio_review.app">&larr; <span class="nav-label">Prev</span></a>
+          </div>
+          <div class="book-nav-center">
+          </div>
+          <div class="book-nav-next">
+            <a class="book-nav-btn" href="../rst_utils/index.html" title="photon_platform.publish.folio_review.rst_utils"><span class="nav-label">Next</span> &rarr;</a>
+          </div>
+        </div>
       </header>
-      <div class="content body" role="main">
+      <div class="content body book-content" role="main">
         <section class="level-1" id="module-photon_platform.publish.folio_review.reviews">
-          <span id="photon-platform-publish-folio-review-reviews"></span><h1>photon_platform.publish.folio_review.reviews<a class="headerlink" href="#module-photon_platform.publish.folio_review.reviews" title="Link to this heading">¶</a></h1>
-          <p>Persistent review and vetting status tracker for folios.</p>
-          <p>Stores vetting checklist, review status, and notes in <cite>folio_reviews.json</cite>
-          inside the edition’s <cite>resources/&lt;edition&gt;/</cite> directory.</p>
-          <section class="level-2" id="classes">
-          <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
-          <table class="autosummary longtable docutils align-default">
-          <tbody>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.reviews.ReviewManager" title="photon_platform.publish.folio_review.reviews.ReviewManager"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReviewManager</span></code></a></p></td>
-          <td><p>Manages reading and writing vetting / review records for folios.</p></td>
-          </tr>
-          </tbody>
-          </table>
-          </section>
-          <section class="level-2" id="module-contents">
-          <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
-          <dl class="py class">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.reviews.ReviewManager">
-          <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.reviews.</span></span><span class="sig-name descname"><span class="pre">ReviewManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/library/pathlib.html#pathlib.Path" title="(in Python v3.13)"><span class="pre">pathlib.Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.folio_review.reviews.ReviewManager" title="Link to this definition">¶</a></dt>
-          <dd><p>Manages reading and writing vetting / review records for folios.</p>
-          <dl class="py method">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.reviews.ReviewManager.get_review">
-          <span class="sig-name descname"><span class="pre">get_review</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">folio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.reviews.ReviewManager.get_review" title="Link to this definition">¶</a></dt>
-          <dd><p>Get review record for a specific folio, returning default if unreviewed.</p>
-          </dd></dl>
+        <span id="photon-platform-publish-folio-review-reviews"></span><h1>photon_platform.publish.folio_review.reviews<a class="headerlink" href="#module-photon_platform.publish.folio_review.reviews" title="Link to this heading">¶</a></h1>
+        <p>Persistent review and vetting status tracker for folios.</p>
+        <p>Stores vetting checklist, review status, and notes in <cite>folio_reviews.json</cite>
+        inside the edition’s <cite>resources/&lt;edition&gt;/</cite> directory.</p>
+        <section class="level-2" id="classes">
+        <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
+        <table class="autosummary longtable docutils align-default">
+        <tbody>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.reviews.ReviewManager" title="photon_platform.publish.folio_review.reviews.ReviewManager"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReviewManager</span></code></a></p></td>
+        <td><p>Manages reading and writing vetting / review records for folios.</p></td>
+        </tr>
+        </tbody>
+        </table>
+        </section>
+        <section class="level-2" id="module-contents">
+        <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+        <dl class="py class">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.reviews.ReviewManager">
+        <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.reviews.</span></span><span class="sig-name descname"><span class="pre">ReviewManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/library/pathlib.html#pathlib.Path" title="(in Python v3.13)"><span class="pre">pathlib.Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.folio_review.reviews.ReviewManager" title="Link to this definition">¶</a></dt>
+        <dd><p>Manages reading and writing vetting / review records for folios.</p>
+        <dl class="py method">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.reviews.ReviewManager.get_review">
+        <span class="sig-name descname"><span class="pre">get_review</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">folio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.reviews.ReviewManager.get_review" title="Link to this definition">¶</a></dt>
+        <dd><p>Get review record for a specific folio, returning default if unreviewed.</p>
+        </dd></dl>
 
-          <dl class="py method">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.reviews.ReviewManager.set_review">
-          <span class="sig-name descname"><span class="pre">set_review</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">folio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">checklist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reviewer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'phi'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.reviews.ReviewManager.set_review" title="Link to this definition">¶</a></dt>
-          <dd><p>Save or update review record for a specific folio.</p>
-          </dd></dl>
+        <dl class="py method">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.reviews.ReviewManager.set_review">
+        <span class="sig-name descname"><span class="pre">set_review</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">folio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">checklist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reviewer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'phi'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.reviews.ReviewManager.set_review" title="Link to this definition">¶</a></dt>
+        <dd><p>Save or update review record for a specific folio.</p>
+        </dd></dl>
 
-          <dl class="py method">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.reviews.ReviewManager.get_all_reviews">
-          <span class="sig-name descname"><span class="pre">get_all_reviews</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.reviews.ReviewManager.get_all_reviews" title="Link to this definition">¶</a></dt>
-          <dd><p>Return all stored reviews.</p>
-          </dd></dl>
+        <dl class="py method">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.reviews.ReviewManager.get_all_reviews">
+        <span class="sig-name descname"><span class="pre">get_all_reviews</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.reviews.ReviewManager.get_all_reviews" title="Link to this definition">¶</a></dt>
+        <dd><p>Return all stored reviews.</p>
+        </dd></dl>
 
-          <dl class="py method">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.reviews.ReviewManager.get_review_stats">
-          <span class="sig-name descname"><span class="pre">get_review_stats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.reviews.ReviewManager.get_review_stats" title="Link to this definition">¶</a></dt>
-          <dd><p>Return count breakdown of review statuses.</p>
-          </dd></dl>
+        <dl class="py method">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.reviews.ReviewManager.get_review_stats">
+        <span class="sig-name descname"><span class="pre">get_review_stats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.reviews.ReviewManager.get_review_stats" title="Link to this definition">¶</a></dt>
+        <dd><p>Return count breakdown of review statuses.</p>
+        </dd></dl>
 
-          </dd></dl>
+        </dd></dl>
 
-          </section>
-          </section>
+        </section>
+        </section>
 
       </div>
-      <footer>
-
-        <nav class="context">
-          <div class="prev">
-             <a href="../app/index.html" title="photon_platform.publish.folio_review.app" >Prev</a>
+      <footer class="book-footer">
+        <div class="book-footer-ornament">&#10086;</div>
+        <div class="book-footer-nav">
+          <div class="book-nav-prev">
+            <a class="book-nav-btn" href="../app/index.html" title="photon_platform.publish.folio_review.app">&larr; <span class="nav-label">photon_platform.publish.folio_review.app</span></a>
           </div>
-          <div class="next">
-            <a href="../rst_utils/index.html" title="photon_platform.publish.folio_review.rst_utils" >Next</a>
+          <div class="book-nav-center">
+            <a class="book-toc-link" href="../../../../../../index.html">PHOTON • publish</a>
           </div>
-        </nav>
+          <div class="book-nav-next">
+            <a class="book-nav-btn" href="../rst_utils/index.html" title="photon_platform.publish.folio_review.rst_utils"><span class="nav-label">photon_platform.publish.folio_review.rst_utils</span> &rarr;</a>
+          </div>
+        </div>
       </footer>
     </article>
   </main>
@@ -158,7 +168,7 @@
         </form>
       </div>
     </aside>
-    <aside>
+    <aside class="aside-recent-logs">
       <h3>Recent Logs</h3>
       <ul>
         <li><a href="../../../../../../log/24.126-084512/index.html">add global_conf.py</a></li>
@@ -192,12 +202,12 @@
   <footer>
     <div class="footer-nav">
       <ul>
-        <li><a href="../../../../../../about.html">About</a></li>
-        <li><a href="../../../../../../connect.html">Connect</a></li>
-        <li><a href="../../../../../../changelog.html">Changelog</a></li>
-        <li><a href="../../../../../../glossary.html">Glossary</a></li>
-        <li><a href="../../../../../../todos/index.html">todos</a></li>
-        <li><a href="../../../../../../orphan.html">Orphan Page</a></li>
+        <li><a href="../../../../../../about.html"  >About</a></li>
+        <li><a href="../../../../../../connect.html"  >Connect</a></li>
+        <li><a href="../../../../../../changelog.html"  >Changelog</a></li>
+        <li><a href="../../../../../../glossary.html"  >Glossary</a></li>
+        <li><a href="../../../../../../todos/index.html"  >todos</a></li>
+        <li><a href="../../../../../../orphan.html"  >Orphan Page</a></li>
       </ul>
     </div>
     <hr />
@@ -210,7 +220,7 @@
 
   <script src="../../../../../../_static/jquery.js?v=5d32c60e"></script>
   <script src="../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-  <script src="../../../../../../_static/documentation_options.js?v=189d1112"></script>
+  <script src="../../../../../../_static/documentation_options.js?v=3226d6c8"></script>
   <script src="../../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>

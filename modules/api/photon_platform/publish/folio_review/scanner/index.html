@@ -9,9 +9,9 @@
   <title>photon_platform.publish.folio_review.scanner &mdash; PHOTON • publish</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=51fa7472" />
+  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=3d8cc37d" />
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -20,7 +20,7 @@
   <link rel="icon" href="../../../../../../_static/favicon.ico" />
 </head>
 
-<body>
+<body class="book-theme-classical-serif">
   <header>
     <div class="logo">
       <a href="../../../../../../index.html">
@@ -43,7 +43,7 @@
           <a href="../../../../../../usage/index.html"  >usage</a>
         </li>
         <li>
-          <a href="../../../../../index.html"  >modules</a>
+          <a href="../../../../../index.html" class="is-active" aria-selected="true" >modules</a>
         </li>
         <li>
           <a href="../../../../../../log/index.html"  >log</a>
@@ -55,221 +55,231 @@
     </nav>
     <div class="motto"></div>
   </header>
-  <main>
-    <article>
-      <header>
-      <nav class="breadcrumbs">
-        <span><a href="../../../../../../index.html">Home</a></span>
-          <span>/</span>
-        <span><a href="../../../../../index.html">modules</a></span>
-          <span>/</span>
-        <span><a href="../index.html">photon_platform.publish.folio_review</a></span>
-      </nav>
-        <nav class="context">
-          <div class="prev">
-             <a href="../rst_utils/index.html" title="photon_platform.publish.folio_review.rst_utils" >Prev</a>
+  <main class="book-main">
+    <article class="book-layout book-reading-pane">
+      <header class="book-header">
+        <div class="book-header-bar">
+          <div class="book-header-identity">
+            <a class="book-portal-link" href="../../../../../../index.html" title="Return to Project Portal">&larr; publish</a>
+            <span class="book-header-sep">/</span>
+            <a class="book-title-link" href="../../../../../../index.html">PHOTON • publish</a>
           </div>
-          <div class="next">
-            <a href="../../global_conf/index.html" title="photon_platform.publish.global_conf" >Next</a>
+          <div class="book-header-breadcrumbs book-header-badges" role="navigation" aria-label="Breadcrumbs">
+            <a class="book-crumb-link" href="../../../../../index.html">modules</a>
+            <span class="book-crumb-sep">/</span>
+            <a class="book-crumb-link" href="../index.html">photon_platform.publish.folio_review</a>
           </div>
-        </nav>
+        </div>
+        <div class="book-header-nav">
+          <div class="book-nav-prev">
+            <a class="book-nav-btn" href="../rst_utils/index.html" title="photon_platform.publish.folio_review.rst_utils">&larr; <span class="nav-label">Prev</span></a>
+          </div>
+          <div class="book-nav-center">
+          </div>
+          <div class="book-nav-next">
+            <a class="book-nav-btn" href="../../global_conf/index.html" title="photon_platform.publish.global_conf"><span class="nav-label">Next</span> &rarr;</a>
+          </div>
+        </div>
       </header>
-      <div class="content body" role="main">
+      <div class="content body book-content" role="main">
         <section class="level-1" id="module-photon_platform.publish.folio_review.scanner">
-          <span id="photon-platform-publish-folio-review-scanner"></span><h1>photon_platform.publish.folio_review.scanner<a class="headerlink" href="#module-photon_platform.publish.folio_review.scanner" title="Link to this heading">¶</a></h1>
-          <p>Folio discovery, metadata parsing, and statistics aggregation.</p>
-          <p>Operates exclusively on <cite>resources/</cite> directories containing <cite>volume_*</cite> folders.</p>
-          <section class="level-2" id="attributes">
-          <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
-          <table class="autosummary longtable docutils align-default">
-          <tbody>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.PYGMENTS_STYLE" title="photon_platform.publish.folio_review.scanner.PYGMENTS_STYLE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PYGMENTS_STYLE</span></code></a></p></td>
-          <td><p></p></td>
-          </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.ROMAN_ORDER" title="photon_platform.publish.folio_review.scanner.ROMAN_ORDER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ROMAN_ORDER</span></code></a></p></td>
-          <td><p></p></td>
-          </tr>
-          </tbody>
-          </table>
-          </section>
-          <section class="level-2" id="classes">
-          <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
-          <table class="autosummary longtable docutils align-default">
-          <tbody>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.FolioScanner" title="photon_platform.publish.folio_review.scanner.FolioScanner"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FolioScanner</span></code></a></p></td>
-          <td><p>Scans <cite>volume_*</cite> or book directories under an edition root and indexes all folio assets.</p></td>
-          </tr>
-          </tbody>
-          </table>
-          </section>
-          <section class="level-2" id="functions">
-          <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
-          <table class="autosummary longtable docutils align-default">
-          <tbody>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.highlight_code_html" title="photon_platform.publish.folio_review.scanner.highlight_code_html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">highlight_code_html</span></code></a>(→ str)</p></td>
-          <td><p>Render code to syntax-highlighted HTML using Pygments (<cite>gruvbox-dark</cite>).</p></td>
-          </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.parse_frontmatter" title="photon_platform.publish.folio_review.scanner.parse_frontmatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_frontmatter</span></code></a>(→ Tuple[Dict[str, Any], str])</p></td>
-          <td><p>Extract YAML frontmatter and body from markdown content.</p></td>
-          </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.protect_math_for_markdown" title="photon_platform.publish.folio_review.scanner.protect_math_for_markdown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">protect_math_for_markdown</span></code></a>(→ Tuple[str, Dict[str, str]])</p></td>
-          <td><p>Replace LaTeX math spans with placeholders so Markdown doesn't mangle underscores or asterisks.</p></td>
-          </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.restore_math_placeholders" title="photon_platform.publish.folio_review.scanner.restore_math_placeholders"><code class="xref py py-obj docutils literal notranslate"><span class="pre">restore_math_placeholders</span></code></a>(→ str)</p></td>
-          <td><p>Restore LaTeX math spans into rendered HTML.</p></td>
-          </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.fix_relative_media_urls" title="photon_platform.publish.folio_review.scanner.fix_relative_media_urls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fix_relative_media_urls</span></code></a>(→ str)</p></td>
-          <td><p>Rewrite relative image src attributes in rendered HTML to point to /media/.</p></td>
-          </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.render_markdown_with_math" title="photon_platform.publish.folio_review.scanner.render_markdown_with_math"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_markdown_with_math</span></code></a>(→ str)</p></td>
-          <td><p>Render Markdown to HTML while preserving KaTeX math expressions and fixing image paths.</p></td>
-          </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.render_rst_with_media" title="photon_platform.publish.folio_review.scanner.render_rst_with_media"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_rst_with_media</span></code></a>(→ str)</p></td>
-          <td><p>Render reStructuredText to HTML and rewrite relative media URLs.</p></td>
-          </tr>
-          <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.discover_edition_root" title="photon_platform.publish.folio_review.scanner.discover_edition_root"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discover_edition_root</span></code></a>(→ pathlib.Path)</p></td>
-          <td><p>Locate the edition or book root directory inside <cite>resources/</cite>.</p></td>
-          </tr>
-          <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.infer_project_and_edition" title="photon_platform.publish.folio_review.scanner.infer_project_and_edition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">infer_project_and_edition</span></code></a>(→ Tuple[str, str])</p></td>
-          <td><p>Infer <cite>(project_title, edition_label)</cite> from the <cite>resources/</cite> path without reading <cite>docsrc/</cite>.</p></td>
-          </tr>
-          </tbody>
-          </table>
-          </section>
-          <section class="level-2" id="module-contents">
-          <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
-          <dl class="py data">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.PYGMENTS_STYLE">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">PYGMENTS_STYLE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'gruvbox-dark'</span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.PYGMENTS_STYLE" title="Link to this definition">¶</a></dt>
-          <dd></dd></dl>
+        <span id="photon-platform-publish-folio-review-scanner"></span><h1>photon_platform.publish.folio_review.scanner<a class="headerlink" href="#module-photon_platform.publish.folio_review.scanner" title="Link to this heading">¶</a></h1>
+        <p>Folio discovery, metadata parsing, and statistics aggregation.</p>
+        <p>Operates exclusively on <cite>resources/</cite> directories containing <cite>volume_*</cite> folders.</p>
+        <section class="level-2" id="attributes">
+        <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
+        <table class="autosummary longtable docutils align-default">
+        <tbody>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.PYGMENTS_STYLE" title="photon_platform.publish.folio_review.scanner.PYGMENTS_STYLE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PYGMENTS_STYLE</span></code></a></p></td>
+        <td><p></p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.ROMAN_ORDER" title="photon_platform.publish.folio_review.scanner.ROMAN_ORDER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ROMAN_ORDER</span></code></a></p></td>
+        <td><p></p></td>
+        </tr>
+        </tbody>
+        </table>
+        </section>
+        <section class="level-2" id="classes">
+        <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
+        <table class="autosummary longtable docutils align-default">
+        <tbody>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.FolioScanner" title="photon_platform.publish.folio_review.scanner.FolioScanner"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FolioScanner</span></code></a></p></td>
+        <td><p>Scans <cite>volume_*</cite> or book directories under an edition root and indexes all folio assets.</p></td>
+        </tr>
+        </tbody>
+        </table>
+        </section>
+        <section class="level-2" id="functions">
+        <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
+        <table class="autosummary longtable docutils align-default">
+        <tbody>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.highlight_code_html" title="photon_platform.publish.folio_review.scanner.highlight_code_html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">highlight_code_html</span></code></a>(→ str)</p></td>
+        <td><p>Render code to syntax-highlighted HTML using Pygments (<cite>gruvbox-dark</cite>).</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.parse_frontmatter" title="photon_platform.publish.folio_review.scanner.parse_frontmatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_frontmatter</span></code></a>(→ Tuple[Dict[str, Any], str])</p></td>
+        <td><p>Extract YAML frontmatter and body from markdown content.</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.protect_math_for_markdown" title="photon_platform.publish.folio_review.scanner.protect_math_for_markdown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">protect_math_for_markdown</span></code></a>(→ Tuple[str, Dict[str, str]])</p></td>
+        <td><p>Replace LaTeX math spans with placeholders so Markdown doesn't mangle underscores or asterisks.</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.restore_math_placeholders" title="photon_platform.publish.folio_review.scanner.restore_math_placeholders"><code class="xref py py-obj docutils literal notranslate"><span class="pre">restore_math_placeholders</span></code></a>(→ str)</p></td>
+        <td><p>Restore LaTeX math spans into rendered HTML.</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.fix_relative_media_urls" title="photon_platform.publish.folio_review.scanner.fix_relative_media_urls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fix_relative_media_urls</span></code></a>(→ str)</p></td>
+        <td><p>Rewrite relative image src attributes in rendered HTML to point to /media/.</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.render_markdown_with_math" title="photon_platform.publish.folio_review.scanner.render_markdown_with_math"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_markdown_with_math</span></code></a>(→ str)</p></td>
+        <td><p>Render Markdown to HTML while preserving KaTeX math expressions and fixing image paths.</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.render_rst_with_media" title="photon_platform.publish.folio_review.scanner.render_rst_with_media"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_rst_with_media</span></code></a>(→ str)</p></td>
+        <td><p>Render reStructuredText to HTML and rewrite relative media URLs.</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.discover_edition_root" title="photon_platform.publish.folio_review.scanner.discover_edition_root"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discover_edition_root</span></code></a>(→ pathlib.Path)</p></td>
+        <td><p>Locate the edition or book root directory inside <cite>resources/</cite>.</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.infer_project_and_edition" title="photon_platform.publish.folio_review.scanner.infer_project_and_edition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">infer_project_and_edition</span></code></a>(→ Tuple[str, str])</p></td>
+        <td><p>Infer <cite>(project_title, edition_label)</cite> from the <cite>resources/</cite> path without reading <cite>docsrc/</cite>.</p></td>
+        </tr>
+        </tbody>
+        </table>
+        </section>
+        <section class="level-2" id="module-contents">
+        <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+        <dl class="py data">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.PYGMENTS_STYLE">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">PYGMENTS_STYLE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'gruvbox-dark'</span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.PYGMENTS_STYLE" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
 
-          <dl class="py data">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.ROMAN_ORDER">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">ROMAN_ORDER</span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.ROMAN_ORDER" title="Link to this definition">¶</a></dt>
-          <dd></dd></dl>
+        <dl class="py data">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.ROMAN_ORDER">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">ROMAN_ORDER</span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.ROMAN_ORDER" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
 
-          <dl class="py function">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.highlight_code_html">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">highlight_code_html</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">lang</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'python'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.highlight_code_html" title="Link to this definition">¶</a></dt>
-          <dd><p>Render code to syntax-highlighted HTML using Pygments (<cite>gruvbox-dark</cite>).</p>
-          </dd></dl>
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.highlight_code_html">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">highlight_code_html</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">lang</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'python'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.highlight_code_html" title="Link to this definition">¶</a></dt>
+        <dd><p>Render code to syntax-highlighted HTML using Pygments (<cite>gruvbox-dark</cite>).</p>
+        </dd></dl>
 
-          <dl class="py function">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.parse_frontmatter">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">parse_frontmatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">md_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.parse_frontmatter" title="Link to this definition">¶</a></dt>
-          <dd><p>Extract YAML frontmatter and body from markdown content.</p>
-          </dd></dl>
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.parse_frontmatter">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">parse_frontmatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">md_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.parse_frontmatter" title="Link to this definition">¶</a></dt>
+        <dd><p>Extract YAML frontmatter and body from markdown content.</p>
+        </dd></dl>
 
-          <dl class="py function">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.protect_math_for_markdown">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">protect_math_for_markdown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.protect_math_for_markdown" title="Link to this definition">¶</a></dt>
-          <dd><p>Replace LaTeX math spans with placeholders so Markdown doesn’t mangle underscores or asterisks.</p>
-          </dd></dl>
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.protect_math_for_markdown">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">protect_math_for_markdown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.protect_math_for_markdown" title="Link to this definition">¶</a></dt>
+        <dd><p>Replace LaTeX math spans with placeholders so Markdown doesn’t mangle underscores or asterisks.</p>
+        </dd></dl>
 
-          <dl class="py function">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.restore_math_placeholders">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">restore_math_placeholders</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">placeholders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.restore_math_placeholders" title="Link to this definition">¶</a></dt>
-          <dd><p>Restore LaTeX math spans into rendered HTML.</p>
-          </dd></dl>
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.restore_math_placeholders">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">restore_math_placeholders</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">placeholders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.restore_math_placeholders" title="Link to this definition">¶</a></dt>
+        <dd><p>Restore LaTeX math spans into rendered HTML.</p>
+        </dd></dl>
 
-          <dl class="py function">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.fix_relative_media_urls">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">fix_relative_media_urls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.fix_relative_media_urls" title="Link to this definition">¶</a></dt>
-          <dd><p>Rewrite relative image src attributes in rendered HTML to point to /media/.</p>
-          </dd></dl>
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.fix_relative_media_urls">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">fix_relative_media_urls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.fix_relative_media_urls" title="Link to this definition">¶</a></dt>
+        <dd><p>Rewrite relative image src attributes in rendered HTML to point to /media/.</p>
+        </dd></dl>
 
-          <dl class="py function">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.render_markdown_with_math">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">render_markdown_with_math</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">md_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.render_markdown_with_math" title="Link to this definition">¶</a></dt>
-          <dd><p>Render Markdown to HTML while preserving KaTeX math expressions and fixing image paths.</p>
-          </dd></dl>
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.render_markdown_with_math">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">render_markdown_with_math</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">md_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.render_markdown_with_math" title="Link to this definition">¶</a></dt>
+        <dd><p>Render Markdown to HTML while preserving KaTeX math expressions and fixing image paths.</p>
+        </dd></dl>
 
-          <dl class="py function">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.render_rst_with_media">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">render_rst_with_media</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rst_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.render_rst_with_media" title="Link to this definition">¶</a></dt>
-          <dd><p>Render reStructuredText to HTML and rewrite relative media URLs.</p>
-          </dd></dl>
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.render_rst_with_media">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">render_rst_with_media</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rst_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.render_rst_with_media" title="Link to this definition">¶</a></dt>
+        <dd><p>Render reStructuredText to HTML and rewrite relative media URLs.</p>
+        </dd></dl>
 
-          <dl class="py function">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.discover_edition_root">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">discover_edition_root</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/library/pathlib.html#pathlib.Path" title="(in Python v3.13)"><span class="pre">pathlib.Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/library/pathlib.html#pathlib.Path" title="(in Python v3.13)"><span class="pre">pathlib.Path</span></a></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.discover_edition_root" title="Link to this definition">¶</a></dt>
-          <dd><p>Locate the edition or book root directory inside <cite>resources/</cite>.</p>
-          <p>Never inspects <cite>docsrc/</cite>. Supports both multi-volume editions (<cite>volume_*</cite>)
-          and single-volume book directories (<cite>resources/&lt;book&gt;/</cite>) containing folio PNGs.</p>
-          </dd></dl>
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.discover_edition_root">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">discover_edition_root</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/library/pathlib.html#pathlib.Path" title="(in Python v3.13)"><span class="pre">pathlib.Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/library/pathlib.html#pathlib.Path" title="(in Python v3.13)"><span class="pre">pathlib.Path</span></a></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.discover_edition_root" title="Link to this definition">¶</a></dt>
+        <dd><p>Locate the edition or book root directory inside <cite>resources/</cite>.</p>
+        <p>Never inspects <cite>docsrc/</cite>. Supports both multi-volume editions (<cite>volume_*</cite>)
+        and single-volume book directories (<cite>resources/&lt;book&gt;/</cite>) containing folio PNGs.</p>
+        </dd></dl>
 
-          <dl class="py function">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.infer_project_and_edition">
-          <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">infer_project_and_edition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edition_root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/library/pathlib.html#pathlib.Path" title="(in Python v3.13)"><span class="pre">pathlib.Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edition_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.infer_project_and_edition" title="Link to this definition">¶</a></dt>
-          <dd><p>Infer <cite>(project_title, edition_label)</cite> from the <cite>resources/</cite> path without reading <cite>docsrc/</cite>.</p>
-          </dd></dl>
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.infer_project_and_edition">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">infer_project_and_edition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edition_root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/library/pathlib.html#pathlib.Path" title="(in Python v3.13)"><span class="pre">pathlib.Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edition_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.infer_project_and_edition" title="Link to this definition">¶</a></dt>
+        <dd><p>Infer <cite>(project_title, edition_label)</cite> from the <cite>resources/</cite> path without reading <cite>docsrc/</cite>.</p>
+        </dd></dl>
 
-          <dl class="py class">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.FolioScanner">
-          <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">FolioScanner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/library/pathlib.html#pathlib.Path" title="(in Python v3.13)"><span class="pre">pathlib.Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.FolioScanner" title="Link to this definition">¶</a></dt>
-          <dd><p>Scans <cite>volume_*</cite> or book directories under an edition root and indexes all folio assets.</p>
-          <dl class="py attribute">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.FolioScanner.root_dir">
-          <span class="sig-name descname"><span class="pre">root_dir</span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.FolioScanner.root_dir" title="Link to this definition">¶</a></dt>
-          <dd></dd></dl>
+        <dl class="py class">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.FolioScanner">
+        <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_review.scanner.</span></span><span class="sig-name descname"><span class="pre">FolioScanner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/library/pathlib.html#pathlib.Path" title="(in Python v3.13)"><span class="pre">pathlib.Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.FolioScanner" title="Link to this definition">¶</a></dt>
+        <dd><p>Scans <cite>volume_*</cite> or book directories under an edition root and indexes all folio assets.</p>
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.FolioScanner.root_dir">
+        <span class="sig-name descname"><span class="pre">root_dir</span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.FolioScanner.root_dir" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
 
-          <dl class="py property">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.FolioScanner.volumes">
-          <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">volumes</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.FolioScanner.volumes" title="Link to this definition">¶</a></dt>
-          <dd><p>Discover <cite>volume_*</cite> directories dynamically, or treat the book directory itself as the unit.</p>
-          </dd></dl>
+        <dl class="py property">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.FolioScanner.volumes">
+        <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">volumes</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.FolioScanner.volumes" title="Link to this definition">¶</a></dt>
+        <dd><p>Discover <cite>volume_*</cite> directories dynamically, or treat the book directory itself as the unit.</p>
+        </dd></dl>
 
-          <dl class="py method">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.FolioScanner.scan">
-          <span class="sig-name descname"><span class="pre">scan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.FolioScanner.scan" title="Link to this definition">¶</a></dt>
-          <dd><p>Scan all volumes/books and return sorted list of folio metadata dicts.</p>
-          </dd></dl>
+        <dl class="py method">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.FolioScanner.scan">
+        <span class="sig-name descname"><span class="pre">scan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.FolioScanner.scan" title="Link to this definition">¶</a></dt>
+        <dd><p>Scan all volumes/books and return sorted list of folio metadata dicts.</p>
+        </dd></dl>
 
-          <dl class="py method">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.FolioScanner.get_folio_detail">
-          <span class="sig-name descname"><span class="pre">get_folio_detail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">folio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.FolioScanner.get_folio_detail" title="Link to this definition">¶</a></dt>
-          <dd><p>Get full details for a single folio, including rendered RST/Markdown and Notes.</p>
-          </dd></dl>
+        <dl class="py method">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.FolioScanner.get_folio_detail">
+        <span class="sig-name descname"><span class="pre">get_folio_detail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">folio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.FolioScanner.get_folio_detail" title="Link to this definition">¶</a></dt>
+        <dd><p>Get full details for a single folio, including rendered RST/Markdown and Notes.</p>
+        </dd></dl>
 
-          <dl class="py attribute">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.FolioScanner.get_folio">
-          <span class="sig-name descname"><span class="pre">get_folio</span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.FolioScanner.get_folio" title="Link to this definition">¶</a></dt>
-          <dd></dd></dl>
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.FolioScanner.get_folio">
+        <span class="sig-name descname"><span class="pre">get_folio</span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.FolioScanner.get_folio" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
 
-          <dl class="py method">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.FolioScanner.get_apparatus">
-          <span class="sig-name descname"><span class="pre">get_apparatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.FolioScanner.get_apparatus" title="Link to this definition">¶</a></dt>
-          <dd><p>Load or build the edition’s citations, glossary, and persons registries.</p>
-          </dd></dl>
+        <dl class="py method">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.FolioScanner.get_apparatus">
+        <span class="sig-name descname"><span class="pre">get_apparatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.FolioScanner.get_apparatus" title="Link to this definition">¶</a></dt>
+        <dd><p>Load or build the edition’s citations, glossary, and persons registries.</p>
+        </dd></dl>
 
-          <dl class="py method">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.FolioScanner.get_neighbors">
-          <span class="sig-name descname"><span class="pre">get_neighbors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">folio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.FolioScanner.get_neighbors" title="Link to this definition">¶</a></dt>
-          <dd><p>Return (prev_folio, next_folio) in the ordered sequence.</p>
-          </dd></dl>
+        <dl class="py method">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.FolioScanner.get_neighbors">
+        <span class="sig-name descname"><span class="pre">get_neighbors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">folio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.FolioScanner.get_neighbors" title="Link to this definition">¶</a></dt>
+        <dd><p>Return (prev_folio, next_folio) in the ordered sequence.</p>
+        </dd></dl>
 
-          <dl class="py method">
-          <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.FolioScanner.get_summary_stats">
-          <span class="sig-name descname"><span class="pre">get_summary_stats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.FolioScanner.get_summary_stats" title="Link to this definition">¶</a></dt>
-          <dd><p>Compute aggregate statistics per volume and across the entire edition.</p>
-          </dd></dl>
+        <dl class="py method">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_review.scanner.FolioScanner.get_summary_stats">
+        <span class="sig-name descname"><span class="pre">get_summary_stats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.folio_review.scanner.FolioScanner.get_summary_stats" title="Link to this definition">¶</a></dt>
+        <dd><p>Compute aggregate statistics per volume and across the entire edition.</p>
+        </dd></dl>
 
-          </dd></dl>
+        </dd></dl>
 
-          </section>
-          </section>
+        </section>
+        </section>
 
       </div>
-      <footer>
-
-        <nav class="context">
-          <div class="prev">
-             <a href="../rst_utils/index.html" title="photon_platform.publish.folio_review.rst_utils" >Prev</a>
+      <footer class="book-footer">
+        <div class="book-footer-ornament">&#10086;</div>
+        <div class="book-footer-nav">
+          <div class="book-nav-prev">
+            <a class="book-nav-btn" href="../rst_utils/index.html" title="photon_platform.publish.folio_review.rst_utils">&larr; <span class="nav-label">photon_platform.publish.folio_review.rst_utils</span></a>
           </div>
-          <div class="next">
-            <a href="../../global_conf/index.html" title="photon_platform.publish.global_conf" >Next</a>
+          <div class="book-nav-center">
+            <a class="book-toc-link" href="../../../../../../index.html">PHOTON • publish</a>
           </div>
-        </nav>
+          <div class="book-nav-next">
+            <a class="book-nav-btn" href="../../global_conf/index.html" title="photon_platform.publish.global_conf"><span class="nav-label">photon_platform.publish.global_conf</span> &rarr;</a>
+          </div>
+        </div>
       </footer>
     </article>
   </main>
@@ -292,7 +302,7 @@
         </form>
       </div>
     </aside>
-    <aside>
+    <aside class="aside-recent-logs">
       <h3>Recent Logs</h3>
       <ul>
         <li><a href="../../../../../../log/24.126-084512/index.html">add global_conf.py</a></li>
@@ -326,12 +336,12 @@
   <footer>
     <div class="footer-nav">
       <ul>
-        <li><a href="../../../../../../about.html">About</a></li>
-        <li><a href="../../../../../../connect.html">Connect</a></li>
-        <li><a href="../../../../../../changelog.html">Changelog</a></li>
-        <li><a href="../../../../../../glossary.html">Glossary</a></li>
-        <li><a href="../../../../../../todos/index.html">todos</a></li>
-        <li><a href="../../../../../../orphan.html">Orphan Page</a></li>
+        <li><a href="../../../../../../about.html"  >About</a></li>
+        <li><a href="../../../../../../connect.html"  >Connect</a></li>
+        <li><a href="../../../../../../changelog.html"  >Changelog</a></li>
+        <li><a href="../../../../../../glossary.html"  >Glossary</a></li>
+        <li><a href="../../../../../../todos/index.html"  >todos</a></li>
+        <li><a href="../../../../../../orphan.html"  >Orphan Page</a></li>
       </ul>
     </div>
     <hr />
@@ -344,7 +354,7 @@
 
   <script src="../../../../../../_static/jquery.js?v=5d32c60e"></script>
   <script src="../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-  <script src="../../../../../../_static/documentation_options.js?v=189d1112"></script>
+  <script src="../../../../../../_static/documentation_options.js?v=3226d6c8"></script>
   <script src="../../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>

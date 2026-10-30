@@ -9,9 +9,9 @@
   <title>Using Images &mdash; PHOTON • publish</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../_static/css/styles.css?v=51fa7472" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/styles.css?v=3d8cc37d" />
   <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -20,7 +20,7 @@
   <link rel="icon" href="../../_static/favicon.ico" />
 </head>
 
-<body>
+<body class="book-theme-classical-serif">
   <header>
     <div class="logo">
       <a href="../../index.html">
@@ -40,7 +40,7 @@
           <a href="../../mission/index.html"  >mission</a>
         </li>
         <li>
-          <a href="../index.html"  >usage</a>
+          <a href="../index.html" class="is-active" aria-selected="true" >usage</a>
         </li>
         <li>
           <a href="../../modules/index.html"  >modules</a>
@@ -55,101 +55,109 @@
     </nav>
     <div class="motto"></div>
   </header>
-  <main>
-    <article>
-      <header>
-      <nav class="breadcrumbs">
-        <span><a href="../../index.html">Home</a></span>
-          <span>/</span>
-        <span><a href="../index.html">usage</a></span>
-      </nav>
-        <nav class="context">
-          <div class="prev">
-             <a href="../fonts.html" title="Fonts" >Prev</a>
+  <main class="book-main">
+    <article class="book-layout book-reading-pane">
+      <header class="book-header">
+        <div class="book-header-bar">
+          <div class="book-header-identity">
+            <a class="book-portal-link" href="../../index.html" title="Return to Project Portal">&larr; publish</a>
+            <span class="book-header-sep">/</span>
+            <a class="book-title-link" href="../../index.html">PHOTON • publish</a>
           </div>
-          <div class="next">
-            <a href="featured.html" title="Featured Images" >Next</a>
+          <div class="book-header-breadcrumbs book-header-badges" role="navigation" aria-label="Breadcrumbs">
+            <a class="book-crumb-link" href="../index.html">usage</a>
           </div>
-        </nav>
+        </div>
+        <div class="book-header-nav">
+          <div class="book-nav-prev">
+            <a class="book-nav-btn" href="../fonts.html" title="Fonts">&larr; <span class="nav-label">Prev</span></a>
+          </div>
+          <div class="book-nav-center">
+          </div>
+          <div class="book-nav-next">
+            <a class="book-nav-btn" href="featured.html" title="Featured Images"><span class="nav-label">Next</span> &rarr;</a>
+          </div>
+        </div>
       </header>
-      <div class="content body" role="main">
+      <div class="content body book-content" role="main">
         <section class="level-1" id="using-images">
-          <h1>Using Images<a class="headerlink" href="#using-images" title="Link to this heading">¶</a></h1>
-          <div class="admonition-todo admonition" id="id1">
-          <p class="admonition-title">Todo</p>
-          <p>expand on figure management</p>
-          </div>
-              <section class="collection ">
-                <article class="excerpt">
-                  <div class="content">
-                    <figure>
-                      <a href="featured.html" aria-label="A wide example image">
-                        <img src="wide_300w_9e97fe04.webp" alt="A wide example image">
-                      </a>
-                    </figure>
-                    <section>
-                      <h2><a href="featured.html">Featured Images</a></h2>
-                        <p>The <code class="docutils literal notranslate"><span class="pre">picture</span></code> directive is an enhanced version of the standard image directive designed for performance and responsiveness.
-                        It automatically generates optimized WebP variants of your images and context-aware thumbnails for use in collection listings.</p>
-                    </section>
-                  </div>
-                </article>
-                <article class="excerpt">
-                  <div class="content">
-                    <figure>
-                      <a href="square.html" aria-label="square">
-                        <img src="square_300w_12f3971e.webp" alt="square">
-                      </a>
-                    </figure>
-                    <section>
-                      <h2><a href="square.html">square</a></h2>
-                        <p>this is a square image</p>
-                    </section>
-                  </div>
-                </article>
-                <article class="excerpt">
-                  <div class="content">
-                    <figure>
-                      <a href="tall.html" aria-label="tall">
-                        <img src="tall_300w_8b42a984.webp" alt="tall">
-                      </a>
-                    </figure>
-                    <section>
-                      <h2><a href="tall.html">tall</a></h2>
-                        <p>This is a tall image</p>
-                    </section>
-                  </div>
-                </article>
-                <article class="excerpt">
-                  <div class="content">
-                    <figure>
-                      <a href="wide.html" aria-label="wide">
-                        <img src="wide_300w_9e97fe04.webp" alt="wide">
-                      </a>
-                    </figure>
-                    <section>
-                      <h2><a href="wide.html">wide</a></h2>
-                        <blockquote>
-                        <div><p>This is a wide image</p>
-                        </div></blockquote>
-                    </section>
-                  </div>
-                </article>
-              </section></section>
+        <h1>Using Images<a class="headerlink" href="#using-images" title="Link to this heading">¶</a></h1>
+        <div class="admonition-todo admonition" id="id1">
+        <p class="admonition-title">Todo</p>
+        <p>expand on figure management</p>
+        </div>
+            <section class="collection ">
+              <article class="excerpt">
+                <div class="content">
+                  <figure>
+                    <a href="featured.html" aria-label="A wide example image">
+                      <img src="wide_300w_9e97fe04.webp" alt="A wide example image">
+                    </a>
+                  </figure>
+                  <section>
+                    <h2><a href="featured.html">Featured Images</a></h2>
+                      <p>The <code class="docutils literal notranslate"><span class="pre">picture</span></code> directive is an enhanced version of the standard image directive designed for performance and responsiveness.
+                      It automatically generates optimized WebP variants of your images and context-aware thumbnails for use in collection listings.</p>
+                  </section>
+                </div>
+              </article>
+              <article class="excerpt">
+                <div class="content">
+                  <figure>
+                    <a href="square.html" aria-label="square">
+                      <img src="square_300w_12f3971e.webp" alt="square">
+                    </a>
+                  </figure>
+                  <section>
+                    <h2><a href="square.html">square</a></h2>
+                      <p>this is a square image</p>
+                  </section>
+                </div>
+              </article>
+              <article class="excerpt">
+                <div class="content">
+                  <figure>
+                    <a href="tall.html" aria-label="tall">
+                      <img src="tall_300w_8b42a984.webp" alt="tall">
+                    </a>
+                  </figure>
+                  <section>
+                    <h2><a href="tall.html">tall</a></h2>
+                      <p>This is a tall image</p>
+                  </section>
+                </div>
+              </article>
+              <article class="excerpt">
+                <div class="content">
+                  <figure>
+                    <a href="wide.html" aria-label="wide">
+                      <img src="wide_300w_9e97fe04.webp" alt="wide">
+                    </a>
+                  </figure>
+                  <section>
+                    <h2><a href="wide.html">wide</a></h2>
+                      <blockquote>
+                      <div><p>This is a wide image</p>
+                      </div></blockquote>
+                  </section>
+                </div>
+              </article>
+            </section></section>
 
       </div>
-      <footer>
-
-        <div class="meta">
+      <footer class="book-footer">
+        <div class="book-footer-ornament">&#10086;</div>
+        <div class="book-footer-nav">
+          <div class="book-nav-prev">
+            <a class="book-nav-btn" href="../fonts.html" title="Fonts">&larr; <span class="nav-label">Fonts</span></a>
+          </div>
+          <div class="book-nav-center">
+            <a class="book-toc-link" href="../../index.html">PHOTON • publish</a>
+          </div>
+          <div class="book-nav-next">
+            <a class="book-nav-btn" href="featured.html" title="Featured Images"><span class="nav-label">Featured Images</span> &rarr;</a>
+          </div>
         </div>
-        <nav class="context">
-          <div class="prev">
-             <a href="../fonts.html" title="Fonts" >Prev</a>
-          </div>
-          <div class="next">
-            <a href="featured.html" title="Featured Images" >Next</a>
-          </div>
-        </nav>
       </footer>
     </article>
   </main>
@@ -172,7 +180,7 @@
         </form>
       </div>
     </aside>
-    <aside>
+    <aside class="aside-recent-logs">
       <h3>Recent Logs</h3>
       <ul>
         <li><a href="../../log/24.126-084512/index.html">add global_conf.py</a></li>
@@ -206,12 +214,12 @@
   <footer>
     <div class="footer-nav">
       <ul>
-        <li><a href="../../about.html">About</a></li>
-        <li><a href="../../connect.html">Connect</a></li>
-        <li><a href="../../changelog.html">Changelog</a></li>
-        <li><a href="../../glossary.html">Glossary</a></li>
-        <li><a href="../../todos/index.html">todos</a></li>
-        <li><a href="../../orphan.html">Orphan Page</a></li>
+        <li><a href="../../about.html"  >About</a></li>
+        <li><a href="../../connect.html"  >Connect</a></li>
+        <li><a href="../../changelog.html"  >Changelog</a></li>
+        <li><a href="../../glossary.html"  >Glossary</a></li>
+        <li><a href="../../todos/index.html"  >todos</a></li>
+        <li><a href="../../orphan.html"  >Orphan Page</a></li>
       </ul>
     </div>
     <hr />
@@ -224,7 +232,7 @@
 
   <script src="../../_static/jquery.js?v=5d32c60e"></script>
   <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-  <script src="../../_static/documentation_options.js?v=189d1112"></script>
+  <script src="../../_static/documentation_options.js?v=3226d6c8"></script>
   <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../_static/js/collection_controls.js?v=b6b5297a"></script>
