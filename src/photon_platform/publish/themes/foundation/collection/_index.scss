@@ -1,115 +1,50 @@
 .collection {
-    font-size: .9em;
     display: grid;
-    gap: var(--fitz);
-
-    // Default Layout (Cards)
-    // This matches the default grid behavior
-    grid-template-columns: repeat(auto-fit, minmax(24em, 1fr));
-
-    &.layout-cards {
-        grid-template-columns: repeat(auto-fit, minmax(16em, 1fr));
-
-        >article.excerpt {
-
-            // Center vertically and horizontally
-            .content {
-                justify-content: center;
-                align-items: center; // Center children horizontally (flex-col)
-                text-align: center;
-
-                figure {
-                    margin: 0 auto;
-                    // Enforce 14em square
-                    width: 14em;
-                    height: 14em;
-                    max-width: none;
-                    flex: 0 0 auto;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-
-                    a {
-                        display: flex;
-                        width: 100%;
-                        height: 100%;
-                        align-items: center;
-                        justify-content: center;
-                    }
-
-                    img {
-                        max-width: 100%;
-                        max-height: 100%;
-                        width: auto;
-                        height: auto;
-                        // ensure it fits
-                        object-fit: contain;
-                    }
-                }
-
-                section {
-                    width: 100%; // Ensure it takes full width for text centering to matter if needed, or let it shrink
-                    text-align: center;
-
-                    // blockquote {
-                    //     border-left: none;
-                    //     padding-left: 0;
-                    //     margin-left: 0;
-                    //     margin-right: 0;
-                    // }
-                }
-            }
-
-            footer {
-                text-align: center;
-            }
-        }
-    }
-
-    &.layout-banners {
-        grid-template-columns: 1fr;
-    }
-
-    &.layout-list {
-        grid-template-columns: 1fr;
-        gap: 0;
-    }
-
-    >* {
-        background: var(--bg);
-        padding: var(--fitz);
-    }
+    gap: 0.9rem;
+    margin: 1rem 0 1.5rem 0;
+    grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
 
     >header {
         grid-column: 1 / -1;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        padding: 0 0 0.35rem 0;
+        border-bottom: 1px solid var(--book-border);
+
+        h1 {
+            margin: 0;
+            border: none;
+            font-family: "EB Garamond", Georgia, serif;
+            font-size: 1.45rem;
+            color: var(--book-text);
+        }
     }
 
     .collection-controls {
         grid-column: 1 / -1;
         display: flex;
         justify-content: flex-end;
-        gap: 0.5rem;
-        margin-bottom: var(--fitz);
+        gap: 0.35rem;
+        margin-bottom: 0.15rem;
 
         button {
-            background: none;
-            border: 1px solid var(--text-muted);
-            color: var(--text-muted);
-            padding: 0.25rem;
+            background: var(--book-surface-alt);
+            border: 1px solid var(--book-border);
+            color: var(--book-muted);
+            padding: 0.28rem 0.42rem;
             cursor: pointer;
             border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
 
             &:hover,
             &.active {
-                background: var(--text-muted);
-                color: var(--bg);
+                background: color-mix(in srgb, var(--book-accent) 14%, var(--book-surface-alt));
+                border-color: var(--book-accent);
+                color: var(--book-accent);
             }
 
             svg {
@@ -121,160 +56,127 @@
     >article.excerpt {
         container-type: inline-size;
         container-name: excerpt;
-        display: flex;
-        flex-direction: column;
-        gap: var(--fitz);
-
-        // Ensure content doesn't overflow
         min-width: 0;
+    }
 
-        .content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: var(--fitz);
+    &.layout-cards {
+        grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
 
-            figure {
-                width: 100%;
-                max-width: none;
-                flex: 0 0 auto;
-                margin: 0;
-
-                img {
-                    width: 100%;
-                    height: auto;
-                    // Removed crop forcing
-                    border-radius: 4px;
-                }
-            }
-
-            section {
-                h2 {
-                    margin-top: 0;
-                    font-size: 1.2em;
-                }
-            }
-
-            // Container Query: Horizontal layout for wider containers
-            // Applies to .content based on article.excerpt width
-            // This effectively handles "Banners" usually or wide cards
-            @container excerpt (min-width: 35em) {
-                flex-direction: row;
-                align-items: flex-start;
-                text-align: left; // Reset in case it was centered by card layout
+        >article.excerpt {
+            .content {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: left;
 
                 figure {
-                    // Usage for Banners/Wide Layouts
-                    // Enforce 10em square
-                    width: 10em;
-                    height: 10em;
+                    width: 100%;
+                    height: 11rem;
                     max-width: none;
-                    margin-right: var(--fitz);
-                    flex: 0 0 auto;
-
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-
-                    a {
-                        display: flex;
-                        width: 100%;
-                        height: 100%;
-                        align-items: center;
-                        justify-content: center;
-                    }
-
-                    img {
-                        // Reset card max-height restriction if needed or keep auto
-                        max-width: 100%;
-                        max-height: 100%;
-                        width: auto;
-                        height: auto;
-                        object-fit: contain;
-                    }
                 }
             }
-        }
-
-        footer {
-            margin-top: auto;
-            border-top: 1px solid var(--text-muted-alpha);
-            padding-top: var(--fitz-2);
         }
     }
 
-    // Specific overrides for List layout
-    &.layout-list>article.excerpt {
-        flex-direction: row;
-        align-items: center;
-        padding: var(--fitz-2);
-        border-bottom: 1px solid var(--text-muted-alpha);
-        gap: var(--fitz);
+    &.layout-banners {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
 
-        .content {
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            text-align: left;
+        >article.excerpt {
+            .content {
+                flex-direction: row;
+                align-items: flex-start;
+                text-align: left;
+                gap: 1.1rem;
 
-            figure {
-                // Enforce 5em square
-                width: 5em;
-                height: 5em;
-                max-width: none;
-                margin: 0;
-                margin-right: var(--fitz);
-                flex: 0 0 auto;
-
-                display: flex;
-                align-items: center;
-                justify-content: center;
-
-                a {
-                    display: flex;
-                    width: 100%;
-                    height: 100%;
-                    align-items: center;
-                    justify-content: center;
-                }
-
-                img {
-                    max-width: 100%;
-                    max-height: 100%;
-                    width: auto;
-                    height: auto;
-                    object-fit: contain;
-                    border-radius: 4px;
-                }
-            }
-
-            section {
-                flex: 1;
-                display: flex;
-                align-items: center;
-
-                h2 {
-                    font-size: 1em;
+                figure {
+                    width: 8.5rem;
+                    height: 8.5rem;
+                    flex: 0 0 8.5rem;
+                    max-width: none;
                     margin: 0;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-
-                blockquote {
-                    display: none;
                 }
             }
         }
+    }
 
-        footer {
+    &.layout-list {
+        grid-template-columns: 1fr;
+        gap: 0;
+        border: 1px solid var(--book-border);
+        border-radius: 6px;
+        overflow: hidden;
+
+        >.collection-controls {
+            padding: 0.45rem 0.75rem;
             margin: 0;
-            padding: 0;
+            background: var(--book-surface-alt);
+            border-bottom: 1px solid var(--book-border);
+        }
+
+        >article.excerpt {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.55rem 0.9rem;
+            margin: 0;
             border: none;
-            margin-left: var(--fitz);
-            font-size: 0.8em;
-            white-space: nowrap;
+            border-bottom: 1px solid var(--book-border);
+            border-radius: 0;
+            background: var(--book-surface);
+            gap: 0.85rem;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            &:hover {
+                background: var(--book-surface-alt);
+            }
+
+            .content {
+                flex: 1;
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 0.75rem;
+                min-width: 0;
+                text-align: left;
+
+                figure {
+                    width: 3rem;
+                    height: 3rem;
+                    flex: 0 0 3rem;
+                    max-width: none;
+                    margin: 0;
+                    padding: 0.2rem;
+                }
+
+                section {
+                    flex: 1;
+                    min-width: 0;
+
+                    h2 {
+                        font-size: 1.05rem;
+                        margin: 0;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    p,
+                    blockquote,
+                    .enunciation {
+                        display: none;
+                    }
+                }
+            }
+
+            footer {
+                margin: 0;
+                padding: 0;
+                border: none;
+                flex-shrink: 0;
+            }
         }
     }
 }

@@ -56,6 +56,27 @@ def safe_numeric(value: Any, default: int | float = 999) -> int | float:
     return default
 
 
+def safe_sort_key(value: Any) -> tuple[int, float, str]:
+    """Return a type-safe comparable tuple for sorting mixed numeric and string metadata."""
+    if value is None or value == "":
+        return (2, 999999.0, "")
+    res = to_numeric(value)
+    if isinstance(res, (int, float)):
+        return (0, float(res), "")
+    return (1, 0.0, str(res))
+
+
+def _normalize_log_meta(docname: str, meta: Dict[str, Any]) -> Dict[str, Any]:
+    """Infer :type: log and :date: from docnames under log/<stamp>/ when omitted."""
+    if docname.startswith("log/") and docname != "log/index":
+        meta.setdefault("type", "log")
+        if not meta.get("date"):
+            parts = docname.split("/")
+            if len(parts) >= 2 and parts[1] != "index":
+                meta["date"] = parts[1]
+    return meta
+
+
 class PendingCollection(nodes.General, nodes.Element):
     """A placeholder node for a collection.
 
@@ -114,7 +135,7 @@ class CollectionDirective(SphinxDirective):
                 early_meta = peek_metadata(path)
                 for k, v in early_meta.items():
                     meta.setdefault(k, v)
-            return meta
+            return _normalize_log_meta(docname, meta)
 
         if collection_type == 'header':
             # Scan GLOBAL source directory for header items
@@ -195,9 +216,7 @@ class CollectionDirective(SphinxDirective):
             if sort_key:
                 def get_sort_val(docname: str) -> Any:
                     meta = get_early_meta(docname)
-                    if sort_key in meta and meta[sort_key] is not None:
-                        return to_numeric(meta[sort_key])
-                    return 0
+                    return safe_sort_key(meta.get(sort_key))
                 docnames.sort(key=get_sort_val, reverse=reverse)
 
         # Create a toctree with discovered items matching this collection
@@ -330,7 +349,7 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
 
         collection_items = []
         for docname in docnames:
-            meta = env.metadata.get(docname, {})
+            meta = _normalize_log_meta(docname, dict(env.metadata.get(docname, {})))
             if not collection_type or meta.get('type') == collection_type:
                 title_node = env.titles.get(docname)
                 if title_node:
@@ -357,6 +376,10 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
                         if first_text:
                             item['excerpt_text'] = render_node_html(builder, first_text)
 
+                    if not item['excerpt_text'] and meta.get('excerpt'):
+                        item['excerpt_text'] = f"<p>{meta['excerpt']}</p>"
+
+                    if item_doctree:
                         # Check for explicitly set featured image (from .. picture::)
                         if 'featured_image' in meta:
                              item['excerpt_figure_filename'] = meta['featured_image']
@@ -409,7 +432,7 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
                     collection_items.append(item)
 
         if sort_key:
-            collection_items.sort(key=lambda x: to_numeric(x.get(sort_key, 0)), reverse=reverse)
+            collection_items.sort(key=lambda x: safe_sort_key(x.get(sort_key)), reverse=reverse)
 
         if limit:
             collection_items = collection_items[:limit]
@@ -474,6 +497,10 @@ def _build_taxonomy_article_item(app: Any, env: Any, docname: str, meta: Dict[st
         if first_text:
             item['excerpt_text'] = render_node_html(app.builder, first_text)
 
+    if not item['excerpt_text'] and meta.get('excerpt'):
+        item['excerpt_text'] = f"<p>{meta['excerpt']}</p>"
+
+    if doctree:
         if 'featured_image' in meta:
             item['excerpt_figure_filename'] = meta['featured_image']
             item['excerpt_figure_alt'] = meta.get('featured_image_alt') or item['title']
@@ -557,7 +584,7 @@ def collect_metadata(app: Any, env: Any) -> None:
     env.all_types = set()
     
     for docname in env.found_docs:
-        meta = env.metadata.get(docname, {})
+        meta = _normalize_log_meta(docname, env.metadata.setdefault(docname, {}))
         if 'tags' in meta:
             env.all_tags.update(_split_meta_list(meta['tags']))
         if 'categories' in meta:
@@ -674,6 +701,7 @@ def build_nav_links(
     context['types'] = sorted(list(app.env.all_types), key=_natural_taxonomy_sort_key) if hasattr(app.env, 'all_types') else []
 
     if 'meta' in context and context['meta']:
+        _normalize_log_meta(pagename, context['meta'])
         if 'tags' in context['meta'] and isinstance(context['meta']['tags'], str):
             context['meta']['tags'] = _split_meta_list(context['meta']['tags'])
         if 'categories' in context['meta'] and isinstance(context['meta']['categories'], str):
@@ -686,7 +714,7 @@ def build_nav_links(
     footer_nav_list = []
     recent_logs = []
     for docname in app.env.found_docs:
-        meta = app.env.metadata.get(docname, {})
+        meta = _normalize_log_meta(docname, app.env.metadata.setdefault(docname, {}))
         if meta.get('navigation') == 'header':
             title = app.env.titles.get(docname)
             if title:
@@ -718,7 +746,7 @@ def build_nav_links(
     footer_nav_list.sort(key=lambda x: safe_numeric(x['order']))
     context['footer_nav_list'] = footer_nav_list
 
-    recent_logs.sort(key=lambda x: x['date'], reverse=True)
+    recent_logs.sort(key=lambda x: safe_sort_key(x['date']), reverse=True)
     context['recent_logs'] = recent_logs[:5]
 
 def peek_metadata(filepath: str) -> Dict[str, str]:

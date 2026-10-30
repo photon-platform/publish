@@ -1,5 +1,5 @@
 :navigation: footer
-:order: 3
+:order: 40
 
 .. _changelog:
 

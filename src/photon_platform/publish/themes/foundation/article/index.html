@@ -12,19 +12,22 @@
 {%- endif %}
           </div>
 {%- set has_crumbs = (book_breadcrumbs is defined and book_breadcrumbs) or (parents is defined and parents) %}
-{%- if has_crumbs or canonical_id or original_id or folio %}
+{%- set meta_date = meta.date if meta is defined and meta and meta.date else '' %}
+{%- set meta_author = meta.author if meta is defined and meta and meta.author else '' %}
+{%- set has_badges = canonical_id or original_id or folio or meta_date or meta_author %}
+{%- if has_crumbs or has_badges %}
           <div class="book-header-breadcrumbs book-header-badges" role="navigation" aria-label="Breadcrumbs">
 {%-   if book_breadcrumbs is defined and book_breadcrumbs %}
 {%-     for crumb in book_breadcrumbs %}
             <a class="book-crumb-link" href="{{ pathto(crumb.docname) }}">{{ crumb.title }}</a>
-{%-       if not loop.last or canonical_id or original_id or folio %}
+{%-       if not loop.last or has_badges %}
             <span class="book-crumb-sep">/</span>
 {%-       endif %}
 {%-     endfor %}
 {%-   elif parents is defined and parents %}
 {%-     for doc in parents %}
             <a class="book-crumb-link" href="{{ doc.link|e }}">{{ doc.title }}</a>
-{%-       if not loop.last or canonical_id or original_id or folio %}
+{%-       if not loop.last or has_badges %}
             <span class="book-crumb-sep">/</span>
 {%-       endif %}
 {%-     endfor %}
@@ -37,6 +40,12 @@
 {%-   endif %}
 {%-   if folio %}
             <span class="book-badge folio-badge">Folio {{ folio }}{% if page %} | p. {{ page }}{% endif %}</span>
+{%-   endif %}
+{%-   if meta_date %}
+            <span class="book-badge canonical-badge">{{ meta_date }}</span>
+{%-   endif %}
+{%-   if meta_author %}
+            <span class="book-badge folio-badge">{{ meta_author }}</span>
 {%-   endif %}
           </div>
 {%- endif %}

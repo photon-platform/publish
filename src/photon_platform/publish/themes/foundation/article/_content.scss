@@ -48,14 +48,15 @@
   }
 
   blockquote {
-    padding: var(--fitz-2);
-    margin-bottom: var(--fitz);
-    // border-left: 1px solid $color-key;
-    // padding-left: var(--fitz);
-    // line-height: 1.7;
-    background: #000; // Strictly darker than body (var(--bg-color) #1a1a1a)
-    border: none;
-    font-size: 1.2em;
+    padding: 0.75rem 1.25rem;
+    margin: 0.75rem 0 var(--fitz) 0;
+    background: var(--book-surface-alt);
+    border-left: 3px solid var(--book-accent);
+    border-radius: 0 6px 6px 0;
+    color: var(--book-text);
+    font-family: "EB Garamond", Georgia, serif;
+    font-size: 1.12em;
+    line-height: 1.55;
 
     >*:last-child {
       margin-bottom: 0;
@@ -69,14 +70,13 @@
       font-style: italic;
       list-style-type: '~';
       padding-top: .5em;
-      font-size: 1em; // Reset or keep relative
+      font-size: 1em;
     }
 
     >ul {
       font-style: italic;
       list-style-type: square;
       padding-top: .5em;
-      // font-size: .9em;
     }
   }
 

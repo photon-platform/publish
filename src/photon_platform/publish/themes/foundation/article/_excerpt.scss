@@ -1,71 +1,170 @@
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.25;
+  color: var(--book-muted);
+
+  .date {
+    display: inline-block;
+    padding: 0.1rem 0.45rem;
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--book-accent) 12%, var(--book-surface));
+    border: 1px solid color-mix(in srgb, var(--book-accent) 30%, var(--book-border));
+    color: var(--book-accent);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  .author {
+    display: inline-block;
+    padding: 0.1rem 0.45rem;
+    border-radius: 3px;
+    background: var(--book-surface);
+    border: 1px solid var(--book-border);
+    color: var(--book-muted);
+    font-weight: 500;
+  }
+
+  .category,
+  .tags {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem;
+
+    a {
+      display: inline-block;
+      padding: 0.08rem 0.42rem;
+      border-radius: 3px;
+      background: var(--book-surface);
+      border: 1px solid var(--book-border);
+      color: var(--book-muted);
+      text-decoration: none;
+      transition: all 0.15s ease;
+
+      &:hover {
+        color: var(--book-accent);
+        border-color: var(--book-accent);
+      }
+    }
+  }
+
+  .category a {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+    font-size: 0.72rem;
+  }
+
+  .tags a::before {
+    content: "#";
+    opacity: 0.65;
+    margin-right: 0.08em;
+  }
+}
+
 article.excerpt {
-  padding: var(--fitz);
-  margin: var(--fitz-half) 0;
-  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 1.15rem;
+  margin: 0;
+  background: var(--book-surface-alt);
+  border: 1px solid var(--book-border);
+  border-radius: 6px;
   display: flex;
   flex-flow: column nowrap;
+  gap: 0.65rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--book-accent) 45%, var(--book-border));
+  }
 
   >.content {
     display: flex;
-    flex-flow: row-reverse nowrap;
-    align-items: flex-start;
-    gap: var(--fitz);
-    margin-bottom: var(--fitz-half);
+    flex-flow: column nowrap;
+    align-items: stretch;
+    gap: 0.65rem;
 
     >figure {
-      flex: 0 0 8em;
-      max-width: 8em;
-      height: 6em;
+      flex: 0 0 auto;
+      width: 100%;
+      height: 11rem;
       overflow: hidden;
       margin: 0;
+      padding: 0.5rem;
+      background: var(--book-surface);
+      border: 1px solid color-mix(in srgb, var(--book-border) 65%, transparent);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       a {
-        display: block;
+        display: flex;
         width: 100%;
         height: 100%;
+        align-items: center;
+        justify-content: center;
       }
 
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+      img,
+      svg {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
       }
     }
 
     >section {
       flex: 1;
+      min-width: 0;
 
       h2 {
-        font-size: 1.1em;
-        line-height: 1.2;
-        margin: 0;
+        font-family: "EB Garamond", Georgia, serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        line-height: 1.28;
+        margin: 0 0 0.35rem 0;
+
+        a {
+          color: var(--book-text);
+          text-decoration: none;
+
+          &:hover {
+            color: var(--book-accent);
+          }
+        }
       }
 
-      blockquote {
+      p,
+      blockquote,
+      .enunciation {
         margin: 0;
-        font-size: 1.1em; // Match heading size (h2 is 1.1em)
-        line-height: 1.4;
-        font-weight: normal;
+        padding: 0;
+        background: transparent;
         border: none;
+        font-family: "EB Garamond", Georgia, serif;
+        font-size: 1.02rem;
+        line-height: 1.5;
+        color: var(--book-muted);
       }
     }
   }
 
   >footer {
     display: flex;
-    justify-content: flex-end;
-
-    .meta {
-      font-size: 0.7em;
-      gap: 0.5em;
-    }
+    justify-content: flex-start;
+    margin-top: auto;
+    padding-top: 0.55rem;
+    border-top: 1px solid color-mix(in srgb, var(--book-border) 65%, transparent);
   }
 
   .article-share {
     display: none;
-  }
-
-  .more {
-    align-self: flex-end;
   }
 }

@@ -2,6 +2,14 @@ changelog
 =========
 
 
+0.3.22
+======
+
+- style(collection,excerpt): Unify ``.collection`` layouts (``cards``, ``banners``, ``list``), ``article.excerpt`` cards, ``.collection-controls`` buttons, and ``.meta`` badges (``date``, ``author``, ``category``, ``tags``) with the Classical Scriptorium Book Codex design tokens and typography.
+- fix(article): Scope ``article/_index.scss`` to ``article:not(.excerpt)`` without legacy container-query row wrapping, and replace the hardcoded dark ``blockquote`` background in ``article/_content.scss`` with ``--book-surface-alt``.
+- feat(collection,log): Infer ``:type: log`` and ``:date:`` from ``log/<stamp>/`` docnames when omitted, support ``:excerpt:`` frontmatter fallback, use ``safe_sort_key`` for mixed numeric/string collection sorting, and render ``meta.date`` / ``meta.author`` badges in ``article/index.html``.
+
+
 0.3.21
 ======
 
