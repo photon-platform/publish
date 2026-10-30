@@ -512,11 +512,34 @@ def _build_taxonomy_article_item(app: Any, env: Any, docname: str, meta: Dict[st
     return item
 
 
+_ROMAN_VALUES = {
+    'i': 1, 'ii': 2, 'iii': 3, 'iv': 4, 'v': 5, 'vi': 6, 'vii': 7,
+    'viii': 8, 'ix': 9, 'x': 10, 'xi': 11, 'xii': 12, 'xiii': 13,
+}
+
+
+def _natural_taxonomy_sort_key(label: str) -> tuple:
+    parts = label.lower().rsplit('-', 1)
+    if len(parts) == 2:
+        prefix, suffix = parts
+        if suffix in _ROMAN_VALUES:
+            return (prefix, 0, _ROMAN_VALUES[suffix], '')
+        if suffix.isdigit():
+            return (prefix, 0, int(suffix), '')
+    return (label.lower(), 1, 0, label)
+
+
 def _sort_taxonomy_articles(articles: List[Dict[str, Any]]) -> None:
-    if any('number' in a for a in articles):
-        articles.sort(key=lambda x: safe_numeric(x.get('number', 0)), reverse=True)
-    elif any('order' in a for a in articles):
-        articles.sort(key=lambda x: safe_numeric(x.get('order', 999999)))
+    if any('order' in a or 'number' in a or 'proposition' in a for a in articles):
+        articles.sort(
+            key=lambda x: (
+                safe_numeric(x.get('order', x.get('number', x.get('proposition', 999999))), 999999),
+                safe_numeric(x.get('number', 999999), 999999),
+                str(x.get('title', '')),
+            )
+        )
+    elif any('date' in a for a in articles):
+        articles.sort(key=lambda x: str(x.get('date', '')), reverse=True)
     else:
         articles.sort(key=lambda x: str(x.get('title', '')))
 
@@ -573,8 +596,8 @@ def generate_taxonomy_pages(app: Any) -> Any:
                 'collection': {
                     'title': f"Posts tagged '{tag}'",
                     'articles': articles,
-                    'sort_key': 'number',
-                    'reverse': True,
+                    'sort_key': 'order',
+                    'reverse': False,
                 },
                 'has_maths_elements': any('class="math' in a.get('excerpt_text', '') for a in articles),
             }
@@ -597,8 +620,8 @@ def generate_taxonomy_pages(app: Any) -> Any:
                 'collection': {
                     'title': f"Posts in category '{category}'",
                     'articles': articles,
-                    'sort_key': 'number',
-                    'reverse': True,
+                    'sort_key': 'order',
+                    'reverse': False,
                 },
                 'has_maths_elements': any('class="math' in a.get('excerpt_text', '') for a in articles),
             }
@@ -620,8 +643,8 @@ def generate_taxonomy_pages(app: Any) -> Any:
                 'collection': {
                     'title': f"Content of type '{type_}'",
                     'articles': articles,
-                    'sort_key': 'number',
-                    'reverse': True,
+                    'sort_key': 'order',
+                    'reverse': False,
                 },
                 'has_maths_elements': any('class="math' in a.get('excerpt_text', '') for a in articles),
             }
@@ -646,9 +669,9 @@ def build_nav_links(
                 context['has_maths_elements'] = True
                 break
 
-    context['tags'] = sorted(list(app.env.all_tags)) if hasattr(app.env, 'all_tags') else []
-    context['categories'] = sorted(list(app.env.all_categories)) if hasattr(app.env, 'all_categories') else []
-    context['types'] = sorted(list(app.env.all_types)) if hasattr(app.env, 'all_types') else []
+    context['tags'] = sorted(list(app.env.all_tags), key=_natural_taxonomy_sort_key) if hasattr(app.env, 'all_tags') else []
+    context['categories'] = sorted(list(app.env.all_categories), key=_natural_taxonomy_sort_key) if hasattr(app.env, 'all_categories') else []
+    context['types'] = sorted(list(app.env.all_types), key=_natural_taxonomy_sort_key) if hasattr(app.env, 'all_types') else []
 
     if 'meta' in context and context['meta']:
         if 'tags' in context['meta'] and isinstance(context['meta']['tags'], str):

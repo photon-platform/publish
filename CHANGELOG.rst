@@ -2,6 +2,12 @@ changelog
 =========
 
 
+0.3.21
+======
+
+- fix(collection): Sort tag, category, and type taxonomy page listings in ascending order by ``order`` / ``number`` / ``proposition`` instead of descending (`reverse=True`), and natural-sort Roman numeral and numeric taxonomy suffixes (e.g., ``book-i``..``book-xiii``) in sidebar navigation lists.
+
+
 0.3.20
 ======
 
