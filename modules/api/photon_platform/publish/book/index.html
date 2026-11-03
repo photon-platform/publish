@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../../../../_static/css/styles.css?v=69acf51f" />
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/css/styles.css?v=66998e95" />
   <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -97,28 +97,28 @@
         <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
         <table class="autosummary longtable docutils align-default">
         <tbody>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.book.peek_metadata" title="photon_platform.publish.book.peek_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peek_metadata</span></code></a>(→ Dict[str, str])</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.book.peek_metadata" title="photon_platform.publish.book.peek_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peek_metadata</span></code></a>(filepath) → Dict[str, str]</p></td>
         <td><p>Peek at the beginning of an RST file to extract top field-list metadata.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.book.detect_companion_tracks" title="photon_platform.publish.book.detect_companion_tracks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">detect_companion_tracks</span></code></a>(→ List[Dict[str, Any]])</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.book.detect_companion_tracks" title="photon_platform.publish.book.detect_companion_tracks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">detect_companion_tracks</span></code></a>(env, pagename) → List[Dict[str, Any]]</p></td>
         <td><p>Detect companion tracks for <cite>pagename</cite> in <cite>env.found_docs</cite>.</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.book.resolve_book_context" title="photon_platform.publish.book.resolve_book_context"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_book_context</span></code></a>(→ Dict[str, Any])</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.book.resolve_book_context" title="photon_platform.publish.book.resolve_book_context"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_book_context</span></code></a>(env, pagename[, doctree]) → Dict[str, Any]</p></td>
         <td><p>Resolve book subtree inheritance and companion tracks for <cite>pagename</cite>.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.book.filter_epub_book_sources" title="photon_platform.publish.book.filter_epub_book_sources"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_epub_book_sources</span></code></a>(→ None)</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.book.filter_epub_book_sources" title="photon_platform.publish.book.filter_epub_book_sources"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_epub_book_sources</span></code></a>(app, docname, source) → None</p></td>
         <td><p>Clean up non-book editorial references in source RST when building an EPUB.</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.book.resolve_book_doctree" title="photon_platform.publish.book.resolve_book_doctree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_book_doctree</span></code></a>(→ None)</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.book.resolve_book_doctree" title="photon_platform.publish.book.resolve_book_doctree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_book_doctree</span></code></a>(app, doctree, fromdocname) → None</p></td>
         <td><p>Consolidate footnote targets and apply EPUB 3 doctree transformations.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.book.resolve_epub_missing_reference" title="photon_platform.publish.book.resolve_epub_missing_reference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_epub_missing_reference</span></code></a>(→ Optional[Any])</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.book.resolve_epub_missing_reference" title="photon_platform.publish.book.resolve_epub_missing_reference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_epub_missing_reference</span></code></a>(app, env, node, contnode) → Optional[Any]</p></td>
         <td><p>Gracefully degrade excluded website references (e.g. about-<a href="#id1"><span class="problematic" id="id2">*</span></a>) to plain text in EPUB builds.</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.book.setup_book_page_context" title="photon_platform.publish.book.setup_book_page_context"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_book_page_context</span></code></a>(→ Optional[str])</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.book.setup_book_page_context" title="photon_platform.publish.book.setup_book_page_context"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_book_page_context</span></code></a>(app, pagename, templatename, ...) → Optional[str]</p></td>
         <td><p>Sphinx <cite>html-page-context</cite> hook to inject Book Codex context and select <cite>book_layout.html</cite>.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.book.setup" title="photon_platform.publish.book.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(→ Dict[str, Any])</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.book.setup" title="photon_platform.publish.book.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(app) → Dict[str, Any]</p></td>
         <td><p>Register the book subtree inheritance and EPUB 3 hooks with Sphinx.</p></td>
         </tr>
         </tbody>
@@ -142,7 +142,7 @@
         <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.book.</span></span><span class="sig-name descname"><span class="pre">detect_companion_tracks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pagename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.book.detect_companion_tracks" title="Link to this definition">¶</a></dt>
         <dd><p>Detect companion tracks for <cite>pagename</cite> in <cite>env.found_docs</cite>.</p>
         <p>Supports:
-        - Elements 2.0 tracks: <code class="docutils literal notranslate"><span class="pre">index</span></code> (Pseudocode), <code class="docutils literal notranslate"><span class="pre">code</span></code> (Code), <code class="docutils literal notranslate"><span class="pre">heath</span></code> (Heath)
+        - Elements 2.0 tracks: <code class="docutils literal notranslate"><span class="pre">index</span></code> (Pseudocode), <code class="docutils literal notranslate"><span class="pre">video</span></code> (Video), <code class="docutils literal notranslate"><span class="pre">code</span></code> (Code), <code class="docutils literal notranslate"><span class="pre">heath</span></code> (Heath)
         - Euclid tracks: <code class="docutils literal notranslate"><span class="pre">index</span></code> / <code class="docutils literal notranslate"><span class="pre">proposition</span></code>, <code class="docutils literal notranslate"><span class="pre">commentary</span></code>, <code class="docutils literal notranslate"><span class="pre">notes</span></code>, <code class="docutils literal notranslate"><span class="pre">folio</span></code></p>
         <blockquote>
         <div><p>or <code class="docutils literal notranslate"><span class="pre">&lt;pagename&gt;.commentary</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;pagename&gt;.notes</span></code></p>
@@ -290,7 +290,7 @@
   <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>
-  <script src="../../../../../_static/js/geometor_interactive.js?v=4430a5d4"></script>
+  <script src="../../../../../_static/js/geometor_interactive.js?v=b2892320"></script>
   <script src="../../../../../_static/js/search_highlight.js"></script>
 
 </body>

@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=69acf51f" />
+  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=66998e95" />
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -112,37 +112,37 @@
         <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
         <table class="autosummary longtable docutils align-default">
         <tbody>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.to_numeric" title="photon_platform.publish.directives.collection.to_numeric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_numeric</span></code></a>(→ int | float | Any)</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.to_numeric" title="photon_platform.publish.directives.collection.to_numeric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_numeric</span></code></a>(value) → int | float | Any</p></td>
         <td><p>Convert a value to a numeric type if possible, trying int then float.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.safe_numeric" title="photon_platform.publish.directives.collection.safe_numeric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">safe_numeric</span></code></a>(→ int | float)</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.safe_numeric" title="photon_platform.publish.directives.collection.safe_numeric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">safe_numeric</span></code></a>(value[, default]) → int | float</p></td>
         <td><p>Safely convert a value to a numeric type for sorting.</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.safe_sort_key" title="photon_platform.publish.directives.collection.safe_sort_key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">safe_sort_key</span></code></a>(→ tuple[int, float, str])</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.safe_sort_key" title="photon_platform.publish.directives.collection.safe_sort_key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">safe_sort_key</span></code></a>(value) → tuple[int, float, str]</p></td>
         <td><p>Return a type-safe comparable tuple for sorting mixed numeric and string metadata.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.render_node_html" title="photon_platform.publish.directives.collection.render_node_html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_node_html</span></code></a>(→ str)</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.render_node_html" title="photon_platform.publish.directives.collection.render_node_html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_node_html</span></code></a>(builder, node) → str</p></td>
         <td><p>Render a docutils node to an HTML fragment string.</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.process_collections" title="photon_platform.publish.directives.collection.process_collections"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_collections</span></code></a>(→ None)</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.process_collections" title="photon_platform.publish.directives.collection.process_collections"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_collections</span></code></a>(app, doctree, fromdocname) → None</p></td>
         <td><p>Resolve PendingCollection nodes into actual HTML content.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.collect_metadata" title="photon_platform.publish.directives.collection.collect_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">collect_metadata</span></code></a>(→ None)</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.collect_metadata" title="photon_platform.publish.directives.collection.collect_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">collect_metadata</span></code></a>(app, env) → None</p></td>
         <td><p>Collect all tags and categories from document metadata.</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.generate_taxonomy_pages" title="photon_platform.publish.directives.collection.generate_taxonomy_pages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_taxonomy_pages</span></code></a>(→ Any)</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.generate_taxonomy_pages" title="photon_platform.publish.directives.collection.generate_taxonomy_pages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_taxonomy_pages</span></code></a>(app) → Any</p></td>
         <td><p>Dynamically generate pages for each tag and category.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.build_nav_links" title="photon_platform.publish.directives.collection.build_nav_links"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_nav_links</span></code></a>(→ None)</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.build_nav_links" title="photon_platform.publish.directives.collection.build_nav_links"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_nav_links</span></code></a>(app, pagename, templatename, context, ...) → None</p></td>
         <td><p>Build navigation links and add tags/categories to the context.</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.peek_metadata" title="photon_platform.publish.directives.collection.peek_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peek_metadata</span></code></a>(→ Dict[str, str])</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.peek_metadata" title="photon_platform.publish.directives.collection.peek_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peek_metadata</span></code></a>(filepath) → Dict[str, str]</p></td>
         <td><p>Peek at the beginning of a file to extract navigation metadata.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.inject_root_navigation" title="photon_platform.publish.directives.collection.inject_root_navigation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inject_root_navigation</span></code></a>(→ None)</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.inject_root_navigation" title="photon_platform.publish.directives.collection.inject_root_navigation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inject_root_navigation</span></code></a>(app, docname, source) → None</p></td>
         <td><p>Automatically inject a hidden toctree into the master document (Root).</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.setup" title="photon_platform.publish.directives.collection.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(→ Dict[str, Any])</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.setup" title="photon_platform.publish.directives.collection.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(app) → Dict[str, Any]</p></td>
         <td><p>Register directives and connect to Sphinx events.</p></td>
         </tr>
         </tbody>
@@ -461,7 +461,7 @@
   <script src="../../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>
-  <script src="../../../../../../_static/js/geometor_interactive.js?v=4430a5d4"></script>
+  <script src="../../../../../../_static/js/geometor_interactive.js?v=b2892320"></script>
   <script src="../../../../../../_static/js/search_highlight.js"></script>
 
 </body>

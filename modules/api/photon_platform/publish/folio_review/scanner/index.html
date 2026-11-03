@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=69acf51f" />
+  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=66998e95" />
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -113,31 +113,31 @@
         <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
         <table class="autosummary longtable docutils align-default">
         <tbody>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.highlight_code_html" title="photon_platform.publish.folio_review.scanner.highlight_code_html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">highlight_code_html</span></code></a>(→ str)</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.highlight_code_html" title="photon_platform.publish.folio_review.scanner.highlight_code_html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">highlight_code_html</span></code></a>(code[, lang]) → str</p></td>
         <td><p>Render code to syntax-highlighted HTML using Pygments (<cite>gruvbox-dark</cite>).</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.parse_frontmatter" title="photon_platform.publish.folio_review.scanner.parse_frontmatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_frontmatter</span></code></a>(→ Tuple[Dict[str, Any], str])</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.parse_frontmatter" title="photon_platform.publish.folio_review.scanner.parse_frontmatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_frontmatter</span></code></a>(md_text) → Tuple[Dict[str, Any], str]</p></td>
         <td><p>Extract YAML frontmatter and body from markdown content.</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.protect_math_for_markdown" title="photon_platform.publish.folio_review.scanner.protect_math_for_markdown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">protect_math_for_markdown</span></code></a>(→ Tuple[str, Dict[str, str]])</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.protect_math_for_markdown" title="photon_platform.publish.folio_review.scanner.protect_math_for_markdown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">protect_math_for_markdown</span></code></a>(text) → Tuple[str, Dict[str, str]]</p></td>
         <td><p>Replace LaTeX math spans with placeholders so Markdown doesn't mangle underscores or asterisks.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.restore_math_placeholders" title="photon_platform.publish.folio_review.scanner.restore_math_placeholders"><code class="xref py py-obj docutils literal notranslate"><span class="pre">restore_math_placeholders</span></code></a>(→ str)</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.restore_math_placeholders" title="photon_platform.publish.folio_review.scanner.restore_math_placeholders"><code class="xref py py-obj docutils literal notranslate"><span class="pre">restore_math_placeholders</span></code></a>(html_str, placeholders) → str</p></td>
         <td><p>Restore LaTeX math spans into rendered HTML.</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.fix_relative_media_urls" title="photon_platform.publish.folio_review.scanner.fix_relative_media_urls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fix_relative_media_urls</span></code></a>(→ str)</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.fix_relative_media_urls" title="photon_platform.publish.folio_review.scanner.fix_relative_media_urls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fix_relative_media_urls</span></code></a>(html_str, volume, rel_dir) → str</p></td>
         <td><p>Rewrite relative image src attributes in rendered HTML to point to /media/.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.render_markdown_with_math" title="photon_platform.publish.folio_review.scanner.render_markdown_with_math"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_markdown_with_math</span></code></a>(→ str)</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.render_markdown_with_math" title="photon_platform.publish.folio_review.scanner.render_markdown_with_math"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_markdown_with_math</span></code></a>(md_body[, volume, rel_dir]) → str</p></td>
         <td><p>Render Markdown to HTML while preserving KaTeX math expressions and fixing image paths.</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.render_rst_with_media" title="photon_platform.publish.folio_review.scanner.render_rst_with_media"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_rst_with_media</span></code></a>(→ str)</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.render_rst_with_media" title="photon_platform.publish.folio_review.scanner.render_rst_with_media"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_rst_with_media</span></code></a>(rst_body[, volume, rel_dir]) → str</p></td>
         <td><p>Render reStructuredText to HTML and rewrite relative media URLs.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.discover_edition_root" title="photon_platform.publish.folio_review.scanner.discover_edition_root"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discover_edition_root</span></code></a>(→ pathlib.Path)</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.discover_edition_root" title="photon_platform.publish.folio_review.scanner.discover_edition_root"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discover_edition_root</span></code></a>([root_path]) → pathlib.Path</p></td>
         <td><p>Locate the edition or book root directory inside <cite>resources/</cite>.</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.infer_project_and_edition" title="photon_platform.publish.folio_review.scanner.infer_project_and_edition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">infer_project_and_edition</span></code></a>(→ Tuple[str, str])</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_review.scanner.infer_project_and_edition" title="photon_platform.publish.folio_review.scanner.infer_project_and_edition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">infer_project_and_edition</span></code></a>(edition_root[, ...]) → Tuple[str, str]</p></td>
         <td><p>Infer <cite>(project_title, edition_label)</cite> from the <cite>resources/</cite> path without reading <cite>docsrc/</cite>.</p></td>
         </tr>
         </tbody>
@@ -364,7 +364,7 @@
   <script src="../../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>
-  <script src="../../../../../../_static/js/geometor_interactive.js?v=4430a5d4"></script>
+  <script src="../../../../../../_static/js/geometor_interactive.js?v=b2892320"></script>
   <script src="../../../../../../_static/js/search_highlight.js"></script>
 
 </body>

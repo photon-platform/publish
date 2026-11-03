@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../../../../_static/css/styles.css?v=69acf51f" />
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/css/styles.css?v=66998e95" />
   <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -87,25 +87,25 @@
         <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
         <table class="autosummary longtable docutils align-default">
         <tbody>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.publish.find_git_root" title="photon_platform.publish.publish.find_git_root"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_git_root</span></code></a>(→ str | None)</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.publish.find_git_root" title="photon_platform.publish.publish.find_git_root"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_git_root</span></code></a>() → str | None</p></td>
         <td><p>Find the git repository root.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.publish.build_sass" title="photon_platform.publish.publish.build_sass"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_sass</span></code></a>(→ None)</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.publish.build_sass" title="photon_platform.publish.publish.build_sass"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_sass</span></code></a>() → None</p></td>
         <td><p>Compile SASS files for all themes.</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.publish.build" title="photon_platform.publish.publish.build"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build</span></code></a>(→ None)</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.publish.build" title="photon_platform.publish.publish.build"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build</span></code></a>() → None</p></td>
         <td><p>Build the Sphinx documentation.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.publish.clean" title="photon_platform.publish.publish.clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clean</span></code></a>(→ None)</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.publish.clean" title="photon_platform.publish.publish.clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clean</span></code></a>() → None</p></td>
         <td><p>Remove the build directory.</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.publish.test" title="photon_platform.publish.publish.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></a>(→ None)</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.publish.test" title="photon_platform.publish.publish.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></a>([port]) → None</p></td>
         <td><p>Build and serve the documentation locally.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.publish.discover_books" title="photon_platform.publish.publish.discover_books"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discover_books</span></code></a>(→ list[dict[str, str]])</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.publish.discover_books" title="photon_platform.publish.publish.discover_books"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discover_books</span></code></a>(docsrc_dir) → list[dict[str, str]]</p></td>
         <td><p>Discover book subtrees (marked with :layout: book or :book_title:) inside docsrc.</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.publish.build_epub" title="photon_platform.publish.publish.build_epub"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_epub</span></code></a>(→ list[str])</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.publish.build_epub" title="photon_platform.publish.publish.build_epub"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_epub</span></code></a>([book, output]) → list[str]</p></td>
         <td><p>Build an EPUB 3 edition for a book subtree in docsrc.</p></td>
         </tr>
         </tbody>
@@ -256,7 +256,7 @@
   <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>
-  <script src="../../../../../_static/js/geometor_interactive.js?v=4430a5d4"></script>
+  <script src="../../../../../_static/js/geometor_interactive.js?v=b2892320"></script>
   <script src="../../../../../_static/js/search_highlight.js"></script>
 
 </body>
