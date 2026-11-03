@@ -33,6 +33,7 @@ Functions
 
    photon_platform.publish.directives.collection.to_numeric
    photon_platform.publish.directives.collection.safe_numeric
+   photon_platform.publish.directives.collection.safe_sort_key
    photon_platform.publish.directives.collection.render_node_html
    photon_platform.publish.directives.collection.process_collections
    photon_platform.publish.directives.collection.collect_metadata
@@ -67,6 +68,11 @@ Module Contents
    :param default: The default value to return if conversion fails.
 
    :returns: The converted numeric value or the default.
+
+
+.. py:function:: safe_sort_key(value: Any) -> tuple[int, float, str]
+
+   Return a type-safe comparable tuple for sorting mixed numeric and string metadata.
 
 
 .. py:class:: PendingCollection(rawsource: str = '', *children, **attributes: Any)

@@ -564,7 +564,9 @@ def visit_step_node(self: Any, node: nodes.Element) -> None:
         if just_display
         else ""
     )
-    badge_html = f'<span class="geom-step-badge geom-badge-{html.escape(step_kind, quote=True)}">{html.escape(step_kind)}</span> '
+    badge_label = "∴" if step_kind == "conclude" else step_kind
+    badge_title = ' title="conclude"' if step_kind == "conclude" else ""
+    badge_html = f'<span class="geom-step-badge geom-badge-{html.escape(step_kind, quote=True)}"{badge_title}>{html.escape(badge_label)}</span> '
     extra: Dict[str, str] = {"data-step-kind": step_kind}
     if node.get("assert_equal"):
         extra["data-assert-equal"] = node["assert_equal"]

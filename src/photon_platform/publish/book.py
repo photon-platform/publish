@@ -69,6 +69,7 @@ _TRACK_SUFFIX_PATTERNS: List[Tuple[str, str, str]] = [
     (r"^translation-notes-(.+)$", "notes", "Notes"),
     (r"^(.+)[._-]proposition$", "proposition", "Proposition"),
     (r"^(.+)[._-]pseudocode$", "pseudocode", "Pseudocode"),
+    (r"^(.+)[._-]video$", "video", "Video"),
     (r"^(.+)[._-]code$", "code", "Code"),
     (r"^(.+)[._-]heath$", "heath", "Heath"),
     (r"^(.+)[._-]en$", "en", "English"),
@@ -92,6 +93,7 @@ def _extract_unit_stem(basename: str, doc_dir: str) -> str:
         "index",
         "proposition",
         "pseudocode",
+        "video",
         "code",
         "heath",
         "commentary",
@@ -111,7 +113,7 @@ def detect_companion_tracks(env: Any, pagename: str) -> List[Dict[str, Any]]:
     """Detect companion tracks for `pagename` in `env.found_docs`.
 
     Supports:
-    - Elements 2.0 tracks: ``index`` (Pseudocode), ``code`` (Code), ``heath`` (Heath)
+    - Elements 2.0 tracks: ``index`` (Pseudocode), ``video`` (Video), ``code`` (Code), ``heath`` (Heath)
     - Euclid tracks: ``index`` / ``proposition``, ``commentary``, ``notes``, ``folio``
       or ``<pagename>.commentary``, ``<pagename>.notes``
     - Pacioli tracks: ``<stem>_en``, ``<stem>_it``, ``<stem>_de``, ``<stem>_notes``, ``index``
@@ -158,6 +160,14 @@ def detect_companion_tracks(env: Any, pagename: str) -> List[Dict[str, Any]]:
             _cands(
                 [_qual(f"{stem}.proposition")],
                 [_qual("index"), _qual("pseudocode"), _qual("proposition")],
+            ),
+        ),
+        (
+            "video",
+            "Video",
+            _cands(
+                [_qual(f"{stem}.video"), _qual(f"{stem}_video"), _qual(f"{stem}-video")],
+                [_qual("video")],
             ),
         ),
         (
@@ -749,6 +759,7 @@ def _enhance_epub_body_html(
 
 
 _AUX_TRACK_BASENAMES: Set[str] = {
+    "video",
     "code",
     "heath",
     "commentary",
@@ -761,7 +772,7 @@ _AUX_TRACK_BASENAMES: Set[str] = {
 }
 
 _AUX_TRACK_PATTERNS: List[re.Pattern[str]] = [
-    re.compile(r"^.+[._-](?:code|heath|commentary|summary|notes|folio|it|de|la)$"),
+    re.compile(r"^.+[._-](?:video|code|heath|commentary|summary|notes|folio|it|de|la)$"),
     re.compile(r"^translation-notes-.+$"),
 ]
 
@@ -846,7 +857,7 @@ def _update_book_prev_next(app: Any, pagename: str, context: Dict[str, Any]) -> 
                     break
         if (
             link_doc == target_doc
-            and cur_basename in ("code", "heath")
+            and cur_basename in ("video", "code", "heath")
             and os.path.basename(target_doc) == "index"
         ):
             target_dir = os.path.dirname(target_doc)

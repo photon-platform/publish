@@ -288,12 +288,27 @@ def _resolve_apparatus_link(
     base_doc = doc_targets.get(role_type, "bibliography")
     anchor_prefix = anchor_prefixes.get(role_type, role_type)
 
+    if role_type == "term" and re.match(r"^(?:G\.\d+|[IVX]+\.def\.\d+)$", target, re.I):
+        href = _resolve_justification_href(translator, target)
+        j_tip = _resolve_justification_tooltip(translator, target)
+        if j_tip:
+            title_text = j_tip
+        occ_doc = getattr(translator, "_apparatus_occ_doc", None)
+        if occ_doc != current_docname:
+            translator._apparatus_occ_doc = current_docname
+            translator._apparatus_occ_counts = {}
+        counts: Dict[Tuple[str, str], int] = getattr(translator, "_apparatus_occ_counts", {})
+        key_pair = (role_type, target)
+        counts[key_pair] = counts.get(key_pair, 0) + 1
+        occ_id = f"occ-{role_type}-{slug}-{counts[key_pair]}"
+        return href, occ_id, title_text
+
     target_doc = None
     if first_seg and f"{first_seg}/{base_doc}" in found_docs:
         target_doc = f"{first_seg}/{base_doc}"
     elif base_doc in found_docs:
         target_doc = base_doc
-    elif first_seg:
+    elif not found_docs and first_seg:
         target_doc = f"{first_seg}/{base_doc}"
 
     href = None
@@ -309,7 +324,7 @@ def _resolve_apparatus_link(
     if occ_doc != current_docname:
         translator._apparatus_occ_doc = current_docname
         translator._apparatus_occ_counts = {}
-    counts: Dict[Tuple[str, str], int] = getattr(translator, "_apparatus_occ_counts", {})
+    counts = getattr(translator, "_apparatus_occ_counts", {})
     key_pair = (role_type, target)
     counts[key_pair] = counts.get(key_pair, 0) + 1
     occ_id = f"occ-{role_type}-{slug}-{counts[key_pair]}"
@@ -577,6 +592,52 @@ def eq_role(
     return [node], []
 
 
+class coincide_ref_node(nodes.Inline, nodes.TextElement):
+    """Inline AST node for coincidence/superposition references (:coincide:)."""
+
+
+def visit_coincide_ref_node(self: Any, node: nodes.Element) -> None:
+    """HTML visitor for coincide_ref_node."""
+    raw_spec = str(node.get("coincide_spec", ""))
+    spec = escape_data_ref_attr(raw_spec)
+    display = str(node.get("display", node.astext()))
+    if display:
+        inner_html = format_inline_emphasis_html(display)
+        co_tooltip = re.sub(r"\b(?:\d{4}\.)?g\d+:\s*", "", raw_spec).strip()
+        title_attr = f' title="{html.escape(co_tooltip, quote=True)}"' if co_tooltip else ""
+        self.body.append(
+            f'<span class="geom-eq-ref geom-coincide-ref" data-assert-coincide="{spec}" data-assert-equal="{spec}"{title_attr}>{inner_html}</span>'
+        )
+    else:
+        self.body.append(
+            f'<span class="geom-eq-marker geom-coincide-marker" data-assert-coincide="{spec}" data-assert-equal="{spec}" hidden></span>'
+        )
+    raise nodes.SkipNode
+
+
+def depart_coincide_ref_node(self: Any, node: nodes.Element) -> None:
+    """HTML departure visitor for coincide_ref_node."""
+    pass
+
+
+def coincide_role(
+    name: str,
+    rawtext: str,
+    text: str,
+    lineno: int,
+    inliner: Any,
+    options: Optional[Dict[str, Any]] = None,
+    content: Optional[List[str]] = None,
+) -> Tuple[List[nodes.Node], List[nodes.system_message]]:
+    """Role `:coincide:` for interactive coincidence/superposition references."""
+    restored = utils.unescape(text, restore_backslashes=True).strip()
+    display, spec = parse_eq_role_text(restored)
+    node = coincide_ref_node(rawtext, display)
+    node["display"] = display
+    node["coincide_spec"] = spec
+    return [node], []
+
+
 class fn_ref_node(nodes.Inline, nodes.TextElement):
     """Inline AST node for geometric construction/theorem function references (:fn:)."""
 
@@ -643,6 +704,7 @@ _ROLE_NODE_VISITORS = [
     (term_ref_node, visit_term_ref_node, depart_term_ref_node),
     (person_ref_node, visit_person_ref_node, depart_person_ref_node),
     (eq_ref_node, visit_eq_ref_node, depart_eq_ref_node),
+    (coincide_ref_node, visit_coincide_ref_node, depart_coincide_ref_node),
     (fn_ref_node, visit_fn_ref_node, depart_fn_ref_node),
 ]
 
@@ -654,6 +716,7 @@ _ROLES = {
     "term": term_role,
     "person": person_role,
     "eq": eq_role,
+    "coincide": coincide_role,
     "fn": fn_role,
 }
 
