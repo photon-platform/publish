@@ -2,6 +2,19 @@ changelog
 =========
 
 
+0.3.24
+======
+
+- feat(agents): Add canonical ``scriptorium-codex`` skill and ``scriptorium`` subagent with multimodal scan-vision folio ingestion mandate, 4-step Ink-to-Vector SVG calibration, and ``:layout: book`` codex standards.
+- feat(book,elements): Add ``Video`` companion track support and ``∴ conclude`` step badge rendering.
+
+
+0.3.23
+======
+
+- feat(geometry): Format multi-vertex subscripted ``:g:`` display labels cleanly across HTML and SVG tooltips.
+
+
 0.3.22
 ======
 
