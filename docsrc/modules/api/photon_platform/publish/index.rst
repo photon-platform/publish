@@ -26,6 +26,7 @@ Submodules
    /modules/api/photon_platform/publish/folio_review/index
    /modules/api/photon_platform/publish/global_conf/index
    /modules/api/photon_platform/publish/images/index
+   /modules/api/photon_platform/publish/mcp_server/index
    /modules/api/photon_platform/publish/publish/index
    /modules/api/photon_platform/publish/roles/index
    /modules/api/photon_platform/publish/rst_renderer/index
@@ -67,7 +68,7 @@ Package Contents
 
 
 .. py:data:: __version__
-   :value: '0.4.1'
+   :value: '0.4.3'
 
 
 .. py:data:: __licence__

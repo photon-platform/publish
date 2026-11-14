@@ -26,24 +26,24 @@ Functions
 Module Contents
 ---------------
 
-.. py:function:: find_git_root() -> str | None
+.. py:function:: find_git_root(start_dir: str | None = None) -> str | None
 
-   Find the git repository root.
-
-
-.. py:function:: build_sass() -> None
-
-   Compile SASS files for all themes.
+   Find the git repository root from start_dir (or current working directory).
 
 
-.. py:function:: build() -> None
+.. py:function:: build_sass(force: bool = False, quiet: bool = False) -> None
 
-   Build the Sphinx documentation.
+   Compile SASS files for themes only when .scss sources are newer than compiled .css.
 
 
-.. py:function:: clean() -> None
+.. py:function:: build(repo: str | None = None, clean: bool = False, jobs: int | None = None, quiet: bool = False) -> dict[str, Any]
 
-   Remove the build directory.
+   Build the Sphinx HTML documentation (incremental by default; full wipe when clean=True).
+
+
+.. py:function:: clean(repo: str | None = None, quiet: bool = False) -> dict[str, Any]
+
+   Remove the docs/ build directory and generated autoapi files.
 
 
 .. py:function:: test(port: int = 8000) -> None
@@ -56,7 +56,7 @@ Module Contents
    Discover book subtrees (marked with :layout: book or :book_title:) inside docsrc.
 
 
-.. py:function:: build_epub(book: str | None = None, output: str | None = None) -> list[str]
+.. py:function:: build_epub(book: str | None = None, output: str | None = None, repo: str | None = None, quiet: bool = False) -> list[str]
 
    Build an EPUB 3 edition for a book subtree in docsrc.
 

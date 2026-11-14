@@ -16,14 +16,15 @@ Attributes
 
    photon_platform.publish.global_conf.html_context
    photon_platform.publish.global_conf.year
-   photon_platform.publish.global_conf.extensions
-   photon_platform.publish.global_conf.ogp_social_cards
-   photon_platform.publish.global_conf.graphviz_output_format
    photon_platform.publish.global_conf.current_dir
    photon_platform.publish.global_conf.project_root
    photon_platform.publish.global_conf.pyproject_path
    photon_platform.publish.global_conf.include
    photon_platform.publish.global_conf.potential_path
+   photon_platform.publish.global_conf.extensions
+   photon_platform.publish.global_conf.ogp_social_cards
+   photon_platform.publish.global_conf.graphviz_output_format
+   photon_platform.publish.global_conf.intersphinx_timeout
    photon_platform.publish.global_conf.autoapi_dirs
    photon_platform.publish.global_conf.pyproject_data
    photon_platform.publish.global_conf.autoapi_ignore
@@ -75,16 +76,6 @@ Module Contents
 
 .. py:data:: year
 
-.. py:data:: extensions
-   :value: ['sphinx.ext.intersphinx', 'sphinx.ext.githubpages', 'sphinx.ext.graphviz',...
-
-
-.. py:data:: ogp_social_cards
-
-.. py:data:: graphviz_output_format
-   :value: 'svg'
-
-
 .. py:data:: current_dir
 
 .. py:data:: project_root
@@ -100,6 +91,20 @@ Module Contents
 
 
 .. py:data:: potential_path
+
+.. py:data:: extensions
+   :value: ['sphinx.ext.intersphinx', 'sphinx.ext.githubpages', 'sphinx.ext.graphviz',...
+
+
+.. py:data:: ogp_social_cards
+
+.. py:data:: graphviz_output_format
+   :value: 'svg'
+
+
+.. py:data:: intersphinx_timeout
+   :value: 3
+
 
 .. py:data:: autoapi_dirs
 

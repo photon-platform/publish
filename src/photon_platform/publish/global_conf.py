@@ -1,8 +1,8 @@
 """A global, reusable configuration file for Sphinx documentation."""
 import os
 import sys
-from datetime import datetime
 import tomllib
+from datetime import datetime
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'directives')))
 
@@ -71,10 +71,8 @@ def setup_globals(org: str, org_name: str, repo: str, repo_name: str) -> None:
         # Construct path: modules/api/<include>/<repo>/index.rst
         # e.g. modules/api/photon_platform/publish/index.rst
         exclusion = f"modules/api/{include}/{repo}/index.rst"
-        if 'exclude_patterns' in globals():
-             # Check if it's already there to avoid duplicates if called multiple times
-             if exclusion not in exclude_patterns:
-                 exclude_patterns.append(exclusion)
+        if 'exclude_patterns' in globals() and exclusion not in exclude_patterns:
+            exclude_patterns.append(exclusion)
     html_context.update(
         {
             "display_github": True,
@@ -91,33 +89,62 @@ def setup_globals(org: str, org_name: str, repo: str, repo_name: str) -> None:
 year = datetime.now().year
 
 
+os.environ.setdefault("MPLCONFIGDIR", "/tmp/matplotlib-publish")
+
 # -- Sphinx Options -----------------------------------------------------------
 
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
+# Walk up from the current working directory to find pyproject.toml first
+# so we can also inspect docsrc/ for optional non-parallel-safe extensions.
+current_dir = os.getcwd()
+project_root = None
+pyproject_path = None
+include = None  # Initialize include
+
+while current_dir != os.path.dirname(current_dir):
+    potential_path = os.path.join(current_dir, 'pyproject.toml')
+    if os.path.exists(potential_path):
+        project_root = current_dir
+        pyproject_path = potential_path
+        break
+    current_dir = os.path.dirname(current_dir)
+
+
+def _docsrc_uses_directives(root_dir: str | None, markers: tuple[str, ...]) -> dict[str, bool]:
+    found = {m: False for m in markers}
+    if not root_dir:
+        return found
+    dsrc = os.path.join(root_dir, "docsrc")
+    if not os.path.isdir(dsrc):
+        return found
+    for r, dirs, files in os.walk(dsrc):
+        dirs[:] = [d for d in dirs if not d.startswith(".") and d not in ("_static", "_templates", "centers")]
+        for fn in files:
+            if fn.endswith(".rst"):
+                try:
+                    with open(os.path.join(r, fn), encoding="utf-8", errors="ignore") as fh:
+                        txt = fh.read()
+                    for m in markers:
+                        if not found[m] and m in txt:
+                            found[m] = True
+                    if all(found.values()):
+                        return found
+                except OSError:
+                    pass
+    return found
+
+
+_opt_directives = _docsrc_uses_directives(project_root, (".. revealjs", ".. carousel"))
+
 extensions = [
-    #  "sphinx.ext.autodoc",
-    #  "sphinx.ext.autosummary",
-    # "sphinx.ext.extlinks",
     "sphinx.ext.intersphinx",
     "sphinx.ext.githubpages",
     "sphinx.ext.graphviz",
     "sphinx.ext.mathjax",
     "sphinx.ext.todo",
-    # "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
     "sphinxcontrib.youtube",
-    #  "sphinxcontrib.bibtex",
     "myst_parser",
-    "sphinx_revealjs",
-    "sphinx_revealjs.ext.footnotes",
-    #  "sphinx_revealjs.ext.screenshot",
-    #  "sphinxcontrib.budoux",
-    #  "sphinxcontrib.gtagjs",
-    #  "sphinxcontrib.oembed",
     "sphinxext.opengraph",
-    "sphinx_carousel.carousel",
     "sphinxcontrib.jquery",
     "photon_platform.publish.directives.collection",
     "photon_platform.publish.directives.elements",
@@ -127,29 +154,14 @@ extensions = [
     "autoapi.extension",
 ]
 
+if _opt_directives[".. revealjs"]:
+    extensions.extend(["sphinx_revealjs", "sphinx_revealjs.ext.footnotes"])
+if _opt_directives[".. carousel"]:
+    extensions.append("sphinx_carousel.carousel")
+
 ogp_social_cards = {"enable": False}
 graphviz_output_format = "svg"
-
-# autosummary_generate = True
-
-# AutoAPI options
-# AutoAPI options
-
-# Dynamic AutoAPI Configuration
-# We walk up from the current working directory to find pyproject.toml
-# This allows global_conf.py to adapt to the project it's being used in.
-current_dir = os.getcwd()
-project_root = None
-pyproject_path = None
-include = None # Initialize include
-
-while current_dir != os.path.dirname(current_dir):
-    potential_path = os.path.join(current_dir, 'pyproject.toml')
-    if os.path.exists(potential_path):
-        project_root = current_dir
-        pyproject_path = potential_path
-        break
-    current_dir = os.path.dirname(current_dir)
+intersphinx_timeout = 3
 
 # Default fallback
 autoapi_dirs = [os.path.abspath('../src')]
@@ -193,7 +205,7 @@ if project_root and pyproject_path:
         else:
             autoapi_dirs = [src_path]
             
-    except Exception as e:
+    except (OSError, tomllib.TOMLDecodeError, KeyError, IndexError) as e:
         print(f"Warning: Error parsing pyproject.toml for AutoAPI config: {e}")
 
 autoapi_ignore = [

@@ -594,6 +594,11 @@ def collect_metadata(app: Any, env: Any) -> None:
         if 'type' in meta and meta['type']:
             env.all_types.add(str(meta['type']).strip())
 
+    master_doc = getattr(getattr(app, 'config', None), 'master_doc', 'index')
+    hdr, ftr = _scan_root_navigation_items(env.srcdir, master_doc)
+    env._root_nav_signature = _nav_signature(hdr, ftr)
+
+
 def generate_taxonomy_pages(app: Any) -> Any:
     """Dynamically generate pages for each tag and category.
 
@@ -792,6 +797,67 @@ def peek_metadata(filepath: str) -> Dict[str, str]:
 
 
 
+def _scan_root_navigation_items(srcdir: str, master_doc: str) -> tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    """Scan srcdir for documents declaring :navigation: header or :navigation: footer."""
+    header_docs: List[Dict[str, Any]] = []
+    footer_docs: List[Dict[str, Any]] = []
+
+    for root, dirs, files in os.walk(srcdir):
+        dirs[:] = [d for d in dirs if not d.startswith('.')]
+        if '_static' in dirs:
+            dirs.remove('_static')
+        if '_templates' in dirs:
+            dirs.remove('_templates')
+
+        for filename in files:
+            if filename.endswith('.rst'):
+                path = os.path.join(root, filename)
+                found_docname = os.path.splitext(os.path.relpath(path, srcdir))[0]
+                if found_docname == master_doc:
+                    continue
+
+                meta = peek_metadata(path)
+                nav = meta.get('navigation')
+                if nav in ('header', 'footer'):
+                    order_val = safe_numeric(meta.get('order', 999))
+                    item = {
+                        'docname': found_docname,
+                        'order': order_val,
+                        'nav_title': meta.get('nav_title', ''),
+                    }
+                    if nav == 'header':
+                        header_docs.append(item)
+                    else:
+                        footer_docs.append(item)
+
+    header_docs.sort(key=lambda x: (x['order'], x['docname']))
+    footer_docs.sort(key=lambda x: (x['order'], x['docname']))
+    return header_docs, footer_docs
+
+
+def _nav_signature(header_docs: List[Dict[str, Any]], footer_docs: List[Dict[str, Any]]) -> tuple[Any, ...]:
+    return tuple(
+        ("h", d['docname'], d['order'], d['nav_title']) for d in header_docs
+    ) + tuple(
+        ("f", d['docname'], d['order'], d['nav_title']) for d in footer_docs
+    )
+
+
+def check_root_navigation_outdated(
+    app: Any, env: Any, added: Any, changed: Any, removed: Any
+) -> List[str]:
+    """Mark master_doc outdated during incremental builds whenever header/footer navigation changes."""
+    if getattr(getattr(app, "builder", None), "name", "") == "epub":
+        return []
+    master_doc = app.config.master_doc
+    header_docs, footer_docs = _scan_root_navigation_items(env.srcdir, master_doc)
+    sig = _nav_signature(header_docs, footer_docs)
+    if getattr(env, '_root_nav_signature', None) != sig:
+        if master_doc in env.found_docs:
+            return [master_doc]
+    return []
+
+
 def inject_root_navigation(app: Any, docname: str, source: List[str]) -> None:
     """Automatically inject a hidden toctree into the master document (Root).
 
@@ -809,52 +875,16 @@ def inject_root_navigation(app: Any, docname: str, source: List[str]) -> None:
         return
 
     env = app.env
-    header_docs = []
-    footer_docs = []
+    header_docs, footer_docs = _scan_root_navigation_items(env.srcdir, docname)
+    env._root_nav_signature = _nav_signature(header_docs, footer_docs)
 
-    # Recursively scan docsrc (srcdir) for header/footer items
-    for root, dirs, files in os.walk(env.srcdir):
-        # Exclude dot-directories and standard Sphinx folders
-        dirs[:] = [d for d in dirs if not d.startswith('.')]
-        if '_static' in dirs:
-            dirs.remove('_static')
-        if '_templates' in dirs:
-            dirs.remove('_templates')
-
-        for filename in files:
-            if filename.endswith('.rst'):
-                path = os.path.join(root, filename)
-                found_docname = os.path.splitext(os.path.relpath(path, env.srcdir))[0]
-                
-                # Exclude master doc itself
-                if found_docname == docname:
-                    continue
-                
-                meta = peek_metadata(path)
-                nav = meta.get('navigation')
-                
-                if nav == 'header' or nav == 'footer':
-                    order_val = safe_numeric(meta.get('order', 999))
-                    item = {'docname': found_docname, 'order': order_val}
-                    
-                    if nav == 'header':
-                        header_docs.append(item)
-                    elif nav == 'footer':
-                        footer_docs.append(item)
-
-    # Sort
-    header_docs.sort(key=lambda x: x['order'])
-    footer_docs.sort(key=lambda x: x['order'])
-    
-    # Combine (Header first, then Footer)
-    final_docnames = [x['docname'] for x in header_docs] + \
-                     [x['docname'] for x in footer_docs]
+    final_docnames = [x['docname'] for x in header_docs] + [x['docname'] for x in footer_docs]
 
     if final_docnames:
         toctree_rst = "\n\n.. toctree::\n   :hidden:\n\n"
         for d in final_docnames:
             toctree_rst += f"   {d}\n"
-        
+
         source[0] += toctree_rst
 
 
@@ -870,6 +900,7 @@ def setup(app: Any) -> Dict[str, Any]:
     """
     app.add_node(PendingCollection)
     app.add_directive("collection", CollectionDirective)
+    app.connect('env-get-outdated', check_root_navigation_outdated)
     app.connect('env-updated', collect_metadata)
     app.connect('html-collect-pages', generate_taxonomy_pages)
     app.connect('html-page-context', build_nav_links, priority=100)
@@ -881,3 +912,4 @@ def setup(app: Any) -> Dict[str, Any]:
         'parallel_read_safe': True,
         'parallel_write_safe': True,
     }
+

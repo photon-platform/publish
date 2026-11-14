@@ -35,6 +35,7 @@ dependencies = [
 
 [project.scripts]
 publish = "photon_platform.publish.__main__:run"
+publish-mcp = "photon_platform.publish.mcp_server:main"
 
 [project.entry-points."sphinx.html_themes"]
 photon = "photon_platform.publish.themes.photon"
