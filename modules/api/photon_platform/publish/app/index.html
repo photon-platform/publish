@@ -99,16 +99,19 @@
         <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.app.test" title="photon_platform.publish.app.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></a>(port)</p></td>
         <td><p>Builds and serves the documentation locally.</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.app.epub" title="photon_platform.publish.app.epub"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epub</span></code></a>(repo, book, output)</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.app.serve" title="photon_platform.publish.app.serve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">serve</span></code></a>(repo, host, port, build_first, no_browser)</p></td>
+        <td><p>Serves docs/ on the first open port &gt;= 8000 and launches Chrome.</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.app.epub" title="photon_platform.publish.app.epub"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epub</span></code></a>(repo, book, output)</p></td>
         <td><p>Builds an EPUB 3 edition for the book subtree in docsrc/.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.app.mcp" title="photon_platform.publish.app.mcp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mcp</span></code></a>()</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.app.mcp" title="photon_platform.publish.app.mcp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mcp</span></code></a>()</p></td>
         <td><p>Launches the Model Context Protocol (MCP) JSON-RPC stdio server for publish.</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.app.folio" title="photon_platform.publish.app.folio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">folio</span></code></a>(host, port, root, title, edition, debug)</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.app.folio" title="photon_platform.publish.app.folio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">folio</span></code></a>(host, port, root, title, edition, debug)</p></td>
         <td><p>Launches the interactive Folio Review &amp; Vetting web application for resources/.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.app.folio_links_cmd" title="photon_platform.publish.app.folio_links_cmd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">folio_links_cmd</span></code></a>(repo, optimize_scans, grayscale, as_json)</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.app.folio_links_cmd" title="photon_platform.publish.app.folio_links_cmd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">folio_links_cmd</span></code></a>(repo, optimize_scans, grayscale, as_json)</p></td>
         <td><p>Audits primary-source .. folio:: and :folio: links (and optionally optimizes scans).</p></td>
         </tr>
         </tbody>
@@ -138,6 +141,12 @@
         <dt class="sig sig-object py" id="photon_platform.publish.app.test">
         <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.app.</span></span><span class="sig-name descname"><span class="pre">test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.app.test" title="Link to this definition">¶</a></dt>
         <dd><p>Builds and serves the documentation locally.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.app.serve">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.app.</span></span><span class="sig-name descname"><span class="pre">serve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">build_first</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_browser</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.app.serve" title="Link to this definition">¶</a></dt>
+        <dd><p>Serves docs/ on the first open port &gt;= 8000 and launches Chrome.</p>
         </dd></dl>
 
         <dl class="py function">
@@ -261,7 +270,7 @@
 
   <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
   <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-  <script src="../../../../../_static/documentation_options.js?v=5bfaad31"></script>
+  <script src="../../../../../_static/documentation_options.js?v=90733dfc"></script>
   <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>

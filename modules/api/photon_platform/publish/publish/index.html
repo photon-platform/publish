@@ -83,6 +83,16 @@
         <section class="level-1" id="module-photon_platform.publish.publish">
         <span id="photon-platform-publish-publish"></span><h1>photon_platform.publish.publish<a class="headerlink" href="#module-photon_platform.publish.publish" title="Link to this heading">¶</a></h1>
         <p>Core publishing functions.</p>
+        <section class="level-2" id="attributes">
+        <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
+        <table class="autosummary longtable docutils align-default">
+        <tbody>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.publish.CHROME_CANDIDATES" title="photon_platform.publish.publish.CHROME_CANDIDATES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CHROME_CANDIDATES</span></code></a></p></td>
+        <td><p></p></td>
+        </tr>
+        </tbody>
+        </table>
+        </section>
         <section class="level-2" id="functions">
         <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
         <table class="autosummary longtable docutils align-default">
@@ -102,10 +112,19 @@
         <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.publish.test" title="photon_platform.publish.publish.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></a>([port]) → None</p></td>
         <td><p>Build and serve the documentation locally.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.publish.discover_books" title="photon_platform.publish.publish.discover_books"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discover_books</span></code></a>(docsrc_dir) → list[dict[str, str]]</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.publish.find_open_port" title="photon_platform.publish.publish.find_open_port"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_open_port</span></code></a>([start_port, host, max_tries]) → int</p></td>
+        <td><p>Find the first open TCP port at or after <code class="docutils literal notranslate"><span class="pre">start_port</span></code>.</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.publish.launch_chrome" title="photon_platform.publish.publish.launch_chrome"><code class="xref py py-obj docutils literal notranslate"><span class="pre">launch_chrome</span></code></a>(url) → str | None</p></td>
+        <td><p>Launch <code class="docutils literal notranslate"><span class="pre">url</span></code> in Google Chrome (or Chromium / system browser fallback).</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.publish.serve" title="photon_platform.publish.publish.serve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">serve</span></code></a>([repo, host, port, build_first, open_browser]) → None</p></td>
+        <td><p>Serve built documentation on the first open port &gt;= <code class="docutils literal notranslate"><span class="pre">port</span></code> and open Chrome.</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.publish.discover_books" title="photon_platform.publish.publish.discover_books"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discover_books</span></code></a>(docsrc_dir) → list[dict[str, str]]</p></td>
         <td><p>Discover book subtrees (marked with :layout: book or :book_title:) inside docsrc.</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.publish.build_epub" title="photon_platform.publish.publish.build_epub"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_epub</span></code></a>([book, output, repo, quiet]) → list[str]</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.publish.build_epub" title="photon_platform.publish.publish.build_epub"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_epub</span></code></a>([book, output, repo, quiet]) → list[str]</p></td>
         <td><p>Build an EPUB 3 edition for a book subtree in docsrc.</p></td>
         </tr>
         </tbody>
@@ -141,6 +160,29 @@
         <dt class="sig sig-object py" id="photon_platform.publish.publish.test">
         <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.publish.</span></span><span class="sig-name descname"><span class="pre">test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.publish.test" title="Link to this definition">¶</a></dt>
         <dd><p>Build and serve the documentation locally.</p>
+        </dd></dl>
+
+        <dl class="py data">
+        <dt class="sig sig-object py" id="photon_platform.publish.publish.CHROME_CANDIDATES">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.publish.</span></span><span class="sig-name descname"><span class="pre">CHROME_CANDIDATES</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#tuple" title="(in Python v3.13)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('google-chrome',</span> <span class="pre">'google-chrome-stable',</span> <span class="pre">'/usr/bin/google-chrome',...</span></span><a class="headerlink" href="#photon_platform.publish.publish.CHROME_CANDIDATES" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.publish.find_open_port">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.publish.</span></span><span class="sig-name descname"><span class="pre">find_open_port</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#photon_platform.publish.publish.find_open_port" title="Link to this definition">¶</a></dt>
+        <dd><p>Find the first open TCP port at or after <code class="docutils literal notranslate"><span class="pre">start_port</span></code>.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.publish.launch_chrome">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.publish.</span></span><span class="sig-name descname"><span class="pre">launch_chrome</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.publish.launch_chrome" title="Link to this definition">¶</a></dt>
+        <dd><p>Launch <code class="docutils literal notranslate"><span class="pre">url</span></code> in Google Chrome (or Chromium / system browser fallback).</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.publish.serve">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.publish.</span></span><span class="sig-name descname"><span class="pre">serve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">build_first</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">open_browser</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.publish.serve" title="Link to this definition">¶</a></dt>
+        <dd><p>Serve built documentation on the first open port &gt;= <code class="docutils literal notranslate"><span class="pre">port</span></code> and open Chrome.</p>
         </dd></dl>
 
         <dl class="py function">
@@ -252,7 +294,7 @@
 
   <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
   <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-  <script src="../../../../../_static/documentation_options.js?v=5bfaad31"></script>
+  <script src="../../../../../_static/documentation_options.js?v=90733dfc"></script>
   <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>
