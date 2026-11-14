@@ -2,14 +2,17 @@
 """
 from __future__ import annotations
 
+import functools
 import http.server
 import io
 import os
 import shutil
+import socket
 import socketserver
 import subprocess
 import sys
 import time
+import webbrowser
 from typing import Any
 
 import click
@@ -284,6 +287,173 @@ def test(port: int = 8000) -> None:
             httpd.server_close()
 
     clean(repo=project_root)
+
+
+class _DocsHTTPServer(http.server.ThreadingHTTPServer):
+    """Multi-threaded static HTTP server with instant Ctrl+C teardown."""
+
+    allow_reuse_address = True
+    daemon_threads = True
+
+
+CHROME_CANDIDATES: tuple[str, ...] = (
+    "google-chrome",
+    "google-chrome-stable",
+    "/usr/bin/google-chrome",
+    "/usr/bin/google-chrome-stable",
+    "/opt/google/chrome/google-chrome",
+    "chromium",
+    "chromium-browser",
+    "/usr/bin/chromium",
+    "/usr/bin/chromium-browser",
+)
+
+
+def _is_port_in_use(port: int, host: str = "127.0.0.1") -> bool:
+    """Return True if any local service is actively listening on or holding ``port``."""
+    v4_targets = ["127.0.0.1"]
+    if host not in ("", "0.0.0.0", "127.0.0.1", "localhost", "::", "::1"):
+        v4_targets.append(host)
+    for addr in v4_targets:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as probe:
+            probe.settimeout(0.05)
+            if probe.connect_ex((addr, port)) == 0:
+                return True
+
+    if socket.has_ipv6:
+        try:
+            with socket.socket(socket.AF_INET6, socket.SOCK_STREAM) as probe6:
+                probe6.settimeout(0.05)
+                if probe6.connect_ex(("::1", port)) == 0:
+                    return True
+        except OSError:
+            pass
+
+    bind_host = "" if host in ("0.0.0.0", "") else ("127.0.0.1" if host == "localhost" else host)
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as binder:
+        binder.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        try:
+            binder.bind((bind_host, port))
+        except OSError:
+            return True
+    return False
+
+
+def find_open_port(start_port: int = 8000, host: str = "127.0.0.1", max_tries: int = 100) -> int:
+    """Find the first open TCP port at or after ``start_port``."""
+    for candidate in range(start_port, start_port + max_tries):
+        if not _is_port_in_use(candidate, host=host):
+            return candidate
+    msg = f"No open TCP port found in range {start_port}..{start_port + max_tries - 1}"
+    raise RuntimeError(msg)
+
+
+def launch_chrome(url: str) -> str | None:
+    """Launch ``url`` in Google Chrome (or Chromium / system browser fallback)."""
+    env_browser = os.environ.get("PUBLISH_BROWSER", "").strip()
+    candidates = (env_browser, *CHROME_CANDIDATES) if env_browser else CHROME_CANDIDATES
+
+    for candidate in candidates:
+        resolved = shutil.which(candidate)
+        if not resolved and os.path.isfile(candidate) and os.access(candidate, os.X_OK):
+            resolved = candidate
+        if resolved:
+            subprocess.Popen(
+                [resolved, url],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                start_new_session=True,
+            )
+            return resolved
+
+    if sys.platform == "darwin" and shutil.which("open"):
+        subprocess.Popen(
+            ["open", "-a", "Google Chrome", url],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True,
+        )
+        return "Google Chrome"
+
+    if shutil.which("flatpak"):
+        chk = subprocess.run(
+            ["flatpak", "info", "com.google.Chrome"],
+            capture_output=True,
+            check=False,
+        )
+        if chk.returncode == 0:
+            subprocess.Popen(
+                ["flatpak", "run", "com.google.Chrome", url],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                start_new_session=True,
+            )
+            return "flatpak:com.google.Chrome"
+
+    if webbrowser.open(url):
+        return "webbrowser"
+    return None
+
+
+def serve(
+    repo: str | None = None,
+    host: str = "127.0.0.1",
+    port: int = 8000,
+    build_first: bool = False,
+    open_browser: bool = True,
+) -> None:
+    """Serve built documentation on the first open port >= ``port`` and open Chrome."""
+    project_root = find_git_root(repo)
+    if not project_root:
+        click.echo(f"Error: Not a git repository or valid project path: {repo or os.getcwd()}", err=True)
+        return
+
+    build_dir = os.path.join(project_root, "docs")
+    index_html = os.path.join(build_dir, "index.html")
+    if build_first or not os.path.isfile(index_html):
+        res = build(repo=project_root)
+        if not res.get("ok") or not os.path.isdir(build_dir):
+            click.echo("Build failed. 'docs' directory not found. Aborting server.", err=True)
+            return
+
+    handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=build_dir)
+    bind_host = "127.0.0.1" if host == "localhost" else host
+
+    httpd: _DocsHTTPServer | None = None
+    chosen_port = port
+    for candidate in range(find_open_port(start_port=port, host=bind_host), port + 100):
+        if _is_port_in_use(candidate, host=bind_host):
+            continue
+        try:
+            httpd = _DocsHTTPServer((bind_host, candidate), handler)
+            chosen_port = candidate
+            break
+        except OSError:
+            continue
+
+    if httpd is None:
+        click.echo(f"Error: Could not bind any open port starting from {port}.", err=True)
+        return
+
+    if chosen_port != port:
+        click.echo(f"Port {port} is busy; using open port {chosen_port}.")
+
+    display_host = "localhost" if bind_host in ("127.0.0.1", "", "0.0.0.0") else bind_host
+    url = f"http://{display_host}:{chosen_port}"
+    click.echo(f"Serving {build_dir} at {url}")
+
+    if open_browser:
+        launched = launch_chrome(url)
+        if launched:
+            click.echo(f"Launched browser ({os.path.basename(launched)}).")
+
+    click.echo("Press Ctrl+C to stop the server.")
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        click.echo("\nStopping server...")
+    finally:
+        httpd.server_close()
 
 
 def discover_books(docsrc_dir: str) -> list[dict[str, str]]:

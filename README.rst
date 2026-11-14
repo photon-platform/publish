@@ -70,9 +70,14 @@ Command-line interface:
 
 .. code-block:: bash
 
-   publish build   # Compile SCSS and build Sphinx HTML documentation into docs/
-   publish test    # Build and serve documentation locally with live reload
-   publish folio   # Launch the side-by-side Folio Review web UI
+   publish build        # Incremental 8-core Sphinx HTML build into docs/ (--clean for cold rebuild)
+   publish serve        # Serve docs/ on first open port >= 8000 and open automatically in Chrome
+   publish test         # Build, serve, and clean docs/ on exit
+   publish clean        # Remove docs/ and generated autoapi files
+   publish epub         # Build an EPUB 3 edition for a :layout: book subtree
+   publish folio        # Launch the side-by-side Folio Review web UI
+   publish folio-links  # Audit primary-source .. folio:: / :folio: scan & concordance links
+   publish mcp          # Launch the stdio Model Context Protocol (MCP) server
 
 Continuous Deployment
 ---------------------
