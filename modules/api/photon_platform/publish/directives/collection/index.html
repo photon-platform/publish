@@ -139,10 +139,13 @@
         <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.peek_metadata" title="photon_platform.publish.directives.collection.peek_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peek_metadata</span></code></a>(filepath) → Dict[str, str]</p></td>
         <td><p>Peek at the beginning of a file to extract navigation metadata.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.inject_root_navigation" title="photon_platform.publish.directives.collection.inject_root_navigation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inject_root_navigation</span></code></a>(app, docname, source) → None</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.check_root_navigation_outdated" title="photon_platform.publish.directives.collection.check_root_navigation_outdated"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_root_navigation_outdated</span></code></a>(app, env, added, ...) → List[str]</p></td>
+        <td><p>Mark master_doc outdated during incremental builds whenever header/footer navigation changes.</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.inject_root_navigation" title="photon_platform.publish.directives.collection.inject_root_navigation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inject_root_navigation</span></code></a>(app, docname, source) → None</p></td>
         <td><p>Automatically inject a hidden toctree into the master document (Root).</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.setup" title="photon_platform.publish.directives.collection.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(app) → Dict[str, Any]</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.setup" title="photon_platform.publish.directives.collection.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(app) → Dict[str, Any]</p></td>
         <td><p>Register directives and connect to Sphinx events.</p></td>
         </tr>
         </tbody>
@@ -331,6 +334,12 @@
         </dd></dl>
 
         <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.check_root_navigation_outdated">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">check_root_navigation_outdated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">added</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">changed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">removed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.check_root_navigation_outdated" title="Link to this definition">¶</a></dt>
+        <dd><p>Mark master_doc outdated during incremental builds whenever header/footer navigation changes.</p>
+        </dd></dl>
+
+        <dl class="py function">
         <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.inject_root_navigation">
         <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">inject_root_navigation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.inject_root_navigation" title="Link to this definition">¶</a></dt>
         <dd><p>Automatically inject a hidden toctree into the master document (Root).</p>
@@ -457,7 +466,7 @@
 
   <script src="../../../../../../_static/jquery.js?v=5d32c60e"></script>
   <script src="../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-  <script src="../../../../../../_static/documentation_options.js?v=ff822928"></script>
+  <script src="../../../../../../_static/documentation_options.js?v=5bfaad31"></script>
   <script src="../../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>

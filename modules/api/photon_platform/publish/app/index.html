@@ -90,14 +90,20 @@
         <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.app.cli" title="photon_platform.publish.app.cli"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cli</span></code></a>()</p></td>
         <td><p>A tool to streamline and enhance the Sphinx documentation framework.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.app.build" title="photon_platform.publish.app.build"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build</span></code></a>()</p></td>
-        <td><p>Builds the documentation.</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.app.build" title="photon_platform.publish.app.build"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build</span></code></a>(repo, clean_build, jobs, as_json)</p></td>
+        <td><p>Builds the documentation (incremental by default; pass --clean for full rebuild).</p></td>
         </tr>
-        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.app.test" title="photon_platform.publish.app.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></a>(port)</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.app.clean" title="photon_platform.publish.app.clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clean</span></code></a>(repo)</p></td>
+        <td><p>Removes the docs/ build directory and generated autoapi files.</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.app.test" title="photon_platform.publish.app.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></a>(port)</p></td>
         <td><p>Builds and serves the documentation locally.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.app.epub" title="photon_platform.publish.app.epub"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epub</span></code></a>(book, output)</p></td>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.app.epub" title="photon_platform.publish.app.epub"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epub</span></code></a>(repo, book, output)</p></td>
         <td><p>Builds an EPUB 3 edition for the book subtree in docsrc/.</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.app.mcp" title="photon_platform.publish.app.mcp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mcp</span></code></a>()</p></td>
+        <td><p>Launches the Model Context Protocol (MCP) JSON-RPC stdio server for publish.</p></td>
         </tr>
         <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.app.folio" title="photon_platform.publish.app.folio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">folio</span></code></a>(host, port, root, title, edition, debug)</p></td>
         <td><p>Launches the interactive Folio Review &amp; Vetting web application for resources/.</p></td>
@@ -118,8 +124,14 @@
 
         <dl class="py function">
         <dt class="sig sig-object py" id="photon_platform.publish.app.build">
-        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.app.</span></span><span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.app.build" title="Link to this definition">¶</a></dt>
-        <dd><p>Builds the documentation.</p>
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.app.</span></span><span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean_build</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_json</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.app.build" title="Link to this definition">¶</a></dt>
+        <dd><p>Builds the documentation (incremental by default; pass –clean for full rebuild).</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.app.clean">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.app.</span></span><span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.app.clean" title="Link to this definition">¶</a></dt>
+        <dd><p>Removes the docs/ build directory and generated autoapi files.</p>
         </dd></dl>
 
         <dl class="py function">
@@ -130,8 +142,14 @@
 
         <dl class="py function">
         <dt class="sig sig-object py" id="photon_platform.publish.app.epub">
-        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.app.</span></span><span class="sig-name descname"><span class="pre">epub</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">book</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.app.epub" title="Link to this definition">¶</a></dt>
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.app.</span></span><span class="sig-name descname"><span class="pre">epub</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">book</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.app.epub" title="Link to this definition">¶</a></dt>
         <dd><p>Builds an EPUB 3 edition for the book subtree in docsrc/.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.app.mcp">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.app.</span></span><span class="sig-name descname"><span class="pre">mcp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.app.mcp" title="Link to this definition">¶</a></dt>
+        <dd><p>Launches the Model Context Protocol (MCP) JSON-RPC stdio server for publish.</p>
         </dd></dl>
 
         <dl class="py function">
@@ -243,7 +261,7 @@
 
   <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
   <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-  <script src="../../../../../_static/documentation_options.js?v=ff822928"></script>
+  <script src="../../../../../_static/documentation_options.js?v=5bfaad31"></script>
   <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>
