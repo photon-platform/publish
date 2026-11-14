@@ -3530,50 +3530,141 @@ article.book-layout nav a::before, article.book-layout nav a::after,
   border-bottom-color: var(--book-link-hover);
 }
 
+.book-reading-pane .book-content section#table-of-contents,
+.book-reading-pane .book-content section#contents,
 .book-reading-pane .book-content section#conspectus-totius-operis,
-.folio-book-page section#conspectus-totius-operis {
-  max-width: 42rem;
+.book-reading-pane .book-content section.book-toc,
+.folio-book-page section#table-of-contents,
+.folio-book-page section#contents,
+.folio-book-page section#conspectus-totius-operis,
+.folio-book-page section.book-toc {
   margin: 1.5rem auto 2.5rem !important;
-  text-align: center;
 }
 
-.book-reading-pane .book-content section#conspectus-totius-operis h2,
-.folio-book-page section#conspectus-totius-operis h2 {
-  margin-bottom: 0.2rem !important;
+.book-reading-pane .book-content section#table-of-contents > h2,
+.book-reading-pane .book-content section#contents > h2,
+.book-reading-pane .book-content section#conspectus-totius-operis > h2,
+.book-reading-pane .book-content section.book-toc > h2,
+.folio-book-page section#table-of-contents > h2,
+.folio-book-page section#contents > h2,
+.folio-book-page section#conspectus-totius-operis > h2,
+.folio-book-page section.book-toc > h2 {
+  text-align: center !important;
+  margin-bottom: 0.5rem !important;
 }
 
-.book-reading-pane .book-content section#conspectus-totius-operis h3,
-.folio-book-page section#conspectus-totius-operis h3 {
+.book-reading-pane .book-content section#table-of-contents > h3,
+.book-reading-pane .book-content section#contents > h3,
+.book-reading-pane .book-content section#conspectus-totius-operis > h3,
+.book-reading-pane .book-content section.book-toc > h3,
+.folio-book-page section#table-of-contents > h3,
+.folio-book-page section#contents > h3,
+.folio-book-page section#conspectus-totius-operis > h3,
+.folio-book-page section.book-toc > h3 {
+  max-width: 42rem;
+  margin: 2rem auto 0.2rem !important;
   text-align: center !important;
   font-size: 1.22rem !important;
   letter-spacing: 0.04em;
-  margin-top: 2rem !important;
-  margin-bottom: 0.2rem !important;
 }
 
-.book-reading-pane .book-content section#conspectus-totius-operis p,
-.folio-book-page section#conspectus-totius-operis p {
+.book-reading-pane .book-content section#table-of-contents > p,
+.book-reading-pane .book-content section#contents > p,
+.book-reading-pane .book-content section#conspectus-totius-operis > p,
+.book-reading-pane .book-content section.book-toc > p,
+.folio-book-page section#table-of-contents > p,
+.folio-book-page section#contents > p,
+.folio-book-page section#conspectus-totius-operis > p,
+.folio-book-page section.book-toc > p {
+  max-width: 42rem;
+  margin: 0 auto 0.35rem !important;
   text-align: center !important;
   text-indent: 0 !important;
-  margin-bottom: 0.35rem !important;
 }
 
-.book-reading-pane .book-content section#conspectus-totius-operis p em,
-.folio-book-page section#conspectus-totius-operis p em {
+.book-reading-pane .book-content section#table-of-contents > p em,
+.book-reading-pane .book-content section#contents > p em,
+.book-reading-pane .book-content section#conspectus-totius-operis > p em,
+.book-reading-pane .book-content section.book-toc > p em,
+.folio-book-page section#table-of-contents > p em,
+.folio-book-page section#contents > p em,
+.folio-book-page section#conspectus-totius-operis > p em,
+.folio-book-page section.book-toc > p em {
   color: var(--book-text-muted);
   font-size: 1.02rem;
 }
 
-.book-reading-pane .book-content section#conspectus-totius-operis p a,
-.folio-book-page section#conspectus-totius-operis p a {
+.book-reading-pane .book-content section#table-of-contents > p a,
+.book-reading-pane .book-content section#contents > p a,
+.book-reading-pane .book-content section#conspectus-totius-operis > p a,
+.book-reading-pane .book-content section.book-toc > p a,
+.folio-book-page section#table-of-contents > p a,
+.folio-book-page section#contents > p a,
+.folio-book-page section#conspectus-totius-operis > p a,
+.folio-book-page section.book-toc > p a {
   text-decoration: none !important;
   padding: 0.1rem 0.45rem;
   border-radius: 3px;
 }
 
-.book-reading-pane .book-content section#conspectus-totius-operis p a:hover,
-.folio-book-page section#conspectus-totius-operis p a:hover {
+.book-reading-pane .book-content section#table-of-contents > p a:hover,
+.book-reading-pane .book-content section#contents > p a:hover,
+.book-reading-pane .book-content section#conspectus-totius-operis > p a:hover,
+.book-reading-pane .book-content section.book-toc > p a:hover,
+.folio-book-page section#table-of-contents > p a:hover,
+.folio-book-page section#contents > p a:hover,
+.folio-book-page section#conspectus-totius-operis > p a:hover,
+.folio-book-page section.book-toc > p a:hover {
   background-color: var(--book-surface);
+}
+
+.book-reading-pane .book-content section#table-of-contents > dl,
+.book-reading-pane .book-content section#contents > dl,
+.book-reading-pane .book-content section#conspectus-totius-operis > dl,
+.book-reading-pane .book-content section.book-toc > dl,
+.folio-book-page section#table-of-contents > dl,
+.folio-book-page section#contents > dl,
+.folio-book-page section#conspectus-totius-operis > dl,
+.folio-book-page section.book-toc > dl {
+  max-width: 44rem;
+  margin: 1rem auto 1.5rem !important;
+  text-align: center;
+}
+
+.book-reading-pane .book-content section#table-of-contents > dl > dt,
+.book-reading-pane .book-content section#contents > dl > dt,
+.book-reading-pane .book-content section#conspectus-totius-operis > dl > dt,
+.book-reading-pane .book-content section.book-toc > dl > dt,
+.folio-book-page section#table-of-contents > dl > dt,
+.folio-book-page section#contents > dl > dt,
+.folio-book-page section#conspectus-totius-operis > dl > dt,
+.folio-book-page section.book-toc > dl > dt {
+  font-weight: 600;
+  margin-top: 1.15rem;
+}
+
+.book-reading-pane .book-content section#table-of-contents > dl > dd,
+.book-reading-pane .book-content section#contents > dl > dd,
+.book-reading-pane .book-content section#conspectus-totius-operis > dl > dd,
+.book-reading-pane .book-content section.book-toc > dl > dd,
+.folio-book-page section#table-of-contents > dl > dd,
+.folio-book-page section#contents > dl > dd,
+.folio-book-page section#conspectus-totius-operis > dl > dd,
+.folio-book-page section.book-toc > dl > dd {
+  margin-left: 0 !important;
+  margin-bottom: 0.4rem;
+}
+
+.book-reading-pane .book-content section#table-of-contents > ul,
+.book-reading-pane .book-content section#contents > ul,
+.book-reading-pane .book-content section#conspectus-totius-operis > ul,
+.book-reading-pane .book-content section.book-toc > ul,
+.folio-book-page section#table-of-contents > ul,
+.folio-book-page section#contents > ul,
+.folio-book-page section#conspectus-totius-operis > ul,
+.folio-book-page section.book-toc > ul {
+  max-width: 44rem;
+  margin: 1rem auto 1.5rem !important;
 }
 
 .book-reading-pane .book-content section[id],

@@ -21,6 +21,7 @@ Classes
    photon_platform.publish.roles.geometry.term_ref_node
    photon_platform.publish.roles.geometry.person_ref_node
    photon_platform.publish.roles.geometry.eq_ref_node
+   photon_platform.publish.roles.geometry.coincide_ref_node
    photon_platform.publish.roles.geometry.fn_ref_node
 
 
@@ -57,6 +58,9 @@ Functions
    photon_platform.publish.roles.geometry.visit_eq_ref_node
    photon_platform.publish.roles.geometry.depart_eq_ref_node
    photon_platform.publish.roles.geometry.eq_role
+   photon_platform.publish.roles.geometry.visit_coincide_ref_node
+   photon_platform.publish.roles.geometry.depart_coincide_ref_node
+   photon_platform.publish.roles.geometry.coincide_role
    photon_platform.publish.roles.geometry.visit_fn_ref_node
    photon_platform.publish.roles.geometry.depart_fn_ref_node
    photon_platform.publish.roles.geometry.fn_role
@@ -271,6 +275,29 @@ Module Contents
 .. py:function:: eq_role(name: str, rawtext: str, text: str, lineno: int, inliner: Any, options: Optional[Dict[str, Any]] = None, content: Optional[List[str]] = None) -> Tuple[List[docutils.nodes.Node], List[docutils.nodes.system_message]]
 
    Role `:eq:` for interactive equality references wrapping 'equal' (or 'equilateral', etc.).
+
+
+.. py:class:: coincide_ref_node(rawsource: str = '', text: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.Inline`, :py:obj:`docutils.nodes.TextElement`
+
+
+   Inline AST node for coincidence/superposition references (:coincide:).
+
+
+.. py:function:: visit_coincide_ref_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML visitor for coincide_ref_node.
+
+
+.. py:function:: depart_coincide_ref_node(self: Any, node: docutils.nodes.Element) -> None
+
+   HTML departure visitor for coincide_ref_node.
+
+
+.. py:function:: coincide_role(name: str, rawtext: str, text: str, lineno: int, inliner: Any, options: Optional[Dict[str, Any]] = None, content: Optional[List[str]] = None) -> Tuple[List[docutils.nodes.Node], List[docutils.nodes.system_message]]
+
+   Role `:coincide:` for interactive coincidence/superposition references.
 
 
 .. py:class:: fn_ref_node(rawsource: str = '', text: str = '', *children, **attributes: Any)

@@ -49,10 +49,12 @@ Module Contents
    Detect companion tracks for `pagename` in `env.found_docs`.
 
    Supports:
-   - Elements 2.0 tracks: ``index`` (Pseudocode), ``code`` (Code), ``heath`` (Heath)
+   - Elements 2.0 tracks: ``index`` (Pseudocode), ``video`` (Video), ``code`` (Code), ``heath`` (Heath)
    - Euclid tracks: ``index`` / ``proposition``, ``commentary``, ``notes``, ``folio``
      or ``<pagename>.commentary``, ``<pagename>.notes``
-   - Pacioli tracks: ``<stem>_en``, ``<stem>_it``, ``<stem>_de``, ``<stem>_notes``, ``index``
+   - Multilingual tracks: ``<stem>_en`` / ``-en``, ``-el`` (Greek), ``-la`` (Latin),
+     ``-de`` (German), ``-fr`` (French), ``-it`` (Italian), ``-da`` (Danish),
+     ``-summary``, ``-notes``
    - Hoenen tracks: ``<stem>`` (Latin), ``<stem>-en``, ``<stem>-summary``, ``translation-notes-<stem>``
 
 
