@@ -18,6 +18,7 @@ Functions
    photon_platform.publish.app.build
    photon_platform.publish.app.clean
    photon_platform.publish.app.test
+   photon_platform.publish.app.serve
    photon_platform.publish.app.epub
    photon_platform.publish.app.mcp
    photon_platform.publish.app.folio
@@ -45,6 +46,11 @@ Module Contents
 .. py:function:: test(port)
 
    Builds and serves the documentation locally.
+
+
+.. py:function:: serve(repo, host, port, build_first, no_browser)
+
+   Serves docs/ on the first open port >= 8000 and launches Chrome.
 
 
 .. py:function:: epub(repo, book, output)

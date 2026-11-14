@@ -39,6 +39,23 @@ def test(port):
 
 @cli.command()
 @click.option('--repo', default=None, help='Path to target repository root (default: current directory).')
+@click.option('--host', default='127.0.0.1', show_default=True, help='Host interface to bind.')
+@click.option('-p', '--port', default=8000, show_default=True, type=int, help='Starting port (advances to next open port if busy).')
+@click.option('-b', '--build', 'build_first', is_flag=True, help='Run incremental build before serving (auto-enabled if docs/ is missing).')
+@click.option('--no-browser', is_flag=True, help='Do not automatically launch Chrome.')
+def serve(repo, host, port, build_first, no_browser):
+    """Serves docs/ on the first open port >= 8000 and launches Chrome."""
+    publish.serve(
+        repo=repo,
+        host=host,
+        port=port,
+        build_first=build_first,
+        open_browser=not no_browser,
+    )
+
+
+@cli.command()
+@click.option('--repo', default=None, help='Path to target repository root (default: current directory).')
 @click.option('--book', default=None, help='Book subdirectory in docsrc/ (auto-detected if omitted).')
 @click.option('--output', '-o', default=None, help='Optional output path for the generated .epub file.')
 def epub(repo, book, output):

@@ -9,6 +9,14 @@ photon_platform.publish.publish
 
 
 
+Attributes
+----------
+
+.. autoapisummary::
+
+   photon_platform.publish.publish.CHROME_CANDIDATES
+
+
 Functions
 ---------
 
@@ -19,6 +27,9 @@ Functions
    photon_platform.publish.publish.build
    photon_platform.publish.publish.clean
    photon_platform.publish.publish.test
+   photon_platform.publish.publish.find_open_port
+   photon_platform.publish.publish.launch_chrome
+   photon_platform.publish.publish.serve
    photon_platform.publish.publish.discover_books
    photon_platform.publish.publish.build_epub
 
@@ -49,6 +60,26 @@ Module Contents
 .. py:function:: test(port: int = 8000) -> None
 
    Build and serve the documentation locally.
+
+
+.. py:data:: CHROME_CANDIDATES
+   :type:  tuple[str, ...]
+   :value: ('google-chrome', 'google-chrome-stable', '/usr/bin/google-chrome',...
+
+
+.. py:function:: find_open_port(start_port: int = 8000, host: str = '127.0.0.1', max_tries: int = 100) -> int
+
+   Find the first open TCP port at or after ``start_port``.
+
+
+.. py:function:: launch_chrome(url: str) -> str | None
+
+   Launch ``url`` in Google Chrome (or Chromium / system browser fallback).
+
+
+.. py:function:: serve(repo: str | None = None, host: str = '127.0.0.1', port: int = 8000, build_first: bool = False, open_browser: bool = True) -> None
+
+   Serve built documentation on the first open port >= ``port`` and open Chrome.
 
 
 .. py:function:: discover_books(docsrc_dir: str) -> list[dict[str, str]]

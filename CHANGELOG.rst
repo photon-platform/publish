@@ -2,6 +2,13 @@ changelog
 =========
 
 
+0.4.4
+=====
+*2026-11-14*
+
+- feat(serve): Add standalone ``publish serve`` command (separate from ``publish test``) that serves ``docs/`` via multi-threaded HTTP without wiping ``docs/`` on exit, automatically scans for the next open port starting at ``8000`` (enabling multiple books side-by-side), auto-builds only when ``docs/index.html`` is missing (or ``-b``/``--build`` is passed), and launches automatically in Google Chrome (``--no-browser`` to suppress).
+
+
 0.4.3
 =====
 *2026-11-14*
