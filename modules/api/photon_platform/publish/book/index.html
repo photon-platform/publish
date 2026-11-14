@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../../../../_static/css/styles.css?v=66998e95" />
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/css/styles.css?v=8713e751" />
   <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -101,7 +101,7 @@
         <td><p>Peek at the beginning of an RST file to extract top field-list metadata.</p></td>
         </tr>
         <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.book.detect_companion_tracks" title="photon_platform.publish.book.detect_companion_tracks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">detect_companion_tracks</span></code></a>(env, pagename) → List[Dict[str, Any]]</p></td>
-        <td><p>Detect companion tracks for <cite>pagename</cite> in <cite>env.found_docs</cite>.</p></td>
+        <td><p>Detect companion tracks for <code class="docutils literal notranslate"><span class="pre">pagename</span></code> in <code class="docutils literal notranslate"><span class="pre">env.found_docs</span></code>.</p></td>
         </tr>
         <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.book.resolve_book_context" title="photon_platform.publish.book.resolve_book_context"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_book_context</span></code></a>(env, pagename[, doctree]) → Dict[str, Any]</p></td>
         <td><p>Resolve book subtree inheritance and companion tracks for <cite>pagename</cite>.</p></td>
@@ -140,15 +140,15 @@
         <dl class="py function">
         <dt class="sig sig-object py" id="photon_platform.publish.book.detect_companion_tracks">
         <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.book.</span></span><span class="sig-name descname"><span class="pre">detect_companion_tracks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pagename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.book.detect_companion_tracks" title="Link to this definition">¶</a></dt>
-        <dd><p>Detect companion tracks for <cite>pagename</cite> in <cite>env.found_docs</cite>.</p>
-        <p>Supports:
-        - Elements 2.0 tracks: <code class="docutils literal notranslate"><span class="pre">index</span></code> (Pseudocode), <code class="docutils literal notranslate"><span class="pre">video</span></code> (Video), <code class="docutils literal notranslate"><span class="pre">code</span></code> (Code), <code class="docutils literal notranslate"><span class="pre">heath</span></code> (Heath)
-        - Euclid tracks: <code class="docutils literal notranslate"><span class="pre">index</span></code> / <code class="docutils literal notranslate"><span class="pre">proposition</span></code>, <code class="docutils literal notranslate"><span class="pre">commentary</span></code>, <code class="docutils literal notranslate"><span class="pre">notes</span></code>, <code class="docutils literal notranslate"><span class="pre">folio</span></code></p>
-        <blockquote>
-        <div><p>or <code class="docutils literal notranslate"><span class="pre">&lt;pagename&gt;.commentary</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;pagename&gt;.notes</span></code></p>
-        </div></blockquote>
+        <dd><p>Detect companion tracks for <code class="docutils literal notranslate"><span class="pre">pagename</span></code> in <code class="docutils literal notranslate"><span class="pre">env.found_docs</span></code>.</p>
+        <p>Supports:</p>
         <ul class="simple">
-        <li><p>Pacioli tracks: <code class="docutils literal notranslate"><span class="pre">&lt;stem&gt;_en</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;stem&gt;_it</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;stem&gt;_de</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;stem&gt;_notes</span></code>, <code class="docutils literal notranslate"><span class="pre">index</span></code></p></li>
+        <li><p>Elements 2.0 tracks: <code class="docutils literal notranslate"><span class="pre">index</span></code> (Pseudocode), <code class="docutils literal notranslate"><span class="pre">video</span></code> (Video), <code class="docutils literal notranslate"><span class="pre">code</span></code> (Code), <code class="docutils literal notranslate"><span class="pre">heath</span></code> (Heath)</p></li>
+        <li><p>Euclid tracks: <code class="docutils literal notranslate"><span class="pre">index</span></code> / <code class="docutils literal notranslate"><span class="pre">proposition</span></code>, <code class="docutils literal notranslate"><span class="pre">commentary</span></code>, <code class="docutils literal notranslate"><span class="pre">notes</span></code>, <code class="docutils literal notranslate"><span class="pre">folio</span></code>
+        or <code class="docutils literal notranslate"><span class="pre">&lt;pagename&gt;.commentary</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;pagename&gt;.notes</span></code></p></li>
+        <li><p>Multilingual tracks: <code class="docutils literal notranslate"><span class="pre">&lt;stem&gt;_en</span></code> / <code class="docutils literal notranslate"><span class="pre">-en</span></code>, <code class="docutils literal notranslate"><span class="pre">-el</span></code> (Greek), <code class="docutils literal notranslate"><span class="pre">-la</span></code> (Latin),
+        <code class="docutils literal notranslate"><span class="pre">-de</span></code> (German), <code class="docutils literal notranslate"><span class="pre">-fr</span></code> (French), <code class="docutils literal notranslate"><span class="pre">-it</span></code> (Italian), <code class="docutils literal notranslate"><span class="pre">-da</span></code> (Danish),
+        <code class="docutils literal notranslate"><span class="pre">-summary</span></code>, <code class="docutils literal notranslate"><span class="pre">-notes</span></code></p></li>
         <li><p>Hoenen tracks: <code class="docutils literal notranslate"><span class="pre">&lt;stem&gt;</span></code> (Latin), <code class="docutils literal notranslate"><span class="pre">&lt;stem&gt;-en</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;stem&gt;-summary</span></code>, <code class="docutils literal notranslate"><span class="pre">translation-notes-&lt;stem&gt;</span></code></p></li>
         </ul>
         </dd></dl>
@@ -286,7 +286,7 @@
 
   <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
   <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-  <script src="../../../../../_static/documentation_options.js?v=c87aa342"></script>
+  <script src="../../../../../_static/documentation_options.js?v=ff822928"></script>
   <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>

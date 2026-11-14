@@ -933,28 +933,31 @@ article.book-layout nav,
     }
   }
 
-  /* Conspectus Totius Operis (Book Index Table of Contents) */
-  section#conspectus-totius-operis {
-    max-width: 42rem;
+  /* Book Index Table of Contents (English & Latin Hoenen Exemplar) */
+  section#table-of-contents,
+  section#contents,
+  section#conspectus-totius-operis,
+  section.book-toc {
     margin: 1.5rem auto 2.5rem !important;
-    text-align: center;
 
-    h2 {
-      margin-bottom: 0.2rem !important;
+    > h2 {
+      text-align: center !important;
+      margin-bottom: 0.5rem !important;
     }
 
-    h3 {
+    > h3 {
+      max-width: 42rem;
+      margin: 2rem auto 0.2rem !important;
       text-align: center !important;
       font-size: 1.22rem !important;
       letter-spacing: 0.04em;
-      margin-top: 2rem !important;
-      margin-bottom: 0.2rem !important;
     }
 
-    p {
+    > p {
+      max-width: 42rem;
+      margin: 0 auto 0.35rem !important;
       text-align: center !important;
       text-indent: 0 !important;
-      margin-bottom: 0.35rem !important;
 
       em {
         color: var(--book-text-muted);
@@ -970,6 +973,27 @@ article.book-layout nav,
           background-color: var(--book-surface);
         }
       }
+    }
+
+    > dl {
+      max-width: 44rem;
+      margin: 1rem auto 1.5rem !important;
+      text-align: center;
+
+      > dt {
+        font-weight: 600;
+        margin-top: 1.15rem;
+      }
+
+      > dd {
+        margin-left: 0 !important;
+        margin-bottom: 0.4rem;
+      }
+    }
+
+    > ul {
+      max-width: 44rem;
+      margin: 1rem auto 1.5rem !important;
     }
   }
 
