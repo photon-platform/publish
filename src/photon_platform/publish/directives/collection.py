@@ -717,18 +717,20 @@ def build_nav_links(
         meta = _normalize_log_meta(docname, app.env.metadata.setdefault(docname, {}))
         if meta.get('navigation') == 'header':
             title = app.env.titles.get(docname)
-            if title:
+            nav_label = str(meta.get('nav_title') or '').strip() or (title.astext() if title else '')
+            if nav_label:
                 header_nav_list.append({
                     'docname': docname,
-                    'title': title.astext(),
+                    'title': nav_label,
                     'order': meta.get('order', 0),
                 })
         if meta.get('navigation') == 'footer':
             title = app.env.titles.get(docname)
-            if title:
+            nav_label = str(meta.get('nav_title') or '').strip() or (title.astext() if title else '')
+            if nav_label:
                 footer_nav_list.append({
                     'docname': docname,
-                    'title': title.astext(),
+                    'title': nav_label,
                     'order': meta.get('order', 0),
                 })
         if meta.get('type') == 'log':
@@ -740,10 +742,10 @@ def build_nav_links(
                     'date': meta.get('date', ''),
                 })
 
-    header_nav_list.sort(key=lambda x: safe_numeric(x['order']))
+    header_nav_list.sort(key=lambda x: (safe_numeric(x['order']), x['docname']))
     context['header_nav_list'] = header_nav_list
 
-    footer_nav_list.sort(key=lambda x: safe_numeric(x['order']))
+    footer_nav_list.sort(key=lambda x: (safe_numeric(x['order']), x['docname']))
     context['footer_nav_list'] = footer_nav_list
 
     recent_logs.sort(key=lambda x: safe_sort_key(x['date']), reverse=True)

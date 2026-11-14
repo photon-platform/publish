@@ -2,6 +2,16 @@ changelog
 =========
 
 
+0.4.2
+=====
+*2026-11-14*
+
+- feat(collection): Support ``:nav_title:`` frontmatter overrides and deterministic ``(order, docname)`` sorting for ``header`` and ``footer`` navigation menus.
+- feat(book): Add Greek (``-el``/``-grc``), French (``-fr``), and Danish (``-da``) companion track detection and normalize track switcher labels to English (``English``, ``Greek``, ``Latin``, ``German``, ``French``, ``Italian``, ``Danish``).
+- feat(epub): Default EPUB track bar utility links to English (``Contents``, ``People``) while honoring book-root ``:toc_label:`` and ``:persons_label:`` metadata overrides (e.g. ``Conspectus`` / ``Index Nominum`` in ``geometor/hoenen``).
+- style(geometor): Generalize classical Book Index Table of Contents layout to ``section#table-of-contents``, ``section#contents``, ``section#conspectus-totius-operis``, and ``section.book-toc`` using LibSass-safe direct-child selectors so ``.collection`` cards remain unclipped.
+
+
 0.4.1
 =====
 *2026-11-13*

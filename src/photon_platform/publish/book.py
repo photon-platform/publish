@@ -73,9 +73,13 @@ _TRACK_SUFFIX_PATTERNS: List[Tuple[str, str, str]] = [
     (r"^(.+)[._-]code$", "code", "Code"),
     (r"^(.+)[._-]heath$", "heath", "Heath"),
     (r"^(.+)[._-]en$", "en", "English"),
-    (r"^(.+)[._-]it$", "it", "Italiano (1509)"),
-    (r"^(.+)[._-]de$", "de", "Deutsch (1889)"),
+    (r"^(.+)[._-]el$", "el", "Greek"),
+    (r"^(.+)[._-]grc$", "el", "Greek"),
     (r"^(.+)[._-]la$", "la", "Latin"),
+    (r"^(.+)[._-]de$", "de", "German"),
+    (r"^(.+)[._-]fr$", "fr", "French"),
+    (r"^(.+)[._-]it$", "it", "Italian"),
+    (r"^(.+)[._-]da$", "da", "Danish"),
     (r"^(.+)[._-]commentary$", "commentary", "Commentary"),
     (r"^(.+)[._-]summary$", "summary", "Summary"),
     (r"^(.+)[._-]notes$", "notes", "Notes"),
@@ -101,22 +105,29 @@ def _extract_unit_stem(basename: str, doc_dir: str) -> str:
         "notes",
         "folio",
         "en",
-        "it",
-        "de",
+        "el",
+        "grc",
         "la",
+        "de",
+        "fr",
+        "it",
+        "da",
     }:
         return os.path.basename(doc_dir) if doc_dir else basename
     return basename
 
 
 def detect_companion_tracks(env: Any, pagename: str) -> List[Dict[str, Any]]:
-    """Detect companion tracks for `pagename` in `env.found_docs`.
+    """Detect companion tracks for ``pagename`` in ``env.found_docs``.
 
     Supports:
+
     - Elements 2.0 tracks: ``index`` (Pseudocode), ``video`` (Video), ``code`` (Code), ``heath`` (Heath)
     - Euclid tracks: ``index`` / ``proposition``, ``commentary``, ``notes``, ``folio``
       or ``<pagename>.commentary``, ``<pagename>.notes``
-    - Pacioli tracks: ``<stem>_en``, ``<stem>_it``, ``<stem>_de``, ``<stem>_notes``, ``index``
+    - Multilingual tracks: ``<stem>_en`` / ``-en``, ``-el`` (Greek), ``-la`` (Latin),
+      ``-de`` (German), ``-fr`` (French), ``-it`` (Italian), ``-da`` (Danish),
+      ``-summary``, ``-notes``
     - Hoenen tracks: ``<stem>`` (Latin), ``<stem>-en``, ``<stem>-summary``, ``translation-notes-<stem>``
     """
     found_docs: Set[str] = set(getattr(env, "found_docs", set()))
@@ -200,19 +211,18 @@ def detect_companion_tracks(env: Any, pagename: str) -> List[Dict[str, Any]]:
             ),
         ),
         (
-            "it",
-            "Italiano",
+            "el",
+            "Greek",
             _cands(
-                [_qual(f"{stem}.it"), _qual(f"{stem}_it"), _qual(f"{stem}-it")],
-                [_qual("it")],
-            ),
-        ),
-        (
-            "de",
-            "Deutsch",
-            _cands(
-                [_qual(f"{stem}.de"), _qual(f"{stem}_de"), _qual(f"{stem}-de")],
-                [_qual("de")],
+                [
+                    _qual(f"{stem}.el"),
+                    _qual(f"{stem}_el"),
+                    _qual(f"{stem}-el"),
+                    _qual(f"{stem}.grc"),
+                    _qual(f"{stem}_grc"),
+                    _qual(f"{stem}-grc"),
+                ],
+                [_qual("el"), _qual("grc")],
             ),
         ),
         (
@@ -221,6 +231,38 @@ def detect_companion_tracks(env: Any, pagename: str) -> List[Dict[str, Any]]:
             _cands(
                 [_qual(f"{stem}.la"), _qual(f"{stem}_la"), _qual(f"{stem}-la")],
                 [_qual("la")],
+            ),
+        ),
+        (
+            "de",
+            "German",
+            _cands(
+                [_qual(f"{stem}.de"), _qual(f"{stem}_de"), _qual(f"{stem}-de")],
+                [_qual("de")],
+            ),
+        ),
+        (
+            "fr",
+            "French",
+            _cands(
+                [_qual(f"{stem}.fr"), _qual(f"{stem}_fr"), _qual(f"{stem}-fr")],
+                [_qual("fr")],
+            ),
+        ),
+        (
+            "it",
+            "Italian",
+            _cands(
+                [_qual(f"{stem}.it"), _qual(f"{stem}_it"), _qual(f"{stem}-it")],
+                [_qual("it")],
+            ),
+        ),
+        (
+            "da",
+            "Danish",
+            _cands(
+                [_qual(f"{stem}.da"), _qual(f"{stem}_da"), _qual(f"{stem}-da")],
+                [_qual("da")],
             ),
         ),
         (
@@ -629,20 +671,26 @@ def _build_epub_tracks_bar_html(
                 track_items.append(f'<a class="book-track-item" href="{rel_uri}">{label}</a>')
         parts_html.append(' <span class="book-track-sep">&middot;</span> '.join(track_items))
 
-    # Add Conspectus & Apparatus quick links
+    # Add Contents & Apparatus quick links (English default, metadata-overridable e.g. for Hoenen)
     book_prefix = os.path.dirname(book_root)
     def _qual_book(name: str) -> str:
         return f"{book_prefix}/{name}" if book_prefix else name
 
+    root_meta = getattr(env, "metadata", {}).get(book_root, {}) if env else {}
+    toc_label = _html.escape(str(root_meta.get("toc_label") or "Contents"))
+    persons_label = _html.escape(str(root_meta.get("persons_label") or "People"))
+    bib_label = _html.escape(str(root_meta.get("bibliography_label") or "Bibliography"))
+    glossary_label = _html.escape(str(root_meta.get("glossary_label") or "Glossary"))
+
     util_links: List[str] = []
     if book_root in found_docs and pagename != book_root:
         toc_uri = _html.escape(builder.get_relative_uri(pagename, book_root), quote=True)
-        util_links.append(f'<a class="book-track-item book-util-link" href="{toc_uri}">Conspectus</a>')
+        util_links.append(f'<a class="book-track-item book-util-link" href="{toc_uri}">{toc_label}</a>')
 
     for app_doc, app_label in (
-        ("bibliography", "Bibliography"),
-        ("persons", "Persons"),
-        ("glossary", "Glossary"),
+        ("bibliography", bib_label),
+        ("persons", persons_label),
+        ("glossary", glossary_label),
     ):
         cand = _qual_book(app_doc)
         if cand not in found_docs and app_doc in found_docs:
