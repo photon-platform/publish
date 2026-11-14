@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+import time
 from pathlib import Path
 from typing import Any
 
@@ -224,7 +225,24 @@ def test_audit_repo_folio_links(tmp_path: Path) -> None:
         encoding="utf-8",
     )
 
+    t0 = time.perf_counter()
     report = audit_repo_folio_links(repo)
+    elapsed = time.perf_counter() - t0
+    assert elapsed < 0.2
+
+    # Verify env cache population
+    assert report.env is not None
+    cached_scan = getattr(report.env, "_photon_folio_scan_cache", None)
+    assert cached_scan is not None
+    assert cached_scan[0] == str(repo.resolve())
+    assert ("", "0001") in cached_scan[1]
+    assert ("", "0002") in cached_scan[1]
+
+    cached_map = getattr(report.env, "_photon_folio_map_cache", None)
+    assert cached_map is not None
+    assert cached_map[0] == str(repo.resolve())
+    assert "Folio 0003" in cached_map[1]
+
     assert report.repo == repo.name
     assert report.tracked_scans == 2
     assert report.ignored_scans == 0

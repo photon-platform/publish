@@ -2,6 +2,13 @@ changelog
 =========
 
 
+0.4.1
+=====
+*2026-11-13*
+
+- fix(folio_links): Resolve repository root prior to cache lookup and cache scan/manifest indices on Sphinx/mock env regardless of caller invocation form for O(1) directive resolution during audits.
+
+
 0.4.0
 =====
 *2026-11-13*

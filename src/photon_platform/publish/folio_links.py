@@ -92,15 +92,19 @@ def load_folio_scan_index(env: Any, project_root: Path | None = None) -> dict[tu
     Returns:
         Mapping of `(scope_key, 4_digit_stem)` to repo-relative POSIX path.
     """
-    cache_attr = "_photon_folio_scan_cache"
-    if env is not None and project_root is None:
-        cached = getattr(env, cache_attr, None)
-        if cached is not None:
-            return cached
-
     if project_root is None:
         srcdir = getattr(env, "srcdir", ".") if env is not None else "."
-        project_root = Path(srcdir).resolve().parent
+        resolved_root = Path(srcdir).resolve().parent
+    else:
+        resolved_root = Path(project_root).resolve()
+
+    cache_attr = "_photon_folio_scan_cache"
+    if env is not None:
+        cached = getattr(env, cache_attr, None)
+        if isinstance(cached, tuple) and len(cached) == 2 and cached[0] == str(resolved_root):
+            return cached[1]
+        if isinstance(cached, dict):
+            return cached
 
     index: dict[tuple[str, str], str] = {}
 
@@ -110,7 +114,7 @@ def load_folio_scan_index(env: Any, project_root: Path | None = None) -> dict[tu
         if existing is None or (existing.lower().endswith((".jpg", ".jpeg")) and rel_posix.lower().endswith(".png")):
             index[key] = rel_posix
 
-    for rel_posix in _list_non_ignored_resource_files(project_root):
+    for rel_posix in _list_non_ignored_resource_files(resolved_root):
         parts = Path(rel_posix).parts
         if not parts:
             continue
@@ -129,27 +133,31 @@ def load_folio_scan_index(env: Any, project_root: Path | None = None) -> dict[tu
         _store(("", stem), rel_posix)
 
     if env is not None:
-        setattr(env, cache_attr, index)
+        setattr(env, cache_attr, (str(resolved_root), index))
     return index
 
 
 def load_folio_map_index(env: Any, project_root: Path | None = None) -> dict[str, Any]:
     """Load and merge all non-ignored `resources/**/folio_map.json` manifests."""
-    cache_attr = "_photon_folio_map_cache"
-    if env is not None and project_root is None:
-        cached = getattr(env, cache_attr, None)
-        if cached is not None:
-            return cached
-
     if project_root is None:
         srcdir = getattr(env, "srcdir", ".") if env is not None else "."
-        project_root = Path(srcdir).resolve().parent
+        resolved_root = Path(srcdir).resolve().parent
+    else:
+        resolved_root = Path(project_root).resolve()
+
+    cache_attr = "_photon_folio_map_cache"
+    if env is not None:
+        cached = getattr(env, cache_attr, None)
+        if isinstance(cached, tuple) and len(cached) == 2 and cached[0] == str(resolved_root):
+            return cached[1]
+        if isinstance(cached, dict):
+            return cached
 
     merged: dict[str, Any] = {}
-    for rel_posix in _list_non_ignored_resource_files(project_root):
+    for rel_posix in _list_non_ignored_resource_files(resolved_root):
         if Path(rel_posix).name != "folio_map.json":
             continue
-        full_path = project_root / rel_posix
+        full_path = resolved_root / rel_posix
         try:
             data = json.loads(full_path.read_text(encoding="utf-8"))
         except (json.JSONDecodeError, OSError):
@@ -161,7 +169,7 @@ def load_folio_map_index(env: Any, project_root: Path | None = None) -> dict[str
                     merged[str(k).strip()] = v
 
     if env is not None:
-        setattr(env, cache_attr, merged)
+        setattr(env, cache_attr, (str(resolved_root), merged))
     return merged
 
 
@@ -351,9 +359,10 @@ class FolioAuditReport:
     unresolved_directives: list[str] = field(default_factory=list)
     unresolved_badges: list[str] = field(default_factory=list)
     sample_links: list[str] = field(default_factory=list)
+    env: Any = None
 
 
-def audit_repo_folio_links(repo_root: Path) -> FolioAuditReport:
+def audit_repo_folio_links(repo_root: Path, env: Any = None) -> FolioAuditReport:
     """Deterministically audit all `.. folio::` directives and `:folio:` badges in `repo_root`."""
     repo_root = repo_root.resolve()
     docsrc = repo_root / "docsrc"
@@ -390,7 +399,8 @@ def audit_repo_folio_links(repo_root: Path) -> FolioAuditReport:
             self.config = _StubConfig(repo_name)
             self.metadata: dict[str, dict[str, Any]] = {}
 
-    env = _StubEnv(docsrc, repo_root.name)
+    if env is None:
+        env = _StubEnv(docsrc, repo_root.name)
     fmap = load_folio_map_index(env, project_root=repo_root)
 
     directives_total = 0
@@ -461,6 +471,7 @@ def audit_repo_folio_links(repo_root: Path) -> FolioAuditReport:
         unresolved_directives=sorted(unresolved_dir_set)[:25],
         unresolved_badges=sorted(unresolved_badge_set)[:25],
         sample_links=samples,
+        env=env,
     )
 
 
