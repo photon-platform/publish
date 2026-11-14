@@ -19,6 +19,7 @@ Functions
    photon_platform.publish.app.test
    photon_platform.publish.app.epub
    photon_platform.publish.app.folio
+   photon_platform.publish.app.folio_links_cmd
 
 
 Module Contents
@@ -47,5 +48,10 @@ Module Contents
 .. py:function:: folio(host, port, root, title, edition, debug)
 
    Launches the interactive Folio Review & Vetting web application for resources/.
+
+
+.. py:function:: folio_links_cmd(repo, optimize_scans, grayscale, as_json)
+
+   Audits primary-source .. folio:: and :folio: links (and optionally optimizes scans).
 
 
