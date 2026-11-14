@@ -2,6 +2,16 @@ changelog
 =========
 
 
+0.4.0
+=====
+*2026-11-13*
+
+- feat(folio_links): Primary-source folio URL resolution, repository link auditing, and scan index caching.
+- feat(book): Populate ``folio_url`` in ``resolve_book_context`` for book header badge link rendering.
+- feat(directives): Track-aware folio directive and badge target resolution.
+- feat(agents): Add canonical ``folio-curator`` subagent definition.
+
+
 0.3.24
 ======
 

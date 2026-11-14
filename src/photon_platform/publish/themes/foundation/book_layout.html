@@ -24,7 +24,11 @@
             <span class="book-badge folio-badge">{{ original_id }}</span>
 {%-   endif %}
 {%-   if folio %}
+{%-     if folio_url %}
+            <a class="book-badge folio-badge folio-link" href="{{ folio_url }}" target="_blank" rel="noopener" title="View Folio {{ folio }}{% if page %} (p. {{ page }}){% endif %}">Folio {{ folio }}{% if page %} | p. {{ page }}{% endif %}</a>
+{%-     else %}
             <span class="book-badge folio-badge">Folio {{ folio }}{% if page %} | p. {{ page }}{% endif %}</span>
+{%-     endif %}
 {%-   endif %}
           </div>
 {%- endif %}

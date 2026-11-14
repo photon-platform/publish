@@ -49,6 +49,48 @@ def folio(host, port, root, title, edition, debug):
     app.run(host=host, port=port, debug=debug, use_reloader=True)
 
 
+@cli.command("folio-links")
+@click.option("--repo", default=".", help="Path to target repository root (default: current directory).")
+@click.option("--optimize-scans", is_flag=True, help="Losslessly crush 4-digit .png folio scans in resources/.")
+@click.option("--grayscale", is_flag=True, help="Convert all 4-digit .png folio scans to 8-bit grayscale when optimizing.")
+@click.option("--json", "as_json", is_flag=True, help="Emit structured JSON report.")
+def folio_links_cmd(repo, optimize_scans, grayscale, as_json):
+    """Audits primary-source .. folio:: and :folio: links (and optionally optimizes scans)."""
+    import json
+    from dataclasses import asdict
+    from pathlib import Path
+    from .folio_links import audit_repo_folio_links, optimize_repo_folio_scans
 
+    repo_root = Path(repo).resolve()
+    opt_stats = None
+    if optimize_scans:
+        opt_stats = optimize_repo_folio_scans(repo_root, force_grayscale=grayscale)
 
+    report = audit_repo_folio_links(repo_root)
+    payload = asdict(report)
+    if opt_stats is not None:
+        payload["scan_optimization"] = opt_stats
 
+    if as_json:
+        click.echo(json.dumps(payload, indent=2))
+        return
+
+    if opt_stats is not None:
+        click.echo(
+            f"[optimize-scans] checked={opt_stats['files_checked']}, "
+            f"rewritten={opt_stats['files_rewritten']}, "
+            f"saved={opt_stats['saved_mb']:.2f} MB "
+            f"({opt_stats['before_bytes'] / 1048576:.2f} -> {opt_stats['after_bytes'] / 1048576:.2f} MB)"
+        )
+    click.echo(
+        f"[{report.repo}] scans: tracked={report.tracked_scans}, ignored={report.ignored_scans} | "
+        f"folio_map={report.folio_map_entries} | "
+        f"directives={report.directives_resolved}/{report.directives_total} | "
+        f"badges={report.badges_resolved}/{report.badges_total}"
+    )
+    for u in report.unresolved_directives[:10]:
+        click.echo(f"  ! unresolved directive -> {u}")
+    for u in report.unresolved_badges[:10]:
+        click.echo(f"  ! unresolved badge     -> {u}")
+    for s in report.sample_links[:3]:
+        click.echo(f"  ✓ sample -> {s}")

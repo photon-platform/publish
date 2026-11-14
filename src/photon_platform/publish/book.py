@@ -446,6 +446,10 @@ def resolve_book_context(
             if "track-nav" in node.get("classes", []) and node.parent is not None:
                 node.parent.remove(node)
 
+    from .folio_links import resolve_folio_url
+
+    folio_url = resolve_folio_url(env, pagename, folio) if folio else None
+
     return {
         "is_book_page": True,
         "book_root": book_root,
@@ -453,6 +457,7 @@ def resolve_book_context(
         "book_subtitle": book_subtitle,
         "book_theme": book_theme,
         "folio": folio,
+        "folio_url": folio_url or "",
         "page": page_num,
         "canonical_id": canonical_id,
         "original_id": original_id,
