@@ -46,9 +46,10 @@ Module Contents
 
 .. py:function:: detect_companion_tracks(env: Any, pagename: str) -> List[Dict[str, Any]]
 
-   Detect companion tracks for `pagename` in `env.found_docs`.
+   Detect companion tracks for ``pagename`` in ``env.found_docs``.
 
    Supports:
+
    - Elements 2.0 tracks: ``index`` (Pseudocode), ``video`` (Video), ``code`` (Code), ``heath`` (Heath)
    - Euclid tracks: ``index`` / ``proposition``, ``commentary``, ``notes``, ``folio``
      or ``<pagename>.commentary``, ``<pagename>.notes``

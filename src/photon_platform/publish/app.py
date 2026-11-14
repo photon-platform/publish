@@ -2,17 +2,33 @@
 """Command-line interface for the publish tool.
 """
 import click
+
 from . import publish
+
 
 @click.group()
 def cli():
     """A tool to streamline and enhance the Sphinx documentation framework."""
-    pass
 
 @cli.command()
-def build():
-    """Builds the documentation."""
-    publish.build()
+@click.option('--repo', default=None, help='Path to target repository root (default: current directory).')
+@click.option('--clean', 'clean_build', is_flag=True, help='Wipe .doctrees and regenerate autoapi from scratch.')
+@click.option('-j', '--jobs', default=None, type=int, help='Number of parallel Sphinx workers (default: auto up to 8).')
+@click.option('--json', 'as_json', is_flag=True, help='Emit compact JSON build summary.')
+def build(repo, clean_build, jobs, as_json):
+    """Builds the documentation (incremental by default; pass --clean for full rebuild)."""
+    import json
+    res = publish.build(repo=repo, clean=clean_build, jobs=jobs, quiet=as_json)
+    if as_json:
+        click.echo(json.dumps(res, indent=2))
+
+
+@cli.command()
+@click.option('--repo', default=None, help='Path to target repository root (default: current directory).')
+def clean(repo):
+    """Removes the docs/ build directory and generated autoapi files."""
+    publish.clean(repo=repo)
+
 
 @cli.command()
 @click.option('--port', default=8000, help='Port to serve the documentation on.')
@@ -20,12 +36,22 @@ def test(port):
     """Builds and serves the documentation locally."""
     publish.test(port=port)
 
+
 @cli.command()
+@click.option('--repo', default=None, help='Path to target repository root (default: current directory).')
 @click.option('--book', default=None, help='Book subdirectory in docsrc/ (auto-detected if omitted).')
 @click.option('--output', '-o', default=None, help='Optional output path for the generated .epub file.')
-def epub(book, output):
+def epub(repo, book, output):
     """Builds an EPUB 3 edition for the book subtree in docsrc/."""
-    publish.build_epub(book=book, output=output)
+    publish.build_epub(book=book, output=output, repo=repo)
+
+
+@cli.command()
+def mcp():
+    """Launches the Model Context Protocol (MCP) JSON-RPC stdio server for publish."""
+    from .mcp_server import run_stdio_jsonrpc
+    run_stdio_jsonrpc()
+
 
 
 @cli.command()
@@ -38,6 +64,7 @@ def epub(book, output):
 def folio(host, port, root, title, edition, debug):
     """Launches the interactive Folio Review & Vetting web application for resources/."""
     from pathlib import Path
+
     from .folio_review.app import create_app
 
     root_path = Path(root).resolve() if root else None
@@ -59,6 +86,7 @@ def folio_links_cmd(repo, optimize_scans, grayscale, as_json):
     import json
     from dataclasses import asdict
     from pathlib import Path
+
     from .folio_links import audit_repo_folio_links, optimize_repo_folio_scans
 
     repo_root = Path(repo).resolve()

@@ -2,6 +2,15 @@ changelog
 =========
 
 
+0.4.3
+=====
+*2026-11-14*
+
+- perf(build): Make ``publish build`` incremental by default (retaining ``docs/.doctrees`` and mtime-gating ``sphinx-autoapi`` and SASS compilation unless ``--clean`` is passed), conditionally load non-parallel-safe ``sphinx_revealjs`` / ``sphinx_carousel`` extensions only when used so Sphinx runs 8-core parallel reads as well as writes (``-j`` / ``--jobs``), and add ``--repo`` and ``--json`` CLI flags.
+- fix(collection): Add ``env-get-outdated`` hook (``check_root_navigation_outdated``) so incremental builds automatically invalidate ``master_doc`` whenever subpage ``:navigation:``, ``:order:``, or ``:nav_title:`` frontmatter changes.
+- feat(mcp): Add zero-dependency JSON-RPC 2.0 stdio MCP server (``publish mcp`` / ``photon_platform.publish.mcp_server``) exposing ``publish_build``, ``publish_build_batch``, ``publish_clean``, ``publish_epub``, and ``publish_folio_links``.
+
+
 0.4.2
 =====
 *2026-11-14*

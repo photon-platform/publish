@@ -40,6 +40,7 @@ Functions
    photon_platform.publish.directives.collection.generate_taxonomy_pages
    photon_platform.publish.directives.collection.build_nav_links
    photon_platform.publish.directives.collection.peek_metadata
+   photon_platform.publish.directives.collection.check_root_navigation_outdated
    photon_platform.publish.directives.collection.inject_root_navigation
    photon_platform.publish.directives.collection.setup
 
@@ -182,6 +183,11 @@ Module Contents
    :param filepath: The path to the file to peek at.
 
    :returns: A dictionary containing the extracted metadata.
+
+
+.. py:function:: check_root_navigation_outdated(app: Any, env: Any, added: Any, changed: Any, removed: Any) -> List[str]
+
+   Mark master_doc outdated during incremental builds whenever header/footer navigation changes.
 
 
 .. py:function:: inject_root_navigation(app: Any, docname: str, source: List[str]) -> None
