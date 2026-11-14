@@ -106,7 +106,7 @@
         <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_links.resolve_folio_url" title="photon_platform.publish.folio_links.resolve_folio_url"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_folio_url</span></code></a>(env, current_docname, folio_id[, ...]) → str | None</p></td>
         <td><p>Resolve <cite>folio_id</cite> to a verified primary-source scan or text-locus URL.</p></td>
         </tr>
-        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_links.audit_repo_folio_links" title="photon_platform.publish.folio_links.audit_repo_folio_links"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audit_repo_folio_links</span></code></a>(repo_root) → FolioAuditReport</p></td>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.folio_links.audit_repo_folio_links" title="photon_platform.publish.folio_links.audit_repo_folio_links"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audit_repo_folio_links</span></code></a>(repo_root[, env]) → FolioAuditReport</p></td>
         <td><p>Deterministically audit all <cite>.. folio::</cite> directives and <cite>:folio:</cite> badges in <cite>repo_root</cite>.</p></td>
         </tr>
         <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.folio_links.optimize_repo_folio_scans" title="photon_platform.publish.folio_links.optimize_repo_folio_scans"><code class="xref py py-obj docutils literal notranslate"><span class="pre">optimize_repo_folio_scans</span></code></a>(repo_root[, force_grayscale]) → dict[str, Any]</p></td>
@@ -208,11 +208,16 @@
         <span class="sig-name descname"><span class="pre">sample_links</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></span><a class="headerlink" href="#photon_platform.publish.folio_links.FolioAuditReport.sample_links" title="Link to this definition">¶</a></dt>
         <dd></dd></dl>
 
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.folio_links.FolioAuditReport.env">
+        <span class="sig-name descname"><span class="pre">env</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#photon_platform.publish.folio_links.FolioAuditReport.env" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
         </dd></dl>
 
         <dl class="py function">
         <dt class="sig sig-object py" id="photon_platform.publish.folio_links.audit_repo_folio_links">
-        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_links.</span></span><span class="sig-name descname"><span class="pre">audit_repo_folio_links</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/library/pathlib.html#pathlib.Path" title="(in Python v3.13)"><span class="pre">pathlib.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#photon_platform.publish.folio_links.FolioAuditReport" title="photon_platform.publish.folio_links.FolioAuditReport"><span class="pre">FolioAuditReport</span></a></span></span><a class="headerlink" href="#photon_platform.publish.folio_links.audit_repo_folio_links" title="Link to this definition">¶</a></dt>
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.folio_links.</span></span><span class="sig-name descname"><span class="pre">audit_repo_folio_links</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/library/pathlib.html#pathlib.Path" title="(in Python v3.13)"><span class="pre">pathlib.Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#photon_platform.publish.folio_links.FolioAuditReport" title="photon_platform.publish.folio_links.FolioAuditReport"><span class="pre">FolioAuditReport</span></a></span></span><a class="headerlink" href="#photon_platform.publish.folio_links.audit_repo_folio_links" title="Link to this definition">¶</a></dt>
         <dd><p>Deterministically audit all <cite>.. folio::</cite> directives and <cite>:folio:</cite> badges in <cite>repo_root</cite>.</p>
         </dd></dl>
 
@@ -319,7 +324,7 @@
 
   <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
   <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-  <script src="../../../../../_static/documentation_options.js?v=6c02275b"></script>
+  <script src="../../../../../_static/documentation_options.js?v=c87aa342"></script>
   <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>

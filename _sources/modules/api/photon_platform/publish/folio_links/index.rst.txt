@@ -111,7 +111,13 @@ Module Contents
 
 
 
-.. py:function:: audit_repo_folio_links(repo_root: pathlib.Path) -> FolioAuditReport
+   .. py:attribute:: env
+      :type:  Any
+      :value: None
+
+
+
+.. py:function:: audit_repo_folio_links(repo_root: pathlib.Path, env: Any = None) -> FolioAuditReport
 
    Deterministically audit all `.. folio::` directives and `:folio:` badges in `repo_root`.
 
