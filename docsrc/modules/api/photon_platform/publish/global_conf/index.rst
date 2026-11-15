@@ -46,6 +46,7 @@ Attributes
    photon_platform.publish.global_conf.html_theme_options
    photon_platform.publish.global_conf.intersphinx_mapping
    photon_platform.publish.global_conf.html_logo
+   photon_platform.publish.global_conf.html_favicon
    photon_platform.publish.global_conf.autodoc_default_options
    photon_platform.publish.global_conf.html_permalinks
    photon_platform.publish.global_conf.rst_fixed_section_levels
@@ -176,6 +177,10 @@ Module Contents
 
 .. py:data:: html_logo
    :value: '_static/logo.png'
+
+
+.. py:data:: html_favicon
+   :value: '_static/favicon.ico'
 
 
 .. py:data:: autodoc_default_options
