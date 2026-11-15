@@ -34,12 +34,17 @@ Module Contents
 
 .. py:function:: prepare_inline_svg(svg_path: pathlib.Path | str, as_thumbnail: bool = False) -> str | None
 
-   Read an SVG file and prepare it for inline HTML rendering controlled by global CSS.
+   Read an SVG file and prepare it for inline HTML rendering.
 
-   Strips XML/DOCTYPE headers, embedded <style> blocks, and hardcoded background <rect>
-   elements so theme CSS variables (--geom-fg, --geom-bg, etc.) govern light/dark mode.
-   When as_thumbnail is True, also strips hidden highlight overlays and element IDs to
-   avoid duplicate DOM IDs on collection index pages.
+   - Strips XML/DOCTYPE headers and full-bleed background `<rect>` elements.
+   - Injects intrinsic numeric `width` and `height` attributes derived from `viewBox`
+     whenever `width` is absent, `auto`, or `%` (preventing `0px` collapse inside
+     `width: fit-content` figure containers).
+   - Preserves custom `<style>` blocks safely scoped per-SVG via `data-svg-scope`
+     with Book Codex Nocturnal / `body.light-mode` theme adaptation, while dropping
+     legacy light-only boilerplate styles already governed by `_geometor.scss`.
+   - When `as_thumbnail` is True, strips hidden highlight overlays and DOM IDs to
+     avoid duplicate IDs on collection index pages.
 
 
 .. py:class:: picture_node(rawsource: str = '', *children, **attributes: Any)
@@ -55,7 +60,7 @@ Module Contents
    HTML visitor for picture_node.
 
    Renders a standard <figure> with nested <picture> element for raster images,
-   or a clean <figure class="photon-picture photon-svg"><img .../></figure> for SVGs
+   or a clean <figure class="photon-picture photon-svg"><svg .../></figure> for SVGs
    and standalone Docutils rendering.
 
    :param self: The translator instance.
@@ -100,6 +105,7 @@ Module Contents
 
 
    .. py:attribute:: option_spec
+      :type:  ClassVar[dict[str, Any]]
 
       Mapping of option names to validator functions.
 
@@ -111,7 +117,7 @@ Module Contents
       Return the Sphinx BuildEnvironment if running inside Sphinx, else None.
 
 
-   .. py:method:: run() -> List[docutils.nodes.Node]
+   .. py:method:: run() -> list[docutils.nodes.Node]
 
       Process the picture directive in either Sphinx or standalone Docutils mode.
 

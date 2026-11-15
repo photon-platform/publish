@@ -2,6 +2,15 @@ changelog
 =========
 
 
+0.4.6
+=====
+*2026-11-15*
+
+- fix(images): Auto-inject explicit pixel ``width`` and ``height`` attributes from ``viewBox`` onto widthless inline SVGs in ``prepare_inline_svg`` (preventing ``0px`` layout collapse inside ``figure.photon-svg { width: fit-content; }``), deduplicate ``class`` attributes on ``<svg>`` thumbnails, and register ``note_dependency`` + dynamic ``svg_abs_path`` rendering on ``picture_node``.
+- fix(images): Preserve custom embedded SVG ``<style>`` blocks scoped per-diagram via ``svg[data-svg-scope="..."]`` with Nocturnal / ``body.light-mode`` theme adaptation while stripping container background boxes, global theme variable overrides, and legacy light-only boilerplate styles.
+- style(geometor): Add ``figure.photon-svg svg:not([width])`` fallback width and zero-specificity ``:where(...)`` fallback selectors for cross-corpus geometric classes (``.geom-segment``, ``.Line``, ``.Segment``, ``.Circle``, ``.Curve``, ``.Polygon``, ``.Point``, ``.geom-accent-line``, ``.geom-assert-line``, ``.golden-segment``, ``.geom-faint``, etc.) in ``_geometor.scss``.
+
+
 0.4.5
 =====
 *2026-11-15*
