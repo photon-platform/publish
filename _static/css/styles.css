@@ -4181,6 +4181,10 @@ figure.photon-svg svg {
   margin: 0 auto;
 }
 
+figure.photon-svg svg:not([width]) {
+  width: 42rem;
+}
+
 figure.photon-picture.diagram-right,
 figure.photon-svg.diagram-right {
   float: right;
@@ -4215,7 +4219,8 @@ svg.euclid-graphic.euclid-thumbnail {
 svg.euclid-graphic .geom-line,
 svg.euclid-graphic .line,
 svg.euclid-graphic .element,
-svg.euclid-graphic .graphic-seg {
+svg.euclid-graphic .graphic-seg,
+svg.euclid-graphic :where(.geom-segment, .struct-segment, .Line, .Segment, .construct, .line-primary) {
   stroke: var(--geom-fg, #d6cfc5);
   stroke-width: 1.8;
   stroke-linecap: round;
@@ -4235,7 +4240,8 @@ svg.euclid-graphic .geom-bold {
 
 svg.euclid-graphic .geom-circle,
 svg.euclid-graphic .geom-curve,
-svg.euclid-graphic .geom-ellipse {
+svg.euclid-graphic .geom-ellipse,
+svg.euclid-graphic :where(.Circle, .Curve, .conic-curve, .conic-locus) {
   stroke: var(--geom-fg, #d6cfc5);
   stroke-width: 1.8;
   stroke-linecap: round;
@@ -4257,7 +4263,8 @@ svg.euclid-graphic .geom-line-dashed,
 svg.euclid-graphic .geom-arc-dashed,
 svg.euclid-graphic .geom-aux,
 svg.euclid-graphic .geom-Auxiliary,
-svg.euclid-graphic .geom-construction {
+svg.euclid-graphic .geom-construction,
+svg.euclid-graphic :where(.aux-line, .aux-segment, .aux-circle, .auxiliary, .extension, .guide, .guide-line, .line-guide) {
   stroke: var(--geom-fg, #d6cfc5);
   stroke-width: 1.5;
   stroke-dasharray: 4, 3;
@@ -4265,6 +4272,30 @@ svg.euclid-graphic .geom-construction {
   stroke-linejoin: round;
   fill: none;
   transition: stroke 0.15s ease, stroke-width 0.15s ease;
+}
+
+svg.euclid-graphic :where(.geom-faint, .geom-muted, .geom-grid, .grid-seg) {
+  stroke: var(--geom-fg, #d6cfc5);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  fill: none;
+  opacity: 0.55;
+}
+
+svg.euclid-graphic :where(.geom-accent-line, .geom-accent, .accent-line, .line-accent, .golden-segment, .golden-seg, .golden-major, .golden-minor, .geom-circle-accent) {
+  stroke: var(--geom-accent, #e8b85a);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+svg.euclid-graphic :where(.geom-assert-line, .geom-assert, .line-result, .geom-circle-assert) {
+  stroke: var(--geom-assert, #5ec27e);
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
 }
 
 svg.euclid-graphic .geom-arc-dotted {
@@ -4302,11 +4333,28 @@ svg.euclid-graphic .grid-line {
 
 svg.euclid-graphic .geom-polygon,
 svg.euclid-graphic .poly,
-svg.euclid-graphic .graphic-poly {
+svg.euclid-graphic .graphic-poly,
+svg.euclid-graphic :where(.Polygon) {
   fill: var(--geom-poly-fill, #d6cfc5);
   fill-opacity: 0.04;
   stroke: none;
   transition: fill-opacity 0.15s ease, fill 0.15s ease, stroke 0.15s ease;
+}
+
+svg.euclid-graphic :where(.geom-polygon-accent, .golden-poly) {
+  fill: var(--geom-accent, #e8b85a);
+  fill-opacity: 0.12;
+  stroke: var(--geom-accent, #e8b85a);
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+}
+
+svg.euclid-graphic :where(.geom-polygon-assert, .geom-poly-ok) {
+  fill: var(--geom-assert, #5ec27e);
+  fill-opacity: 0.12;
+  stroke: var(--geom-assert, #5ec27e);
+  stroke-width: 1.8;
+  stroke-linejoin: round;
 }
 
 svg.euclid-graphic .geom-polygon-bordered,
@@ -4355,11 +4403,24 @@ svg.euclid-graphic .geom-tick-mark {
 }
 
 svg.euclid-graphic .geom-point,
-svg.euclid-graphic .point {
+svg.euclid-graphic .point,
+svg.euclid-graphic :where(.Point, .pt, .pt-given) {
   fill: var(--geom-fg, #d6cfc5);
   stroke: var(--geom-point-stroke, #1e1e20);
   stroke-width: 1;
   transition: fill 0.15s ease, r 0.15s ease;
+}
+
+svg.euclid-graphic :where(.geom-point-accent, .pt-accent, .golden-point) {
+  fill: var(--geom-accent, #e8b85a);
+  stroke: var(--geom-point-stroke, #1e1e20);
+  stroke-width: 1.2;
+}
+
+svg.euclid-graphic :where(.geom-point-assert, .pt-emerald) {
+  fill: var(--geom-assert, #5ec27e);
+  stroke: var(--geom-point-stroke, #1e1e20);
+  stroke-width: 1.2;
 }
 
 svg.euclid-graphic .geom-dot {

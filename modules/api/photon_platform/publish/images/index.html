@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../../../../_static/css/styles.css?v=8713e751" />
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/css/styles.css?v=99410eb1" />
   <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -116,7 +116,7 @@
         <td><p>Departure visitor for picture_node.</p></td>
         </tr>
         <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.images.prepare_inline_svg" title="photon_platform.publish.images.prepare_inline_svg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_inline_svg</span></code></a>(svg_path[, as_thumbnail]) → str | None</p></td>
-        <td><p>Read an SVG file and prepare it for inline HTML rendering controlled by global CSS.</p></td>
+        <td><p>Read an SVG file and prepare it for inline HTML rendering.</p></td>
         </tr>
         <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.images.setup" title="photon_platform.publish.images.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(app) → Dict[str, Any]</p></td>
         <td><p>Register directives and nodes.</p></td>
@@ -151,7 +151,7 @@
 
         <dl class="py attribute">
         <dt class="sig sig-object py" id="photon_platform.publish.images.PictureDirective.option_spec">
-        <span class="sig-name descname"><span class="pre">option_spec</span></span><a class="headerlink" href="#photon_platform.publish.images.PictureDirective.option_spec" title="Link to this definition">¶</a></dt>
+        <span class="sig-name descname"><span class="pre">option_spec</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#photon_platform.publish.images.PictureDirective.option_spec" title="Link to this definition">¶</a></dt>
         <dd><p>Mapping of option names to validator functions.</p>
         </dd></dl>
 
@@ -163,7 +163,7 @@
 
         <dl class="py method">
         <dt class="sig sig-object py" id="photon_platform.publish.images.PictureDirective.run">
-        <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">docutils.nodes.Node</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.images.PictureDirective.run" title="Link to this definition">¶</a></dt>
+        <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><span class="pre">docutils.nodes.Node</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.images.PictureDirective.run" title="Link to this definition">¶</a></dt>
         <dd><p>Process the picture directive in either Sphinx or standalone Docutils mode.</p>
         <dl class="field-list simple">
         <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -186,7 +186,7 @@
         <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.images.</span></span><span class="sig-name descname"><span class="pre">visit_picture_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">docutils.nodes.Element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.images.visit_picture_node" title="Link to this definition">¶</a></dt>
         <dd><p>HTML visitor for picture_node.</p>
         <p>Renders a standard &lt;figure&gt; with nested &lt;picture&gt; element for raster images,
-        or a clean &lt;figure class=”photon-picture photon-svg”&gt;&lt;img …/&gt;&lt;/figure&gt; for SVGs
+        or a clean &lt;figure class=”photon-picture photon-svg”&gt;&lt;svg …/&gt;&lt;/figure&gt; for SVGs
         and standalone Docutils rendering.</p>
         <dl class="field-list simple">
         <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -215,11 +215,18 @@
         <dl class="py function">
         <dt class="sig sig-object py" id="photon_platform.publish.images.prepare_inline_svg">
         <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.images.</span></span><span class="sig-name descname"><span class="pre">prepare_inline_svg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svg_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/library/pathlib.html#pathlib.Path" title="(in Python v3.13)"><span class="pre">pathlib.Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_thumbnail</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.images.prepare_inline_svg" title="Link to this definition">¶</a></dt>
-        <dd><p>Read an SVG file and prepare it for inline HTML rendering controlled by global CSS.</p>
-        <p>Strips XML/DOCTYPE headers, embedded &lt;style&gt; blocks, and hardcoded background &lt;rect&gt;
-        elements so theme CSS variables (–geom-fg, –geom-bg, etc.) govern light/dark mode.
-        When as_thumbnail is True, also strips hidden highlight overlays and element IDs to
-        avoid duplicate DOM IDs on collection index pages.</p>
+        <dd><p>Read an SVG file and prepare it for inline HTML rendering.</p>
+        <ul class="simple">
+        <li><p>Strips XML/DOCTYPE headers and full-bleed background <cite>&lt;rect&gt;</cite> elements.</p></li>
+        <li><p>Injects intrinsic numeric <cite>width</cite> and <cite>height</cite> attributes derived from <cite>viewBox</cite>
+        whenever <cite>width</cite> is absent, <cite>auto</cite>, or <cite>%</cite> (preventing <cite>0px</cite> collapse inside
+        <cite>width: fit-content</cite> figure containers).</p></li>
+        <li><p>Preserves custom <cite>&lt;style&gt;</cite> blocks safely scoped per-SVG via <cite>data-svg-scope</cite>
+        with Book Codex Nocturnal / <cite>body.light-mode</cite> theme adaptation, while dropping
+        legacy light-only boilerplate styles already governed by <cite>_geometor.scss</cite>.</p></li>
+        <li><p>When <cite>as_thumbnail</cite> is True, strips hidden highlight overlays and DOM IDs to
+        avoid duplicate IDs on collection index pages.</p></li>
+        </ul>
         </dd></dl>
 
         <dl class="py function">
@@ -333,7 +340,7 @@
 
   <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
   <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-  <script src="../../../../../_static/documentation_options.js?v=340bb9e5"></script>
+  <script src="../../../../../_static/documentation_options.js?v=03f3338f"></script>
   <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>
