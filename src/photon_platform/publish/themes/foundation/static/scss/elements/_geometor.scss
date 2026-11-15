@@ -21,6 +21,7 @@
   --geom-font-sans: 'Fira Sans Condensed', 'Fira Sans', sans-serif;
   --geom-fg: #18181b;
   --geom-bg: #ffffff;
+  --geom-muted: #71717a;
   --geom-point-stroke: #ffffff;
   --geom-poly-fill: #000000;
   --geom-accent: #c88a1e;
@@ -29,6 +30,8 @@
   --geom-assert: #16a34a;
   --geom-assert-bg: rgba(22, 163, 74, 0.10);
   --geom-assert-border: rgba(22, 163, 74, 0.50);
+  --geom-hyper: #2563eb;
+  --geom-rose: #be123c;
   --geom-coincide: #0891b2;
   --geom-coincide-bg: rgba(8, 145, 178, 0.12);
   --geom-coincide-border: rgba(8, 145, 178, 0.55);
@@ -38,6 +41,7 @@
   :root {
     --geom-fg: #d6cfc5;
     --geom-bg: transparent;
+    --geom-muted: #a1a1aa;
     --geom-point-stroke: #1e1e20;
     --geom-poly-fill: #d6cfc5;
     --geom-accent: #e8b85a;
@@ -46,6 +50,8 @@
     --geom-assert: #5ec27e;
     --geom-assert-bg: rgba(94, 194, 126, 0.12);
     --geom-assert-border: rgba(94, 194, 126, 0.55);
+    --geom-hyper: #60a5fa;
+    --geom-rose: #fb7185;
     --geom-coincide: #38bdf8;
     --geom-coincide-bg: rgba(56, 189, 248, 0.14);
     --geom-coincide-border: rgba(56, 189, 248, 0.60);
@@ -90,6 +96,7 @@ article.book-reading-pane {
   /* Geometric SVG Palette (Light lines matching text on dark codex background) */
   --geom-fg: var(--book-text, #d6cfc5);
   --geom-bg: transparent;
+  --geom-muted: #a1a1aa;
   --geom-point-stroke: var(--book-bg, #1e1e20);
   --geom-poly-fill: var(--book-text, #d6cfc5);
   --geom-accent: #e8b85a;
@@ -98,6 +105,8 @@ article.book-reading-pane {
   --geom-assert: #5ec27e;
   --geom-assert-bg: rgba(94, 194, 126, 0.12);
   --geom-assert-border: rgba(94, 194, 126, 0.55);
+  --geom-hyper: #60a5fa;
+  --geom-rose: #fb7185;
   --geom-coincide: #38bdf8;
   --geom-coincide-bg: rgba(56, 189, 248, 0.14);
   --geom-coincide-border: rgba(56, 189, 248, 0.60);
@@ -107,6 +116,7 @@ body.light-mode,
 [data-theme="light"] {
   --geom-fg: #18181b;
   --geom-bg: #ffffff;
+  --geom-muted: #71717a;
   --geom-point-stroke: #ffffff;
   --geom-poly-fill: #000000;
   --geom-accent: #c88a1e;
@@ -115,6 +125,8 @@ body.light-mode,
   --geom-assert: #16a34a;
   --geom-assert-bg: rgba(22, 163, 74, 0.10);
   --geom-assert-border: rgba(22, 163, 74, 0.50);
+  --geom-hyper: #2563eb;
+  --geom-rose: #be123c;
   --geom-coincide: #0891b2;
   --geom-coincide-bg: rgba(8, 145, 178, 0.12);
   --geom-coincide-border: rgba(8, 145, 178, 0.55);
@@ -127,10 +139,13 @@ body.light-mode,
   :root {
     --geom-fg: #000000;
     --geom-bg: #ffffff;
+    --geom-muted: #52525b;
     --geom-point-stroke: #ffffff;
     --geom-poly-fill: #000000;
     --geom-accent: #b47814;
     --geom-assert: #15803d;
+    --geom-hyper: #1d4ed8;
+    --geom-rose: #9f1239;
     --geom-coincide: #0e7490;
   }
 }
@@ -1577,6 +1592,22 @@ svg.euclid-graphic {
     fill: none;
   }
 
+  :where(.geom-hyper-line, .geom-hyper, .geom-circle-hyper) {
+    stroke: var(--geom-hyper, #60a5fa);
+    stroke-width: 2.1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+
+  :where(.geom-rose-line, .geom-rose, .geom-circle-rose) {
+    stroke: var(--geom-rose, #fb7185);
+    stroke-width: 2.0;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+
   .geom-arc-dotted {
     stroke: var(--geom-fg, #d6cfc5);
     stroke-width: 1.5;
@@ -1633,6 +1664,22 @@ svg.euclid-graphic {
     fill-opacity: 0.12;
     stroke: var(--geom-assert, #5ec27e);
     stroke-width: 1.8;
+    stroke-linejoin: round;
+  }
+
+  :where(.geom-polygon-hyper) {
+    fill: var(--geom-hyper, #60a5fa);
+    fill-opacity: 0.12;
+    stroke: var(--geom-hyper, #60a5fa);
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+  }
+
+  :where(.geom-polygon-rose) {
+    fill: var(--geom-rose, #fb7185);
+    fill-opacity: 0.12;
+    stroke: var(--geom-rose, #fb7185);
+    stroke-width: 1.6;
     stroke-linejoin: round;
   }
 
@@ -1702,6 +1749,18 @@ svg.euclid-graphic {
     stroke-width: 1.2;
   }
 
+  :where(.geom-point-hyper) {
+    fill: var(--geom-hyper, #60a5fa);
+    stroke: var(--geom-point-stroke, #1e1e20);
+    stroke-width: 1.2;
+  }
+
+  :where(.geom-point-rose) {
+    fill: var(--geom-rose, #fb7185);
+    stroke: var(--geom-point-stroke, #1e1e20);
+    stroke-width: 1.2;
+  }
+
   .geom-dot {
     fill: var(--geom-fg, #d6cfc5);
     stroke: none;
@@ -1732,10 +1791,10 @@ svg.euclid-graphic {
 
   .geom-label-sm {
     font-family: var(--geom-font-sans, 'Fira Sans Condensed', 'Fira Sans', sans-serif);
-    font-size: 11px;
+    font-size: 11.5px;
     font-weight: 700;
     font-style: normal;
-    fill: var(--geom-fg, #d6cfc5);
+    fill: var(--geom-muted, #a1a1aa);
     stroke: none;
     user-select: none;
   }
@@ -1747,6 +1806,46 @@ svg.euclid-graphic {
     font-weight: 700;
     fill: var(--geom-fg, #d6cfc5);
     stroke: none;
+  }
+
+  :where(.geom-label-accent) {
+    font-family: var(--geom-font-sans, 'Fira Sans Condensed', 'Fira Sans', sans-serif);
+    font-size: 12.5px;
+    font-weight: 700;
+    font-style: normal;
+    fill: var(--geom-accent, #e8b85a);
+    stroke: none;
+    user-select: none;
+  }
+
+  :where(.geom-label-assert) {
+    font-family: var(--geom-font-sans, 'Fira Sans Condensed', 'Fira Sans', sans-serif);
+    font-size: 12.5px;
+    font-weight: 700;
+    font-style: normal;
+    fill: var(--geom-assert, #5ec27e);
+    stroke: none;
+    user-select: none;
+  }
+
+  :where(.geom-label-hyper) {
+    font-family: var(--geom-font-sans, 'Fira Sans Condensed', 'Fira Sans', sans-serif);
+    font-size: 12.5px;
+    font-weight: 700;
+    font-style: normal;
+    fill: var(--geom-hyper, #60a5fa);
+    stroke: none;
+    user-select: none;
+  }
+
+  :where(.geom-label-rose) {
+    font-family: var(--geom-font-sans, 'Fira Sans Condensed', 'Fira Sans', sans-serif);
+    font-size: 12.5px;
+    font-weight: 700;
+    font-style: normal;
+    fill: var(--geom-rose, #fb7185);
+    stroke: none;
+    user-select: none;
   }
 
   /* Frontispiece Manuscript Overlay (0003.g1) */

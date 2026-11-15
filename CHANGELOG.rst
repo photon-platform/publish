@@ -2,6 +2,13 @@ changelog
 =========
 
 
+0.4.7
+=====
+*2026-11-15*
+
+- style(geometor): Add first-class ``--geom-muted``, ``--geom-hyper``, and ``--geom-rose`` CSS custom properties across dark, light, book-codex, and print palettes alongside ``.geom-hyper-line``, ``.geom-rose-line``, ``.geom-polygon-hyper``, ``.geom-polygon-rose``, ``.geom-point-hyper``, ``.geom-point-rose``, and ``.geom-label-{accent,assert,hyper,rose}`` rules in ``_geometor.scss`` and compiled ``styles.css``.
+
+
 0.4.6
 =====
 *2026-11-15*
