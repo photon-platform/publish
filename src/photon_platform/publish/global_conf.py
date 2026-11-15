@@ -208,6 +208,9 @@ if project_root and pyproject_path:
     except (OSError, tomllib.TOMLDecodeError, KeyError, IndexError) as e:
         print(f"Warning: Error parsing pyproject.toml for AutoAPI config: {e}")
 
+if not any(os.path.isdir(d) for d in autoapi_dirs) and "autoapi.extension" in extensions:
+    extensions.remove("autoapi.extension")
+
 autoapi_ignore = [
     '*migrations*',
     '*venv*',
@@ -295,6 +298,7 @@ intersphinx_mapping = {
 }
 
 html_logo = "_static/logo.png"
+html_favicon = "_static/favicon.ico"
 
 autodoc_default_options = {
     "members": True,

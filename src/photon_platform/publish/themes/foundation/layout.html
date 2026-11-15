@@ -20,7 +20,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
   <link rel="stylesheet" href="{{ pathto('_static/css/print.css', 1) }}" type="text/css" media="print" />
-  <link rel="icon" href="{{ pathto('_static/favicon.ico', 1) }}" />
+  <link rel="icon" href="{{ favicon_url|default(pathto('_static/favicon.ico', 1), true) }}" />
 </head>
 
 <body class="{% if is_book_page %}is-book-page {% endif %}book-theme-{{ book_theme|default('classical-serif') }}"{% if folio %} data-folio="{{ folio }}"{% endif %}>

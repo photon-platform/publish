@@ -2,6 +2,13 @@ changelog
 =========
 
 
+0.4.5
+=====
+*2026-11-15*
+
+- feat(branding): Configure ``html_favicon = "_static/favicon.ico"`` alongside ``html_logo = "_static/logo.png"`` in ``global_conf.py``, wire ``favicon_url`` fallback in the ``foundation`` theme layout, add ``publish``'s ``docsrc/_static/favicon.ico``, and serve repo-aware ``/favicon.ico`` and ``/brand/logo.png`` assets in the ``publish folio`` review web UI.
+
+
 0.4.4
 =====
 *2026-11-14*

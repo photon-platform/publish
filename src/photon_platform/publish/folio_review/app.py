@@ -58,14 +58,33 @@ def _extract_graphics_for_json(json_path: Path) -> None:
             cropped.save(out_path)
 
 
+def _resolve_brand_asset(edition_root: Path, filename: str, static_dir: Path) -> tuple[Path, str]:
+    """Resolve logo.png or favicon.ico from the enclosing repo's docsrc/_static/ or fallback."""
+    cur = edition_root.resolve()
+    for _ in range(5):
+        candidate = cur / "docsrc" / "_static" / filename
+        if candidate.is_file():
+            return candidate.parent, filename
+        if cur.parent == cur:
+            break
+        cur = cur.parent
+    return static_dir, filename
+
+
 def create_app(
     root_dir: Optional[Path] = None,
     project_title: Optional[str] = None,
     edition_label: Optional[str] = None,
 ) -> Flask:
     """Create and configure the Flask review application."""
-    template_dir = Path(__file__).parent / "templates"
-    app = Flask(__name__, template_folder=str(template_dir))
+    base_dir = Path(__file__).parent
+    template_dir = base_dir / "templates"
+    static_dir = base_dir / "static"
+    app = Flask(
+        __name__,
+        template_folder=str(template_dir),
+        static_folder=str(static_dir),
+    )
 
     edition_root = discover_edition_root(root_dir)
     resolved_project, resolved_edition = infer_project_and_edition(
@@ -93,6 +112,18 @@ def create_app(
     # -------------------------------------------------------------------------
     # HTML Routes
     # -------------------------------------------------------------------------
+
+    @app.route("/favicon.ico")
+    def favicon():
+        """Serve the edition repository's favicon.ico or fallback brand favicon."""
+        directory, fname = _resolve_brand_asset(scanner.root_dir, "favicon.ico", static_dir)
+        return send_from_directory(str(directory), fname)
+
+    @app.route("/brand/logo.png")
+    def brand_logo():
+        """Serve the edition repository's logo.png or fallback brand logo."""
+        directory, fname = _resolve_brand_asset(scanner.root_dir, "logo.png", static_dir)
+        return send_from_directory(str(directory), fname)
 
     @app.route("/")
     def dashboard() -> str:
