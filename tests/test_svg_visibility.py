@@ -150,3 +150,9 @@ def test_sass_compiles_geometor_svg_selectors() -> None:
     assert ".geom-segment" in css
     assert ".geom-accent-line" in css
     assert ".geom-assert-line" in css
+    assert ".geom-hyper-line" in css
+    assert ".geom-rose-line" in css
+    assert ".geom-polygon-rose" in css
+    assert ".geom-point-rose" in css
+    assert ".geom-label-hyper" in css
+    assert ".geom-label-rose" in css
