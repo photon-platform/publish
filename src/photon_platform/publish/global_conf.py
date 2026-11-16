@@ -144,7 +144,6 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinxcontrib.youtube",
     "myst_parser",
-    "sphinxext.opengraph",
     "sphinxcontrib.jquery",
     "photon_platform.publish.directives.collection",
     "photon_platform.publish.directives.elements",

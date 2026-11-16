@@ -2,6 +2,13 @@ changelog
 =========
 
 
+0.4.9
+=====
+*2026-11-15*
+
+- fix(social & collections): Resolve CSS custom properties (``var(--geom-*)``) and invert white-paper / dark-ink woodcuts to warm ivory on ``1200x630`` sharing banners in ``social_meta.py``, remove duplicate ``sphinxext.opengraph`` relative tags from ``global_conf.py``, give explicit ``:excerpt:`` metadata priority in ``directives/collection.py``, promote leading ``.. folio::`` nodes during ``doctree-resolved`` before HTML translation, and fix first-invocation hot-reload in ``mcp_server.py``.
+
+
 0.4.8
 =====
 *2026-11-15*

@@ -407,25 +407,116 @@ def _wrap_lines(draw: Any, text: str, font: Any, max_width: int, max_lines: int 
 
 def _find_best_emblem_image(docsrc_dir: Path, subtree_slug: str | None = None) -> Path | None:
     """Find a representative diagram/plate in `docsrc/<subtree_slug>` (or fallback to `_static/logo.png`)."""
+    from .directives.collection import peek_metadata
+
+    # 1. Check explicit :featured_image: on subtree index.rst or root index.rst
+    for idx_cand in (
+        ([docsrc_dir / subtree_slug / "index.rst"] if subtree_slug else [])
+        + [docsrc_dir / "index.rst"]
+    ):
+        if idx_cand.is_file():
+            meta = peek_metadata(str(idx_cand))
+            feat = (meta.get("featured_image") or "").strip().lstrip("/")
+            if feat:
+                for base in (idx_cand.parent, docsrc_dir):
+                    fp = base / feat
+                    if fp.is_file():
+                        return fp
+
     search_roots: list[Path] = []
     if subtree_slug and (docsrc_dir / subtree_slug).is_dir():
         search_roots.append(docsrc_dir / subtree_slug)
     search_roots.append(docsrc_dir)
 
     for root in search_roots:
-        # Prefer curated .svg geometric diagrams first, then .png plates (excluding social/ and favicon)
-        for pattern in ("*.svg", "*.png"):
-            for p in sorted(root.rglob(pattern)):
-                rel_parts = p.relative_to(docsrc_dir).parts
-                if "_static" in rel_parts and "social" in rel_parts:
-                    continue
-                if p.name.startswith(".") or "logo" in p.name.lower() or "favicon" in p.name.lower():
-                    continue
-                if p.stat().st_size > 350:
-                    return p
+        # Prefer proposition / construction SVGs with circles & paths (e.g. I.1, G.1, plates)
+        svgs = [
+            p
+            for p in sorted(root.rglob("*.svg"))
+            if not ("_static" in p.relative_to(docsrc_dir).parts and "social" in p.relative_to(docsrc_dir).parts)
+            and not p.name.startswith(".")
+            and "logo" not in p.name.lower()
+            and 900 <= p.stat().st_size <= 120_000
+        ]
+        # Boost canonical proposition/plate paths (`propositions/01`, `plates/`, `G.001`, `01`)
+        def _svg_rank(p: Path) -> tuple[int, str]:
+            s = p.as_posix().lower()
+            if "/propositions/01/" in s or "/prop_01" in s or "0255.g1" in s or "g.001" in s:
+                return (0, s)
+            if "/propositions/" in s or "/plates/" in s or "/compendio/" in s:
+                return (1, s)
+            return (2, s)
+
+        if svgs:
+            svgs.sort(key=_svg_rank)
+            return svgs[0]
+
+        for p in sorted(root.rglob("*.png")):
+            rel_parts = p.relative_to(docsrc_dir).parts
+            if "_static" in rel_parts and "social" in rel_parts:
+                continue
+            if p.name.startswith(".") or "logo" in p.name.lower() or "favicon" in p.name.lower():
+                continue
+            if p.stat().st_size > 1500:
+                return p
 
     logo = docsrc_dir / "_static" / "logo.png"
     return logo if logo.is_file() else None
+
+
+def _normalize_emblem_for_dark_card(im: Any) -> Any:
+    """Convert white-paper or black-ink-on-transparent diagrams into luminous ivory ink on transparent."""
+    from PIL import Image
+
+    rgba = im.convert("RGBA")
+    px = rgba.load()
+    w, h = rgba.size
+
+    # Detect opaque light/white paper background at corners
+    corners = [px[0, 0], px[w - 1, 0], px[0, h - 1], px[w - 1, h - 1]]
+    opaque_white_bg = sum(1 for r, g, b, a in corners if a > 200 and r > 215 and g > 215 and b > 210) >= 3
+
+    if opaque_white_bg:
+        # White-paper woodcut/scan: turn white paper transparent and dark ink into warm ivory
+        for y in range(h):
+            for x in range(w):
+                r, g, b, a = px[x, y]
+                lum = (r * 299 + g * 587 + b * 114) // 1000
+                if lum >= 235:
+                    px[x, y] = (0, 0, 0, 0)
+                else:
+                    ink_alpha = min(255, int((255 - lum) * 1.12))
+                    px[x, y] = (235, 228, 216, (ink_alpha * a) // 255)
+        return rgba
+
+    # Transparent-backdrop diagram: check if visible pixels are predominantly dark (black ink on transparent)
+    dark_vis = 0
+    light_vis = 0
+    step = max(1, min(w, h) // 80)
+    for y in range(0, h, step):
+        for x in range(0, w, step):
+            r, g, b, a = px[x, y]
+            if a < 25:
+                continue
+            lum = (r * 299 + g * 587 + b * 114) // 1000
+            if lum < 85:
+                dark_vis += 1
+            elif lum > 140:
+                light_vis += 1
+
+    if dark_vis > light_vis:
+        for y in range(h):
+            for x in range(w):
+                r, g, b, a = px[x, y]
+                if a < 10:
+                    continue
+                lum = (r * 299 + g * 587 + b * 114) // 1000
+                # Preserve saturated colors (like Byrne red/blue/yellow) while lifting dark black/grey ink to ivory
+                spread = max(r, g, b) - min(r, g, b)
+                if spread < 35 and lum < 120:
+                    lift = 235 - int(lum * 0.4)
+                    px[x, y] = (lift, max(0, lift - 7), max(0, lift - 19), a)
+    return Image.fromarray(rgba.tobytes(), "RGBA", (w, h)) if False else rgba
 
 
 def _rasterize_emblem(asset_path: Path, box_size: int = 390) -> Any | None:
@@ -439,11 +530,33 @@ def _rasterize_emblem(asset_path: Path, box_size: int = 390) -> Any | None:
         if not inkscape:
             return None
         svg_txt = asset_path.read_text(encoding="utf-8", errors="ignore")
-        # Force dark-mode foreground variables to warm ivory/gold for the dark sharing card
+        var_map = {
+            "--geom-fg": "#ebe4d8",
+            "--geom-bg": "none",
+            "--geom-point-stroke": "#18181b",
+            "--geom-poly-fill": "#e8b85a",
+            "--geom-accent": "#e8b85a",
+            "--geom-assert": "#5ec27e",
+            "--geom-muted": "#a1a1aa",
+            "--geom-hyper": "#60a5fa",
+            "--geom-rose": "#fb7185",
+            "--book-text": "#ebe4d8",
+            "--book-bg": "none",
+        }
+        for vname, hex_val in var_map.items():
+            svg_txt = re.sub(
+                rf"var\(\s*{re.escape(vname)}(?:\s*,\s*[^)]+)?\s*\)",
+                hex_val,
+                svg_txt,
+            )
+        svg_txt = re.sub(r"background-color\s*:\s*[^;\}]+;?", "", svg_txt)
         dark_override = (
             "<style>"
-            ":root, svg { --geom-fg: #ebe4d8 !important; --book-text: #ebe4d8 !important; "
-            "--geom-point-stroke: #18181b !important; }"
+            "svg line, svg polyline, svg circle, svg ellipse, svg path { stroke: #ebe4d8; fill: none; }"
+            "svg polygon, svg .geom-polygon { stroke: #e8b85a; fill: #e8b85a; fill-opacity: 0.14; }"
+            "svg .geom-point, svg .Point, svg .geom-dot { fill: #e8b85a; stroke: #18181b; }"
+            "svg #elements, svg #highlights, svg .geom-overlay { opacity: 0; display: none; }"
+            "svg text, svg tspan { fill: #ebe4d8; stroke: none; }"
             "</style>"
         )
         if "</svg>" in svg_txt:
@@ -467,13 +580,13 @@ def _rasterize_emblem(asset_path: Path, box_size: int = 390) -> Any | None:
             if proc.returncode == 0 and tmp_png.is_file():
                 im = Image.open(tmp_png).convert("RGBA")
                 im.thumbnail((box_size, box_size), Image.Resampling.LANCZOS)
-                return im
+                return _normalize_emblem_for_dark_card(im)
         return None
 
     try:
         im = Image.open(asset_path).convert("RGBA")
         im.thumbnail((box_size, box_size), Image.Resampling.LANCZOS)
-        return im
+        return _normalize_emblem_for_dark_card(im)
     except OSError:
         return None
 

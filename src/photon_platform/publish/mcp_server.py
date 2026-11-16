@@ -26,8 +26,11 @@ from .folio_links import audit_repo_folio_links, optimize_repo_folio_scans
 _MODULE_MTIMES: dict[str, float] = {}
 
 
+_SERVER_START_TIME: float = time.time()
+
+
 def _reload_modified_publish_modules() -> None:
-    """Reload editable photon_platform.publish submodules modified on disk since import."""
+    """Reload editable photon_platform.publish submodules modified on disk since server start."""
     prefix = "photon_platform.publish."
     for mod_name, mod in list(sys.modules.items()):
         if not mod_name.startswith(prefix) or mod_name.endswith(".mcp_server"):
@@ -39,9 +42,9 @@ def _reload_modified_publish_modules() -> None:
             mtime = Path(mod_file).stat().st_mtime
         except OSError:
             continue
-        prev = _MODULE_MTIMES.get(mod_name)
+        prev = _MODULE_MTIMES.get(mod_name, _SERVER_START_TIME)
         _MODULE_MTIMES[mod_name] = mtime
-        if prev is not None and mtime > prev:
+        if mtime > prev:
             with contextlib.suppress(Exception):
                 importlib.reload(mod)
 

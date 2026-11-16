@@ -369,15 +369,13 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
                         # Fallback if doctree cannot be loaded
                         item_doctree = None
 
-                    if item_doctree:
+                    if meta.get('excerpt'):
+                        item['excerpt_text'] = f"<p>{meta['excerpt']}</p>"
+                    elif item_doctree:
                         # Find first paragraph or blockquote outside admonitions
                         first_text = _find_first_excerpt_node(item_doctree)
-                        
                         if first_text:
                             item['excerpt_text'] = render_node_html(builder, first_text)
-
-                    if not item['excerpt_text'] and meta.get('excerpt'):
-                        item['excerpt_text'] = f"<p>{meta['excerpt']}</p>"
 
                     fig_info = _resolve_representative_figure(env, builder, docname, meta, item_doctree)
                     if fig_info:

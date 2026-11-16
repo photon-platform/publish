@@ -702,6 +702,33 @@ def resolve_book_doctree(app: Any, doctree: Any, fromdocname: str) -> None:
                         fn_node["ids"].append(tid)
                 parent.remove(prev)
 
+    # Promote leading folio_node (preceding first body paragraph) to masthead & mark in_masthead=True
+    env = getattr(app, "env", None)
+    if env is not None and hasattr(doctree, "findall"):
+        doc_meta = env.metadata.setdefault(fromdocname, {}) if hasattr(env, "metadata") else {}
+        fm_folio = str(doc_meta.get("folio") or "").strip()
+        first_para = next(iter(doctree.findall(nodes.paragraph)), None)
+        for el in doctree.findall(nodes.Element):
+            if el.__class__.__name__ == "folio_node":
+                el_fid = str(el.get("folio_id") or "").strip()
+                el_pg = str(el.get("page") or "").strip()
+                is_leading = first_para is None
+                if not is_leading:
+                    for walk_el in doctree.findall(nodes.Element):
+                        if walk_el is el:
+                            is_leading = True
+                            break
+                        if walk_el is first_para:
+                            break
+                if is_leading and not fm_folio and el_fid:
+                    doc_meta["folio"] = el_fid
+                    if el_pg and not doc_meta.get("page"):
+                        doc_meta["page"] = el_pg
+                    el["in_masthead"] = True
+                elif fm_folio and el_fid == fm_folio:
+                    el["in_masthead"] = True
+                break
+
     if getattr(getattr(app, "builder", None), "name", "") != "epub":
         return
 
