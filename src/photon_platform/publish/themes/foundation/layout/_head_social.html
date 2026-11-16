@@ -1,0 +1,45 @@
+{#- _head_social.html — Clean A-to-Z <title>, canonical URL, OpenGraph, and Twitter Card metadata -#}
+{%- set computed_title = page_browser_title if page_browser_title is defined and page_browser_title else ((title|striptags) ~ ' — ' ~ (book_title if is_book_page and book_title else docstitle)) %}
+  <title>{{ computed_title|e }}</title>
+{%- if metatags is defined and metatags %}
+  {{ metatags }}
+{%- endif %}
+{%- if canonical_url is defined and canonical_url %}
+  <link rel="canonical" href="{{ canonical_url|e }}" />
+{%- endif %}
+{%- if social_description is defined and social_description %}
+  <meta name="description" content="{{ social_description|e }}" />
+{%- endif %}
+{%- if social_title is defined and social_title %}
+  <meta property="og:site_name" content="{{ (social_site_name|default('GEOMETOR'))|e }}" />
+  <meta property="og:type" content="{{ (social_type|default('website'))|e }}" />
+  <meta property="og:title" content="{{ social_title|e }}" />
+{%-   if social_description is defined and social_description %}
+  <meta property="og:description" content="{{ social_description|e }}" />
+{%-   endif %}
+{%-   if canonical_url is defined and canonical_url %}
+  <meta property="og:url" content="{{ canonical_url|e }}" />
+{%-   endif %}
+{%-   if social_image_url is defined and social_image_url %}
+  <meta property="og:image" content="{{ social_image_url|e }}" />
+  <meta property="og:image:type" content="image/png" />
+{%-     if social_image_width is defined and social_image_width %}
+  <meta property="og:image:width" content="{{ social_image_width }}" />
+  <meta property="og:image:height" content="{{ social_image_height }}" />
+{%-     endif %}
+{%-     if social_image_alt is defined and social_image_alt %}
+  <meta property="og:image:alt" content="{{ social_image_alt|e }}" />
+{%-     endif %}
+{%-   endif %}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ social_title|e }}" />
+{%-   if social_description is defined and social_description %}
+  <meta name="twitter:description" content="{{ social_description|e }}" />
+{%-   endif %}
+{%-   if social_image_url is defined and social_image_url %}
+  <meta name="twitter:image" content="{{ social_image_url|e }}" />
+{%-     if social_image_alt is defined and social_image_alt %}
+  <meta name="twitter:image:alt" content="{{ social_image_alt|e }}" />
+{%-     endif %}
+{%-   endif %}
+{%- endif %}

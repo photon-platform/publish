@@ -29,8 +29,9 @@
         display: inline-flex;
         flex-direction: column;
         align-items: center;
+        gap: 0.32rem;
         padding: 0.2rem;
-        text-decoration: none;
+        text-decoration: none !important;
 
         img {
           height: 3.1rem;
@@ -44,37 +45,43 @@
           opacity: 0.92;
         }
 
-        h1 {
-          font-family: var(--book-font-display);
-          font-size: 1.05rem;
-          font-weight: 600;
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
-          color: var(--book-text);
-          text-align: center;
-          margin: 0;
+        &:hover .org-repo .repo {
+          color: var(--book-link-hover, #f3d478);
         }
       }
 
       .org-repo {
         font-family: var(--book-font-display);
-        font-size: 0.98rem;
-        font-weight: 600;
-        letter-spacing: 0.06em;
-        color: var(--book-text);
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 0.35rem;
         justify-content: center;
+        gap: 0.08rem;
+        line-height: 1.08;
+        text-align: center;
 
         .org {
-          color: var(--book-text-muted);
+          font-size: 0.82rem;
           font-weight: 500;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: var(--book-text-muted);
+        }
+
+        .sep {
+          font-size: 0.72rem;
+          line-height: 0.68;
+          color: var(--book-border-dark);
+          user-select: none;
         }
 
         .repo {
-          color: var(--book-text);
+          font-size: 0.98rem;
           font-weight: 600;
+          letter-spacing: 0.05em;
+          color: var(--book-text);
+          transition: color 0.15s ease;
+          word-break: break-word;
         }
       }
     }

@@ -22,6 +22,7 @@ Submodules
    /modules/api/photon_platform/publish/app/index
    /modules/api/photon_platform/publish/book/index
    /modules/api/photon_platform/publish/directives/index
+   /modules/api/photon_platform/publish/folio_ingest/index
    /modules/api/photon_platform/publish/folio_links/index
    /modules/api/photon_platform/publish/folio_review/index
    /modules/api/photon_platform/publish/global_conf/index
@@ -30,6 +31,7 @@ Submodules
    /modules/api/photon_platform/publish/publish/index
    /modules/api/photon_platform/publish/roles/index
    /modules/api/photon_platform/publish/rst_renderer/index
+   /modules/api/photon_platform/publish/social_meta/index
 
 
 Attributes
@@ -68,7 +70,7 @@ Package Contents
 
 
 .. py:data:: __version__
-   :value: '0.4.7'
+   :value: '0.4.8'
 
 
 .. py:data:: __licence__

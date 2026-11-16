@@ -7,7 +7,7 @@ from sphinx.util.osutil import relative_uri
 from docutils.parsers.rst import directives
 from docutils import nodes
 from sphinx.addnodes import toctree
-from typing import Dict, Any, List
+from typing import Any, Dict, List, Optional, Tuple
 try:
     from photon_platform.publish.images import picture_node, prepare_inline_svg
 except ImportError:
@@ -379,48 +379,24 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
                     if not item['excerpt_text'] and meta.get('excerpt'):
                         item['excerpt_text'] = f"<p>{meta['excerpt']}</p>"
 
-                    if item_doctree:
-                        # Check for explicitly set featured image (from .. picture::)
-                        if 'featured_image' in meta:
-                             item['excerpt_figure_filename'] = meta['featured_image']
-                             item['excerpt_figure_alt'] = meta.get('featured_image_alt') or item['title']
-                        
-                        # Fallback: Find first figure/picture if no featured image
-                        if not item['excerpt_figure_filename']:
-                            # Check for picture_node first (custom)
-                            if picture_node:
-                                for n in item_doctree.traverse(picture_node):
-                                    if 'main_src' in n:
-                                        item['excerpt_figure_filename'] = n['main_src']
-                                        item['excerpt_figure_alt'] = n.get('alt', '')
-                                        # picture_node doesn't enforce width in the same way, or it's implicitly 800
-                                        break
-                            
-                            # Check for standard figure if still not found
-                            if not item['excerpt_figure_filename']:
-                                for n in item_doctree.traverse(nodes.figure):
-                                    image_node = next(iter(n.traverse(nodes.image)), None)
-                                    if image_node:
-                                        item['excerpt_figure_filename'] = os.path.join(
-                                            builder.imagedir, os.path.basename(image_node['uri'])
-                                        )
-                                        item['excerpt_figure_alt'] = image_node.get('alt', '')
-                                        item['excerpt_figure_width'] = n.get('width')
-                                        break
+                    fig_info = _resolve_representative_figure(env, builder, docname, meta, item_doctree)
+                    if fig_info:
+                        item['excerpt_figure_filename'] = fig_info['uri']
+                        item['excerpt_figure_alt'] = fig_info.get('alt') or item['title']
+                        if fig_info.get('width'):
+                            item['excerpt_figure_width'] = fig_info['width']
+                        if prepare_inline_svg and fig_info.get('svg_disk_path'):
+                            item['excerpt_svg_content'] = prepare_inline_svg(
+                                fig_info['svg_disk_path'], as_thumbnail=True
+                            )
 
-                    fig_file = item.get('excerpt_figure_filename')
-                    if (
-                        prepare_inline_svg
-                        and isinstance(fig_file, str)
-                        and fig_file.lower().endswith('.svg')
-                    ):
-                        rel_fig = fig_file.lstrip('/')
-                        svg_src_path = os.path.join(env.srcdir, rel_fig)
-                        if not os.path.isfile(svg_src_path):
-                            svg_src_path = os.path.join(builder.outdir, rel_fig)
-                        item['excerpt_svg_content'] = prepare_inline_svg(
-                            svg_src_path, as_thumbnail=True
-                        )
+                    try:
+                        from ..book import detect_companion_tracks
+                        c_tracks = detect_companion_tracks(env, docname)
+                        if len(c_tracks) > 1:
+                            item['companion_tracks'] = c_tracks
+                    except Exception:
+                        pass
 
                     if 'tags' in item and isinstance(item['tags'], str):
                         item['tags'] = [tag.strip() for tag in item['tags'].split(',') if tag.strip()]
@@ -471,6 +447,180 @@ def _split_meta_list(val: Any) -> List[str]:
     return []
 
 
+def _extract_direct_figure(
+    env: Any,
+    builder: Any,
+    docname: str,
+    meta: Dict[str, Any],
+    doctree: Optional[nodes.document],
+) -> Optional[Dict[str, Any]]:
+    """Extract direct `:featured_image:`, `.. picture::`, or `.. figure::` from a single `docname`."""
+    doc_dir = os.path.dirname(docname)
+
+    def _resolve_asset_paths(raw_ref: str) -> Tuple[str, Optional[str]]:
+        clean_ref = raw_ref.strip().lstrip("/")
+        candidates = []
+        if doc_dir:
+            candidates.append(os.path.join(env.srcdir, doc_dir, clean_ref))
+        candidates.append(os.path.join(env.srcdir, clean_ref))
+        candidates.append(os.path.join(builder.outdir, clean_ref))
+        if hasattr(builder, "imagedir"):
+            candidates.append(os.path.join(builder.outdir, builder.imagedir, os.path.basename(clean_ref)))
+
+        disk_found = next((c for c in candidates if os.path.isfile(c)), None)
+        # Compute URI relative to outdir/srcdir root so pathto(..., 1) resolves from any parent collection!
+        if disk_found and disk_found.startswith(str(builder.outdir)):
+            out_rel = os.path.relpath(disk_found, str(builder.outdir)).replace(os.sep, "/")
+            return out_rel, (disk_found if clean_ref.lower().endswith(".svg") else None)
+        if disk_found and disk_found.startswith(str(env.srcdir)):
+            src_rel = os.path.relpath(disk_found, str(env.srcdir)).replace(os.sep, "/")
+            # Check if Sphinx copied it into _images/
+            if hasattr(builder, "imagedir"):
+                copied = os.path.join(builder.outdir, builder.imagedir, os.path.basename(disk_found))
+                if os.path.isfile(copied):
+                    out_rel = os.path.join(builder.imagedir, os.path.basename(disk_found)).replace(os.sep, "/")
+                    return out_rel, (disk_found if clean_ref.lower().endswith(".svg") else None)
+            return src_rel, (disk_found if clean_ref.lower().endswith(".svg") else None)
+        return clean_ref, (disk_found if (disk_found and clean_ref.lower().endswith(".svg")) else None)
+
+    if meta.get("featured_image"):
+        uri, svg_disk = _resolve_asset_paths(str(meta["featured_image"]))
+        return {
+            "uri": uri,
+            "alt": meta.get("featured_image_alt") or "",
+            "svg_disk_path": svg_disk,
+        }
+
+    if doctree is None:
+        return None
+
+    if picture_node:
+        for n in doctree.findall(picture_node):
+            if "main_src" in n and n["main_src"]:
+                uri, svg_disk = _resolve_asset_paths(str(n["main_src"]))
+                return {
+                    "uri": uri,
+                    "alt": n.get("alt", ""),
+                    "svg_disk_path": svg_disk,
+                }
+
+    for fig_n in doctree.findall(nodes.figure):
+        image_node = next(iter(fig_n.findall(nodes.image)), None)
+        if image_node and image_node.get("uri"):
+            raw_uri = str(image_node["uri"])
+            img_out = (
+                os.path.join(builder.imagedir, os.path.basename(raw_uri))
+                if hasattr(builder, "imagedir")
+                else raw_uri
+            )
+            uri, svg_disk = _resolve_asset_paths(raw_uri)
+            if not svg_disk and hasattr(builder, "imagedir"):
+                uri = img_out.replace(os.sep, "/")
+            return {
+                "uri": uri,
+                "alt": image_node.get("alt", ""),
+                "width": fig_n.get("width"),
+                "svg_disk_path": svg_disk,
+            }
+
+    # Check bare top-level image nodes (excluding folio initial drop-caps)
+    for img_n in doctree.findall(nodes.image):
+        if "folio-initial-cap" in img_n.get("classes", []):
+            continue
+        if img_n.get("uri"):
+            raw_uri = str(img_n["uri"])
+            uri, svg_disk = _resolve_asset_paths(raw_uri)
+            return {
+                "uri": uri,
+                "alt": img_n.get("alt", ""),
+                "svg_disk_path": svg_disk,
+            }
+
+    return None
+
+
+def _resolve_representative_figure(
+    env: Any,
+    builder: Any,
+    docname: str,
+    meta: Optional[Dict[str, Any]] = None,
+    item_doctree: Optional[nodes.document] = None,
+    _visited: Optional[set] = None,
+) -> Optional[Dict[str, Any]]:
+    """Resolve representative figure for `docname`, recursively bubbling from child units when `docname` is a container."""
+    visited = _visited if _visited is not None else set()
+    if docname in visited:
+        return None
+    visited.add(docname)
+
+    resolved_meta = meta if meta is not None else dict(env.metadata.get(docname, {}))
+    doctree = item_doctree
+    if doctree is None:
+        try:
+            doctree = env.get_doctree(docname)
+        except Exception:
+            doctree = None
+
+    # 1. Direct figure on docname
+    direct = _extract_direct_figure(env, builder, docname, resolved_meta, doctree)
+    if direct:
+        return direct
+
+    # 2. Companion reading track sibling in same unit directory
+    try:
+        from ..book import detect_companion_tracks
+
+        for tr in detect_companion_tracks(env, docname):
+            sib = tr.get("docname")
+            if sib and sib != docname and sib not in visited:
+                visited.add(sib)
+                sib_meta = dict(env.metadata.get(sib, {}))
+                try:
+                    sib_dt = env.get_doctree(sib)
+                except Exception:
+                    sib_dt = None
+                sib_fig = _extract_direct_figure(env, builder, sib, sib_meta, sib_dt)
+                if sib_fig:
+                    return sib_fig
+    except Exception:
+        pass
+
+    # 3. Recursive container bubbling: if `docname` is a container (`.../index`), inspect ordered descendants
+    if docname.endswith("/index") or docname == getattr(getattr(env, "config", None), "master_doc", "index"):
+        prefix = "" if not docname.endswith("/index") else docname[:-5]  # includes trailing '/'
+        candidates: List[Tuple[Tuple[Any, ...], str]] = []
+        for cand in getattr(env, "found_docs", ()):
+            if cand == docname or cand in visited:
+                continue
+            if prefix and not cand.startswith(prefix):
+                continue
+            rel_rest = cand[len(prefix) :]
+            depth = rel_rest.count("/")
+            cmeta = env.metadata.get(cand, {})
+            ord_val = safe_numeric(
+                cmeta.get("order", cmeta.get("number", cmeta.get("proposition", 999999))),
+                999999,
+            )
+            # Prefer shallower direct children ordered by :order:/:number:, then deeper proposition units
+            candidates.append(((depth, ord_val, cand), cand))
+
+        candidates.sort(key=lambda pair: pair[0])
+        for _sort_k, child_doc in candidates[:60]:
+            if child_doc in visited:
+                continue
+            visited.add(child_doc)
+            cmeta = dict(env.metadata.get(child_doc, {}))
+            try:
+                cdt = env.get_doctree(child_doc)
+            except Exception:
+                cdt = None
+            cfig = _extract_direct_figure(env, builder, child_doc, cmeta, cdt)
+            if cfig:
+                return cfig
+
+    return None
+
+
 def _build_taxonomy_article_item(app: Any, env: Any, docname: str, meta: Dict[str, Any], title_node: nodes.Node) -> Dict[str, Any]:
     item: Dict[str, Any] = {
         'title': title_node.astext(),
@@ -500,42 +650,24 @@ def _build_taxonomy_article_item(app: Any, env: Any, docname: str, meta: Dict[st
     if not item['excerpt_text'] and meta.get('excerpt'):
         item['excerpt_text'] = f"<p>{meta['excerpt']}</p>"
 
-    if doctree:
-        if 'featured_image' in meta:
-            item['excerpt_figure_filename'] = meta['featured_image']
-            item['excerpt_figure_alt'] = meta.get('featured_image_alt') or item['title']
+    fig_info = _resolve_representative_figure(env, app.builder, docname, meta, doctree)
+    if fig_info:
+        item['excerpt_figure_filename'] = fig_info['uri']
+        item['excerpt_figure_alt'] = fig_info.get('alt') or item['title']
+        if fig_info.get('width'):
+            item['excerpt_figure_width'] = fig_info['width']
+        if prepare_inline_svg and fig_info.get('svg_disk_path'):
+            item['excerpt_svg_content'] = prepare_inline_svg(
+                fig_info['svg_disk_path'], as_thumbnail=True
+            )
 
-        if not item['excerpt_figure_filename'] and picture_node:
-            for n in doctree.traverse(picture_node):
-                if 'main_src' in n:
-                    item['excerpt_figure_filename'] = n['main_src']
-                    item['excerpt_figure_alt'] = n.get('alt', '')
-                    break
-
-        if not item['excerpt_figure_filename']:
-            for node in doctree.traverse(nodes.figure):
-                image_node = next(iter(node.traverse(nodes.image)), None)
-                if image_node:
-                    item['excerpt_figure_filename'] = os.path.join(
-                        app.builder.imagedir, os.path.basename(image_node['uri'])
-                    )
-                    item['excerpt_figure_alt'] = image_node.get('alt', '')
-                    item['excerpt_figure_width'] = node.get('width')
-                    break
-
-    fig_file = item.get('excerpt_figure_filename')
-    if (
-        prepare_inline_svg
-        and isinstance(fig_file, str)
-        and fig_file.lower().endswith('.svg')
-    ):
-        rel_fig = fig_file.lstrip('/')
-        svg_src_path = os.path.join(env.srcdir, rel_fig)
-        if not os.path.isfile(svg_src_path):
-            svg_src_path = os.path.join(app.builder.outdir, rel_fig)
-        item['excerpt_svg_content'] = prepare_inline_svg(
-            svg_src_path, as_thumbnail=True
-        )
+    try:
+        from ..book import detect_companion_tracks
+        c_tracks = detect_companion_tracks(env, docname)
+        if len(c_tracks) > 1:
+            item['companion_tracks'] = c_tracks
+    except Exception:
+        pass
     return item
 
 
@@ -626,6 +758,7 @@ def generate_taxonomy_pages(app: Any) -> Any:
 
             context = {
                 'collection': {
+                    'label': tag,
                     'title': f"Posts tagged '{tag}'",
                     'articles': articles,
                     'sort_key': 'order',
@@ -650,6 +783,7 @@ def generate_taxonomy_pages(app: Any) -> Any:
 
             context = {
                 'collection': {
+                    'label': category,
                     'title': f"Posts in category '{category}'",
                     'articles': articles,
                     'sort_key': 'order',
@@ -673,6 +807,7 @@ def generate_taxonomy_pages(app: Any) -> Any:
 
             context = {
                 'collection': {
+                    'label': type_,
                     'title': f"Content of type '{type_}'",
                     'articles': articles,
                     'sort_key': 'order',

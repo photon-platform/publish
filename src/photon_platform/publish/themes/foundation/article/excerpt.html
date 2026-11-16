@@ -16,6 +16,16 @@
 {%- if article.excerpt_text %}
               {{ article.excerpt_text|indent(14) }}
 {%- endif %}
+{%- if article.companion_tracks and article.companion_tracks|length > 1 %}
+            <nav class="excerpt-tracks" aria-label="Tracks">
+{%-   for tr in article.companion_tracks %}
+{%-     if not loop.first %}
+              <span class="excerpt-track-sep">&middot;</span>
+{%-     endif %}
+              <a class="excerpt-track-link" href="{{ pathto(tr.docname) }}">{{ tr.label }}</a>
+{%-   endfor %}
+            </nav>
+{%- endif %}
           </section>
         </div>
 {%- if article.date or article.author or article.category or article.categories or article.tags %}

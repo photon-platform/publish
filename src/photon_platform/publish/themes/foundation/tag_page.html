@@ -2,13 +2,8 @@
 {% block body %}
   <article class="book-layout book-reading-pane">
     <header class="book-header">
-      <div class="book-header-bar">
-        <div class="book-header-identity">
-          <a class="book-portal-link" href="{{ pathto(master_doc) }}" title="Return to Project Portal">&larr; {{ repo_name|default(project)|default('Home') }}</a>
-          <span class="book-header-sep">/</span>
-          <span class="book-title-link">{{ collection.title }}</span>
-        </div>
-      </div>
+{%- set page_breadcrumbs = [{'title': 'Tags', 'is_current': False}, {'title': collection.label|default(collection.title), 'is_current': True}] %}
+{%- include "layout/_breadcrumbs.html" %}
     </header>
     <div class="content body book-content" role="main">
       <h1>{{ collection.title }}</h1>

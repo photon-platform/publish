@@ -334,6 +334,74 @@ def detect_companion_tracks(env: Any, pagename: str) -> List[Dict[str, Any]]:
     return tracks
 
 
+_CONTAINER_PREFIX_WORDS = (
+    "volume ",
+    "vol. ",
+    "book ",
+    "liber ",
+    "part ",
+    "pars ",
+    "tractatus ",
+    "caput ",
+    "chapter ",
+    "ch. ",
+    "prologue ",
+    "section ",
+    "sec. ",
+    "teil ",
+    "abschnitt ",
+)
+
+_CONTAINER_TYPES = {
+    "volume",
+    "book",
+    "liber",
+    "part",
+    "pars",
+    "tractatus",
+    "caput",
+    "chapter",
+    "prologue",
+    "section",
+}
+
+
+def _shorten_container_crumb_label(raw_title: str, meta: Optional[Dict[str, Any]] = None) -> str:
+    """Shorten container headings ('Volume I: Intro...', 'Book I — Triangles') for breadcrumbs."""
+    if meta:
+        explicit = str(meta.get("breadcrumb_title") or meta.get("nav_title") or "").strip()
+        if explicit:
+            return explicit.rstrip(".")
+    label = (raw_title or "").strip().rstrip(".")
+    low = label.lower()
+    mtype = str((meta or {}).get("type") or "").strip().lower()
+    if mtype in _CONTAINER_TYPES or low.startswith(_CONTAINER_PREFIX_WORDS):
+        label = re.split(r"\s*[:\u2014\u2013]\s*", label, maxsplit=1)[0].strip()
+    return label
+
+
+def _shorten_book_home_label(book_title: str) -> str:
+    """Produce a concise Book Home label for inner-page breadcrumbs."""
+    cleaned = (book_title or "").strip().rstrip(".")
+    if not cleaned:
+        return ""
+    if "euclid" in cleaned.lower() and "elements" in cleaned.lower():
+        return "Elements"
+    short = re.split(r"\s*[:\u2014\u2013]\s*", cleaned, maxsplit=1)[0].strip()
+    return short
+
+
+def _shorten_leaf_crumb_label(raw_title: str) -> str:
+    """Produce a clean, concise terminal breadcrumb label for a leaf unit or section page."""
+    cleaned = re.sub(r"<[^>]+>", "", (raw_title or "")).strip().rstrip(".")
+    if not cleaned:
+        return ""
+    short = re.split(r"\s*[:\u2014\u2013]\s*", cleaned, maxsplit=1)[0].strip()
+    if len(short) > 48:
+        short = short[:45].rsplit(" ", 1)[0] + "…"
+    return short
+
+
 def resolve_book_context(
     env: Any,
     pagename: str,
@@ -414,6 +482,36 @@ def resolve_book_context(
 
     folio = str(page_meta.get("folio") or unit_index_meta.get("folio") or "").strip()
     page_num = str(page_meta.get("page") or unit_index_meta.get("page") or "").strip()
+
+    # Promote leading folio_node (before first body paragraph) to masthead & mark in_masthead=True
+    if doctree is not None and nodes is not None and hasattr(doctree, "findall"):
+        first_para = next(iter(doctree.findall(nodes.paragraph)), None)
+        for el in doctree.findall(nodes.Element):
+            if el.__class__.__name__ == "folio_node":
+                # Check if this folio_node precedes the first prose paragraph (or matches masthead folio)
+                el_fid = str(el.get("folio_id") or "").strip()
+                el_pg = str(el.get("page") or "").strip()
+                is_leading = False
+                if first_para is None:
+                    is_leading = True
+                else:
+                    # Walk document order to check if el comes before first_para
+                    for walk_el in doctree.findall(nodes.Element):
+                        if walk_el is el:
+                            is_leading = True
+                            break
+                        if walk_el is first_para:
+                            is_leading = False
+                            break
+                if is_leading and not folio and el_fid:
+                    folio = el_fid
+                    if not page_num and el_pg:
+                        page_num = el_pg
+                    el["in_masthead"] = True
+                elif folio and el_fid == folio:
+                    el["in_masthead"] = True
+                break
+
     canonical_id = str(
         page_meta.get("canonical_id") or unit_index_meta.get("canonical_id") or ""
     ).strip()
@@ -468,12 +566,9 @@ def resolve_book_context(
     prev_crumb_label = ""
     for anc in crumb_docnames:
         anc_meta = _get_doc_metadata(env, anc)
-        raw_label = _get_doc_title(env, anc, anc_meta).strip().rstrip(".")
-        if ":" in raw_label and (
-            str(anc_meta.get("type", "")).strip().lower() in {"volume", "book", "part", "chapter"}
-            or raw_label.lower().startswith(("volume ", "vol. ", "book ", "chapter ", "part "))
-        ):
-            raw_label = raw_label.split(":", 1)[0].strip()
+        raw_label = _shorten_container_crumb_label(
+            _get_doc_title(env, anc, anc_meta), anc_meta
+        )
         if prev_crumb_label and raw_label.lower().startswith(prev_crumb_label.lower()):
             trimmed = re.sub(
                 r"^[.:\-\u2013\u2014\s]+", "", raw_label[len(prev_crumb_label) :]
@@ -491,11 +586,16 @@ def resolve_book_context(
     from .folio_links import resolve_folio_url
 
     folio_url = resolve_folio_url(env, pagename, folio) if folio else None
+    book_short_title = (
+        str(root_doc_meta.get("breadcrumb_title") or root_doc_meta.get("nav_title") or "").strip()
+        or _shorten_book_home_label(str(book_title or ""))
+    )
 
     return {
         "is_book_page": True,
         "book_root": book_root,
         "book_title": book_title,
+        "book_short_title": book_short_title,
         "book_subtitle": book_subtitle,
         "book_theme": book_theme,
         "folio": folio,
@@ -940,6 +1040,240 @@ def _update_book_prev_next(app: Any, pagename: str, context: Dict[str, Any]) -> 
     context["next"] = _make_link(next_doc)
 
 
+def resolve_page_breadcrumbs(
+    app: Any,
+    env: Any,
+    pagename: str,
+    context: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Build unified section/book-anchored `page_breadcrumbs` and separate `provenance_badges` across all page types."""
+    master_doc = getattr(getattr(env, "config", None), "master_doc", "index")
+    if pagename == master_doc:
+        return {
+            "page_breadcrumbs": [],
+            "provenance_badges": [],
+            "section_root_doc": master_doc,
+            "section_root_title": "",
+        }
+
+    found_docs: Set[str] = set(getattr(env, "found_docs", set()))
+    is_book = bool(context.get("is_book_page"))
+    crumbs: List[Dict[str, Any]] = []
+    badges: List[Dict[str, Any]] = []
+    section_root_doc = master_doc
+    section_root_title = ""
+
+    # Gather relation-based ancestor chain from Sphinx `collect_relations` (excluding master_doc)
+    rel_ancestors: List[str] = []
+    if hasattr(env, "collect_relations"):
+        try:
+            relations = env.collect_relations()
+            cur_p = relations.get(pagename, [None])[0] if pagename in relations else None
+            seen_rel: Set[str] = set()
+            while cur_p and cur_p != master_doc and cur_p not in seen_rel:
+                seen_rel.add(cur_p)
+                rel_ancestors.append(cur_p)
+                cur_p = relations.get(cur_p, [None])[0] if cur_p in relations else None
+            rel_ancestors.reverse()
+        except Exception:
+            rel_ancestors = []
+
+    if is_book:
+        book_root = str(context.get("book_root") or master_doc)
+        section_root_doc = book_root
+        book_full_title = str(context.get("book_title") or "").strip()
+        book_short = str(context.get("book_short_title") or _shorten_book_home_label(book_full_title)).strip()
+        section_root_title = book_short or book_full_title
+
+        if pagename == book_root:
+            # Book Title Page itself: single plain section-root crumb (no self-link)
+            crumbs.append(
+                {
+                    "docname": book_root,
+                    "title": book_full_title or book_short,
+                    "is_current": True,
+                    "link_when_current": False,
+                }
+            )
+        else:
+            # 1. Book Home anchor link
+            crumbs.append(
+                {
+                    "docname": book_root,
+                    "title": book_short or book_full_title,
+                    "is_current": False,
+                }
+            )
+
+            # 2. Intermediate container crumbs (merging book_breadcrumbs + relation ancestors after book_root)
+            existing_crumbs = list(context.get("book_breadcrumbs") or [])
+            seen_dirs: Set[str] = {
+                os.path.dirname(book_root) if os.path.basename(book_root) == "index" else book_root
+            }
+            doc_dir = os.path.dirname(pagename)
+            tracks = list(context.get("book_tracks") or [])
+
+            # Determine primary reading doc for current unit
+            primary_track_doc = pagename
+            if tracks:
+                preferred = next(
+                    (
+                        t["docname"]
+                        for t in tracks
+                        if t.get("key") in ("proposition", "en", "la", "el", "de", "it", "fr")
+                    ),
+                    tracks[0]["docname"],
+                )
+                primary_track_doc = preferred
+
+            unit_dir_key = (
+                doc_dir
+                if (
+                    doc_dir
+                    and (
+                        os.path.basename(pagename) == "index"
+                        or bool(tracks)
+                        or _extract_unit_stem(os.path.basename(pagename), doc_dir) == os.path.basename(doc_dir)
+                    )
+                )
+                else pagename
+            )
+
+            # Add relation ancestors that sit below book_root and above current unit
+            merged_anc_docs: List[str] = [c["docname"] for c in existing_crumbs if c.get("docname")]
+            for ranc in rel_ancestors:
+                if ranc == book_root or ranc == pagename or ranc == primary_track_doc:
+                    continue
+                if book_root != master_doc:
+                    bprefix = book_root[:-5] if book_root.endswith("/index") else f"{book_root}/"
+                    if not ranc.startswith(bprefix):
+                        continue
+                rdir = os.path.dirname(ranc) if os.path.basename(ranc) == "index" else ranc
+                if rdir == unit_dir_key:
+                    continue
+                if ranc not in merged_anc_docs:
+                    # Insert in path-length order
+                    merged_anc_docs.append(ranc)
+
+            merged_anc_docs.sort(key=lambda d: (d.count("/"), len(d)))
+
+            prev_label = (book_short or book_full_title).lower()
+            for anc_doc in merged_anc_docs:
+                anc_dir = os.path.dirname(anc_doc) if os.path.basename(anc_doc) == "index" else anc_doc
+                if anc_dir in seen_dirs or anc_dir == unit_dir_key:
+                    continue
+                seen_dirs.add(anc_dir)
+                anc_meta = _get_doc_metadata(env, anc_doc)
+                lbl = _shorten_container_crumb_label(_get_doc_title(env, anc_doc, anc_meta), anc_meta)
+                if prev_label and lbl.lower().startswith(prev_label):
+                    trimmed = re.sub(r"^[.:\-\u2013\u2014\s]+", "", lbl[len(prev_label) :]).strip()
+                    if trimmed:
+                        lbl = trimmed
+                prev_label = lbl.lower()
+                crumbs.append({"docname": anc_doc, "title": lbl, "is_current": False})
+
+            # 3. Terminal current unit crumb (always present; links back to primary_track_doc when on an auxiliary track)
+            page_meta = _get_doc_metadata(env, pagename)
+            prim_meta = _get_doc_metadata(env, primary_track_doc)
+            raw_cid = str(context.get("canonical_id") or "").strip()
+            clean_cid = re.sub(
+                r"[._-](?:commentary|notes|summary|folio)$", "", raw_cid, flags=re.IGNORECASE
+            ).strip()
+
+            unit_label = (
+                str(page_meta.get("breadcrumb_title") or prim_meta.get("breadcrumb_title") or "").strip()
+                or clean_cid
+                or _shorten_container_crumb_label(
+                    _get_doc_title(env, primary_track_doc, prim_meta), prim_meta
+                )
+            )
+            unit_label = _shorten_leaf_crumb_label(unit_label)
+            is_companion_view = bool(tracks) and pagename != primary_track_doc
+            if unit_label:
+                crumbs.append(
+                    {
+                        "docname": primary_track_doc if is_companion_view else pagename,
+                        "title": unit_label,
+                        "is_current": True,
+                        "link_when_current": is_companion_view,
+                    }
+                )
+    else:
+        # Non-book pages (About, People, Usage, Modules, Log, Demos, etc.)
+        parts = pagename.split("/")
+        anc_candidates: List[str] = []
+        for i in range(1, len(parts)):
+            prefix = "/".join(parts[:i])
+            for cand in (f"{prefix}/index", prefix):
+                if cand != pagename and (not found_docs or cand in found_docs) and cand not in anc_candidates:
+                    anc_candidates.append(cand)
+        for ranc in rel_ancestors:
+            if ranc != pagename and ranc not in anc_candidates:
+                anc_candidates.append(ranc)
+        anc_candidates.sort(key=lambda d: (d.count("/"), len(d)))
+
+        seen_nonbook_dirs: Set[str] = set()
+        for anc_doc in anc_candidates:
+            anc_dir = os.path.dirname(anc_doc) if os.path.basename(anc_doc) == "index" else anc_doc
+            if anc_dir in seen_nonbook_dirs:
+                continue
+            seen_nonbook_dirs.add(anc_dir)
+            anc_meta = _get_doc_metadata(env, anc_doc)
+            lbl = _shorten_container_crumb_label(_get_doc_title(env, anc_doc, anc_meta), anc_meta)
+            crumbs.append({"docname": anc_doc, "title": lbl, "is_current": False})
+
+        cur_meta = _get_doc_metadata(env, pagename)
+        cur_raw = (
+            str(cur_meta.get("breadcrumb_title") or cur_meta.get("nav_title") or "").strip()
+            or _get_doc_title(env, pagename, cur_meta)
+        )
+        cur_lbl = _shorten_leaf_crumb_label(cur_raw)
+        if cur_lbl:
+            crumbs.append(
+                {
+                    "docname": pagename,
+                    "title": cur_lbl,
+                    "is_current": True,
+                    "link_when_current": False,
+                }
+            )
+
+        if crumbs:
+            section_root_doc = str(crumbs[0].get("docname") or pagename)
+            section_root_title = str(crumbs[0].get("title") or "")
+
+    # Separate provenance badges (never mixed into breadcrumb `/` trail)
+    canonical_id = str(context.get("canonical_id") or "").strip()
+    clean_cid = re.sub(
+        r"[._-](?:commentary|notes|summary|folio)$", "", canonical_id, flags=re.IGNORECASE
+    ).strip()
+    original_id = str(context.get("original_id") or "").strip()
+    terminal_title = crumbs[-1]["title"] if crumbs else ""
+    if original_id and original_id not in {canonical_id, clean_cid, terminal_title}:
+        badges.append({"label": original_id, "cls": "folio-badge", "url": ""})
+
+    folio = str(context.get("folio") or "").strip()
+    page_num = str(context.get("page") or "").strip()
+    folio_url = str(context.get("folio_url") or "").strip()
+    if folio:
+        flabel = f"Folio {folio}" + (f" | p. {page_num}" if page_num else "")
+        ftitle = f"View Folio {folio}" + (f" (p. {page_num})" if page_num else "")
+        badges.append({"label": flabel, "cls": "folio-badge", "url": folio_url, "title": ftitle})
+
+    if not is_book:
+        meta = context.get("meta") or _get_doc_metadata(env, pagename)
+        meta_date = str((meta or {}).get("date") or "").strip()
+        if meta_date and pagename.startswith("log/") and pagename != "log/index":
+            badges.append({"label": meta_date, "cls": "canonical-badge", "url": ""})
+
+    return {
+        "page_breadcrumbs": crumbs,
+        "provenance_badges": badges,
+        "section_root_doc": section_root_doc,
+        "section_root_title": section_root_title,
+    }
+
+
 def setup_book_page_context(
     app: Any,
     pagename: str,
@@ -947,7 +1281,7 @@ def setup_book_page_context(
     context: Dict[str, Any],
     doctree: Optional[nodes.document],
 ) -> Optional[str]:
-    """Sphinx `html-page-context` hook to inject Book Codex context and select `book_layout.html`."""
+    """Sphinx `html-page-context` hook to inject Book Codex, breadcrumbs, and social `<head>` context."""
     book_ctx = resolve_book_context(app.env, pagename, doctree=doctree)
     context.update(book_ctx)
     if book_ctx.get("is_book_page"):
@@ -957,6 +1291,15 @@ def setup_book_page_context(
         if "body" in context and isinstance(context["body"], str):
             context["body"] = _enhance_epub_body_html(app, pagename, context["body"], book_ctx)
         return None
+
+    crumb_ctx = resolve_page_breadcrumbs(app, app.env, pagename, context)
+    context.update(crumb_ctx)
+
+    from .social_meta import build_social_and_title_context
+
+    social_ctx = build_social_and_title_context(app, pagename, context, doctree)
+    context.update(social_ctx)
+
     if book_ctx.get("is_book_page") and templatename == "page.html":
         return "book_layout.html"
     return None

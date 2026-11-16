@@ -23,6 +23,8 @@ Functions
    photon_platform.publish.app.mcp
    photon_platform.publish.app.folio
    photon_platform.publish.app.folio_links_cmd
+   photon_platform.publish.app.social_banner_cmd
+   photon_platform.publish.app.folio_ingest_cmd
 
 
 Module Contents
@@ -71,5 +73,15 @@ Module Contents
 .. py:function:: folio_links_cmd(repo, optimize_scans, grayscale, as_json)
 
    Audits primary-source .. folio:: and :folio: links (and optionally optimizes scans).
+
+
+.. py:function:: social_banner_cmd(repo, force, as_json)
+
+   Generates dedicated 1200x630 sharing-only PNG banners in docsrc/_static/social/.
+
+
+.. py:function:: folio_ingest_cmd(repo, pdf, edition, dpi, preserve_color, vector_svg, first_page, last_page, force, as_json)
+
+   Renders 300-DPI <NNNN>.png folios, extracts embedded text & graphics, and updates folio_map.json.
 
 

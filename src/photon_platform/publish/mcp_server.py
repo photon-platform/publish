@@ -258,6 +258,75 @@ TOOL_REGISTRY: dict[str, tuple[Callable[..., dict[str, Any]], dict[str, Any]]] =
             },
         },
     ),
+    "publish_social_banner": (
+        lambda repo, force=False: (
+            _reload_modified_publish_modules()
+            or __import__(
+                "photon_platform.publish.social_meta", fromlist=["generate_repo_social_banners"]
+            ).generate_repo_social_banners(repo, force=force)
+        ),
+        {
+            "description": (
+                "Generate dedicated 1200x630 sharing-only PNG banners in docsrc/_static/social/ "
+                "(banner.png and per-book <book_slug>.png) for OpenGraph and Twitter Cards."
+            ),
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "repo": {
+                        "type": "string",
+                        "description": "Absolute path to the target repository root.",
+                    },
+                    "force": {
+                        "type": "boolean",
+                        "description": "Overwrite existing social banner PNGs.",
+                        "default": False,
+                    },
+                },
+                "required": ["repo"],
+            },
+        },
+    ),
+    "publish_folio_ingest": (
+        lambda repo, pdf=None, edition=None, dpi=300, preserve_color=False, vector_svg=False, first_page=None, last_page=None, force=False: (
+            _reload_modified_publish_modules()
+            or __import__(
+                "photon_platform.publish.folio_ingest", fromlist=["ingest_repo_pdfs"]
+            ).ingest_repo_pdfs(
+                repo,
+                pdf=pdf,
+                edition=edition,
+                dpi=dpi,
+                preserve_color=preserve_color,
+                extract_vector_svg=vector_svg,
+                first_page=first_page,
+                last_page=last_page,
+                force=force,
+            )
+        ),
+        {
+            "description": (
+                "Parse archival PDFs in resources/ into 300-DPI <NNNN>.png folio scans, "
+                "extract embedded pdftotext streams and pdfimages/pdftocairo graphics, "
+                "and update folio_map.json."
+            ),
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "repo": {"type": "string", "description": "Absolute path to repository root."},
+                    "pdf": {"type": "string", "description": "Optional specific PDF path."},
+                    "edition": {"type": "string", "description": "Optional edition slug under resources/."},
+                    "dpi": {"type": "integer", "default": 300},
+                    "preserve_color": {"type": "boolean", "default": False},
+                    "vector_svg": {"type": "boolean", "default": False},
+                    "first_page": {"type": "integer"},
+                    "last_page": {"type": "integer"},
+                    "force": {"type": "boolean", "default": False},
+                },
+                "required": ["repo"],
+            },
+        },
+    ),
 }
 
 

@@ -28,6 +28,7 @@ Functions
    photon_platform.publish.book.filter_epub_book_sources
    photon_platform.publish.book.resolve_book_doctree
    photon_platform.publish.book.resolve_epub_missing_reference
+   photon_platform.publish.book.resolve_page_breadcrumbs
    photon_platform.publish.book.setup_book_page_context
    photon_platform.publish.book.setup
 
@@ -79,9 +80,14 @@ Module Contents
    Gracefully degrade excluded website references (e.g. about-*) to plain text in EPUB builds.
 
 
+.. py:function:: resolve_page_breadcrumbs(app: Any, env: Any, pagename: str, context: Dict[str, Any]) -> Dict[str, Any]
+
+   Build unified section/book-anchored `page_breadcrumbs` and separate `provenance_badges` across all page types.
+
+
 .. py:function:: setup_book_page_context(app: Any, pagename: str, templatename: str, context: Dict[str, Any], doctree: Optional[docutils.nodes.document]) -> Optional[str]
 
-   Sphinx `html-page-context` hook to inject Book Codex context and select `book_layout.html`.
+   Sphinx `html-page-context` hook to inject Book Codex, breadcrumbs, and social `<head>` context.
 
 
 .. py:function:: setup(app: Any) -> Dict[str, Any]

@@ -1,17 +1,15 @@
   <header>
     <div class="logo">
-      <a href="{{ pathto(master_doc) }}">
+      <a href="{{ pathto(master_doc) }}" title="Home">
 {%- if logo_url %}
-        <img src="{{ logo_url }}" class="logo" alt="Logo"/>
-{%- else %}
-        <h1>{{ project }}</h1>
+        <img src="{{ logo_url }}" class="logo" alt="{{ (org_name|default('GEOMETOR'))|upper }} {{ repo_name }}"/>
 {%- endif %}
+        <div class="org-repo">
+          <span class="org">{{ (org_name|default('GEOMETOR'))|upper }}</span>
+          <span class="sep" aria-hidden="true">&bull;</span>
+          <span class="repo">{{ repo_name }}</span>
+        </div>
       </a>
-      <div class="org-repo">
-        <span class="org">{{ org_name }}</span>
-        •
-        <span class="repo">{{ repo_name }}</span>
-      </div>
     </div>
 {%- with nav_list=header_nav_list, nav_title='Header' %}
 {%-    include "layout/header/nav.html" %}

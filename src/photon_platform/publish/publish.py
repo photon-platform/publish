@@ -115,7 +115,7 @@ def build_sass(force: bool = False, quiet: bool = False) -> None:
         if not os.path.isdir(scss_dir):
             continue
 
-        latest_scss = _latest_mtime_in_tree(scss_dir, ".scss")
+        latest_scss = _latest_mtime_in_tree(theme_path, ".scss")
         for filename in sorted(os.listdir(scss_dir)):
             if filename.endswith(".scss") and not filename.startswith("_"):
                 scss_file = os.path.join(scss_dir, filename)

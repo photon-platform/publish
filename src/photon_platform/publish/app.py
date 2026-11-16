@@ -139,3 +139,71 @@ def folio_links_cmd(repo, optimize_scans, grayscale, as_json):
         click.echo(f"  ! unresolved badge     -> {u}")
     for s in report.sample_links[:3]:
         click.echo(f"  ✓ sample -> {s}")
+
+
+@cli.command("social-banner")
+@click.option("--repo", default=".", help="Path to target repository root (default: current directory).")
+@click.option("--force", is_flag=True, help="Overwrite existing 1200x630 banners in docsrc/_static/social/.")
+@click.option("--json", "as_json", is_flag=True, help="Emit structured JSON summary.")
+def social_banner_cmd(repo, force, as_json):
+    """Generates dedicated 1200x630 sharing-only PNG banners in docsrc/_static/social/."""
+    import json
+
+    from .social_meta import generate_repo_social_banners
+
+    res = generate_repo_social_banners(repo, force=force)
+    if as_json:
+        click.echo(json.dumps(res, indent=2))
+        return
+    if not res.get("ok"):
+        click.echo(f"Error: {res.get('error')}", err=True)
+        raise SystemExit(1)
+    click.echo(
+        f"[{res['repo']}] social-banner: created={len(res['created'])}, skipped={len(res['skipped'])}"
+    )
+    for c in res["created"]:
+        click.echo(f"  + {c}")
+
+
+@cli.command("folio-ingest")
+@click.option("--repo", default=".", help="Path to target repository root (default: current directory).")
+@click.option("--pdf", default=None, help="Optional specific PDF path (discovers all PDFs in resources/ if omitted).")
+@click.option("--edition", default=None, help="Optional edition directory slug under resources/.")
+@click.option("--dpi", default=300, show_default=True, type=int, help="Rendering DPI for <NNNN>.png folio scans.")
+@click.option("--preserve-color", is_flag=True, help="Preserve full RGB on color editions (e.g. Byrne 1847).")
+@click.option("--vector-svg", is_flag=True, help="Also extract per-page vector SVGs via pdftocairo.")
+@click.option("--first-page", default=None, type=int, help="Optional starting page (1-indexed).")
+@click.option("--last-page", default=None, type=int, help="Optional ending page (1-indexed).")
+@click.option("--force", is_flag=True, help="Re-render existing folio PNGs.")
+@click.option("--json", "as_json", is_flag=True, help="Emit structured JSON manifest summary.")
+def folio_ingest_cmd(repo, pdf, edition, dpi, preserve_color, vector_svg, first_page, last_page, force, as_json):
+    """Renders 300-DPI <NNNN>.png folios, extracts embedded text & graphics, and updates folio_map.json."""
+    import json
+
+    from .folio_ingest import ingest_repo_pdfs
+
+    res = ingest_repo_pdfs(
+        repo,
+        pdf=pdf,
+        edition=edition,
+        dpi=dpi,
+        preserve_color=preserve_color,
+        extract_vector_svg=vector_svg,
+        first_page=first_page,
+        last_page=last_page,
+        force=force,
+    )
+    if as_json:
+        click.echo(json.dumps(res, indent=2))
+        return
+    if not res.get("ok"):
+        click.echo(f"Error: {res.get('error')}", err=True)
+        raise SystemExit(1)
+    for ed in res.get("editions", []):
+        click.echo(
+            f"[{res['repo']}:{ed.get('edition')}] pages={ed.get('total_pages')} | "
+            f"folios={ed.get('folio_png_count')} (+{ed.get('rendered_new_count')} new) | "
+            f"text_pages={ed.get('extracted_text_pages')} | "
+            f"graphics={ed.get('extracted_graphics_count')}"
+        )
+

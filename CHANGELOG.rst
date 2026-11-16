@@ -2,6 +2,16 @@ changelog
 =========
 
 
+0.4.8
+=====
+*2026-11-15*
+
+- feat(masthead & breadcrumbs): Stack ``GEOMETOR / • / <repo>`` centered vertically inside the clickable sidebar Home logo link, suppress ``<header class="book-header">`` on ``master_doc`` (Home Page), remove ``.book-portal-link`` (``← <repo>``) everywhere, and unify section/book-anchored breadcrumbs (``layout/_breadcrumbs.html`` + ``resolve_page_breadcrumbs``) separated cleanly from provenance pills across all page hierarchies.
+- fix(footer): Render concise ``Prev`` and ``Next`` labels (with hover title tooltips) in ``.book-footer-nav`` across ``book_layout.html`` and ``article/index.html``, eliminating long-title overlaps.
+- feat(social): Add ``social_meta.py``, ``layout/_head_social.html``, ``publish social-banner``, and MCP ``publish_social_banner`` emitting ``A–Z`` bookmark-friendly ``<title>`` tags (``<Full Name> • GEOMETOR``), canonical URLs, OpenGraph, and Twitter ``summary_large_image`` metadata backed by dedicated ``1200x630`` sharing-only PNGs in ``_static/social/``.
+- feat(collections & folios): Add recursive container graphic bubbling (``_resolve_representative_figure``), Hoenen-style companion track pills on collection cards, ``collection/outline.html``, masthead promotion of leading ``.. folio::`` markers with quiet marginal transitions, and ``publish folio-ingest`` / MCP ``publish_folio_ingest`` for 300-DPI ``<NNNN>.png`` rendering and embedded text/graphic extraction.
+
+
 0.4.7
 =====
 *2026-11-15*

@@ -1,0 +1,36 @@
+{#- _breadcrumbs.html — Unified Section/Book-Anchored Breadcrumbs & Separate Provenance Pills -#}
+{%- set crumbs = page_breadcrumbs if page_breadcrumbs is defined else [] %}
+{%- set badges = provenance_badges if provenance_badges is defined else [] %}
+{%- if crumbs or badges %}
+        <div class="book-header-bar">
+{%-   if crumbs %}
+          <nav class="book-breadcrumbs" aria-label="Breadcrumb">
+{%-     for crumb in crumbs %}
+{%-       if not loop.first %}
+            <span class="book-crumb-sep" aria-hidden="true">/</span>
+{%-       endif %}
+{%-       if crumb.is_current and not crumb.link_when_current %}
+            <span class="book-crumb-current{% if loop.first %} is-section-root{% endif %}" aria-current="page">{{ crumb.title }}</span>
+{%-       elif crumb.href is defined and crumb.href %}
+            <a class="{% if loop.first %}book-section-home-link{% else %}book-crumb-link{% endif %}" href="{{ crumb.href|e }}">{{ crumb.title }}</a>
+{%-       elif crumb.docname is defined and crumb.docname %}
+            <a class="{% if loop.first %}book-section-home-link{% else %}book-crumb-link{% endif %}" href="{{ pathto(crumb.docname) }}">{{ crumb.title }}</a>
+{%-       else %}
+            <span class="book-crumb-current{% if loop.first %} is-section-root{% endif %}">{{ crumb.title }}</span>
+{%-       endif %}
+{%-     endfor %}
+          </nav>
+{%-   endif %}
+{%-   if badges %}
+          <div class="book-provenance-badges">
+{%-     for badge in badges %}
+{%-       if badge.url %}
+            <a class="book-badge {{ badge.cls|default('folio-badge') }} folio-link" href="{{ badge.url|e }}" target="_blank" rel="noopener"{% if badge.title %} title="{{ badge.title|e }}"{% endif %}>{{ badge.label }}</a>
+{%-       else %}
+            <span class="book-badge {{ badge.cls|default('folio-badge') }}">{{ badge.label }}</span>
+{%-       endif %}
+{%-     endfor %}
+          </div>
+{%-   endif %}
+        </div>
+{%- endif %}

@@ -1,0 +1,21 @@
+{#- collection/outline.html — Compact hierarchical outline with optional companion track links -#}
+<section class="collection collection-outline{% if collection.class %} {{ collection.class }}{% endif %}">
+{%- if collection.title %}
+  <h2>{{ collection.title }}</h2>
+{%- endif %}
+  <ul class="collection-outline-list">
+{%- for article in collection.articles %}
+    <li class="collection-outline-item">
+      <a class="collection-outline-title" href="{{ pathto(article.docname) }}">{{ article.title }}</a>
+{%-   if article.companion_tracks and article.companion_tracks|length > 1 %}
+      <span class="excerpt-tracks">
+{%-     for tr in article.companion_tracks %}
+{%-       if not loop.first %}<span class="excerpt-track-sep">&middot;</span>{% endif %}
+        <a class="excerpt-track-link" href="{{ pathto(tr.docname) }}">{{ tr.label }}</a>
+{%-     endfor %}
+      </span>
+{%-   endif %}
+    </li>
+{%- endfor %}
+  </ul>
+</section>

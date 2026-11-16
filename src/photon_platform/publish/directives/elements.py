@@ -657,8 +657,20 @@ def visit_folio_node(self: Any, node: nodes.Element) -> None:
     raw_page = str(node.get("page", ""))
     folio_id = html.escape(raw_folio_id, quote=True)
     page = html.escape(raw_page, quote=True)
-    page_str = f" | p. {page}" if page else ""
-    label_html = f"[Folio {folio_id}{page_str}]"
+
+    # When the leading folio is already displayed in the masthead provenance pill,
+    # keep only a zero-height anchor for #folio-<id> deep links without visual body clutter.
+    if node.get("in_masthead"):
+        self.body.append(
+            f'<span class="folio-anchor" id="folio-{folio_id}" '
+            f'data-folio="{folio_id}" data-page="{page}"></span>'
+        )
+        if not len(node.children):
+            raise nodes.SkipNode
+        return
+
+    page_str = f" · p. {page}" if page else ""
+    label_html = f"f. {folio_id}{page_str}"
 
     target_url = node.get("url") or _resolve_folio_png_url(self, raw_folio_id)
     if target_url:
@@ -676,9 +688,9 @@ def visit_folio_node(self: Any, node: nodes.Element) -> None:
         inner_html = label_html
 
     self.body.append(
-        f'<div class="folio-milestone" id="folio-{folio_id}" '
+        f'<span class="folio-milestone" id="folio-{folio_id}" '
         f'data-folio="{folio_id}" data-page="{page}">'
-        f"{inner_html}</div>\n"
+        f"{inner_html}</span>\n"
     )
     if not len(node.children):
         raise nodes.SkipNode
