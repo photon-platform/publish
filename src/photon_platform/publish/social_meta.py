@@ -79,14 +79,17 @@ def _smart_title_case_if_all_caps(text: str) -> str:
 
 
 def _strip_brand_prefix(raw: str, org_name: str = "", repo_name: str = "") -> str:
-    """Strip redundant 'GEOMETOR • ' or 'PHOTON • ' prefixes from a title string."""
+    """Strip redundant 'GEOMETOR • ' or 'PHOTON • ' prefixes/suffixes from a title string."""
     val = (raw or "").strip()
     if not val:
         return ""
     val = re.sub(r"^(?:GEOMETOR|PHOTON)\s*[•·\-—:|]\s*", "", val, flags=re.IGNORECASE).strip()
+    val = re.sub(r"\s*[•·\-—:|]\s*(?:GEOMETOR|PHOTON)$", "", val, flags=re.IGNORECASE).strip()
     if org_name:
-        pat = rf"^{re.escape(org_name)}\s*[•·\-—:|]\s*"
-        val = re.sub(pat, "", val, flags=re.IGNORECASE).strip()
+        pat_pre = rf"^{re.escape(org_name)}\s*[•·\-—:|]\s*"
+        val = re.sub(pat_pre, "", val, flags=re.IGNORECASE).strip()
+        pat_suf = rf"\s*[•·\-—:|]\s*{re.escape(org_name)}$"
+        val = re.sub(pat_suf, "", val, flags=re.IGNORECASE).strip()
     return val
 
 
@@ -154,7 +157,7 @@ def resolve_site_human_title(env: Any, context: dict[str, Any] | None = None) ->
     ).strip()
     if explicit_site:
         cleaned_exp = _strip_brand_prefix(explicit_site, org_brand, repo_name)
-        if cleaned_exp and cleaned_exp.lower() != repo_name.lower():
+        if cleaned_exp:
             return _smart_title_case_if_all_caps(cleaned_exp)
 
     # 2. Master doc H1 title if it is already a real human title (not 'GEOMETOR • slug' or raw slug)
@@ -278,7 +281,10 @@ def build_social_and_title_context(
 
     # 1. Browser <title> & og:title (A-to-Z bookmark-friendly: never prefixed with 'GEOMETOR • ')
     if pagename == master_doc:
-        browser_title = f"{site_human} • {org_brand}"
+        if site_human.strip().lower() == org_brand.strip().lower() or not site_human:
+            browser_title = org_brand
+        else:
+            browser_title = f"{site_human} • {org_brand}"
         og_title = browser_title
         og_type = "website"
     elif is_book and pagename == book_root and book_root != master_doc:
@@ -362,7 +368,11 @@ def build_social_and_title_context(
         "social_image_url": social_image_url,
         "social_image_width": img_w,
         "social_image_height": img_h,
-        "social_image_alt": f"{site_human} — {org_brand}",
+        "social_image_alt": (
+            org_brand
+            if site_human.strip().lower() == org_brand.strip().lower()
+            else f"{site_human} — {org_brand}"
+        ),
     }
 
 

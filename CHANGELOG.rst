@@ -2,6 +2,13 @@ changelog
 =========
 
 
+0.4.10
+======
+*2026-11-16*
+
+- feat(ingest & tracks): Add resumable 25-page ``pdftoppm -gray`` chunked rendering, MRC scan-layer filtering, and multi-PDF edition disambiguation in ``folio_ingest.py``, support explicit ``edition:<NNNN>`` prefixes in ``folio_links.py``, support ``:docs:`` and body lists in ``CollectionDirective``, parse explicit ``:tracks:`` frontmatter on collection cards in ``book.py``, and strip trailing brand suffixes in ``social_meta.py``.
+
+
 0.4.9
 =====
 *2026-11-15*

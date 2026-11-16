@@ -276,6 +276,12 @@ def resolve_folio_url(
         folio_num = m_num.group(1)
         scan_index = load_folio_scan_index(env, project_root=project_root)
         if scan_index:
+            raw_prefix = raw_id.rsplit(":", 1)[0].strip() if ":" in raw_id else ""
+            raw_ed_key = ""
+            if raw_prefix:
+                p_clean = raw_prefix[3:].strip() if raw_prefix.lower().startswith("ed:") else raw_prefix
+                raw_ed_key = f"ed:{p_clean.lower()}"
+
             doc_parts = [p.lower() for p in (current_docname or "").split("/") if p]
             vol_key = next((p for p in doc_parts if p.startswith("volume_")), "")
             if not vol_key and env is not None and hasattr(env, "metadata") and current_docname in env.metadata:
@@ -285,9 +291,10 @@ def resolve_folio_url(
 
             ed_key = f"ed:{doc_parts[0]}" if doc_parts else ""
             rel_path = (
-                (scan_index.get((vol_key, folio_num)) if vol_key else None)
+                (scan_index.get((raw_ed_key, folio_num)) if raw_ed_key else None)
+                or (scan_index.get((vol_key, folio_num)) if vol_key else None)
                 or (scan_index.get((ed_key, folio_num)) if ed_key else None)
-                or scan_index.get(("", folio_num))
+                or (scan_index.get(("", folio_num)) if not raw_ed_key else None)
             )
             if rel_path:
                 quoted_rel = "/".join(quote(seg) for seg in rel_path.split("/"))

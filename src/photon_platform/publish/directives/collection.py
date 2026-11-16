@@ -89,7 +89,7 @@ class PendingCollection(nodes.General, nodes.Element):
 class CollectionDirective(SphinxDirective):
     """Directive to insert a collection of articles."""
 
-    has_content: bool = False
+    has_content: bool = True
     option_spec: Dict[str, Any] = {
         'type': directives.unchanged,
         'sort': directives.unchanged,
@@ -101,6 +101,7 @@ class CollectionDirective(SphinxDirective):
         'hidden': directives.flag,
         'depth': directives.positive_int,
         'recursive': directives.flag,
+        'docs': directives.unchanged,
     }
 
 
@@ -108,7 +109,7 @@ class CollectionDirective(SphinxDirective):
         """Process the collection directive.
 
         Instead of rendering immediately, this method:
-        1. Discovers all relevant files respecting the Container Boundary Rule.
+        1. Discovers all relevant files respecting the Container Boundary Rule or explicit doc list.
         2. Filters by :type: early before claiming documents in the toctree.
         3. Adds them to a hidden toctree so Sphinx knows about them (fixes "not in toctree" warnings).
         4. Returns a PendingCollection node to defer rendering until metadata is ready.
@@ -137,7 +138,31 @@ class CollectionDirective(SphinxDirective):
                     meta.setdefault(k, v)
             return _normalize_log_meta(docname, meta)
 
-        if collection_type == 'header':
+        explicit_docs = []
+        if self.options.get('docs'):
+            explicit_docs.extend(
+                [d.strip() for d in re.split(r'[, \t\n]+', self.options['docs']) if d.strip()]
+            )
+        if self.content:
+            for line in self.content:
+                line_str = line.strip()
+                if line_str.startswith(':doc:'):
+                    line_str = line_str[len(':doc:'):].strip()
+                elif line_str.startswith('- '):
+                    line_str = line_str[2:].strip()
+                if line_str:
+                    explicit_docs.append(line_str)
+
+        if explicit_docs:
+            current_dir = os.path.dirname(env.docname)
+            resolved_docs = []
+            for ed in explicit_docs:
+                clean_ed = ed.lstrip('/')
+                cand = f"{current_dir}/{clean_ed}" if current_dir else clean_ed
+                cand_norm = os.path.normpath(cand).replace(os.sep, '/')
+                resolved_docs.append(cand_norm)
+            docnames = resolved_docs
+        elif collection_type == 'header':
             # Scan GLOBAL source directory for header items
             # We must use peek_metadata because env.metadata might not be populated yet
             # for files we haven't read.

@@ -10,8 +10,6 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
-from .folio_links import optimize_repo_folio_scans
-
 
 def _get_pdf_page_count(pdf_path: Path) -> int:
     """Return total page count of `pdf_path` via `pdfinfo`."""
@@ -37,13 +35,22 @@ def _discover_repo_pdfs(repo_root: Path, edition: str | None = None) -> list[tup
     if not res_dir.is_dir():
         return []
 
+    raw_pdfs = [p for p in sorted(res_dir.rglob("*.pdf")) if p.is_file()]
+    parent_counts: dict[str, int] = {}
+    for pdf in raw_pdfs:
+        parts = pdf.relative_to(res_dir).parts
+        if len(parts) >= 2 and parts[0] not in ("pdfs", "sources"):
+            parent_counts[parts[0]] = parent_counts.get(parts[0], 0) + 1
+
     found: list[tuple[str, Path]] = []
-    for pdf in sorted(res_dir.rglob("*.pdf")):
-        if not pdf.is_file():
-            continue
+    for pdf in raw_pdfs:
         rel = pdf.relative_to(res_dir)
         parts = rel.parts
-        if len(parts) >= 2 and parts[0] not in ("pdfs", "sources"):
+        if (
+            len(parts) >= 2
+            and parts[0] not in ("pdfs", "sources")
+            and parent_counts.get(parts[0], 0) == 1
+        ):
             ed_slug = parts[0]
         else:
             ed_slug = re.sub(r"[^a-z0-9_]+", "_", pdf.stem.lower()).strip("_")
@@ -59,14 +66,17 @@ def _extract_pdf_text_streams(pdf_path: Path, out_text_dir: Path) -> list[str]:
     if not pdftotext:
         return []
 
-    proc = subprocess.run(
-        [pdftotext, "-layout", str(pdf_path), "-"],
-        capture_output=True,
-        text=True,
-        errors="replace",
-        timeout=180,
-        check=False,
-    )
+    try:
+        proc = subprocess.run(
+            [pdftotext, "-layout", str(pdf_path), "-"],
+            capture_output=True,
+            text=True,
+            errors="replace",
+            timeout=300,
+            check=False,
+        )
+    except subprocess.TimeoutExpired:
+        return []
     if proc.returncode != 0 or not proc.stdout:
         return []
 
@@ -94,18 +104,22 @@ def _extract_pdf_embedded_graphics(
     pdfimages = shutil.which("pdfimages")
 
     if pdfimages:
-        list_proc = subprocess.run(
-            [pdfimages, "-list", str(pdf_path)],
-            capture_output=True,
-            text=True,
-            errors="replace",
-            timeout=60,
-            check=False,
-        )
+        try:
+            list_proc = subprocess.run(
+                [pdfimages, "-list", str(pdf_path)],
+                capture_output=True,
+                text=True,
+                errors="replace",
+                timeout=300,
+                check=False,
+            )
+            list_stdout = list_proc.stdout or ""
+        except subprocess.TimeoutExpired:
+            list_stdout = ""
         # Parse `pdfimages -list` rows: page num type width height ...
         page_img_counts: dict[int, int] = {}
         page_dims: list[tuple[int, int, int]] = []
-        for ln in (list_proc.stdout or "").splitlines()[2:]:
+        for ln in list_stdout.splitlines()[2:]:
             cols = ln.split()
             if len(cols) >= 5 and cols[0].isdigit() and cols[1].isdigit():
                 pg = int(cols[0])
@@ -126,15 +140,27 @@ def _extract_pdf_embedded_graphics(
             if any(h < max_h * 0.80 for _, _, h in page_dims):
                 has_subpage_or_multi = True
 
+        # Skip MRC 3-layer full-page scan decompositions when every page has uniform 2-3 scan layers
+        if has_subpage_or_multi and len(page_img_counts) > 20:
+            avg_per_page = sum(page_img_counts.values()) / max(1, len(page_img_counts))
+            if 1.8 <= avg_per_page <= 3.2 and page_dims:
+                max_h = max(h for _, _, h in page_dims)
+                full_cnt = sum(1 for _, _, h in page_dims if h >= max_h * 0.85)
+                if full_cnt >= len(page_img_counts) * 0.8:
+                    has_subpage_or_multi = False
+
         if has_subpage_or_multi:
             with tempfile.TemporaryDirectory() as tmpd:
                 prefix = Path(tmpd) / "img"
-                subprocess.run(
-                    [pdfimages, "-png", "-p", str(pdf_path), str(prefix)],
-                    capture_output=True,
-                    timeout=300,
-                    check=False,
-                )
+                try:
+                    subprocess.run(
+                        [pdfimages, "-png", "-p", str(pdf_path), str(prefix)],
+                        capture_output=True,
+                        timeout=600,
+                        check=False,
+                    )
+                except subprocess.TimeoutExpired:
+                    pass
                 raw_imgs = sorted(Path(tmpd).glob("img-*.png"))
                 if raw_imgs:
                     from PIL import Image
@@ -238,43 +264,53 @@ def ingest_single_pdf(
     folios_dir = edition_dir / "folios"
     folios_dir.mkdir(parents=True, exist_ok=True)
 
-    # 1. Render missing `<NNNN>.png` folio scans via pdftoppm
+    # 1. Render missing `<NNNN>.png` folio scans via resumable 25-page pdftoppm chunks
     rendered_new = 0
-    need_render = force or any(not (folios_dir / f"{p:04d}.png").is_file() for p in range(start_p, end_p + 1))
-    if need_render:
-        with tempfile.TemporaryDirectory() as tmpd:
-            prefix = Path(tmpd) / "page"
-            subprocess.run(
-                [
-                    pdftoppm,
-                    "-png",
-                    "-r",
-                    str(dpi),
-                    "-f",
-                    str(start_p),
-                    "-l",
-                    str(end_p),
-                    str(pdf_path),
-                    str(prefix),
-                ],
-                capture_output=True,
-                timeout=900,
-                check=True,
-            )
-            for gen_png in sorted(Path(tmpd).glob("page-*.png")):
-                m_num = re.search(r"page-0*(\d+)\.png$", gen_png.name)
-                if not m_num:
-                    continue
-                pg_num = int(m_num.group(1))
-                dest_png = folios_dir / f"{pg_num:04d}.png"
-                if force or not dest_png.is_file():
-                    shutil.move(str(gen_png), str(dest_png))
-                    rendered_new += 1
+    missing_pages = [
+        p for p in range(start_p, end_p + 1) if force or not (folios_dir / f"{p:04d}.png").is_file()
+    ]
+    if missing_pages:
+        chunk_size = 25
+        c_start = missing_pages[0]
+        max_missing = missing_pages[-1]
+        while c_start <= max_missing:
+            c_end = min(c_start + chunk_size - 1, end_p)
+            if force or any(not (folios_dir / f"{p:04d}.png").is_file() for p in range(c_start, c_end + 1)):
+                with tempfile.TemporaryDirectory() as tmpd:
+                    prefix = Path(tmpd) / "page"
+                    cmd = [pdftoppm, "-png"]
+                    if not preserve_color:
+                        cmd.append("-gray")
+                    cmd.extend(
+                        [
+                            "-r",
+                            str(dpi),
+                            "-f",
+                            str(c_start),
+                            "-l",
+                            str(c_end),
+                            str(pdf_path),
+                            str(prefix),
+                        ]
+                    )
+                    subprocess.run(
+                        cmd,
+                        capture_output=True,
+                        timeout=600,
+                        check=True,
+                    )
+                    for gen_png in sorted(Path(tmpd).glob("page-*.png")):
+                        m_num = re.search(r"page-0*(\d+)\.png$", gen_png.name)
+                        if not m_num:
+                            continue
+                        pg_num = int(m_num.group(1))
+                        dest_png = folios_dir / f"{pg_num:04d}.png"
+                        if force or not dest_png.is_file():
+                            shutil.move(str(gen_png), str(dest_png))
+                            rendered_new += 1
+            c_start = c_end + 1
 
-    # Losslessly optimize scans (skip grayscale conversion when preserve_color=True)
     opt_stats: dict[str, Any] = {}
-    if not preserve_color:
-        opt_stats = optimize_repo_folio_scans(repo_root, force_grayscale=False)
 
     # 2. Extract embedded text stream if present
     text_folios: list[str] = []

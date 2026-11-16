@@ -113,6 +113,7 @@ def folio_links_cmd(repo, optimize_scans, grayscale, as_json):
 
     report = audit_repo_folio_links(repo_root)
     payload = asdict(report)
+    payload.pop("env", None)
     if opt_stats is not None:
         payload["scan_optimization"] = opt_stats
 

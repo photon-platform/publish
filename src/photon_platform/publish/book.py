@@ -141,6 +141,31 @@ def detect_companion_tracks(env: Any, pagename: str) -> List[Dict[str, Any]]:
     def _qual(local_name: str) -> str:
         return f"{doc_dir}/{local_name}" if doc_dir else local_name
 
+    # Explicit frontmatter tracks declaration: e.g. `:tracks: English: index | Latin: la | Summary: summary | Notes: notes`
+    page_meta = _get_doc_metadata(env, pagename)
+    raw_tracks = page_meta.get("tracks")
+    if not raw_tracks and basename != "index" and doc_dir:
+        raw_tracks = _get_doc_metadata(env, f"{doc_dir}/index").get("tracks")
+    if raw_tracks and isinstance(raw_tracks, str):
+        parsed_tracks: List[Dict[str, Any]] = []
+        for segment in raw_tracks.split("|"):
+            if ":" in segment:
+                lbl, doc_target = segment.split(":", 1)
+                clean_lbl = lbl.strip()
+                clean_target = doc_target.strip()
+                target_doc = _qual(clean_target) if not clean_target.startswith("/") else clean_target.lstrip("/")
+                if target_doc in found_docs:
+                    parsed_tracks.append(
+                        {
+                            "key": clean_target,
+                            "label": clean_lbl,
+                            "docname": target_doc,
+                            "active": target_doc == pagename,
+                        }
+                    )
+        if len(parsed_tracks) > 1:
+            return parsed_tracks
+
     # Determine if bare `<stem>` is the Latin/original primary track (e.g. Hoenen `caput-1/caput-1`)
     has_hyphen_or_under_en = _qual(f"{stem}-en") in found_docs or _qual(f"{stem}_en") in found_docs
     has_elements_siblings = (
