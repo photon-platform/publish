@@ -96,7 +96,7 @@ Module Contents
 
    .. py:attribute:: has_content
       :type:  bool
-      :value: False
+      :value: True
 
 
       May the directive have content?
@@ -113,7 +113,7 @@ Module Contents
       Process the collection directive.
 
       Instead of rendering immediately, this method:
-      1. Discovers all relevant files respecting the Container Boundary Rule.
+      1. Discovers all relevant files respecting the Container Boundary Rule or explicit doc list.
       2. Filters by :type: early before claiming documents in the toctree.
       3. Adds them to a hidden toctree so Sphinx knows about them (fixes "not in toctree" warnings).
       4. Returns a PendingCollection node to defer rendering until metadata is ready.
