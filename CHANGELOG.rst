@@ -2,6 +2,13 @@ changelog
 =========
 
 
+0.4.11
+======
+*2026-11-16*
+
+- fix(collections): Fix ``docsrc`` vs. ``docs`` string-prefix collision in ``_extract_direct_figure`` (``directives/collection.py``) using component-safe ``Path.is_relative_to()`` and proactively staging ``.. figure::`` / ``.. image::`` assets into ``_images/<dest_name>`` via ``env.images`` so static SVG/raster collection thumbnails never emit broken ``../docsrc/...`` URLs on clean builds; also render ``.. enunciation::`` nodes as rich math HTML inside collection cards while keeping plain-text ``excerpt`` metadata for OpenGraph descriptions.
+
+
 0.4.10
 ======
 *2026-11-16*

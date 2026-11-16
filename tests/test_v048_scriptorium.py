@@ -280,6 +280,9 @@ def test_recursive_graphic_bubbling_and_templates(tmp_path: Path) -> None:
     bubbled = _resolve_representative_figure(env, builder, "book_i/index")
     assert bubbled is not None
     assert bubbled["svg_disk_path"] == str(svg_file)
+    assert bubbled["uri"] == "_images/fig1.svg"
+    assert "docsrc" not in bubbled["uri"]
+    assert (out_dir / "_images" / "fig1.svg").is_file()
 
     # Verify footer templates use concise Prev / Next labels and header stacks org-repo inside <a>
     tpl_root = (

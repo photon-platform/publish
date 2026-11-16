@@ -2,6 +2,8 @@
 
 import os
 import re
+import shutil
+from pathlib import Path
 from sphinx.util.docutils import SphinxDirective
 from sphinx.util.osutil import relative_uri
 from docutils.parsers.rst import directives
@@ -394,13 +396,15 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
                         # Fallback if doctree cannot be loaded
                         item_doctree = None
 
-                    if meta.get('excerpt'):
+                    if meta.get('excerpt') and not meta.get('_enunciation_excerpt'):
                         item['excerpt_text'] = f"<p>{meta['excerpt']}</p>"
                     elif item_doctree:
-                        # Find first paragraph or blockquote outside admonitions
+                        # Find enunciation or first paragraph/blockquote outside admonitions
                         first_text = _find_first_excerpt_node(item_doctree)
                         if first_text:
                             item['excerpt_text'] = render_node_html(builder, first_text)
+                    if not item['excerpt_text'] and meta.get('excerpt'):
+                        item['excerpt_text'] = f"<p>{meta['excerpt']}</p>"
 
                     fig_info = _resolve_representative_figure(env, builder, docname, meta, item_doctree)
                     if fig_info:
@@ -479,32 +483,48 @@ def _extract_direct_figure(
 ) -> Optional[Dict[str, Any]]:
     """Extract direct `:featured_image:`, `.. picture::`, or `.. figure::` from a single `docname`."""
     doc_dir = os.path.dirname(docname)
+    srcdir_path = Path(str(env.srcdir)).resolve()
+    outdir_path = Path(str(builder.outdir)).resolve()
 
     def _resolve_asset_paths(raw_ref: str) -> Tuple[str, Optional[str]]:
         clean_ref = raw_ref.strip().lstrip("/")
-        candidates = []
+        is_svg = clean_ref.lower().endswith(".svg")
+        candidates: List[Path] = []
         if doc_dir:
-            candidates.append(os.path.join(env.srcdir, doc_dir, clean_ref))
-        candidates.append(os.path.join(env.srcdir, clean_ref))
-        candidates.append(os.path.join(builder.outdir, clean_ref))
+            candidates.append((srcdir_path / doc_dir / clean_ref).resolve())
+        candidates.append((srcdir_path / clean_ref).resolve())
+        candidates.append((outdir_path / clean_ref).resolve())
         if hasattr(builder, "imagedir"):
-            candidates.append(os.path.join(builder.outdir, builder.imagedir, os.path.basename(clean_ref)))
+            candidates.append((outdir_path / builder.imagedir / os.path.basename(clean_ref)).resolve())
 
-        disk_found = next((c for c in candidates if os.path.isfile(c)), None)
-        # Compute URI relative to outdir/srcdir root so pathto(..., 1) resolves from any parent collection!
-        if disk_found and disk_found.startswith(str(builder.outdir)):
-            out_rel = os.path.relpath(disk_found, str(builder.outdir)).replace(os.sep, "/")
-            return out_rel, (disk_found if clean_ref.lower().endswith(".svg") else None)
-        if disk_found and disk_found.startswith(str(env.srcdir)):
-            src_rel = os.path.relpath(disk_found, str(env.srcdir)).replace(os.sep, "/")
-            # Check if Sphinx copied it into _images/
-            if hasattr(builder, "imagedir"):
-                copied = os.path.join(builder.outdir, builder.imagedir, os.path.basename(disk_found))
-                if os.path.isfile(copied):
-                    out_rel = os.path.join(builder.imagedir, os.path.basename(disk_found)).replace(os.sep, "/")
-                    return out_rel, (disk_found if clean_ref.lower().endswith(".svg") else None)
-            return src_rel, (disk_found if clean_ref.lower().endswith(".svg") else None)
-        return clean_ref, (disk_found if (disk_found and clean_ref.lower().endswith(".svg")) else None)
+        disk_found = next((c for c in candidates if c.is_file()), None)
+        # Compute URI relative to outdir root using component-safe Path.is_relative_to
+        # (avoiding 'docsrc'.startswith('docs') prefix collisions!)
+        if disk_found is not None:
+            if disk_found.is_relative_to(outdir_path):
+                out_rel = disk_found.relative_to(outdir_path).as_posix()
+                return out_rel, (str(disk_found) if is_svg else None)
+            if disk_found.is_relative_to(srcdir_path):
+                src_rel = disk_found.relative_to(srcdir_path).as_posix()
+                if src_rel.startswith("_static/") or (outdir_path / src_rel).is_file():
+                    return src_rel, (str(disk_found) if is_svg else None)
+                if hasattr(builder, "imagedir"):
+                    dest_name = disk_found.name
+                    env_images = getattr(env, "images", None)
+                    if isinstance(env_images, dict):
+                        img_entry = env_images.get(src_rel)
+                        if isinstance(img_entry, tuple) and len(img_entry) >= 2 and img_entry[1]:
+                            dest_name = str(img_entry[1])
+                    dest_file = outdir_path / builder.imagedir / dest_name
+                    dest_file.parent.mkdir(parents=True, exist_ok=True)
+                    if not dest_file.is_file() or dest_file.stat().st_mtime < disk_found.stat().st_mtime:
+                        shutil.copy2(disk_found, dest_file)
+                    if hasattr(builder, "images") and isinstance(builder.images, dict):
+                        builder.images.setdefault(src_rel, dest_name)
+                    out_rel = f"{builder.imagedir}/{dest_name}".replace(os.sep, "/")
+                    return out_rel, (str(disk_found) if is_svg else None)
+                return src_rel, (str(disk_found) if is_svg else None)
+        return clean_ref, (str(disk_found) if (disk_found is not None and is_svg) else None)
 
     if meta.get("featured_image"):
         uri, svg_disk = _resolve_asset_paths(str(meta["featured_image"]))
@@ -531,14 +551,9 @@ def _extract_direct_figure(
         image_node = next(iter(fig_n.findall(nodes.image)), None)
         if image_node and image_node.get("uri"):
             raw_uri = str(image_node["uri"])
-            img_out = (
-                os.path.join(builder.imagedir, os.path.basename(raw_uri))
-                if hasattr(builder, "imagedir")
-                else raw_uri
-            )
             uri, svg_disk = _resolve_asset_paths(raw_uri)
-            if not svg_disk and hasattr(builder, "imagedir"):
-                uri = img_out.replace(os.sep, "/")
+            if not svg_disk and hasattr(builder, "imagedir") and not uri.startswith(f"{builder.imagedir}/"):
+                uri = os.path.join(builder.imagedir, os.path.basename(raw_uri)).replace(os.sep, "/")
             return {
                 "uri": uri,
                 "alt": image_node.get("alt", ""),

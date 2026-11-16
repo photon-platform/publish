@@ -732,6 +732,7 @@ class EnunciationDirective(DualModeDirective):
             doc_meta = self.env.metadata.setdefault(self.env.docname, {})
             if "excerpt" not in doc_meta:
                 doc_meta["excerpt"] = node.astext().strip()
+                doc_meta["_enunciation_excerpt"] = True
 
         return [node]
 
