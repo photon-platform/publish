@@ -1073,7 +1073,6 @@ class PeopleDirectoryDirective(CollectionDirective):
     """Directive to insert a searchable, sortable directory of people records."""
 
     def run(self) -> List[nodes.Node]:
-        self.options.setdefault('type', 'person')
         self.options.setdefault('sort', 'death_year')
         self.options.setdefault('template', 'collection/directory.html')
         self.options.setdefault('directory_kind', 'people')
@@ -1084,7 +1083,6 @@ class ReferenceDirectoryDirective(CollectionDirective):
     """Directive to insert a searchable, sortable directory of reference/book records."""
 
     def run(self) -> List[nodes.Node]:
-        self.options.setdefault('type', 'book')
         self.options.setdefault('sort', 'year')
         self.options.setdefault('template', 'collection/directory.html')
         self.options.setdefault('directory_kind', 'references')
