@@ -1,4 +1,4 @@
-"""Social media metadata (OpenGraph / Twitter Cards), A-Z <title> formatting, and 1200x630 sharing banners."""
+"""Social media metadata (OpenGraph / Twitter Cards), A-Z <title> formatting, and 1280x640 sharing banners."""
 
 from __future__ import annotations
 
@@ -12,8 +12,8 @@ from typing import Any
 
 from docutils import nodes
 
-BANNER_WIDTH = 1200
-BANNER_HEIGHT = 630
+BANNER_WIDTH = 1280
+BANNER_HEIGHT = 640
 
 _MINOR_TITLE_WORDS = {
     "a",
@@ -623,10 +623,10 @@ def generate_social_banner(
     canvas = Image.new("RGBA", (BANNER_WIDTH, BANNER_HEIGHT), (24, 24, 27, 255))
     draw = ImageDraw.Draw(canvas)
 
-    # Subtle layered architectural frame (golden-section proportions: 742px text | 458px emblem)
+    # Subtle layered architectural frame (golden-section proportions: 788px text | 492px emblem)
     draw.rectangle([22, 22, BANNER_WIDTH - 23, BANNER_HEIGHT - 23], outline=(62, 57, 50, 255), width=1)
     draw.rectangle([30, 30, BANNER_WIDTH - 31, BANNER_HEIGHT - 31], outline=(212, 175, 55, 95), width=1)
-    split_x = 738
+    split_x = 788
     draw.line([(split_x, 54), (split_x, BANNER_HEIGHT - 54)], fill=(62, 57, 50, 190), width=1)
 
     # Corner gold ticks
@@ -697,9 +697,9 @@ def generate_social_banner(
     footer_label = site_domain or f"{org_brand.lower()}.github.io/{repo_slug}"
     draw.text((left_x, BANNER_HEIGHT - 74), footer_label, font=font_url, fill=(132, 125, 115, 220))
 
-    # Right Emblem Panel (centered at (969, 315))
+    # Right Emblem Panel
     if emblem_path and emblem_path.is_file():
-        emblem = _rasterize_emblem(emblem_path, box_size=376)
+        emblem = _rasterize_emblem(emblem_path, box_size=400)
         if emblem is not None:
             ex = split_x + (BANNER_WIDTH - 30 - split_x - emblem.width) // 2
             ey = (BANNER_HEIGHT - emblem.height) // 2
@@ -812,6 +812,39 @@ def generate_repo_social_banners(repo_root: str | Path, force: bool = False) -> 
         created.append(str(main_banner.relative_to(root)))
     else:
         skipped.append(str(main_banner.relative_to(root)))
+
+    # Also generate a 1280x640 GitHub repository social preview banner (`github.png`)
+    gh_subtitle = subtitle
+    gh_overline = "semantic digital archive" if has_works_overline else ""
+    readme_rst = root / "README.rst"
+    if readme_rst.is_file():
+        r_txt = readme_rst.read_text(encoding="utf-8", errors="ignore")
+        m_desc = re.search(r"^\*\*([^*]+•[^*]+)\*\*\s*$", r_txt, re.M)
+        if m_desc:
+            raw_desc = m_desc.group(1).strip()
+            parts_desc = [p.strip() for p in raw_desc.split("•")]
+            if parts_desc and parts_desc[-1].lower() == "semantic digital archive":
+                gh_overline = "semantic digital archive"
+                parts_desc = parts_desc[:-1]
+            if len(parts_desc) >= 2:
+                gh_subtitle = " • ".join(parts_desc[1:])
+            elif parts_desc:
+                gh_subtitle = parts_desc[0]
+    gh_banner = social_dir / "github.png"
+    if generate_social_banner(
+        gh_banner,
+        org_brand=org_brand,
+        repo_slug=repo_slug,
+        title=site_title,
+        overline=gh_overline,
+        subtitle=gh_subtitle,
+        emblem_path=root_emblem,
+        site_domain=f"github.com/{org_slug}/{repo_slug}",
+        force=force,
+    ):
+        created.append(str(gh_banner.relative_to(root)))
+    else:
+        skipped.append(str(gh_banner.relative_to(root)))
 
     # Also generate per-book banners for any top-level `docsrc/<book_slug>/index.rst` with `:layout: book`
     for sub in sorted(docsrc.iterdir()):

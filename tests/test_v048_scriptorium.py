@@ -226,8 +226,8 @@ def test_social_meta_titles_and_banner_generation(tmp_path: Path) -> None:
     home_social = build_social_and_title_context(app, "index", {"title": "GEOMETOR • pacioli"}, None)
     assert home_social["page_browser_title"] == "Fra Luca Pacioli • GEOMETOR"
     assert home_social["social_image_url"] == "https://geometor.github.io/pacioli/_static/social/banner.png"
-    assert home_social["social_image_width"] == 1200
-    assert home_social["social_image_height"] == 630
+    assert home_social["social_image_width"] == 1280
+    assert home_social["social_image_height"] == 640
 
     book_social = build_social_and_title_context(
         app,
