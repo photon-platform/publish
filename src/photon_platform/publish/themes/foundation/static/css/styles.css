@@ -5786,3 +5786,163 @@ details.book-collapse .book-collapse-body .line-catalog p {
   text-align: left !important;
   margin: 0.25rem 0 !important;
 }
+
+/* ==========================================================================
+   Collection Directory Template (collection/directory.html)
+   ========================================================================== */
+.collection-directory-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 1.25rem 0 1.5rem;
+  padding: 0.95rem 1.1rem;
+  border: 1px solid var(--book-border, rgba(148, 163, 184, 0.25));
+  border-radius: 10px;
+  background: var(--book-quote-bg, rgba(148, 163, 184, 0.05));
+}
+.collection-directory-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+.collection-directory-search {
+  flex: 1 1 220px;
+  padding: 0.45rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--book-border-dark, rgba(148, 163, 184, 0.35));
+  background: var(--book-bg, transparent);
+  color: inherit;
+  font-size: 0.92rem;
+}
+.collection-directory-sort {
+  padding: 0.45rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--book-border-dark, rgba(148, 163, 184, 0.35));
+  background: var(--book-bg, #18181b);
+  color: inherit;
+  font-size: 0.9rem;
+}
+.collection-directory-count {
+  font-size: 0.85rem;
+  color: var(--book-text-muted, inherit);
+  margin-left: auto;
+}
+.collection-directory-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.collection-directory-pills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.38rem;
+}
+.collection-directory-label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--book-text-muted, inherit);
+  margin-right: 0.25rem;
+}
+.collection-directory-pill {
+  padding: 0.24rem 0.68rem;
+  border-radius: 999px;
+  border: 1px solid var(--book-border-dark, rgba(148, 163, 184, 0.32));
+  background: transparent;
+  color: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.collection-directory-pill:hover {
+  border-color: var(--book-link, #e8b85a);
+}
+.collection-directory-pill.is-active {
+  background: rgba(232, 184, 90, 0.16);
+  border-color: var(--book-link, #e8b85a);
+  font-weight: 600;
+}
+.collection-directory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
+  gap: 1.1rem;
+  margin: 1rem 0 2rem;
+}
+.collection-directory-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--book-border, rgba(148, 163, 184, 0.24));
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--book-surface, rgba(148, 163, 184, 0.04));
+  transition: border-color 0.15s, transform 0.15s;
+}
+.collection-directory-card:hover {
+  border-color: var(--book-link, #e8b85a);
+  transform: translateY(-2px);
+}
+.collection-directory-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #141417;
+  display: block;
+}
+.collection-directory-thumb-svg svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.collection-directory-body {
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+}
+.collection-directory-title {
+  margin: 0;
+  font-size: 1.04rem;
+  line-height: 1.3;
+}
+.collection-directory-native {
+  font-size: 0.84rem;
+  color: var(--book-text-muted, inherit);
+}
+.collection-directory-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.65rem;
+  font-size: 0.8rem;
+  color: var(--book-text-muted, inherit);
+}
+.collection-directory-excerpt {
+  font-size: 0.85rem;
+  line-height: 1.45;
+  margin: 0.15rem 0 0.25rem;
+}
+.collection-directory-excerpt p {
+  margin: 0;
+}
+.collection-directory-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: auto;
+}
+.collection-directory-tag {
+  font-size: 0.72rem;
+  padding: 0.12rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid var(--book-border, rgba(148, 163, 184, 0.28));
+}
+.collection-directory-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  font-size: 0.83rem;
+  font-weight: 500;
+}

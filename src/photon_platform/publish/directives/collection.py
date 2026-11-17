@@ -437,6 +437,8 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
                     if 'category' in item and isinstance(item['category'], str):
                         item['category'] = [cat.strip() for cat in item['category'].split(',') if cat.strip()]
                         item.setdefault('categories', item['category'])
+                    if 'languages' in item and isinstance(item['languages'], str):
+                        item['languages'] = [lang.strip() for lang in item['languages'].split(',') if lang.strip()]
                     collection_items.append(item)
 
         if sort_key:
@@ -1085,6 +1087,7 @@ def setup(app: Any) -> Dict[str, Any]:
     app.connect('source-read', inject_root_navigation)
     app.connect('doctree-resolved', process_collections)
     app.add_js_file('js/collection_controls.js')
+    app.add_js_file('js/collection_directory.js')
     return {
         'version': '0.1',
         'parallel_read_safe': True,

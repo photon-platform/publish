@@ -1,0 +1,78 @@
+<section class="collection collection-directory {% if collection.class %}{{ collection.class }}{% endif %}">
+{%- if collection.title %}
+  <header>
+    <h1>{{ collection.title }}</h1>
+  </header>
+{%- endif %}
+  <div class="collection-directory-controls" hidden>
+    <div class="collection-directory-row">
+      <input type="search" class="collection-directory-search" placeholder="Search records..." aria-label="Search records" />
+      <select class="collection-directory-sort" aria-label="Sort records"></select>
+      <span class="collection-directory-count"></span>
+    </div>
+    <div class="collection-directory-filters"></div>
+  </div>
+  <div class="collection-directory-grid">
+{%- for article in collection.articles %}
+{%-   set primary_href = article.site_url or pathto(article.docname) %}
+{%-   set langs_str = (article.languages | join('|')) if article.languages is iterable and article.languages is not string else (article.languages or '') %}
+{%-   set eras_str = article.era or article.series or '' %}
+{%-   set death_num = article.death_year if article.death_year is defined and article.death_year != '' else '' %}
+{%-   set year_num = article.year if article.year is defined and article.year != '' else '' %}
+{%-   set pub_str = article.published_at or '' %}
+    <article class="collection-directory-card"
+             data-title="{{ (article.title or '') | e }}"
+             data-death-year="{{ death_num | e }}"
+             data-year="{{ year_num | e }}"
+             data-published-at="{{ pub_str | e }}"
+             data-languages="{{ langs_str | e }}"
+             data-era="{{ eras_str | e }}"
+             data-search="{{ ((article.title or '') ~ ' ' ~ (article.author or '') ~ ' ' ~ (article.native_title or '') ~ ' ' ~ (article.era or '') ~ ' ' ~ (article.series or '') ~ ' ' ~ (article.excerpt or '') ~ ' ' ~ langs_str) | striptags | e }}">
+{%-   if article.excerpt_svg_content %}
+      <a class="collection-directory-thumb-link" href="{{ primary_href | e }}"{% if article.site_url %} target="_blank" rel="noopener"{% endif %}>
+        <div class="collection-directory-thumb collection-directory-thumb-svg">{{ article.excerpt_svg_content | safe }}</div>
+      </a>
+{%-   elif article.excerpt_figure_filename %}
+      <a class="collection-directory-thumb-link" href="{{ primary_href | e }}"{% if article.site_url %} target="_blank" rel="noopener"{% endif %}>
+        <img class="collection-directory-thumb" src="{{ pathto(article.excerpt_figure_filename, 1) }}" alt="{{ (article.excerpt_figure_alt or article.title) | e }}" loading="lazy" />
+      </a>
+{%-   endif %}
+      <div class="collection-directory-body">
+        <h3 class="collection-directory-title">
+          <a href="{{ primary_href | e }}"{% if article.site_url %} target="_blank" rel="noopener"{% endif %}>{{ article.title }}</a>
+        </h3>
+{%-   if article.native_title %}
+        <div class="collection-directory-native"><em>{{ article.native_title }}</em></div>
+{%-   endif %}
+        <div class="collection-directory-meta">
+{%-   if article.author %}<span>{{ article.author }}</span>{% endif %}
+{%-   if article.lifespan %}<span>{{ article.lifespan }}</span>{% endif %}
+{%-   if article.death_label %}<span>Death: <strong>{{ article.death_label }}</strong></span>{% endif %}
+{%-   if article.year %}<span>{{ article.year }}</span>{% endif %}
+{%-   if article.era %}<span>{{ article.era }}</span>{% endif %}
+{%-   if article.series %}<span>{{ article.series }}</span>{% endif %}
+        </div>
+{%-   if article.excerpt_text %}
+        <div class="collection-directory-excerpt">{{ article.excerpt_text | safe }}</div>
+{%-   endif %}
+{%-   if article.languages %}
+        <div class="collection-directory-tags">
+{%-     for lang in article.languages %}
+          <span class="collection-directory-tag">{{ lang }}</span>
+{%-     endfor %}
+        </div>
+{%-   endif %}
+        <div class="collection-directory-links">
+{%-   if article.site_url %}
+          <a href="{{ article.site_url | e }}" target="_blank" rel="noopener">Open Site &rarr;</a>
+{%-   endif %}
+          <a href="{{ pathto(article.docname) }}">Record</a>
+{%-   if article.github_url %}
+          <a href="{{ article.github_url | e }}" target="_blank" rel="noopener">GitHub</a>
+{%-   endif %}
+        </div>
+      </div>
+    </article>
+{%- endfor %}
+  </div>
+</section>
