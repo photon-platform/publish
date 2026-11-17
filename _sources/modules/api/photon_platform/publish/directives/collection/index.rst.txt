@@ -24,6 +24,8 @@ Classes
 
    photon_platform.publish.directives.collection.PendingCollection
    photon_platform.publish.directives.collection.CollectionDirective
+   photon_platform.publish.directives.collection.PeopleDirectoryDirective
+   photon_platform.publish.directives.collection.ReferenceDirectoryDirective
 
 
 Functions
@@ -199,6 +201,50 @@ Module Contents
    :param app: The Sphinx application instance.
    :param docname: The name of the document.
    :param source: The list of source strings (mutable).
+
+
+.. py:class:: PeopleDirectoryDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`CollectionDirective`
+
+
+   Directive to insert a searchable, sortable directory of people records.
+
+
+   .. py:method:: run() -> List[docutils.nodes.Node]
+
+      Process the collection directive.
+
+      Instead of rendering immediately, this method:
+      1. Discovers all relevant files respecting the Container Boundary Rule or explicit doc list.
+      2. Filters by :type: early before claiming documents in the toctree.
+      3. Adds them to a hidden toctree so Sphinx knows about them (fixes "not in toctree" warnings).
+      4. Returns a PendingCollection node to defer rendering until metadata is ready.
+
+      :returns: A list containing the PendingCollection node and a hidden toctree node.
+
+
+
+.. py:class:: ReferenceDirectoryDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`CollectionDirective`
+
+
+   Directive to insert a searchable, sortable directory of reference/book records.
+
+
+   .. py:method:: run() -> List[docutils.nodes.Node]
+
+      Process the collection directive.
+
+      Instead of rendering immediately, this method:
+      1. Discovers all relevant files respecting the Container Boundary Rule or explicit doc list.
+      2. Filters by :type: early before claiming documents in the toctree.
+      3. Adds them to a hidden toctree so Sphinx knows about them (fixes "not in toctree" warnings).
+      4. Returns a PendingCollection node to defer rendering until metadata is ready.
+
+      :returns: A list containing the PendingCollection node and a hidden toctree node.
+
 
 
 .. py:function:: setup(app: Any) -> Dict[str, Any]
