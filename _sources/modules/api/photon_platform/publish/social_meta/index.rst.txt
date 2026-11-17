@@ -5,7 +5,7 @@ photon_platform.publish.social_meta
 
 .. autoapi-nested-parse::
 
-   Social media metadata (OpenGraph / Twitter Cards), A-Z <title> formatting, and 1200x630 sharing banners.
+   Social media metadata (OpenGraph / Twitter Cards), A-Z <title> formatting, and 1280x640 sharing banners.
 
 
 
@@ -36,11 +36,11 @@ Module Contents
 ---------------
 
 .. py:data:: BANNER_WIDTH
-   :value: 1200
+   :value: 1280
 
 
 .. py:data:: BANNER_HEIGHT
-   :value: 630
+   :value: 640
 
 
 .. py:function:: resolve_org_brand(env: Any, context: dict[str, Any] | None = None) -> str
