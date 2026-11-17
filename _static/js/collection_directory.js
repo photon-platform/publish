@@ -158,6 +158,9 @@
       btn.addEventListener("click", function () {
         var fk = btn.getAttribute("data-filter");
         var fv = btn.getAttribute("data-val");
+        if (fv && state[fk] === fv) {
+          fv = "";
+        }
         state[fk] = fv;
         filtersWrap.querySelectorAll('.collection-directory-pill[data-filter="' + fk + '"]').forEach(function (b) {
           b.classList.toggle("is-active", b.getAttribute("data-val") === fv);
