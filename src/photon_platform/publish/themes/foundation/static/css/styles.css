@@ -5788,24 +5788,21 @@ details.book-collapse .book-collapse-body .line-catalog p {
 }
 
 /* ==========================================================================
-   Collection Directory Template (collection/directory.html)
+   Directory Directives (people-directory, reference-directory)
    ========================================================================== */
-.collection.collection-directory {
+.directory-section,
+.collection-directory {
   display: block;
-  grid-template-columns: none;
-}
-.collection.collection-directory > .collection-controls {
-  display: none;
 }
 .collection-directory-controls {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  margin: 1.25rem 0 1.5rem;
+  margin: 1.25rem 0 1rem;
   padding: 0.95rem 1.1rem;
   border: 1px solid var(--book-border, rgba(148, 163, 184, 0.25));
-  border-radius: 10px;
-  background: var(--book-quote-bg, rgba(148, 163, 184, 0.05));
+  border-radius: 8px;
+  background: var(--book-surface, rgba(148, 163, 184, 0.05));
 }
 .collection-directory-row {
   display: flex;
@@ -5872,79 +5869,40 @@ details.book-collapse .book-collapse-body .line-catalog p {
   font-weight: 600;
 }
 .collection-directory-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
-  gap: 1.1rem;
-  margin: 1rem 0 2rem;
+  margin-top: 0.5rem;
 }
-.collection-directory-card {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  border: 1px solid var(--book-border, rgba(148, 163, 184, 0.24));
-  border-radius: 10px;
+.collection-directory-grid > article.excerpt > .content > figure {
   overflow: hidden;
-  background: var(--book-surface, rgba(148, 163, 184, 0.04));
-  transition: border-color 0.15s, transform 0.15s;
 }
-.collection-directory-card:hover {
-  border-color: var(--book-link, #e8b85a);
-  transform: translateY(-2px);
-}
-.collection-directory-thumb-link {
-  display: block;
+.collection-directory-grid > article.excerpt > .content > figure svg {
   width: 100%;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-.collection-directory-thumb {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  max-height: 190px;
-  object-fit: cover;
-  overflow: hidden;
-  background: #141417;
-  display: block;
-}
-.collection-directory-thumb-svg {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.collection-directory-thumb-svg svg {
-  width: 100% !important;
-  height: 100% !important;
+  height: 100%;
   max-width: 100%;
   max-height: 100%;
   display: block;
 }
-.collection-directory-body {
-  padding: 0.9rem 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  flex: 1;
-}
-.collection-directory-title {
-  margin: 0;
-  font-size: 1.04rem;
-  line-height: 1.3;
-}
 .collection-directory-native {
   font-size: 0.84rem;
   color: var(--book-text-muted, inherit);
+  margin: 0.15rem 0 0.25rem;
 }
 .collection-directory-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem 0.65rem;
+  justify-content: center;
+  gap: 0.25rem 0.6rem;
   font-size: 0.8rem;
   color: var(--book-text-muted, inherit);
+  margin: 0.25rem 0;
+}
+.collection-directory-grid.layout-banners .collection-directory-meta,
+.collection-directory-grid.layout-list .collection-directory-meta {
+  justify-content: flex-start;
 }
 .collection-directory-excerpt {
   font-size: 0.85rem;
   line-height: 1.45;
-  margin: 0.15rem 0 0.25rem;
+  margin: 0.2rem 0 0.35rem;
 }
 .collection-directory-excerpt p {
   margin: 0;
@@ -5952,8 +5910,13 @@ details.book-collapse .book-collapse-body .line-catalog p {
 .collection-directory-tags {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.3rem;
-  margin-top: auto;
+  margin: 0.35rem 0 0.25rem;
+}
+.collection-directory-grid.layout-banners .collection-directory-tags,
+.collection-directory-grid.layout-list .collection-directory-tags {
+  justify-content: flex-start;
 }
 .collection-directory-tag {
   font-size: 0.72rem;
@@ -5962,10 +5925,11 @@ details.book-collapse .book-collapse-body .line-catalog p {
   border: 1px solid var(--book-border, rgba(148, 163, 184, 0.28));
 }
 .collection-directory-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
-  font-size: 0.83rem;
-  font-weight: 500;
+  justify-content: center;
+  margin-top: 0.45rem;
 }
+.collection-directory-grid.layout-banners .collection-directory-links,
+.collection-directory-grid.layout-list .collection-directory-links {
+  justify-content: flex-start;
+}
+

@@ -457,6 +457,7 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
                 'title': title,
                 'articles': collection_items,
                 'class': collection_class,
+                'directory_kind': options.get('directory_kind', ''),
             },
             'pathto': pathto,
         }
@@ -1068,6 +1069,28 @@ def inject_root_navigation(app: Any, docname: str, source: List[str]) -> None:
         source[0] += toctree_rst
 
 
+class PeopleDirectoryDirective(CollectionDirective):
+    """Directive to insert a searchable, sortable directory of people records."""
+
+    def run(self) -> List[nodes.Node]:
+        self.options.setdefault('type', 'person')
+        self.options.setdefault('sort', 'death_year')
+        self.options.setdefault('template', 'collection/directory.html')
+        self.options.setdefault('directory_kind', 'people')
+        return super().run()
+
+
+class ReferenceDirectoryDirective(CollectionDirective):
+    """Directive to insert a searchable, sortable directory of reference/book records."""
+
+    def run(self) -> List[nodes.Node]:
+        self.options.setdefault('type', 'book')
+        self.options.setdefault('sort', 'year')
+        self.options.setdefault('template', 'collection/directory.html')
+        self.options.setdefault('directory_kind', 'references')
+        return super().run()
+
+
 def setup(app: Any) -> Dict[str, Any]:
     """Register directives and connect to Sphinx events.
 
@@ -1080,6 +1103,8 @@ def setup(app: Any) -> Dict[str, Any]:
     """
     app.add_node(PendingCollection)
     app.add_directive("collection", CollectionDirective)
+    app.add_directive("people-directory", PeopleDirectoryDirective)
+    app.add_directive("reference-directory", ReferenceDirectoryDirective)
     app.connect('env-get-outdated', check_root_navigation_outdated)
     app.connect('env-updated', collect_metadata)
     app.connect('html-collect-pages', generate_taxonomy_pages)
