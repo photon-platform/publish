@@ -50,7 +50,7 @@
           <div class="collection-directory-meta">
 {%-   if article.author %}<span>{% if article.author_doc %}<a href="{{ pathto(article.author_doc) }}">{{ article.author }}</a>{% else %}{{ article.author }}{% endif %}</span>{% endif %}
 {%-   if article.lifespan %}<span>{{ article.lifespan }}</span>{% endif %}
-{%-   if article.death_label %}<span>Death: <strong>{{ article.death_label }}</strong></span>{% endif %}
+{%-   if article.death_label %}<span>Date: <strong>{{ article.death_label }}</strong></span>{% endif %}
 {%-   if article.year %}<span>{{ article.year }}</span>{% endif %}
 {%-   if article.era %}<span>{{ article.era }}</span>{% endif %}
 {%-   if article.series %}<span>{{ article.series }}</span>{% endif %}

@@ -5814,7 +5814,9 @@ details.book-collapse .book-collapse-body .line-catalog p {
 }
 .directory-section .collection-directory-search,
 .collection-directory .collection-directory-search {
-  flex: 1 1 220px;
+  flex: 1 1 200px;
+  width: auto;
+  min-width: 180px;
   padding: 0.42rem 0.75rem;
   border-radius: 6px;
   border: 1px solid var(--book-border-dark, rgba(148, 163, 184, 0.35));
@@ -5829,16 +5831,32 @@ details.book-collapse .book-collapse-body .line-catalog p {
 .collection-directory .collection-directory-search:focus {
   border-color: var(--book-accent, #e8b85a);
 }
-.directory-section .collection-directory-sort,
-.collection-directory .collection-directory-sort {
-  padding: 0.42rem 0.7rem;
+.directory-section select.collection-directory-sort,
+.collection-directory select.collection-directory-sort {
+  appearance: none;
+  -webkit-appearance: none;
+  color-scheme: dark;
+  padding: 0.42rem 2rem 0.42rem 0.75rem;
   border-radius: 6px;
   border: 1px solid var(--book-border-dark, rgba(148, 163, 184, 0.35));
-  background: var(--book-bg, #141417);
+  background-color: var(--book-bg, #141417);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%2394a3b8' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.65rem center;
+  background-size: 0.65rem;
   color: var(--book-text, inherit);
   font-family: inherit;
   font-size: 0.86rem;
   cursor: pointer;
+}
+.directory-section select.collection-directory-sort option,
+.collection-directory select.collection-directory-sort option {
+  background-color: var(--book-bg, #141417);
+  color: var(--book-text, #e4e4e7);
+}
+body.light-mode .directory-section select.collection-directory-sort,
+body.light-mode .collection-directory select.collection-directory-sort {
+  color-scheme: light;
 }
 .directory-section .collection-directory-count,
 .collection-directory .collection-directory-count {
