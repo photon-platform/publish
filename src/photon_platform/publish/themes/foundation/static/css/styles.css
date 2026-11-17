@@ -5897,27 +5897,29 @@ body.light-mode .collection-directory select.collection-directory-sort {
 .collection-directory button.collection-directory-pill {
   appearance: none;
   -webkit-appearance: none;
-  padding: 0.22rem 0.65rem;
+  padding: 0.16rem 0.55rem;
   border-radius: 999px;
-  border: 1px solid var(--book-border, rgba(148, 163, 184, 0.32));
-  background: var(--book-bg, rgba(20, 20, 23, 0.6));
-  color: var(--book-text, inherit);
-  font-family: inherit;
-  font-size: 0.78rem;
-  line-height: 1.3;
+  border: 1px solid var(--book-border-dark, rgba(148, 163, 184, 0.35));
+  background: var(--book-bg, #141417);
+  color: var(--book-muted, #a1a1aa);
+  font-family: var(--book-font-sans, "Fira Sans Condensed", "Fira Sans", sans-serif);
+  font-size: 0.74rem;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
   cursor: pointer;
   transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
 }
 .directory-section button.collection-directory-pill:hover,
 .collection-directory button.collection-directory-pill:hover {
   border-color: var(--book-accent, #e8b85a);
-  color: var(--book-accent, #e8b85a);
+  color: var(--book-text, #f4f4f5);
 }
 .directory-section button.collection-directory-pill.is-active,
 .collection-directory button.collection-directory-pill.is-active {
-  background: color-mix(in srgb, var(--book-accent, #e8b85a) 18%, var(--book-bg, transparent));
+  background: var(--book-accent, #e8b85a);
   border-color: var(--book-accent, #e8b85a);
-  color: var(--book-accent, #e8b85a);
+  color: #141417;
   font-weight: 600;
 }
 .collection-directory-grid {
