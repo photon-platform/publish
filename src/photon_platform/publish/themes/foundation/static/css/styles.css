@@ -5900,6 +5900,7 @@ details.book-collapse .book-collapse-body .line-catalog p {
 .collection-directory-thumb {
   width: 100%;
   aspect-ratio: 16 / 9;
+  max-height: 190px;
   object-fit: cover;
   overflow: hidden;
   background: #141417;
