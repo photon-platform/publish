@@ -844,13 +844,20 @@ def _build_epub_tracks_bar_html(
 
     for app_doc, app_label in (
         ("bibliography", bib_label),
-        ("persons", persons_label),
+        (("people/index", "persons"), persons_label),
         ("glossary", glossary_label),
     ):
-        cand = _qual_book(app_doc)
-        if cand not in found_docs and app_doc in found_docs:
-            cand = app_doc
-        if cand in found_docs:
+        cands = app_doc if isinstance(app_doc, tuple) else (app_doc,)
+        cand = None
+        for doc_opt in cands:
+            q_opt = _qual_book(doc_opt)
+            if q_opt in found_docs:
+                cand = q_opt
+                break
+            if doc_opt in found_docs:
+                cand = doc_opt
+                break
+        if cand:
             if pagename == cand:
                 util_links.append(
                     f'<strong class="book-track-item is-active" aria-current="page">{app_label}</strong>'

@@ -304,12 +304,18 @@ def _resolve_apparatus_link(
         return href, occ_id, title_text
 
     target_doc = None
-    if first_seg and f"{first_seg}/{base_doc}" in found_docs:
-        target_doc = f"{first_seg}/{base_doc}"
-    elif base_doc in found_docs:
-        target_doc = base_doc
-    elif not found_docs and first_seg:
-        target_doc = f"{first_seg}/{base_doc}"
+    if role_type == "person":
+        if first_seg and f"{first_seg}/people/{slug}" in found_docs:
+            target_doc = f"{first_seg}/people/{slug}"
+        elif f"people/{slug}" in found_docs:
+            target_doc = f"people/{slug}"
+    if target_doc is None:
+        if first_seg and f"{first_seg}/{base_doc}" in found_docs:
+            target_doc = f"{first_seg}/{base_doc}"
+        elif base_doc in found_docs:
+            target_doc = base_doc
+        elif not found_docs and first_seg:
+            target_doc = f"{first_seg}/{base_doc}"
 
     href = None
     if target_doc and hasattr(builder, "get_relative_uri"):
