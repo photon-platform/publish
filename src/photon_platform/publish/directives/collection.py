@@ -239,9 +239,13 @@ class CollectionDirective(SphinxDirective):
                     if get_early_meta(d).get('type') == collection_type
                 ]
             else:
+                _excluded_companion_types = {
+                    'book_title', 'translation', 'summary', 'notes',
+                    'el', 'la', 'de', 'fr', 'it', 'apparatus',
+                }
                 docnames = [
                     d for d in docnames
-                    if get_early_meta(d).get('type') != 'book_title'
+                    if get_early_meta(d).get('type') not in _excluded_companion_types
                 ]
 
             # Best-effort sort for toctree
@@ -463,7 +467,16 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
         }
 
         jinja_env = builder.templates.environment
-        template = jinja_env.get_template(template_name)
+        try:
+            template = jinja_env.get_template(template_name)
+        except Exception:
+            from jinja2 import Environment, FileSystemLoader
+
+            foundation_dir = os.path.abspath(
+                os.path.join(os.path.dirname(__file__), "..", "themes", "foundation")
+            )
+            fallback_env = Environment(loader=FileSystemLoader(foundation_dir))
+            template = fallback_env.get_template(template_name)
         html = template.render(context)
 
         if 'class="math' in html and 'math' in env.domains:
