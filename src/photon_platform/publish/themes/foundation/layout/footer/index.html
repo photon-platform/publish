@@ -1,5 +1,5 @@
   <footer>
-{%- if footer_nav_list %}
+{%- if footer_nav_list or github_url or (github_user and github_repo) %}
 {% include "layout/footer/nav.html" %}
 {%- endif %}
     <hr />

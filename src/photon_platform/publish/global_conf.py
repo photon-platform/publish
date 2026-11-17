@@ -78,6 +78,8 @@ def setup_globals(org: str, org_name: str, repo: str, repo_name: str) -> None:
             "display_github": True,
             "github_user": org,
             "github_repo": repo,
+            "github_url": f"https://github.com/{org}/{repo}",
+            "support_url": f"https://github.com/{org}/{repo}/issues",
             "github_version": "main",
             "conf_py_path": "/docsrc/",
             "org_name": org_name,

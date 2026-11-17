@@ -9,5 +9,13 @@
 {%-   set current = 'aria-current="page"' if is_current else '' %}
         <li><a href="{{ pathto(docname) }}"{% if is_selected %} class="is-active"{% endif %} {{ selected }} {{ current }}>{{ p.title }}</a></li>
 {%- endfor %}
+{%- set resolved_github = github_url or ('https://github.com/' ~ github_user ~ '/' ~ github_repo if github_user and github_repo else '') %}
+{%- set resolved_support = support_url or (resolved_github ~ '/issues' if resolved_github else '') %}
+{%- if resolved_github %}
+        <li><a href="{{ resolved_github | e }}" target="_blank" rel="noopener">GitHub</a></li>
+{%- endif %}
+{%- if resolved_support %}
+        <li><a href="{{ resolved_support | e }}" target="_blank" rel="noopener">Support</a></li>
+{%- endif %}
       </ul>
     </div>
