@@ -145,7 +145,9 @@ def detect_companion_tracks(env: Any, pagename: str) -> List[Dict[str, Any]]:
     page_meta = _get_doc_metadata(env, pagename)
     raw_tracks = page_meta.get("tracks")
     if not raw_tracks and basename != "index" and doc_dir:
-        raw_tracks = _get_doc_metadata(env, f"{doc_dir}/index").get("tracks")
+        parent_idx_meta = _get_doc_metadata(env, f"{doc_dir}/index")
+        if parent_idx_meta.get("type") not in ("book", "book_title") and "book_title" not in parent_idx_meta:
+            raw_tracks = parent_idx_meta.get("tracks")
     if raw_tracks and isinstance(raw_tracks, str):
         parsed_tracks: List[Dict[str, Any]] = []
         for segment in raw_tracks.split("|"):
@@ -829,10 +831,11 @@ def _build_epub_tracks_bar_html(
         return f"{book_prefix}/{name}" if book_prefix else name
 
     root_meta = getattr(env, "metadata", {}).get(book_root, {}) if env else {}
-    toc_label = _html.escape(str(root_meta.get("toc_label") or "Contents"))
-    persons_label = _html.escape(str(root_meta.get("persons_label") or "People"))
-    bib_label = _html.escape(str(root_meta.get("bibliography_label") or "Bibliography"))
-    glossary_label = _html.escape(str(root_meta.get("glossary_label") or "Glossary"))
+    page_meta = getattr(env, "metadata", {}).get(pagename, {}) if env else {}
+    toc_label = _html.escape(str(page_meta.get("toc_label") or root_meta.get("toc_label") or "Contents"))
+    persons_label = _html.escape(str(page_meta.get("persons_label") or root_meta.get("persons_label") or "People"))
+    bib_label = _html.escape(str(page_meta.get("bibliography_label") or root_meta.get("bibliography_label") or "Bibliography"))
+    glossary_label = _html.escape(str(page_meta.get("glossary_label") or root_meta.get("glossary_label") or "Glossary"))
 
     util_links: List[str] = []
     if book_root in found_docs and pagename != book_root:
@@ -903,7 +906,7 @@ def _enhance_epub_body_html(
         and "la" in track_map
     ):
         counterpart_key = "la" if active_key == "en" else "en"
-        counterpart_label = "LA" if active_key == "en" else "EN"
+        counterpart_label = "Latin" if active_key == "en" else "English"
         counterpart_title = "Read this section in Latin" if active_key == "en" else "Read this section in English"
         counterpart_uri = builder.get_relative_uri(pagename, track_map[counterpart_key])
 

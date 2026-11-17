@@ -772,6 +772,7 @@ def generate_repo_social_banners(repo_root: str | Path, force: bool = False) -> 
                 or "\n===" in p
                 or "\n---" in p
                 or p.lower() == "the works of"
+                or p.lower().startswith("semantic digital archive")
             ):
                 continue
             clean_p = re.sub(r":[a-zA-Z0-9_+-]+:`([^`<]+)(?:\s*<[^>]+>)?`", r"\1", p)

@@ -105,3 +105,44 @@ def test_nav_title_override_and_deterministic_sorting() -> None:
         ("persons", "People"),
         ("mission/index", "Mission"),
     ]
+
+
+def test_book_title_page_tracks_no_bleed_and_page_labels() -> None:
+    """Book Title Page :tracks: stay on index/title-la and page_meta overrides utility labels."""
+    builder = SimpleNamespace(get_relative_uri=lambda _src, dst: f"../{dst}.xhtml")
+    env = SimpleNamespace(
+        found_docs={
+            "treatise/index",
+            "treatise/title-la",
+            "treatise/bibliography",
+            "treatise/persons",
+        },
+        metadata={
+            "treatise/index": {
+                "type": "book",
+                "tracks": "English: index | Latin: title-la",
+            },
+            "treatise/title-la": {
+                "type": "book_title",
+                "tracks": "English: index | Latin: title-la",
+                "toc_label": "Conspectus",
+                "persons_label": "Index Nominum",
+            },
+            "treatise/bibliography": {},
+        },
+    )
+    assert [(t["label"], t["active"]) for t in detect_companion_tracks(env, "treatise/index")] == [
+        ("English", True),
+        ("Latin", False),
+    ]
+    assert detect_companion_tracks(env, "treatise/bibliography") == []
+
+    app = SimpleNamespace(builder=builder, env=env, config=SimpleNamespace(master_doc="index"))
+    html_la = _build_epub_tracks_bar_html(
+        app,
+        "treatise/title-la",
+        {"book_root": "treatise/index", "book_tracks": []},
+    )
+    assert ">Conspectus<" in html_la
+    assert ">Index Nominum<" in html_la
+

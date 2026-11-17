@@ -238,6 +238,11 @@ class CollectionDirective(SphinxDirective):
                     d for d in docnames
                     if get_early_meta(d).get('type') == collection_type
                 ]
+            else:
+                docnames = [
+                    d for d in docnames
+                    if get_early_meta(d).get('type') != 'book_title'
+                ]
 
             # Best-effort sort for toctree
             if sort_key:
