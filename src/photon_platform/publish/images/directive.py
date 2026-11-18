@@ -710,6 +710,8 @@ class PictureDirective(Directive):
                     stripped = rel_path[len(prefix):]
                     if (srcdir_path / stripped).exists():
                         rel_path = stripped
+                elif (srcdir_path.parent / rel_path).exists():
+                    rel_path = os.path.join("..", rel_path)
         else:
             doc_dir = os.path.dirname(self.env.docname)
             rel_path = os.path.join(doc_dir, image_path_arg)

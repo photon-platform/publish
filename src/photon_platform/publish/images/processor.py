@@ -84,7 +84,10 @@ class ImageProcessor:
         original_stem = abs_source_path.stem
 
         # Calculate relative path of the source directory from srcdir
-        rel_dir = abs_source_path.parent.relative_to(self.srcdir)
+        try:
+            rel_dir = abs_source_path.parent.relative_to(self.srcdir)
+        except ValueError:
+            rel_dir = abs_source_path.parent.relative_to(self.srcdir.parent)
 
         if abs_source_path.suffix.lower() == '.svg':
             dest_dir = self.outdir / rel_dir
