@@ -1102,6 +1102,16 @@ class ReferenceDirectoryDirective(CollectionDirective):
         return super().run()
 
 
+class SourceDirectoryDirective(CollectionDirective):
+    """Directive to insert a searchable, sortable directory of primary source witnesses."""
+
+    def run(self) -> List[nodes.Node]:
+        self.options.setdefault('sort', 'year')
+        self.options.setdefault('template', 'collection/directory.html')
+        self.options.setdefault('directory_kind', 'sources')
+        return super().run()
+
+
 def setup(app: Any) -> Dict[str, Any]:
     """Register directives and connect to Sphinx events.
 
@@ -1116,6 +1126,7 @@ def setup(app: Any) -> Dict[str, Any]:
     app.add_directive("collection", CollectionDirective)
     app.add_directive("people-directory", PeopleDirectoryDirective)
     app.add_directive("reference-directory", ReferenceDirectoryDirective)
+    app.add_directive("source-directory", SourceDirectoryDirective)
     app.connect('env-get-outdated', check_root_navigation_outdated)
     app.connect('env-updated', collect_metadata)
     app.connect('html-collect-pages', generate_taxonomy_pages)

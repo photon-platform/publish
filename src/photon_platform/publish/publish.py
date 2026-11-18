@@ -576,6 +576,8 @@ def build_epub(
                 "photon_platform.publish.images",
                 "sphinx.ext.graphviz",
                 "sphinx.ext.todo",
+                "sphinxcontrib.youtube",
+                "myst_parser",
             ],
             "graphviz_output_format": "svg",
             "epub_exclude_files": [

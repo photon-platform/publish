@@ -1367,8 +1367,20 @@ def setup_book_page_context(
     return None
 
 
+def _register_epub_graphviz(app: Any) -> None:
+    """Ensure Sphinx graphviz nodes render via HTML5Translator in EPUB 3 builds."""
+    if getattr(getattr(app, "builder", None), "name", "") != "epub":
+        return
+    try:
+        from sphinx.ext.graphviz import graphviz, html_visit_graphviz
+    except ImportError:
+        return
+    app.add_node(graphviz, override=True, epub=(html_visit_graphviz, None))
+
+
 def setup(app: Any) -> Dict[str, Any]:
     """Register the book subtree inheritance and EPUB 3 hooks with Sphinx."""
+    app.connect("builder-inited", _register_epub_graphviz)
     app.connect("source-read", filter_epub_book_sources)
     app.connect("doctree-resolved", resolve_book_doctree)
     app.connect("missing-reference", resolve_epub_missing_reference)

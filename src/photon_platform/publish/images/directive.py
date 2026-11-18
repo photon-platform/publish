@@ -703,6 +703,13 @@ class PictureDirective(Directive):
 
         if image_path_arg.startswith('/'):
             rel_path = image_path_arg.lstrip('/')
+            srcdir_path = Path(self.env.app.srcdir)
+            if not (srcdir_path / rel_path).exists():
+                prefix = f"{srcdir_path.name}/"
+                if rel_path.startswith(prefix):
+                    stripped = rel_path[len(prefix):]
+                    if (srcdir_path / stripped).exists():
+                        rel_path = stripped
         else:
             doc_dir = os.path.dirname(self.env.docname)
             rel_path = os.path.join(doc_dir, image_path_arg)
@@ -717,7 +724,9 @@ class PictureDirective(Directive):
             if is_svg and 'photon-svg' not in classes:
                 classes.insert(1, 'photon-svg')
         except FileNotFoundError:
-            logger = self.env.app.logger
+            from sphinx.util import logging as sphinx_logging
+
+            logger = sphinx_logging.getLogger(__name__)
             logger.warning(
                 f'Featured Image not found: {image_path_arg}',
                 location=(self.env.docname, self.lineno),
