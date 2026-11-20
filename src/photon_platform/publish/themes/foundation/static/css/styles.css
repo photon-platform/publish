@@ -2116,6 +2116,8 @@ article.book-reading-pane {
   --book-code-text: #d6cfc5;
   --book-max-width: 46rem;
   /* ~736px, optimal 65-75 characters per line */
+  --collection-max-width: 96rem;
+  /* expanded width for multi-column collections */
   --book-scroll-offset: 8.5rem;
   --book-font-serif: 'EB Garamond', Garamond, 'Palatino Linotype', Palatino, 'Georgia', 'Times New Roman', serif;
   --book-font-display: 'EB Garamond', Garamond, 'Georgia', serif;
@@ -2245,6 +2247,35 @@ article.book-reading-pane > .content {
 article.book-reading-pane {
     padding: 0 1rem 2.5rem !important;
   }
+}
+
+article.book-reading-pane:has(.collection) {
+  max-width: var(--collection-max-width) !important;
+}
+
+article.book-reading-pane:has(.collection) .book-content .author-overline,
+article.book-reading-pane:has(.collection) .book-content > section > h1,
+article.book-reading-pane:has(.collection) .book-content > section > h2,
+article.book-reading-pane:has(.collection) .book-content > section > h3,
+article.book-reading-pane:has(.collection) .book-content > section > h4,
+article.book-reading-pane:has(.collection) .book-content > section > p,
+article.book-reading-pane:has(.collection) .book-content > section > ul,
+article.book-reading-pane:has(.collection) .book-content > section > ol,
+article.book-reading-pane:has(.collection) .book-content > section > blockquote,
+article.book-reading-pane:has(.collection) .book-content > section > .admonition,
+article.book-reading-pane:has(.collection) .book-content > section > .rubric,
+article.book-reading-pane:has(.collection) .book-content > section > .toctree-wrapper,
+article.book-reading-pane:has(.collection) .book-content > section > hr,
+article.book-reading-pane:has(.collection) .book-content > h1,
+article.book-reading-pane:has(.collection) .book-content > h2,
+article.book-reading-pane:has(.collection) .book-content > p,
+article.book-reading-pane:has(.collection) .book-content > ul,
+article.book-reading-pane:has(.collection) .book-content > ol,
+article.book-reading-pane:has(.collection) .book-content > .admonition,
+article.book-reading-pane:has(.collection) .book-content > .rubric {
+  max-width: var(--book-max-width);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* -------------------------------------------------------------------------
@@ -5140,7 +5171,8 @@ svg.euclid-graphic circle.geom-coincide-ring-outer {
   margin-top: 1.25rem;
   font-size: 1rem;
   gap: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 21rem));
+  justify-content: center;
 }
 
 .book-reading-pane .book-content .collection > * {
@@ -5279,7 +5311,8 @@ svg.euclid-graphic circle.geom-coincide-ring-outer {
 }
 
 .book-reading-pane .book-content .collection.layout-cards {
-  grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 21rem));
+  justify-content: center;
   gap: 1rem;
 }
 
@@ -5309,6 +5342,9 @@ svg.euclid-graphic circle.geom-coincide-ring-outer {
 
 .book-reading-pane .book-content .collection.layout-banners {
   grid-template-columns: 1fr;
+  max-width: 58rem;
+  margin-left: auto;
+  margin-right: auto;
   gap: 0.85rem;
 }
 
@@ -5345,6 +5381,9 @@ svg.euclid-graphic circle.geom-coincide-ring-outer {
 
 .book-reading-pane .book-content .collection.layout-list {
   grid-template-columns: 1fr;
+  max-width: 58rem;
+  margin-left: auto;
+  margin-right: auto;
   gap: 0.45rem;
 }
 
@@ -5827,7 +5866,8 @@ details.book-collapse .book-collapse-body .line-catalog p {
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
-  margin: 1.1rem 0 0.85rem;
+  max-width: 72rem;
+  margin: 1.1rem auto 0.85rem;
   padding: 0.85rem 1rem;
   border: 1px solid var(--book-border, rgba(148, 163, 184, 0.25));
   border-radius: 8px;
