@@ -86,6 +86,7 @@ article.book-reading-pane {
   --book-code-text: #d6cfc5;
 
   --book-max-width: 46rem; /* ~736px, optimal 65-75 characters per line */
+  --collection-max-width: 96rem; /* expanded width for multi-column collections */
   --book-scroll-offset: 8.5rem;
 
   --book-font-serif: 'EB Garamond', Garamond, 'Palatino Linotype', Palatino, 'Georgia', 'Times New Roman', serif;
@@ -207,6 +208,37 @@ article.book-reading-pane {
   article.book-layout,
   article.book-reading-pane {
     padding: 0 1rem 2.5rem !important;
+  }
+}
+
+article.book-reading-pane:has(.collection) {
+  max-width: var(--collection-max-width) !important;
+
+  .book-content {
+    .author-overline,
+    > section > h1,
+    > section > h2,
+    > section > h3,
+    > section > h4,
+    > section > p,
+    > section > ul,
+    > section > ol,
+    > section > blockquote,
+    > section > .admonition,
+    > section > .rubric,
+    > section > .toctree-wrapper,
+    > section > hr,
+    > h1,
+    > h2,
+    > p,
+    > ul,
+    > ol,
+    > .admonition,
+    > .rubric {
+      max-width: var(--book-max-width);
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
 }
 
@@ -2400,7 +2432,8 @@ svg.euclid-graphic circle.geom-coincide-ring-outer {
   margin-top: 1.25rem;
   font-size: 1rem;
   gap: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(#{"min(100%, 16rem)"}, 21rem));
+  justify-content: center;
 
   > * {
     background: transparent;
@@ -2539,7 +2572,8 @@ svg.euclid-graphic circle.geom-coincide-ring-outer {
   }
 
   &.layout-cards {
-    grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(#{"min(100%, 16rem)"}, 21rem));
+  justify-content: center;
     gap: 1rem;
 
     > article.excerpt > .content {
@@ -2569,6 +2603,9 @@ svg.euclid-graphic circle.geom-coincide-ring-outer {
 
   &.layout-banners {
     grid-template-columns: 1fr;
+    max-width: 58rem;
+    margin-left: auto;
+    margin-right: auto;
     gap: 0.85rem;
 
     > article.excerpt > .content {
@@ -2604,6 +2641,9 @@ svg.euclid-graphic circle.geom-coincide-ring-outer {
 
   &.layout-list {
     grid-template-columns: 1fr;
+    max-width: 58rem;
+    margin-left: auto;
+    margin-right: auto;
     gap: 0.45rem;
 
     > article.excerpt {
@@ -3093,7 +3133,8 @@ details.book-collapse {
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
-  margin: 1.1rem 0 0.85rem;
+  max-width: 72rem;
+  margin: 1.1rem auto 0.85rem;
   padding: 0.85rem 1rem;
   border: 1px solid var(--book-border, rgba(148, 163, 184, 0.25));
   border-radius: 8px;
