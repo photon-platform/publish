@@ -1413,15 +1413,25 @@ body > header > .logo a {
 }
 
 body > header > .logo a img {
-  height: 3.1rem;
+  height: 7.5rem;
   width: auto;
-  margin: 0 auto;
-  border-radius: 4px;
+  max-width: 85%;
+  object-fit: contain;
+  margin: 0 auto 0.2rem;
+  border-radius: 50%;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.4));
   transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
+@media (max-width: 47.99em) {
+  body > header > .logo a img {
+    height: 6rem;
+  }
+}
+
 body > header > .logo a:hover img {
-  opacity: 0.92;
+  opacity: 0.96;
+  transform: scale(1.03);
 }
 
 body > header > .logo a:hover .org-repo .repo {
@@ -5794,6 +5804,7 @@ details.book-collapse .book-collapse-body .line-catalog p {
 .collection-directory {
   display: block;
 }
+
 .directory-section .collection-directory-controls,
 .collection-directory .collection-directory-controls {
   display: flex;
@@ -5805,6 +5816,7 @@ details.book-collapse .book-collapse-body .line-catalog p {
   border-radius: 8px;
   background: var(--book-surface, rgba(148, 163, 184, 0.05));
 }
+
 .directory-section .collection-directory-row,
 .collection-directory .collection-directory-row {
   display: flex;
@@ -5812,6 +5824,7 @@ details.book-collapse .book-collapse-body .line-catalog p {
   align-items: center;
   gap: 0.6rem;
 }
+
 .directory-section .collection-directory-search,
 .collection-directory .collection-directory-search {
   flex: 1 1 200px;
@@ -5827,10 +5840,12 @@ details.book-collapse .book-collapse-body .line-catalog p {
   outline: none;
   transition: border-color 0.15s ease;
 }
+
 .directory-section .collection-directory-search:focus,
 .collection-directory .collection-directory-search:focus {
   border-color: var(--book-accent, #e8b85a);
 }
+
 .directory-section select.collection-directory-sort,
 .collection-directory select.collection-directory-sort {
   appearance: none;
@@ -5849,15 +5864,18 @@ details.book-collapse .book-collapse-body .line-catalog p {
   font-size: 0.86rem;
   cursor: pointer;
 }
+
 .directory-section select.collection-directory-sort option,
 .collection-directory select.collection-directory-sort option {
   background-color: var(--book-bg, #141417);
   color: var(--book-text, #e4e4e7);
 }
+
 body.light-mode .directory-section select.collection-directory-sort,
 body.light-mode .collection-directory select.collection-directory-sort {
   color-scheme: light;
 }
+
 .directory-section .collection-directory-count,
 .collection-directory .collection-directory-count {
   font-size: 0.78rem;
@@ -5870,12 +5888,14 @@ body.light-mode .collection-directory select.collection-directory-sort {
   margin-left: auto;
   white-space: nowrap;
 }
+
 .directory-section .collection-directory-filters,
 .collection-directory .collection-directory-filters {
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
 }
+
 .directory-section .collection-directory-pills,
 .collection-directory .collection-directory-pills {
   display: flex;
@@ -5883,6 +5903,7 @@ body.light-mode .collection-directory select.collection-directory-sort {
   align-items: center;
   gap: 0.35rem;
 }
+
 .directory-section .collection-directory-label,
 .collection-directory .collection-directory-label {
   font-size: 0.72rem;
@@ -5893,6 +5914,7 @@ body.light-mode .collection-directory select.collection-directory-sort {
   margin-right: 0.2rem;
   min-width: 4.5rem;
 }
+
 .directory-section button.collection-directory-pill,
 .collection-directory button.collection-directory-pill {
   appearance: none;
@@ -5910,11 +5932,13 @@ body.light-mode .collection-directory select.collection-directory-sort {
   cursor: pointer;
   transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
 }
+
 .directory-section button.collection-directory-pill:hover,
 .collection-directory button.collection-directory-pill:hover {
   border-color: var(--book-accent, #e8b85a);
   color: var(--book-text, #f4f4f5);
 }
+
 .directory-section button.collection-directory-pill.is-active,
 .collection-directory button.collection-directory-pill.is-active {
   background: var(--book-accent, #e8b85a);
@@ -5922,12 +5946,15 @@ body.light-mode .collection-directory select.collection-directory-sort {
   color: #141417;
   font-weight: 600;
 }
+
 .collection-directory-grid {
   margin-top: 0.5rem;
 }
+
 .collection-directory-grid > article.excerpt > .content > figure {
   overflow: hidden;
 }
+
 .collection-directory-grid > article.excerpt > .content > figure svg {
   width: 100%;
   height: 100%;
@@ -5935,11 +5962,13 @@ body.light-mode .collection-directory select.collection-directory-sort {
   max-height: 100%;
   display: block;
 }
+
 .collection-directory-native {
   font-size: 0.84rem;
   color: var(--book-text-muted, inherit);
   margin: 0.15rem 0 0.25rem;
 }
+
 .collection-directory-meta {
   display: flex;
   flex-wrap: wrap;
@@ -5949,18 +5978,22 @@ body.light-mode .collection-directory select.collection-directory-sort {
   color: var(--book-text-muted, inherit);
   margin: 0.25rem 0;
 }
+
 .collection-directory-grid.layout-banners .collection-directory-meta,
 .collection-directory-grid.layout-list .collection-directory-meta {
   justify-content: flex-start;
 }
+
 .collection-directory-excerpt {
   font-size: 0.85rem;
   line-height: 1.45;
   margin: 0.2rem 0 0.35rem;
 }
+
 .collection-directory-excerpt p {
   margin: 0;
 }
+
 .collection-directory-tags {
   display: flex;
   flex-wrap: wrap;
@@ -5968,22 +6001,72 @@ body.light-mode .collection-directory select.collection-directory-sort {
   gap: 0.3rem;
   margin: 0.35rem 0 0.25rem;
 }
+
 .collection-directory-grid.layout-banners .collection-directory-tags,
 .collection-directory-grid.layout-list .collection-directory-tags {
   justify-content: flex-start;
 }
+
 .collection-directory-tag {
   font-size: 0.72rem;
   padding: 0.12rem 0.45rem;
   border-radius: 4px;
   border: 1px solid var(--book-border, rgba(148, 163, 184, 0.28));
 }
+
 .collection-directory-links {
   justify-content: center;
   margin-top: 0.45rem;
 }
+
 .collection-directory-grid.layout-banners .collection-directory-links,
 .collection-directory-grid.layout-list .collection-directory-links {
   justify-content: flex-start;
 }
 
+.collection-directory-grid > article.excerpt > .content > figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 0.45rem;
+  box-sizing: border-box;
+  display: block;
+}
+
+.collection-directory-grid > article.excerpt > .content > figure svg.medallion-coin {
+  width: 100%;
+  height: 100%;
+  padding: 0.45rem;
+  box-sizing: border-box;
+  display: block;
+}
+
+.repo-medallion-hero,
+.book-reading-pane .book-content img.repo-medallion-hero,
+.book-reading-pane .book-content svg.repo-medallion-hero,
+.is-home-page img.repo-medallion-hero,
+.is-home-page svg.repo-medallion-hero {
+  display: block;
+  width: 11rem;
+  height: 11rem;
+  max-width: 11rem;
+  margin: 0.65rem auto 1.35rem;
+  border-radius: 50%;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.38));
+}
+
+a.image-reference:has(> .repo-medallion-hero) {
+  display: block;
+  width: fit-content;
+  margin: 0.65rem auto 1.35rem;
+}
+
+a.image-reference:has(> .repo-medallion-hero) > .repo-medallion-hero {
+  margin: 0 auto;
+}
+
+body.light-mode .repo-medallion-hero,
+body.light-mode .book-reading-pane .book-content img.repo-medallion-hero {
+  filter: drop-shadow(0 4px 14px rgba(24, 28, 36, 0.18));
+}

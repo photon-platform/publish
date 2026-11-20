@@ -34,15 +34,23 @@
         text-decoration: none !important;
 
         img {
-          height: 3.1rem;
+          height: 7.5rem;
           width: auto;
-          margin: 0 auto;
-          border-radius: 4px;
+          max-width: 85%;
+          object-fit: contain;
+          margin: 0 auto 0.2rem;
+          border-radius: 50%;
+          filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.4));
           transition: transform 0.15s ease, opacity 0.15s ease;
+
+          @media (max-width: 47.99em) {
+            height: 6rem;
+          }
         }
 
         &:hover img {
-          opacity: 0.92;
+          opacity: 0.96;
+          transform: scale(1.03);
         }
 
         &:hover .org-repo .repo {
