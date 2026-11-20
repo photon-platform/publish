@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=f1075037" />
+  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=f90eb6b3" />
   <link rel="stylesheet" type="text/css" href="../../../../../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -129,6 +129,9 @@
         </tr>
         <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.ReferenceDirectoryDirective" title="photon_platform.publish.directives.collection.ReferenceDirectoryDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReferenceDirectoryDirective</span></code></a></p></td>
         <td><p>Directive to insert a searchable, sortable directory of reference/book records.</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.collection.SourceDirectoryDirective" title="photon_platform.publish.directives.collection.SourceDirectoryDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SourceDirectoryDirective</span></code></a></p></td>
+        <td><p>Directive to insert a searchable, sortable directory of primary source witnesses.</p></td>
         </tr>
         </tbody>
         </table>
@@ -411,6 +414,29 @@
         <dl class="py method">
         <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.ReferenceDirectoryDirective.run">
         <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">docutils.nodes.Node</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.ReferenceDirectoryDirective.run" title="Link to this definition">¶</a></dt>
+        <dd><p>Process the collection directive.</p>
+        <p>Instead of rendering immediately, this method:
+        1. Discovers all relevant files respecting the Container Boundary Rule or explicit doc list.
+        2. Filters by :type: early before claiming documents in the toctree.
+        3. Adds them to a hidden toctree so Sphinx knows about them (fixes “not in toctree” warnings).
+        4. Returns a PendingCollection node to defer rendering until metadata is ready.</p>
+        <dl class="field-list simple">
+        <dt class="field-odd">Returns<span class="colon">:</span></dt>
+        <dd class="field-odd"><p>A list containing the PendingCollection node and a hidden toctree node.</p>
+        </dd>
+        </dl>
+        </dd></dl>
+
+        </dd></dl>
+
+        <dl class="py class">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.SourceDirectoryDirective">
+        <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.collection.</span></span><span class="sig-name descname"><span class="pre">SourceDirectoryDirective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_machine</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.collection.SourceDirectoryDirective" title="Link to this definition">¶</a></dt>
+        <dd><p>Bases: <a class="reference internal" href="#photon_platform.publish.directives.collection.CollectionDirective" title="photon_platform.publish.directives.collection.CollectionDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CollectionDirective</span></code></a></p>
+        <p>Directive to insert a searchable, sortable directory of primary source witnesses.</p>
+        <dl class="py method">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.collection.SourceDirectoryDirective.run">
+        <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">docutils.nodes.Node</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.directives.collection.SourceDirectoryDirective.run" title="Link to this definition">¶</a></dt>
         <dd><p>Process the collection directive.</p>
         <p>Instead of rendering immediately, this method:
         1. Discovers all relevant files respecting the Container Boundary Rule or explicit doc list.
