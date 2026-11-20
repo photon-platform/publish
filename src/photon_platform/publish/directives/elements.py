@@ -651,6 +651,54 @@ def _resolve_folio_png_url(translator: Any, folio_id: str) -> Optional[str]:
     return resolve_folio_url(env, current_docname, folio_id)
 
 
+_FOLIO_PAGE_PREFIX_RE = re.compile(
+    r"^(?:(?:p|pp|s|f|fol|tab|pl|fig|taf)\.|§|"
+    r"(?:tabella|tabula|plate|folio|menge|heiberg|hoche|hultsch|friedlein|bekker|stephanus|d'ooge|heath|boncompagni)\b)",
+    re.IGNORECASE,
+)
+
+
+def format_folio_display(
+    raw_folio_id: str,
+    raw_page: str = "",
+    *,
+    masthead: bool = False,
+) -> Tuple[str, str]:
+    """Return ``(visible_label, hover_title)`` for a folio milestone or masthead badge.
+
+    Strips redundant ``<edition_slug>:`` book prefixes (readers already know which
+    book they are in) and verbose parenthetical descriptions from the visible text,
+    while preserving full witness provenance in the hover ``title`` tooltip.
+    """
+    fid = raw_folio_id.strip()
+    short_fid = fid.rsplit(":", 1)[-1].strip() if ":" in fid else fid
+    short_fid = re.sub(r"^(?:folio|fol\.|f\.)\s+", "", short_fid, flags=re.IGNORECASE).strip()
+
+    page = raw_page.strip()
+    short_page = re.sub(r"\s*\([^)]*\)", "", page).strip()
+    if short_page:
+        if _FOLIO_PAGE_PREFIX_RE.match(short_page):
+            page_disp = short_page
+        elif any(sep in short_page for sep in ("–", "—", "-")):
+            page_disp = f"pp. {short_page}"
+        else:
+            page_disp = f"p. {short_page}"
+    else:
+        page_disp = ""
+
+    if page:
+        page_title = page if _FOLIO_PAGE_PREFIX_RE.match(page) else f"p. {page}"
+        title = f"View Folio {fid} ({page_title})"
+    else:
+        title = f"View Folio {fid}"
+
+    if masthead:
+        label = f"Folio {short_fid}" + (f" | {page_disp}" if page_disp else "")
+    else:
+        label = f"f. {short_fid}" + (f" · {page_disp}" if page_disp else "")
+    return label, title
+
+
 def visit_folio_node(self: Any, node: nodes.Element) -> None:
     """HTML visitor for folio_node."""
     raw_folio_id = str(node.get("folio_id", ""))
@@ -669,8 +717,8 @@ def visit_folio_node(self: Any, node: nodes.Element) -> None:
             raise nodes.SkipNode
         return
 
-    page_str = f" · p. {page}" if page else ""
-    label_html = f"f. {folio_id}{page_str}"
+    short_label, title_base = format_folio_display(raw_folio_id, raw_page, masthead=False)
+    label_html = html.escape(short_label, quote=False)
 
     target_url = node.get("url") or _resolve_folio_png_url(self, raw_folio_id)
     if target_url:
@@ -678,8 +726,7 @@ def visit_folio_node(self: Any, node: nodes.Element) -> None:
         suffix = " PNG" if str(target_url).lower().endswith(".png") else (
             " JPG" if str(target_url).lower().endswith((".jpg", ".jpeg")) else ""
         )
-        title_text = f"View Folio {raw_folio_id}" + (f" (p. {raw_page})" if raw_page else "") + suffix
-        esc_title = html.escape(title_text, quote=True)
+        esc_title = html.escape(title_base + suffix, quote=True)
         inner_html = (
             f'<a class="folio-link" href="{esc_url}" target="_blank" '
             f'rel="noopener" title="{esc_title}">{label_html}</a>'

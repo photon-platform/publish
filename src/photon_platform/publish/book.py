@@ -1318,8 +1318,9 @@ def resolve_page_breadcrumbs(
     page_num = str(context.get("page") or "").strip()
     folio_url = str(context.get("folio_url") or "").strip()
     if folio:
-        flabel = f"Folio {folio}" + (f" | p. {page_num}" if page_num else "")
-        ftitle = f"View Folio {folio}" + (f" (p. {page_num})" if page_num else "")
+        from photon_platform.publish.directives.elements import format_folio_display
+
+        flabel, ftitle = format_folio_display(folio, page_num, masthead=True)
         badges.append({"label": flabel, "cls": "folio-badge", "url": folio_url, "title": ftitle})
 
     if not is_book:

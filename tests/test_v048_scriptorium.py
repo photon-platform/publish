@@ -11,6 +11,7 @@ from PIL import Image
 
 from photon_platform.publish.book import resolve_book_context, resolve_page_breadcrumbs
 from photon_platform.publish.directives.collection import _resolve_representative_figure
+from photon_platform.publish.directives.elements import format_folio_display
 from photon_platform.publish.folio_ingest import ingest_repo_pdfs
 from photon_platform.publish.social_meta import (
     BANNER_HEIGHT,
@@ -327,3 +328,30 @@ def test_folio_ingest_renders_pngs_and_folio_map(tmp_path: Path) -> None:
     fmap = json.loads((repo_dir / "resources" / "tractatus" / "folio_map.json").read_text(encoding="utf-8"))
     assert fmap["0001"] == "resources/tractatus/folios/0001.png"
     assert fmap["tractatus:0002"] == "resources/tractatus/folios/0002.png"
+
+
+def test_format_folio_display_non_intrusive() -> None:
+    """Verify folio labels omit redundant book prefixes and verbose parentheticals while keeping tooltips."""
+    lbl, tip = format_folio_display(
+        "mysterium_cosmographicum:0026",
+        "Tabella I (Copernican Orbs)",
+    )
+    assert lbl == "f. 0026 · Tabella I"
+    assert "mysterium_cosmographicum:0026" in tip
+    assert "Copernican Orbs" in tip
+
+    lbl_p, tip_p = format_folio_display("harmonices_mundi:0018", "p. 11")
+    assert lbl_p == "f. 0018 · p. 11"
+    assert "p. p." not in lbl_p
+    assert "harmonices_mundi:0018" in tip_p
+
+    lbl_range, _ = format_folio_display("halley_1758:0042", "34–36")
+    assert lbl_range == "f. 0042 · pp. 34–36"
+
+    lbl_mast, tip_mast = format_folio_display("mysterium_cosmographicum:0024", "11", masthead=True)
+    assert lbl_mast == "Folio 0024 | p. 11"
+    assert "mysterium_cosmographicum:0024" in tip_mast
+
+    lbl_bare, _ = format_folio_display("0255", "241", masthead=True)
+    assert lbl_bare == "Folio 0255 | p. 241"
+
