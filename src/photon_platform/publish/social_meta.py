@@ -433,6 +433,12 @@ def _find_best_emblem_image(docsrc_dir: Path, subtree_slug: str | None = None) -
                     if fp.is_file():
                         return fp
 
+    # 2. For repository-level banners (subtree_slug is None), prefer the repo medallion logo.png
+    if subtree_slug is None:
+        logo = docsrc_dir / "_static" / "logo.png"
+        if logo.is_file():
+            return logo
+
     search_roots: list[Path] = []
     if subtree_slug and (docsrc_dir / subtree_slug).is_dir():
         search_roots.append(docsrc_dir / subtree_slug)
@@ -596,6 +602,8 @@ def _rasterize_emblem(asset_path: Path, box_size: int = 390) -> Any | None:
     try:
         im = Image.open(asset_path).convert("RGBA")
         im.thumbnail((box_size, box_size), Image.Resampling.LANCZOS)
+        if asset_path.name == "logo.png" or "medallion" in asset_path.stem.lower():
+            return im
         return _normalize_emblem_for_dark_card(im)
     except OSError:
         return None
@@ -765,10 +773,12 @@ def generate_repo_social_banners(repo_root: str | Path, force: bool = False) -> 
     subtitle = idx_meta.get("description", "")
     if not subtitle:
         for para in re.split(r"\n\s*\n", idx_text):
+            if para.startswith((" ", "\t")):
+                continue
             p = para.strip()
             if (
                 not p
-                or p.startswith(("..", ":", "="))
+                or p.startswith(("..", ":", "=", "* ", "- "))
                 or "\n===" in p
                 or "\n---" in p
                 or p.lower() == "the works of"
