@@ -35,6 +35,13 @@ Authoritative runbook for ingesting archival treatises, calibrating interactive 
   - **NEVER** embed `py_file` Python construction scripts inside treatise `resources/` folders or `<NNNN>.json` graphic manifests.
   - Executable SymPy/`geometor.model` constructions belong strictly in constructive geometry packages (`geometor/elements`, `geometor/pappus`, `geometor/etc`, `geometor/fundamentals`, `geometor/wildberger`), linked across repositories via `intersphinx` and `:just:` / `:ref:` anchors.
 
+### Universal Completeness & Drawing Capture Mandate (All Books, All Authors)
+- **Complete Canonical Structure on Separate Pages**: Never stop at cherry-picked chapters or propositions. Capture every Book, Chapter, and Proposition of every treatise on its own standalone page with **concise English-first titles** (`Chapter I: ...`, `Proposition XLV: ...`), clean native-language subtitles/tracks, zero repeated translation boilerplate, and all archival witness provenance inside `*-notes.rst`.
+- **Iron Law of Track Purity (Authentic Voice & Complete Transcription — Zero Meta-Commentary on Primary Tracks)**:
+  - **Original-Language Track (`-la`, `-el`, `-de`, `-fr`, `-it`)**: MUST contain a faithful, complete transcription read directly from the 300-DPI primary witness scans—**NEVER** synthetic 2-sentence paraphrases or abbreviated stubs.
+  - **English Track (`-en` / primary `index.rst`)**: MUST contain a faithful, direct translation (or verbatim public-domain English witness) speaking **in the author's own voice** (first-person prose, direct definitions, enunciations, constructions, and demonstrations). **STRICTLY FORBIDDEN** on English primary tracks: third-person commentary *about* the book (*"In Chapter I, Kepler states..."*, *"Here Mascheroni proves..."*, *"In this section, the author explains..."*).
+  - **Summary & Notes Tracks (`-summary`, `-notes`, `commentary.rst`)**: ALL third-person synopses, structural overviews, modern symbolic notation bridges, historical context, and cross-corpus apparatus belong strictly in `summary` and `notes`—never mixed into primary text tracks.
+- **Paired Archival Bitmaps (`<NNNN>.g<k>.png`) + Calibrated Interactive Vectorizations (`<NNNN>.g<k>.svg`)**: Every original woodcut, copperplate, folding plate, and geometric figure MUST be extracted as a tightly cropped, contrast-normalized archival bitmap (`<NNNN>.g<k>.png`) embedded via `.. picture::` AND—for every geometric/mathematical diagram—paired with a calibrated theme-adaptive `.euclid-graphic` interactive SVG (`<NNNN>.g<k>.svg`) wired with `:g:` / `:eq:` highlighting (plus interactive 3D models for spatial polyhedra treatises).
 ---
 
 ## 3. Canonical Directory & Apparatus Architecture
@@ -136,6 +143,10 @@ With centre :g:`A <0255.g1:A>` and distance :g:`AB <0255.g1:/ A B />` let the ci
   - `:just:` — Renders right-aligned/inline justification pills resolved locally or via `intersphinx` (`euclid`, `elements`).
 - **Structural Directives**: `.. enunciation::`, `.. assertion:: [just]`, `.. subclause:: [just]`, `.. step:: <kind> [just]`, `.. signature:: <kind>`, `.. porism::`, `.. lemma::`, `.. scholium::`, `.. qed::`, `.. folio:: <id>`, `.. collapse:: <title>`.
 - **Scholarly Apparatus Roles**: `:person:` (backed by `persons.json`), `:cite:` (backed by `citations.json`), `:term:` (backed by `glossary.json`).
+- **Canonical Book Publication Year Standard (`:year:`, `:year_label:`, `:edition_year:`)**:
+  - **`:year:`** MUST ALWAYS be a **pure signed integer** representing the **author's original composition or first-publication year** (NOT a modern translator/critical-edition year—e.g. Euclid's *Elements* and *Data* use `-300`, not Heath's `1926` or Menge's `1896`; Apollonius's *Conics* uses `-200`, not Heath's `1896`). Negative integers represent BCE (`-300` = 300 BCE); positive integers represent CE (`60`, `1509`, `1952`).
+  - **`:year_label:`** *(optional)*: Clean, Docutils-safe human display string when distinct from the bare integer (e.g. `ca. 300 BCE`, `ca. 60 CE`, `ca. 1257–1259`, `1950–1952`, `1994–present`). **NEVER** begin `:year:` or `:year_label:` with `c. ` (Docutils parses single-letter `c. ` as a lower-alpha enumerated list `<ol start="3">`)—always use `ca. `, `BCE` (never `BC`), and `CE` (never `AD`).
+  - **`:edition_year:`** *(optional)*: Signed/positive integer year of the modern critical edition, translation, or facsimile witness (e.g. `1926` for Heath's *Elements*, `1896` for Menge's *Data* and Heath's *Conics*, `1897` for Heath's *Archimedes*). Never mix modern edition years into `:year:` with `/`.
 
 ---
 

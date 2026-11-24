@@ -536,7 +536,9 @@ def build_epub(
         full_title = f"{book_title}: {book_subtitle}" if book_subtitle else book_title
         author = b.get("author") or "GEOMETOR"
         publisher = b.get("publisher") or "GEOMETOR"
-        year = b.get("year") or ""
+        from .directives.collection import format_year_display
+
+        year = format_year_display(b.get("year"), b.get("year_label"))
         copyright_str = (
             f"{year}, {publisher} • Digital Edition GEOMETOR"
             if year

@@ -68,6 +68,71 @@ def safe_sort_key(value: Any) -> tuple[int, float, str]:
     return (1, 0.0, str(res))
 
 
+YEAR_SORT_KEYS = frozenset(
+    {"year", "year_sort", "published_year", "death_year", "edition_year"}
+)
+
+
+def parse_year_sort_value(value: Any) -> Optional[int]:
+    """Parse an exact signed integer year from numeric or historical year strings.
+
+    BCE/BC years map to negative integers (e.g. ``-300`` for ``ca. 300 BCE``),
+    CE/AD years map to positive integers (e.g. ``150`` for ``ca. 150 CE``).
+    Slash-separated modern edition dates (e.g. ``ca. 300 BCE / 1896``) sort by
+    the primary original work year before the slash.
+    """
+    if value is None or isinstance(value, bool):
+        return None
+    if isinstance(value, (int, float)):
+        return int(value)
+    s = str(value).strip()
+    if not s:
+        return None
+    if re.fullmatch(r"[+-]?\d+", s):
+        return int(s)
+    primary = s.split("/", 1)[0].strip()
+    is_bce = bool(re.search(r"\b(?:bce|bc)\b", primary, re.IGNORECASE))
+    match = re.search(r"[+-]?\d+", primary)
+    if not match:
+        return None
+    num = int(match.group(0))
+    if is_bce and num > 0:
+        return -num
+    return num
+
+
+def format_year_display(year_raw: Any, year_label: Any = None) -> str:
+    """Format a publication year for human display, preferring an explicit ``:year_label:``."""
+    if year_label is not None and str(year_label).strip():
+        return str(year_label).strip()
+    if year_raw is None or isinstance(year_raw, bool):
+        return ""
+    s = str(year_raw).strip()
+    if not s:
+        return ""
+    if re.fullmatch(r"[+-]?\d+", s):
+        num = int(s)
+        if num < 0:
+            return f"{abs(num)} BCE"
+        return str(num)
+    return s
+
+
+def chronological_sort_key(
+    value: Any,
+    tie_breaker: str = "",
+    *,
+    reverse: bool = False,
+) -> tuple[int, int, str]:
+    """Return a chronological sort key placing dated records in signed year order and undated records last."""
+    parsed = parse_year_sort_value(value)
+    tie = tie_breaker.lower()
+    if parsed is None:
+        return (1, 0, tie)
+    return (0, -parsed if reverse else parsed, tie)
+
+
+
 def _normalize_log_meta(docname: str, meta: Dict[str, Any]) -> Dict[str, Any]:
     """Infer :type: log and :date: from docnames under log/<stamp>/ when omitted."""
     if docname.startswith("log/") and docname != "log/index":
@@ -250,10 +315,17 @@ class CollectionDirective(SphinxDirective):
 
             # Best-effort sort for toctree
             if sort_key:
-                def get_sort_val(docname: str) -> Any:
-                    meta = get_early_meta(docname)
-                    return safe_sort_key(meta.get(sort_key))
-                docnames.sort(key=get_sort_val, reverse=reverse)
+                if sort_key in YEAR_SORT_KEYS:
+                    def get_year_sort_val(docname: str) -> tuple[int, int, str]:
+                        meta = get_early_meta(docname)
+                        raw = meta.get("year_sort") if sort_key == "year" and meta.get("year_sort") not in (None, "") else meta.get(sort_key)
+                        return chronological_sort_key(raw, docname, reverse=reverse)
+                    docnames.sort(key=get_year_sort_val)
+                else:
+                    def get_sort_val(docname: str) -> Any:
+                        meta = get_early_meta(docname)
+                        return safe_sort_key(meta.get(sort_key))
+                    docnames.sort(key=get_sort_val, reverse=reverse)
 
         # Create a toctree with discovered items matching this collection
         # This ensures they are included in the build and not orphaned.
@@ -443,10 +515,35 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
                         item.setdefault('categories', item['category'])
                     if 'languages' in item and isinstance(item['languages'], str):
                         item['languages'] = [lang.strip() for lang in item['languages'].split(',') if lang.strip()]
+
+                    raw_year_sort = (
+                        item.get('year_sort')
+                        if item.get('year_sort') not in (None, '')
+                        else item.get('year')
+                    )
+                    parsed_year = parse_year_sort_value(raw_year_sort)
+                    if parsed_year is not None:
+                        item['year_sort'] = parsed_year
+                    year_disp = format_year_display(item.get('year'), item.get('year_label'))
+                    if year_disp:
+                        item['year_display'] = year_disp
+                    parsed_death = parse_year_sort_value(item.get('death_year'))
+                    if parsed_death is not None:
+                        item['death_year_sort'] = parsed_death
+
                     collection_items.append(item)
 
         if sort_key:
-            collection_items.sort(key=lambda x: safe_sort_key(x.get(sort_key)), reverse=reverse)
+            if sort_key in YEAR_SORT_KEYS:
+                collection_items.sort(
+                    key=lambda x: chronological_sort_key(
+                        x.get('year_sort') if sort_key == 'year' and 'year_sort' in x else x.get(sort_key),
+                        str(x.get('title', '')),
+                        reverse=reverse,
+                    )
+                )
+            else:
+                collection_items.sort(key=lambda x: safe_sort_key(x.get(sort_key)), reverse=reverse)
 
         if limit:
             collection_items = collection_items[:limit]
