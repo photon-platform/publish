@@ -15,6 +15,7 @@ Attributes
 .. autoapisummary::
 
    photon_platform.publish.directives.collection.picture_node
+   photon_platform.publish.directives.collection.YEAR_SORT_KEYS
 
 
 Classes
@@ -37,6 +38,9 @@ Functions
    photon_platform.publish.directives.collection.to_numeric
    photon_platform.publish.directives.collection.safe_numeric
    photon_platform.publish.directives.collection.safe_sort_key
+   photon_platform.publish.directives.collection.parse_year_sort_value
+   photon_platform.publish.directives.collection.format_year_display
+   photon_platform.publish.directives.collection.chronological_sort_key
    photon_platform.publish.directives.collection.render_node_html
    photon_platform.publish.directives.collection.process_collections
    photon_platform.publish.directives.collection.collect_metadata
@@ -77,6 +81,28 @@ Module Contents
 .. py:function:: safe_sort_key(value: Any) -> tuple[int, float, str]
 
    Return a type-safe comparable tuple for sorting mixed numeric and string metadata.
+
+
+.. py:data:: YEAR_SORT_KEYS
+
+.. py:function:: parse_year_sort_value(value: Any) -> Optional[int]
+
+   Parse an exact signed integer year from numeric or historical year strings.
+
+   BCE/BC years map to negative integers (e.g. ``-300`` for ``ca. 300 BCE``),
+   CE/AD years map to positive integers (e.g. ``150`` for ``ca. 150 CE``).
+   Slash-separated modern edition dates (e.g. ``ca. 300 BCE / 1896``) sort by
+   the primary original work year before the slash.
+
+
+.. py:function:: format_year_display(year_raw: Any, year_label: Any = None) -> str
+
+   Format a publication year for human display, preferring an explicit ``:year_label:``.
+
+
+.. py:function:: chronological_sort_key(value: Any, tie_breaker: str = '', *, reverse: bool = False) -> tuple[int, int, str]
+
+   Return a chronological sort key placing dated records in signed year order and undated records last.
 
 
 .. py:class:: PendingCollection(rawsource: str = '', *children, **attributes: Any)
