@@ -25,6 +25,7 @@ Attributes
    photon_platform.publish.global_conf.ogp_social_cards
    photon_platform.publish.global_conf.graphviz_output_format
    photon_platform.publish.global_conf.intersphinx_timeout
+   photon_platform.publish.global_conf.mathjax4_config
    photon_platform.publish.global_conf.autoapi_dirs
    photon_platform.publish.global_conf.pyproject_data
    photon_platform.publish.global_conf.autoapi_ignore
@@ -106,6 +107,8 @@ Module Contents
 .. py:data:: intersphinx_timeout
    :value: 3
 
+
+.. py:data:: mathjax4_config
 
 .. py:data:: autoapi_dirs
 
