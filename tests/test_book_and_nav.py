@@ -146,3 +146,76 @@ def test_book_title_page_tracks_no_bleed_and_page_labels() -> None:
     assert ">Conspectus<" in html_la
     assert ">Index Nominum<" in html_la
 
+
+def test_etc_multitrack_and_mathjax_unification() -> None:
+    from pathlib import Path
+
+    from photon_platform.publish.book import _update_book_prev_next
+
+    found = {
+        "centers/c-00001-00019/x-00001/index",
+        "centers/c-00001-00019/x-00001/lines",
+        "centers/c-00001-00019/x-00001/relations",
+        "centers/c-00001-00019/x-00001/notes",
+        "centers/c-00001-00019/x-00001/code",
+        "centers/c-00001-00019/x-00002/index",
+        "centers/c-00001-00019/x-00002/lines",
+        "centers/c-00001-00019/x-00002/relations",
+        "centers/c-00001-00019/x-00002/notes",
+        "centers/c-00001-00019/x-00002/code",
+    }
+    env = SimpleNamespace(
+        found_docs=found,
+        metadata={
+            "centers/c-00001-00019/x-00001/index": {
+                "tracks": "Overview: index | Lines: lines | Relations: relations | Notes: notes | Code: code"
+            },
+            "centers/c-00001-00019/x-00002/index": {
+                "tracks": "Overview: index | Lines: lines | Relations: relations | Notes: notes | Code: code"
+            },
+        },
+        titles={doc: SimpleNamespace(astext=lambda d=doc: d) for doc in found},
+    )
+    tracks = detect_companion_tracks(env, "centers/c-00001-00019/x-00001/lines")
+    assert [(t["key"], t["label"], t["active"]) for t in tracks] == [
+        ("index", "Overview", False),
+        ("lines", "Lines", True),
+        ("relations", "Relations", False),
+        ("notes", "Notes", False),
+        ("code", "Code", False),
+    ]
+
+    # Verify track-preserving Prev/Next steps from X_1/lines -> X_2/lines
+    relations = {
+        "centers/c-00001-00019/x-00001/index": [None, None, "centers/c-00001-00019/x-00001/lines"],
+        "centers/c-00001-00019/x-00001/lines": [
+            "centers/c-00001-00019/x-00001/index",
+            "centers/c-00001-00019/x-00001/index",
+            "centers/c-00001-00019/x-00002/index",
+        ],
+        "centers/c-00001-00019/x-00002/index": [
+            None,
+            "centers/c-00001-00019/x-00001/lines",
+            "centers/c-00001-00019/x-00002/lines",
+        ],
+    }
+    builder = SimpleNamespace(
+        relations=relations,
+        get_relative_uri=lambda from_doc, to_doc: f"{to_doc}.html",
+    )
+    app = SimpleNamespace(builder=builder, env=env)
+    ctx = {"prev": None, "next": None}
+    _update_book_prev_next(app, "centers/c-00001-00019/x-00001/lines", ctx)
+    assert ctx["next"]["link"].endswith("x-00002/lines.html")
+
+    # Verify MathJax v4 standardization (no KaTeX in foundation layout or folio_review base)
+    pkg_root = Path(__file__).resolve().parents[1] / "src" / "photon_platform" / "publish"
+    layout_html = (pkg_root / "themes" / "foundation" / "layout.html").read_text(encoding="utf-8")
+    assert "katex" not in layout_html.lower()
+    folio_base = (pkg_root / "folio_review" / "templates" / "base.html").read_text(encoding="utf-8")
+    assert "katex" not in folio_base.lower()
+    assert "mathjax@4/tex-mml-chtml.js" in folio_base
+    excerpt_html = (pkg_root / "themes" / "foundation" / "article" / "excerpt.html").read_text(encoding="utf-8")
+    assert 'loading="lazy"' in excerpt_html
+
+

@@ -6,6 +6,7 @@
 <style>
   /* Interactive Geometric Text References */
   .folio-book-page .geom-interactive-ref,
+  .folio-book-page mjx-container.geom-interactive-ref,
   .folio-book-page .katex.geom-interactive-ref {
     cursor: pointer;
     position: relative;
@@ -15,6 +16,7 @@
     transition: all 0.15s ease-in-out;
   }
   .folio-book-page .geom-interactive-ref:hover,
+  .folio-book-page mjx-container.geom-interactive-ref:hover,
   .folio-book-page .katex.geom-interactive-ref:hover {
     border-bottom: 1.5px solid #dc2626 !important;
   }
@@ -22,6 +24,8 @@
   /* Active Highlight: Turning text RED without glow */
   .folio-book-page .geom-highlight-text,
   .folio-book-page .geom-highlight-text *,
+  .folio-book-page mjx-container.geom-highlight-text,
+  .folio-book-page mjx-container.geom-highlight-text *,
   .folio-book-page .katex.geom-highlight-text,
   .folio-book-page .katex.geom-highlight-text *,
   .geom-highlight-text,
@@ -1509,26 +1513,31 @@
     applyTransform();
   }, { passive: false });
 
-  // Render KaTeX Math
-  function renderAllMath() {
-    ['mdView-rendered', 'notesView-rendered'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el && window.renderMathInElement) {
-        try {
-          renderMathInElement(el, {
-            delimiters: [
-              { left: '$$', right: '$$', display: true },
-              { left: '$', right: '$', display: false },
-              { left: '\\(', right: '\\)', display: false },
-              { left: '\\[', right: '\\]', display: true }
-            ],
-            throwOnError: false
+  // Render MathJax v4 Math (Unified with Sphinx Codices)
+  function renderAllMath(onDone) {
+    const els = ['mdView-rendered', 'notesView-rendered']
+      .map(id => document.getElementById(id))
+      .filter(Boolean);
+    if (!els.length) {
+      if (typeof onDone === 'function') onDone();
+      return;
+    }
+    const runTypeset = () => {
+      if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+        window.MathJax.typesetPromise(els)
+          .catch(e => console.warn('MathJax render error:', e))
+          .finally(() => {
+            if (typeof onDone === 'function') onDone();
           });
-        } catch (e) {
-          console.warn('KaTeX render error:', e);
-        }
+      } else if (typeof onDone === 'function') {
+        onDone();
       }
-    });
+    };
+    if (window.MathJax && window.MathJax.startup && window.MathJax.startup.promise) {
+      window.MathJax.startup.promise.then(runTypeset);
+    } else {
+      runTypeset();
+    }
   }
 
   // Save Review / Vetting
@@ -2128,13 +2137,13 @@
         });
       });
 
-      // 2. Contextual fallback for untagged KaTeX math elements
-      const katexEls = container.querySelectorAll('.katex');
-      katexEls.forEach(kel => {
+      // 2. Contextual fallback for untagged MathJax / KaTeX math elements
+      const mathEls = container.querySelectorAll('mjx-container, .katex');
+      mathEls.forEach(kel => {
         if (kel.closest('[data-ref]') || kel.closest('.euclid-figure-container')) return;
 
         const annot = kel.querySelector('annotation');
-        const rawTex = annot ? annot.textContent.trim() : kel.innerText.trim();
+        const rawTex = annot ? annot.textContent.trim() : (kel.textContent || kel.innerText || '').trim();
         const tokens = rawTex.split(/[,;\s]+/).map(t => t.replace(/[^A-Za-z0-9]/g, '')).filter(Boolean);
 
         const resolvedRefs = tokens.map(t => this.inferContextualRef(kel, t)).filter(Boolean);
@@ -2556,8 +2565,8 @@
   // Init
   document.addEventListener('DOMContentLoaded', () => {
     applyTypographySettings();
-    renderAllMath();
     EuclidInteractive.init();
+    renderAllMath(() => EuclidInteractive.bindTextElements());
     ScholarlyApparatus.init();
 
     const scanImg = document.getElementById('folioScanImg');

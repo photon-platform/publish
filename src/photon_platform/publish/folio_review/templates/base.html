@@ -39,10 +39,35 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- KaTeX for Math Rendering -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <!-- MathJax v4 for Math Rendering (Unified with Sphinx Codices) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)'], ['$', '$']],
+        displayMath: [['\\[', '\\]'], ['$$', '$$']],
+      },
+      options: {
+        enableComplexity: true,
+        makeCollapsible: true,
+        menuOptions: {
+          settings: {
+            zoom: 'Click',
+            zscale: '200%',
+            collapsible: true,
+            enrich: true,
+            speech: false,
+            braille: false,
+            assistiveMml: false,
+          }
+        }
+      },
+      output: {
+        displayOverflow: 'linebreak',
+        linebreaks: { inline: true }
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
 
   <!-- Google Fonts: EB Garamond -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -103,9 +128,8 @@
     .folio-book-page i,
     .folio-book-page td,
     .folio-book-page th,
-    .folio-book-page .katex,
-    .folio-book-page .katex-display,
-    .folio-book-page .katex * {
+    .folio-book-page mjx-container,
+    .folio-book-page mjx-container * {
       color: #000000 !important;
     }
 

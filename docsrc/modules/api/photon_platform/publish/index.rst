@@ -70,7 +70,7 @@ Package Contents
 
 
 .. py:data:: __version__
-   :value: '0.4.8'
+   :value: '0.4.12'
 
 
 .. py:data:: __licence__

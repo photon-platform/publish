@@ -164,6 +164,32 @@ ogp_social_cards = {"enable": False}
 graphviz_output_format = "svg"
 intersphinx_timeout = 3
 
+mathjax4_config = {
+    "options": {
+        "ignoreHtmlClass": ".*|etc-lazy-math",
+        "processHtmlClass": "math|arithmatex",
+        "enableComplexity": True,
+        "makeCollapsible": True,
+        "menuOptions": {
+            "settings": {
+                "zoom": "Click",
+                "zscale": "200%",
+                "collapsible": True,
+                "enrich": True,
+                "speech": False,
+                "braille": False,
+                "assistiveMml": False,
+            }
+        },
+    },
+    "output": {
+        "displayOverflow": "linebreak",
+        "linebreaks": {
+            "inline": True,
+        },
+    },
+}
+
 # Default fallback
 autoapi_dirs = [os.path.abspath('../src')]
 

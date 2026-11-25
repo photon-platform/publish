@@ -15,6 +15,7 @@ Attributes
 .. autoapisummary::
 
    photon_platform.publish.directives.collection.picture_node
+   photon_platform.publish.directives.collection.YEAR_SORT_KEYS
 
 
 Classes
@@ -24,6 +25,9 @@ Classes
 
    photon_platform.publish.directives.collection.PendingCollection
    photon_platform.publish.directives.collection.CollectionDirective
+   photon_platform.publish.directives.collection.PeopleDirectoryDirective
+   photon_platform.publish.directives.collection.ReferenceDirectoryDirective
+   photon_platform.publish.directives.collection.SourceDirectoryDirective
 
 
 Functions
@@ -34,6 +38,9 @@ Functions
    photon_platform.publish.directives.collection.to_numeric
    photon_platform.publish.directives.collection.safe_numeric
    photon_platform.publish.directives.collection.safe_sort_key
+   photon_platform.publish.directives.collection.parse_year_sort_value
+   photon_platform.publish.directives.collection.format_year_display
+   photon_platform.publish.directives.collection.chronological_sort_key
    photon_platform.publish.directives.collection.render_node_html
    photon_platform.publish.directives.collection.process_collections
    photon_platform.publish.directives.collection.collect_metadata
@@ -76,6 +83,28 @@ Module Contents
    Return a type-safe comparable tuple for sorting mixed numeric and string metadata.
 
 
+.. py:data:: YEAR_SORT_KEYS
+
+.. py:function:: parse_year_sort_value(value: Any) -> Optional[int]
+
+   Parse an exact signed integer year from numeric or historical year strings.
+
+   BCE/BC years map to negative integers (e.g. ``-300`` for ``ca. 300 BCE``),
+   CE/AD years map to positive integers (e.g. ``150`` for ``ca. 150 CE``).
+   Slash-separated modern edition dates (e.g. ``ca. 300 BCE / 1896``) sort by
+   the primary original work year before the slash.
+
+
+.. py:function:: format_year_display(year_raw: Any, year_label: Any = None) -> str
+
+   Format a publication year for human display, preferring an explicit ``:year_label:``.
+
+
+.. py:function:: chronological_sort_key(value: Any, tie_breaker: str = '', *, reverse: bool = False) -> tuple[int, int, str]
+
+   Return a chronological sort key placing dated records in signed year order and undated records last.
+
+
 .. py:class:: PendingCollection(rawsource: str = '', *children, **attributes: Any)
 
    Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
@@ -96,7 +125,7 @@ Module Contents
 
    .. py:attribute:: has_content
       :type:  bool
-      :value: False
+      :value: True
 
 
       May the directive have content?
@@ -113,7 +142,7 @@ Module Contents
       Process the collection directive.
 
       Instead of rendering immediately, this method:
-      1. Discovers all relevant files respecting the Container Boundary Rule.
+      1. Discovers all relevant files respecting the Container Boundary Rule or explicit doc list.
       2. Filters by :type: early before claiming documents in the toctree.
       3. Adds them to a hidden toctree so Sphinx knows about them (fixes "not in toctree" warnings).
       4. Returns a PendingCollection node to defer rendering until metadata is ready.
@@ -199,6 +228,72 @@ Module Contents
    :param app: The Sphinx application instance.
    :param docname: The name of the document.
    :param source: The list of source strings (mutable).
+
+
+.. py:class:: PeopleDirectoryDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`CollectionDirective`
+
+
+   Directive to insert a searchable, sortable directory of people records.
+
+
+   .. py:method:: run() -> List[docutils.nodes.Node]
+
+      Process the collection directive.
+
+      Instead of rendering immediately, this method:
+      1. Discovers all relevant files respecting the Container Boundary Rule or explicit doc list.
+      2. Filters by :type: early before claiming documents in the toctree.
+      3. Adds them to a hidden toctree so Sphinx knows about them (fixes "not in toctree" warnings).
+      4. Returns a PendingCollection node to defer rendering until metadata is ready.
+
+      :returns: A list containing the PendingCollection node and a hidden toctree node.
+
+
+
+.. py:class:: ReferenceDirectoryDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`CollectionDirective`
+
+
+   Directive to insert a searchable, sortable directory of reference/book records.
+
+
+   .. py:method:: run() -> List[docutils.nodes.Node]
+
+      Process the collection directive.
+
+      Instead of rendering immediately, this method:
+      1. Discovers all relevant files respecting the Container Boundary Rule or explicit doc list.
+      2. Filters by :type: early before claiming documents in the toctree.
+      3. Adds them to a hidden toctree so Sphinx knows about them (fixes "not in toctree" warnings).
+      4. Returns a PendingCollection node to defer rendering until metadata is ready.
+
+      :returns: A list containing the PendingCollection node and a hidden toctree node.
+
+
+
+.. py:class:: SourceDirectoryDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`CollectionDirective`
+
+
+   Directive to insert a searchable, sortable directory of primary source witnesses.
+
+
+   .. py:method:: run() -> List[docutils.nodes.Node]
+
+      Process the collection directive.
+
+      Instead of rendering immediately, this method:
+      1. Discovers all relevant files respecting the Container Boundary Rule or explicit doc list.
+      2. Filters by :type: early before claiming documents in the toctree.
+      3. Adds them to a hidden toctree so Sphinx knows about them (fixes "not in toctree" warnings).
+      4. Returns a PendingCollection node to defer rendering until metadata is ready.
+
+      :returns: A list containing the PendingCollection node and a hidden toctree node.
+
 
 
 .. py:function:: setup(app: Any) -> Dict[str, Any]

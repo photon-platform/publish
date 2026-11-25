@@ -6,7 +6,7 @@
 {%- if article.excerpt_svg_content %}
               {{ article.excerpt_svg_content }}
 {%- else %}
-              <img src="{{ pathto(article.excerpt_figure_filename, 1) }}" alt="{{ article.excerpt_figure_alt }}">
+              <img src="{{ pathto(article.excerpt_figure_filename, 1) }}" alt="{{ article.excerpt_figure_alt }}" loading="lazy" decoding="async">
 {%- endif %}
             </a>
           </figure>

@@ -71,6 +71,8 @@ _TRACK_SUFFIX_PATTERNS: List[Tuple[str, str, str]] = [
     (r"^(.+)[._-]pseudocode$", "pseudocode", "Pseudocode"),
     (r"^(.+)[._-]video$", "video", "Video"),
     (r"^(.+)[._-]code$", "code", "Code"),
+    (r"^(.+)[._-]lines$", "lines", "Lines"),
+    (r"^(.+)[._-]relations$", "relations", "Relations"),
     (r"^(.+)[._-]heath$", "heath", "Heath"),
     (r"^(.+)[._-]en$", "en", "English"),
     (r"^(.+)[._-]el$", "el", "Greek"),
@@ -99,6 +101,8 @@ def _extract_unit_stem(basename: str, doc_dir: str) -> str:
         "pseudocode",
         "video",
         "code",
+        "lines",
+        "relations",
         "heath",
         "commentary",
         "summary",
@@ -198,6 +202,22 @@ def detect_companion_tracks(env: Any, pagename: str) -> List[Dict[str, Any]]:
             _cands(
                 [_qual(f"{stem}.proposition")],
                 [_qual("index"), _qual("pseudocode"), _qual("proposition")],
+            ),
+        ),
+        (
+            "lines",
+            "Lines",
+            _cands(
+                [_qual(f"{stem}.lines"), _qual(f"{stem}_lines"), _qual(f"{stem}-lines")],
+                [_qual("lines")],
+            ),
+        ),
+        (
+            "relations",
+            "Relations",
+            _cands(
+                [_qual(f"{stem}.relations"), _qual(f"{stem}_relations"), _qual(f"{stem}-relations")],
+                [_qual("relations")],
             ),
         ),
         (
@@ -976,6 +996,8 @@ def _enhance_epub_body_html(
 _AUX_TRACK_BASENAMES: Set[str] = {
     "video",
     "code",
+    "lines",
+    "relations",
     "heath",
     "commentary",
     "summary",
@@ -987,7 +1009,7 @@ _AUX_TRACK_BASENAMES: Set[str] = {
 }
 
 _AUX_TRACK_PATTERNS: List[re.Pattern[str]] = [
-    re.compile(r"^.+[._-](?:video|code|heath|commentary|summary|notes|folio|it|de|la)$"),
+    re.compile(r"^.+[._-](?:video|code|lines|relations|heath|commentary|summary|notes|folio|it|de|la)$"),
     re.compile(r"^translation-notes-.+$"),
 ]
 
@@ -1072,7 +1094,7 @@ def _update_book_prev_next(app: Any, pagename: str, context: Dict[str, Any]) -> 
                     break
         if (
             link_doc == target_doc
-            and cur_basename in ("video", "code", "heath")
+            and cur_basename in ("video", "code", "heath", "lines", "relations", "notes")
             and os.path.basename(target_doc) == "index"
         ):
             target_dir = os.path.dirname(target_doc)

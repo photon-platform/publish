@@ -76,6 +76,7 @@ Functions
    photon_platform.publish.directives.elements.depart_lemma_node
    photon_platform.publish.directives.elements.visit_scholium_node
    photon_platform.publish.directives.elements.depart_scholium_node
+   photon_platform.publish.directives.elements.format_folio_display
    photon_platform.publish.directives.elements.visit_folio_node
    photon_platform.publish.directives.elements.depart_folio_node
    photon_platform.publish.directives.elements.visit_collapse_node
@@ -297,6 +298,15 @@ Module Contents
 .. py:function:: depart_scholium_node(self: Any, node: docutils.nodes.Element) -> None
 
    HTML departure visitor for scholium_node.
+
+
+.. py:function:: format_folio_display(raw_folio_id: str, raw_page: str = '', *, masthead: bool = False) -> Tuple[str, str]
+
+   Return ``(visible_label, hover_title)`` for a folio milestone or masthead badge.
+
+   Strips redundant ``<edition_slug>:`` book prefixes (readers already know which
+   book they are in) and verbose parenthetical descriptions from the visible text,
+   while preserving full witness provenance in the hover ``title`` tooltip.
 
 
 .. py:function:: visit_folio_node(self: Any, node: docutils.nodes.Element) -> None
