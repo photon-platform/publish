@@ -1,0 +1,28 @@
+{# book_outline.html — Auto-generated full-book hierarchical outline page #}
+{%- extends "book_layout.html" %}
+{%- block book_content %}
+        <section class="book-outline-page" data-book-outline-root>
+          <header class="book-outline-page-header">
+            <p class="book-outline-kicker">Complete Book Outline</p>
+            <h1>{{ book_title }}</h1>
+{%- if book_subtitle %}
+            <p class="rubric">{{ book_subtitle }}</p>
+{%- endif %}
+            <p class="book-outline-meta">
+              <span class="book-outline-count">{{ outline_total_units }} units</span>
+              <span class="book-track-sep">&middot;</span>
+              <a href="{{ pathto(book_root) }}">Return to Title Page &rarr;</a>
+            </p>
+          </header>
+          <div class="book-outline-controls">
+            <input type="search" class="book-outline-search" placeholder="Filter chapters, sections, propositions, folios..." aria-label="Filter outline" />
+            <div class="book-outline-btn-group">
+              <button type="button" class="book-outline-ctrl-btn" data-outline-expand>Expand all</button>
+              <button type="button" class="book-outline-ctrl-btn" data-outline-collapse>Collapse all</button>
+            </div>
+          </div>
+          <nav class="book-outline-tree" aria-label="Complete Book Outline">
+            {{ outline_html | safe }}
+          </nav>
+        </section>
+{%- endblock %}

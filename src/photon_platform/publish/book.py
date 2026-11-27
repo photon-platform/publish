@@ -174,6 +174,7 @@ def detect_companion_tracks(env: Any, pagename: str) -> List[Dict[str, Any]]:
 
     # Determine if bare `<stem>` is the Latin/original primary track (e.g. Hoenen `caput-1/caput-1`)
     has_hyphen_or_under_en = _qual(f"{stem}-en") in found_docs or _qual(f"{stem}_en") in found_docs
+    has_separate_en = has_hyphen_or_under_en or _qual(f"{stem}.en") in found_docs or _qual("en") in found_docs
     has_elements_siblings = (
         any(_qual(name) in found_docs for name in ("heath", f"{stem}.heath"))
         or os.path.basename(doc_dir).startswith("G.")
@@ -182,22 +183,74 @@ def detect_companion_tracks(env: Any, pagename: str) -> List[Dict[str, Any]]:
         _qual(name) in found_docs
         for name in ("commentary", f"{stem}.commentary", f"{stem}_commentary", f"{stem}-commentary")
     )
-
-    if has_elements_siblings:
-        index_label = "Pseudocode"
-    elif has_proposition_siblings:
-        index_label = "Proposition"
-    else:
-        index_label = "Overview"
+    has_bare_lang_siblings = any(
+        _qual(lang) in found_docs for lang in ("el", "grc", "la", "de", "fr", "it", "da")
+    )
+    has_title_lang_siblings = any(
+        _qual(f"title-{lang}") in found_docs for lang in ("el", "grc", "la", "de", "fr", "it", "da")
+    )
+    has_summary_or_notes = any(
+        _qual(name) in found_docs for name in ("summary", "notes")
+    )
 
     is_unit_dir = not doc_dir or stem == os.path.basename(doc_dir)
+    is_book_title_page = (
+        page_meta.get("type") in ("book", "book_title")
+        or "book_title" in page_meta
+        or basename.startswith("title-")
+    )
+    # Book Title Page auto-detection: `index` + `title-<lang>` -> English | <Language>
+    if is_book_title_page and has_title_lang_siblings and _qual("index") in found_docs:
+        title_tracks: List[Dict[str, Any]] = [
+            {
+                "key": "en",
+                "label": "English",
+                "docname": _qual("index"),
+                "active": _qual("index") == pagename,
+            }
+        ]
+        for lang_code, lang_label in (
+            ("el", "Greek"),
+            ("grc", "Greek"),
+            ("la", "Latin"),
+            ("de", "German"),
+            ("fr", "French"),
+            ("it", "Italian"),
+            ("da", "Danish"),
+        ):
+            cand = _qual(f"title-{lang_code}")
+            if cand in found_docs:
+                title_tracks.append(
+                    {
+                        "key": "el" if lang_code == "grc" else lang_code,
+                        "label": lang_label,
+                        "docname": cand,
+                        "active": cand == pagename,
+                    }
+                )
+        if len(title_tracks) > 1:
+            return title_tracks
+
+    # Determine canonical key & label for `index` in a folder-per-unit directory
+    index_meta = _get_doc_metadata(env, _qual("index")) if _qual("index") in found_docs else {}
+    index_type = str(index_meta.get("type", "")).strip().lower()
+    is_container_index = index_type in _CONTAINER_TYPES or "book_title" in index_meta
+
+    if has_elements_siblings:
+        index_key, index_label = "proposition", "Pseudocode"
+    elif has_proposition_siblings:
+        index_key, index_label = "proposition", "Proposition"
+    elif (has_bare_lang_siblings or (has_summary_or_notes and not is_container_index)) and not has_separate_en:
+        index_key, index_label = "en", "English"
+    else:
+        index_key, index_label = "proposition", "Overview"
 
     def _cands(stemmed: List[str], bare: List[str]) -> List[str]:
         return stemmed + (bare if is_unit_dir else [])
 
     candidate_specs: List[Tuple[str, str, List[str]]] = [
         (
-            "proposition",
+            index_key,
             index_label,
             _cands(
                 [_qual(f"{stem}.proposition")],
@@ -244,11 +297,7 @@ def detect_companion_tracks(env: Any, pagename: str) -> List[Dict[str, Any]]:
                 [_qual("heath")],
             ),
         ),
-        (
-            "la",
-            "Latin",
-            [_qual(stem)] if has_hyphen_or_under_en and stem != "index" else [],
-        ),
+        # English ALWAYS precedes original-language tracks (including legacy bare-stem Latin in Hoenen)
         (
             "en",
             "English",
@@ -256,6 +305,11 @@ def detect_companion_tracks(env: Any, pagename: str) -> List[Dict[str, Any]]:
                 [_qual(f"{stem}.en"), _qual(f"{stem}_en"), _qual(f"{stem}-en")],
                 [_qual("en")],
             ),
+        ),
+        (
+            "la",
+            "Latin",
+            [_qual(stem)] if has_hyphen_or_under_en and stem != "index" else [],
         ),
         (
             "el",
@@ -478,8 +532,11 @@ def resolve_book_context(
             is_book_page = True
             if book_root is None:
                 book_root = anc
-            # Merge book-level configuration down the hierarchy
-            for k in ("book_title", "book_subtitle", "book_theme", "author", "title", "subtitle"):
+            # Preserve outermost book-level configuration (never let sub-books override book_title)
+            for k in ("book_title", "book_subtitle", "book_theme", "author"):
+                if k in meta and meta[k]:
+                    book_meta.setdefault(k, meta[k])
+            for k in ("title", "subtitle"):
                 if k in meta and meta[k]:
                     book_meta[k] = meta[k]
 
@@ -638,6 +695,10 @@ def resolve_book_context(
         or _shorten_book_home_label(str(book_title or ""))
     )
 
+    book_dir = os.path.dirname(book_root)
+    outline_doc = f"{book_dir}/outline" if book_dir else "outline"
+    outline_data_js = f"{book_dir}/outline-data.js" if book_dir else "outline-data.js"
+
     return {
         "is_book_page": True,
         "book_root": book_root,
@@ -645,6 +706,8 @@ def resolve_book_context(
         "book_short_title": book_short_title,
         "book_subtitle": book_subtitle,
         "book_theme": book_theme,
+        "book_outline_doc": outline_doc,
+        "book_outline_data_js": outline_data_js,
         "folio": folio,
         "folio_url": folio_url or "",
         "page": page_num,
@@ -1003,15 +1066,54 @@ _AUX_TRACK_BASENAMES: Set[str] = {
     "summary",
     "notes",
     "folio",
-    "it",
-    "de",
+    "el",
+    "grc",
     "la",
+    "de",
+    "fr",
+    "it",
+    "da",
+    "book_title",
 }
 
 _AUX_TRACK_PATTERNS: List[re.Pattern[str]] = [
-    re.compile(r"^.+[._-](?:video|code|lines|relations|heath|commentary|summary|notes|folio|it|de|la)$"),
+    re.compile(
+        r"^.+[._-](?:video|code|lines|relations|heath|commentary|summary|notes|folio|el|grc|la|de|fr|it|da)$"
+    ),
     re.compile(r"^translation-notes-.+$"),
+    re.compile(r"^title-(?:el|grc|la|de|fr|it|da)$"),
 ]
+
+_COMPANION_AUTO_TOCTREE_STEMS: Tuple[str, ...] = (
+    "el",
+    "grc",
+    "la",
+    "de",
+    "fr",
+    "it",
+    "da",
+    "summary",
+    "notes",
+    "commentary",
+    "folio",
+    "title-el",
+    "title-grc",
+    "title-la",
+    "title-de",
+    "title-fr",
+    "title-it",
+    "title-da",
+)
+
+_OUTLINE_SKIP_BASENAMES: Set[str] = {
+    "bibliography",
+    "glossary",
+    "persons",
+    "concordance",
+    "agent-chronicle",
+    "scan-inventory",
+    "outline",
+}
 
 
 def _is_auxiliary_track_doc(env: Any, docname: str) -> bool:
@@ -1025,8 +1127,16 @@ def _is_auxiliary_track_doc(env: Any, docname: str) -> bool:
         if pat.match(basename):
             return True
     meta = _get_doc_metadata(env, docname)
-    if str(meta.get("type", "")).strip().lower() in _AUX_TRACK_BASENAMES:
+    if str(meta.get("type", "")).strip().lower() in (_AUX_TRACK_BASENAMES | {"greek", "translation"}):
         return True
+    # Legacy bare-stem original track (e.g., Hoenen `caput-1/caput-1` when `caput-1/caput-1-en` exists)
+    found_docs: Set[str] = set(getattr(env, "found_docs", set()))
+    if found_docs and basename != "index":
+        doc_dir = os.path.dirname(docname)
+        en_hyphen = f"{doc_dir}/{basename}-en" if doc_dir else f"{basename}-en"
+        en_under = f"{doc_dir}/{basename}_en" if doc_dir else f"{basename}_en"
+        if en_hyphen in found_docs or en_under in found_docs:
+            return True
     return False
 
 
@@ -1197,16 +1307,24 @@ def resolve_page_breadcrumbs(
             doc_dir = os.path.dirname(pagename)
             tracks = list(context.get("book_tracks") or [])
 
-            # Determine primary reading doc for current unit
+            # Determine primary reading doc for current unit (always prefer English / index first)
             primary_track_doc = pagename
             if tracks:
                 preferred = next(
                     (
                         t["docname"]
                         for t in tracks
-                        if t.get("key") in ("proposition", "en", "la", "el", "de", "it", "fr")
+                        if t.get("key") in ("index", "en", "proposition")
+                        or str(t.get("label", "")).strip().lower() == "english"
                     ),
-                    tracks[0]["docname"],
+                    next(
+                        (
+                            t["docname"]
+                            for t in tracks
+                            if t.get("key") in ("la", "el", "de", "it", "fr", "da")
+                        ),
+                        tracks[0]["docname"],
+                    ),
                 )
                 primary_track_doc = preferred
 
@@ -1359,6 +1477,361 @@ def resolve_page_breadcrumbs(
     }
 
 
+def _is_book_subtree_source(srcdir: str, docname: str, source_text: str) -> bool:
+    """Return True if `docname` declares `:layout: book` / `:book_title:` or inherits it from an ancestor."""
+    head_lines = source_text.splitlines()[:30]
+    for line in head_lines:
+        s = line.strip()
+        if s.startswith(":layout:") and s.split(":", 2)[2].strip() == "book":
+            return True
+        if s.startswith(":book_title:"):
+            return True
+    parts = docname.split("/")
+    for i in range(1, len(parts)):
+        anc = "/".join(parts[:i]) + "/index.rst"
+        anc_path = os.path.join(srcdir, anc)
+        if os.path.isfile(anc_path):
+            m = peek_metadata(anc_path)
+            if m.get("layout") == "book" or "book_title" in m:
+                return True
+    root_idx = os.path.join(srcdir, "index.rst")
+    if os.path.isfile(root_idx):
+        m = peek_metadata(root_idx)
+        if m.get("layout") == "book" or "book_title" in m:
+            return True
+    return False
+
+
+def inject_companion_tracks_toctree(app: Any, docname: str, source: List[str]) -> None:
+    """Automatically register bare sibling companion tracks into a hidden toctree on book `index.rst` files.
+
+    Eliminates manual hidden `.. toctree::` boilerplate for `la.rst`, `el.rst`, `de.rst`,
+    `fr.rst`, `it.rst`, `da.rst`, `summary.rst`, `notes.rst`, `commentary.rst`, `folio.rst`,
+    and `title-<lang>.rst` files inside `:layout: book` directories.
+    """
+    if not source or (docname != "index" and not docname.endswith("/index")):
+        return
+    env = getattr(app, "env", None)
+    srcdir = getattr(env, "srcdir", None) if env is not None else None
+    if not srcdir:
+        return
+    text = source[0]
+    if not _is_book_subtree_source(str(srcdir), docname, text):
+        return
+
+    doc_dir = os.path.dirname(docname)
+    abs_dir = os.path.join(str(srcdir), doc_dir) if doc_dir else str(srcdir)
+    if not os.path.isdir(abs_dir):
+        return
+
+    # Collect existing toctree entries already listed in this file
+    existing_entries: Set[str] = set()
+    in_toc = False
+    toc_indent = 0
+    for line in text.splitlines():
+        m_toc = re.match(r"^(\s*)\.\.\s+toctree::", line)
+        if m_toc:
+            in_toc = True
+            toc_indent = len(m_toc.group(1))
+            continue
+        if in_toc:
+            s = line.strip()
+            if not s:
+                continue
+            cur_indent = len(line) - len(line.lstrip())
+            if cur_indent <= toc_indent:
+                in_toc = False
+                continue
+            if not s.startswith(":"):
+                existing_entries.add(s.lstrip("/"))
+
+    missing: List[str] = []
+    for stem in _COMPANION_AUTO_TOCTREE_STEMS:
+        if os.path.isfile(os.path.join(abs_dir, f"{stem}.rst")) and stem not in existing_entries:
+            missing.append(stem)
+
+    if missing:
+        block = "\n\n.. toctree::\n   :hidden:\n\n" + "".join(f"   {m}\n" for m in missing)
+        source[0] = text.rstrip() + block
+
+
+def discover_book_roots(env: Any) -> List[str]:
+    """Return sorted outermost Book Root docnames in `env.found_docs`."""
+    found_docs: Set[str] = set(getattr(env, "found_docs", set()))
+    candidates: List[str] = []
+    for doc in sorted(found_docs):
+        if os.path.basename(doc).startswith("title-"):
+            continue
+        meta = _get_doc_metadata(env, doc)
+        if meta.get("type") == "book_title":
+            continue
+        if "book_title" in meta or (meta.get("layout") == "book" and meta.get("type") == "book"):
+            candidates.append(doc)
+
+    # Sort shallowest first so outermost book roots suppress accidental nested :book_title: pages
+    candidates.sort(key=lambda d: (d.count("/"), d))
+    roots: List[str] = []
+    root_prefixes: List[str] = []
+    for doc in candidates:
+        doc_dir = doc[:-6] if doc.endswith("/index") else doc
+        if any(doc_dir.startswith(pref + "/") for pref in root_prefixes if pref):
+            continue
+        roots.append(doc)
+        root_prefixes.append(doc_dir)
+    return roots
+
+
+def _is_outline_skip_doc(env: Any, docname: str, book_root: str) -> bool:
+    """Return True if `docname` should be excluded from a book's structural reading outline."""
+    if docname == book_root:
+        return True
+    if _is_auxiliary_track_doc(env, docname):
+        return True
+    base = os.path.basename(docname)
+    if base in _OUTLINE_SKIP_BASENAMES:
+        return True
+    if docname.endswith("/people/index") or docname == "people/index":
+        return True
+    meta = _get_doc_metadata(env, docname)
+    if str(meta.get("type", "")).strip().lower() in {"apparatus", "person", "source_record", "log"}:
+        return True
+    return False
+
+
+def build_book_outline_tree(env: Any, book_root: str) -> List[Dict[str, Any]]:
+    """Build a recursive structural outline tree starting from `book_root` via Sphinx toctree_includes."""
+    toctree_includes: Dict[str, List[str]] = getattr(env, "toctree_includes", {}) or {}
+    found_docs: Set[str] = set(getattr(env, "found_docs", set()))
+    visited: Set[str] = {book_root}
+
+    book_dir = os.path.dirname(book_root)
+    book_prefix = f"{book_dir}/" if book_dir else ""
+
+    def _walk(parent_doc: str, depth: int = 0) -> List[Dict[str, Any]]:
+        if depth > 8:
+            return []
+        raw_children = list(toctree_includes.get(parent_doc, []))
+        nodes_out: List[Dict[str, Any]] = []
+        for child in raw_children:
+            if child in visited:
+                continue
+            if found_docs and child not in found_docs:
+                continue
+            if book_prefix and not child.startswith(book_prefix):
+                continue
+            if _is_outline_skip_doc(env, child, book_root):
+                continue
+            visited.add(child)
+            cmeta = _get_doc_metadata(env, child)
+            ctitle = _get_doc_title(env, child, cmeta)
+            ctracks = [
+                {"key": t["key"], "label": t["label"], "docname": t["docname"]}
+                for t in detect_companion_tracks(env, child)
+            ]
+            children = _walk(child, depth + 1)
+            nodes_out.append(
+                {
+                    "docname": child,
+                    "title": ctitle,
+                    "canonical_id": str(cmeta.get("canonical_id") or "").strip(),
+                    "folio": str(cmeta.get("folio") or "").strip(),
+                    "tracks": ctracks,
+                    "children": children,
+                }
+            )
+        return nodes_out
+
+    return _walk(book_root, 0)
+
+
+def _count_outline_nodes(tree: List[Dict[str, Any]]) -> int:
+    total = 0
+    for item in tree:
+        total += 1 + _count_outline_nodes(item.get("children", []))
+    return total
+
+
+def _render_outline_nodes_html(
+    builder: Any,
+    fromdocname: str,
+    tree: List[Dict[str, Any]],
+    depth: int = 0,
+) -> str:
+    """Render a recursive Book Outline tree as clean semantic nested HTML."""
+    import html as _html
+
+    if not tree:
+        return ""
+    cls = "book-outline-list" if depth == 0 else "book-outline-sublist"
+    parts: List[str] = [f'<ul class="{cls}" data-depth="{depth}">']
+    for item in tree:
+        docname = item["docname"]
+        title = _html.escape(str(item.get("title") or docname))
+        href = _html.escape(builder.get_relative_uri(fromdocname, docname), quote=True)
+        children = item.get("children") or []
+        tracks = item.get("tracks") or []
+        folio = str(item.get("folio") or "").strip()
+        search_txt = _html.escape(
+            f"{item.get('title', '')} {item.get('canonical_id', '')} {folio}".lower(),
+            quote=True,
+        )
+
+        has_kids = bool(children)
+        li_cls = "book-outline-item has-children" if has_kids else "book-outline-item is-leaf"
+        parts.append(f'<li class="{li_cls}" data-docname="{_html.escape(docname, quote=True)}" data-search="{search_txt}">')
+        parts.append('<div class="book-outline-row">')
+        if has_kids:
+            parts.append('<button type="button" class="book-outline-toggle" aria-expanded="true" aria-label="Toggle section">&#9662;</button>')
+        else:
+            parts.append('<span class="book-outline-dot" aria-hidden="true">&middot;</span>')
+        parts.append(f'<a class="book-outline-title" href="{href}">{title}</a>')
+        if len(tracks) > 1:
+            t_links: List[str] = []
+            for tr in tracks:
+                tr_href = _html.escape(builder.get_relative_uri(fromdocname, tr["docname"]), quote=True)
+                tr_lbl = _html.escape(str(tr["label"]))
+                t_links.append(f'<a class="excerpt-track-link" href="{tr_href}">{tr_lbl}</a>')
+            parts.append('<span class="excerpt-tracks">' + '<span class="excerpt-track-sep">&middot;</span>'.join(t_links) + "</span>")
+        parts.append("</div>")
+        if has_kids:
+            parts.append(_render_outline_nodes_html(builder, fromdocname, children, depth + 1))
+        parts.append("</li>")
+    parts.append("</ul>")
+    return "\n".join(parts)
+
+
+if nodes is not None:
+    class PendingBookOutline(nodes.General, nodes.Element):
+        """Placeholder resolved on `doctree-resolved` into a full nested Book Outline."""
+else:  # pragma: no cover
+    class PendingBookOutline:  # type: ignore[no-redef]
+        pass
+
+
+try:
+    from sphinx.util.docutils import SphinxDirective
+    from docutils.parsers.rst import directives as _rst_directives
+
+    class BookOutlineDirective(SphinxDirective):
+        """Directive `.. book-outline::` embedding the full nested outline of the current book."""
+
+        has_content = False
+        option_spec = {
+            "title": _rst_directives.unchanged,
+        }
+
+        def run(self) -> List[Any]:
+            node = PendingBookOutline()
+            node["title"] = self.options.get("title", "")
+            return [node]
+except ImportError:  # pragma: no cover
+    BookOutlineDirective = None  # type: ignore[assignment,misc]
+
+
+def _resolve_book_outline_nodes(app: Any, doctree: Any, fromdocname: str) -> None:
+    """Replace `.. book-outline::` placeholder nodes with rendered nested HTML outlines."""
+    if nodes is None or doctree is None:
+        return
+    pending = list(doctree.findall(PendingBookOutline))
+    if not pending:
+        return
+    book_ctx = resolve_book_context(app.env, fromdocname)
+    book_root = book_ctx.get("book_root") or getattr(app.config, "master_doc", "index")
+    tree = build_book_outline_tree(app.env, book_root)
+    html_list = _render_outline_nodes_html(app.builder, fromdocname, tree)
+    for node in pending:
+        title = str(node.get("title") or "").strip()
+        heading = f"<h2>{title}</h2>\n" if title else ""
+        wrapped = f'<section class="book-outline-embedded">{heading}{html_list}</section>'
+        node.replace_self(nodes.raw("", wrapped, format="html"))
+
+
+def generate_book_outline_pages(app: Any) -> Any:
+    """Dynamically generate `<book>/outline.html` and `<book>/outline-data.js` for every Book Codex."""
+    import json
+
+    builder = getattr(app, "builder", None)
+    if builder is None or getattr(builder, "name", "") == "epub":
+        return
+
+    env = app.env
+    found_docs: Set[str] = set(getattr(env, "found_docs", set()))
+    outdir = getattr(builder, "outdir", None)
+    roots = discover_book_roots(env)
+    cache: Dict[str, List[Dict[str, Any]]] = {}
+
+    for book_root in roots:
+        tree = build_book_outline_tree(env, book_root)
+        if not tree:
+            continue
+        cache[book_root] = tree
+        book_dir = os.path.dirname(book_root)
+        outline_doc = f"{book_dir}/outline" if book_dir else "outline"
+        root_meta = _get_doc_metadata(env, book_root)
+        book_title = (
+            root_meta.get("book_title")
+            or root_meta.get("title")
+            or _get_doc_title(env, book_root, root_meta)
+        )
+        book_short = (
+            str(root_meta.get("breadcrumb_title") or root_meta.get("nav_title") or "").strip()
+            or _shorten_book_home_label(str(book_title))
+        )
+        book_subtitle = str(root_meta.get("book_subtitle") or root_meta.get("author") or "").strip()
+
+        # 1. Write lightweight cached outline-data.js for instant client-side Outline Drawer (works over file:// & https://)
+        if outdir:
+            js_rel = f"{book_dir}/outline-data.js" if book_dir else "outline-data.js"
+            js_path = os.path.join(str(outdir), js_rel)
+            os.makedirs(os.path.dirname(js_path), exist_ok=True)
+            payload = {
+                "book_root": book_root,
+                "book_title": str(book_title),
+                "book_short_title": book_short,
+                "outline_doc": outline_doc,
+                "total_units": _count_outline_nodes(tree),
+                "tree": tree,
+            }
+            try:
+                with open(js_path, "w", encoding="utf-8") as fh:
+                    fh.write(
+                        "window.PHOTON_BOOK_OUTLINE = "
+                        + json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+                        + ";\n"
+                    )
+            except OSError:
+                pass
+
+        # 2. Emit standalone full-page <book>/outline.html unless author already wrote outline.rst
+        if outline_doc in found_docs:
+            continue
+
+        outline_html = _render_outline_nodes_html(builder, outline_doc, tree)
+        context = {
+            "title": f"Outline — {book_short or book_title}",
+            "is_book_page": True,
+            "is_outline_page": True,
+            "book_root": book_root,
+            "book_title": str(book_title),
+            "book_short_title": book_short,
+            "book_subtitle": book_subtitle,
+            "book_theme": str(root_meta.get("book_theme") or "classical-serif"),
+            "book_outline_doc": outline_doc,
+            "book_outline_data_js": f"{book_dir}/outline-data.js" if book_dir else "outline-data.js",
+            "book_has_outline": True,
+            "outline_total_units": _count_outline_nodes(tree),
+            "outline_html": outline_html,
+            "page_breadcrumbs": [
+                {"docname": book_root, "title": book_short or str(book_title), "is_current": False},
+                {"docname": outline_doc, "title": "Outline", "is_current": True, "link_when_current": False},
+            ],
+            "provenance_badges": [],
+        }
+        yield (outline_doc, context, "book_outline.html")
+
+    env._photon_book_outlines = cache
+
+
 def setup_book_page_context(
     app: Any,
     pagename: str,
@@ -1367,10 +1840,23 @@ def setup_book_page_context(
     doctree: Optional[nodes.document],
 ) -> Optional[str]:
     """Sphinx `html-page-context` hook to inject Book Codex, breadcrumbs, and social `<head>` context."""
+    # Preserve pre-built context on generated Book Outline pages
+    if context.get("is_outline_page"):
+        from .social_meta import build_social_and_title_context
+
+        context.update(build_social_and_title_context(app, pagename, context, doctree))
+        return None
+
     book_ctx = resolve_book_context(app.env, pagename, doctree=doctree)
     context.update(book_ctx)
     if book_ctx.get("is_book_page"):
         _update_book_prev_next(app, pagename, context)
+        book_root = book_ctx.get("book_root")
+        outlines_cache = getattr(app.env, "_photon_book_outlines", None)
+        if isinstance(outlines_cache, dict) and book_root:
+            context["book_has_outline"] = book_root in outlines_cache
+        elif book_root:
+            context["book_has_outline"] = bool(build_book_outline_tree(app.env, book_root))
     if getattr(getattr(app, "builder", None), "name", "") == "epub":
         context["script_files"] = []
         if "body" in context and isinstance(context["body"], str):
@@ -1402,12 +1888,20 @@ def _register_epub_graphviz(app: Any) -> None:
 
 
 def setup(app: Any) -> Dict[str, Any]:
-    """Register the book subtree inheritance and EPUB 3 hooks with Sphinx."""
+    """Register the book subtree inheritance, full-book outline, and EPUB 3 hooks with Sphinx."""
+    if nodes is not None:
+        app.add_node(PendingBookOutline)
+    if BookOutlineDirective is not None:
+        app.add_directive("book-outline", BookOutlineDirective)
     app.connect("builder-inited", _register_epub_graphviz)
     app.connect("source-read", filter_epub_book_sources)
+    app.connect("source-read", inject_companion_tracks_toctree)
     app.connect("doctree-resolved", resolve_book_doctree)
+    app.connect("doctree-resolved", _resolve_book_outline_nodes)
     app.connect("missing-reference", resolve_epub_missing_reference)
+    app.connect("html-collect-pages", generate_book_outline_pages)
     app.connect("html-page-context", setup_book_page_context)
+    app.add_js_file("js/book_outline.js")
     return {
         "version": "0.1",
         "parallel_read_safe": True,

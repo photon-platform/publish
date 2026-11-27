@@ -17,6 +17,15 @@ Attributes
    photon_platform.publish.book.nodes
 
 
+Classes
+-------
+
+.. autoapisummary::
+
+   photon_platform.publish.book.PendingBookOutline
+   photon_platform.publish.book.BookOutlineDirective
+
+
 Functions
 ---------
 
@@ -29,6 +38,10 @@ Functions
    photon_platform.publish.book.resolve_book_doctree
    photon_platform.publish.book.resolve_epub_missing_reference
    photon_platform.publish.book.resolve_page_breadcrumbs
+   photon_platform.publish.book.inject_companion_tracks_toctree
+   photon_platform.publish.book.discover_book_roots
+   photon_platform.publish.book.build_book_outline_tree
+   photon_platform.publish.book.generate_book_outline_pages
    photon_platform.publish.book.setup_book_page_context
    photon_platform.publish.book.setup
 
@@ -85,6 +98,61 @@ Module Contents
    Build unified section/book-anchored `page_breadcrumbs` and separate `provenance_badges` across all page types.
 
 
+.. py:function:: inject_companion_tracks_toctree(app: Any, docname: str, source: List[str]) -> None
+
+   Automatically register bare sibling companion tracks into a hidden toctree on book `index.rst` files.
+
+   Eliminates manual hidden `.. toctree::` boilerplate for `la.rst`, `el.rst`, `de.rst`,
+   `fr.rst`, `it.rst`, `da.rst`, `summary.rst`, `notes.rst`, `commentary.rst`, `folio.rst`,
+   and `title-<lang>.rst` files inside `:layout: book` directories.
+
+
+.. py:function:: discover_book_roots(env: Any) -> List[str]
+
+   Return sorted outermost Book Root docnames in `env.found_docs`.
+
+
+.. py:function:: build_book_outline_tree(env: Any, book_root: str) -> List[Dict[str, Any]]
+
+   Build a recursive structural outline tree starting from `book_root` via Sphinx toctree_includes.
+
+
+.. py:class:: PendingBookOutline(rawsource: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.General`, :py:obj:`docutils.nodes.Element`
+
+
+   Placeholder resolved on `doctree-resolved` into a full nested Book Outline.
+
+
+.. py:class:: BookOutlineDirective(name, arguments, options, content, lineno, content_offset, block_text, state, state_machine)
+
+   Bases: :py:obj:`sphinx.util.docutils.SphinxDirective`
+
+
+   Directive `.. book-outline::` embedding the full nested outline of the current book.
+
+
+   .. py:attribute:: has_content
+      :value: False
+
+
+      May the directive have content?
+
+
+   .. py:attribute:: option_spec
+
+      Mapping of option names to validator functions.
+
+
+   .. py:method:: run() -> List[Any]
+
+
+.. py:function:: generate_book_outline_pages(app: Any) -> Any
+
+   Dynamically generate `<book>/outline.html` and `<book>/outline-data.js` for every Book Codex.
+
+
 .. py:function:: setup_book_page_context(app: Any, pagename: str, templatename: str, context: Dict[str, Any], doctree: Optional[docutils.nodes.document]) -> Optional[str]
 
    Sphinx `html-page-context` hook to inject Book Codex, breadcrumbs, and social `<head>` context.
@@ -92,6 +160,6 @@ Module Contents
 
 .. py:function:: setup(app: Any) -> Dict[str, Any]
 
-   Register the book subtree inheritance and EPUB 3 hooks with Sphinx.
+   Register the book subtree inheritance, full-book outline, and EPUB 3 hooks with Sphinx.
 
 

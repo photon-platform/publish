@@ -2,6 +2,15 @@ changelog
 =========
 
 
+0.4.13
+======
+*2026-11-27*
+
+- feat(book-codex & outline): Unify Book Codex hierarchy around English-first folder-per-unit auto-detection (``index.rst`` + bare ``<lang>.rst``, ``summary.rst``, ``notes.rst``, and ``title-<lang>.rst``), auto-register bare companion tracks into hidden toctrees, fix primary English breadcrumb resolution, and add ``el``/``grc``/``fr``/``da``/``book_title`` to Prev/Next auxiliary skipping and collection filtering.
+- feat(outline & nav): Auto-generate full-page searchable/collapsible ``<book>/outline.html`` and cached ``<book>/outline-data.js``, add a one-click **Outline** slide-over drawer in ``book_layout.html``, add ``.. book-outline::`` and recursive ``collection/outline.html``, and keep ``header.book-header`` and ``footer.book-footer`` at a consistent full outer-border width across all book pages with ``Prev``/``Next`` pinned to outer edges.
+- feat(cli): Add ``publish audit-book`` compliance linter (``book_audit.py``).
+
+
 0.4.11
 ======
 *2026-11-16*

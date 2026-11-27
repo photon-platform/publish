@@ -208,3 +208,40 @@ def folio_ingest_cmd(repo, pdf, edition, dpi, preserve_color, vector_svg, first_
             f"graphics={ed.get('extracted_graphics_count')}"
         )
 
+
+@cli.command("audit-book")
+@click.option("--repo", default=".", help="Path to target repository root (default: current directory).")
+@click.option("--json", "as_json", is_flag=True, help="Emit structured JSON compliance report.")
+def audit_book_cmd(repo, as_json):
+    """Audits Book Codex hierarchy, English-first tracks, collections, and apparatus placement."""
+    import json
+    from pathlib import Path
+
+    from .book_audit import audit_repo_books
+
+    report = audit_repo_books(Path(repo).resolve())
+    if as_json:
+        click.echo(json.dumps(report.to_dict(), indent=2))
+        return
+
+    click.echo(
+        f"[{report.repo}] books={len(report.book_roots)} | issues={report.issue_count} | "
+        f"non_en_first={len(report.non_english_first_tracks)} | "
+        f"legacy_filenames={len(report.legacy_track_filenames)} | "
+        f"nested_book_titles={len(report.nested_book_titles)} | "
+        f"dup_coll_toc={len(report.duplicate_collection_toctree)} | "
+        f"dup_apparatus={len(report.duplicated_apparatus)} | "
+        f"body_track_lists={len(report.redundant_track_lists_in_body)}"
+    )
+    for item in report.non_english_first_tracks[:5]:
+        click.echo(f"  ! non-English-first track -> {item['doc']}: {item['tracks']}")
+    for doc in report.nested_book_titles[:5]:
+        click.echo(f"  ! nested :book_title:     -> {doc}")
+    for doc in report.duplicated_apparatus[:5]:
+        click.echo(f"  ! duplicated apparatus    -> {doc}")
+    for doc in report.duplicate_collection_toctree[:5]:
+        click.echo(f"  ! collection+toctree dup  -> {doc}")
+    for doc in report.redundant_track_lists_in_body[:5]:
+        click.echo(f"  ! body track list         -> {doc}")
+
+

@@ -305,8 +305,9 @@ class CollectionDirective(SphinxDirective):
                 ]
             else:
                 _excluded_companion_types = {
-                    'book_title', 'translation', 'summary', 'notes',
-                    'el', 'la', 'de', 'fr', 'it', 'apparatus',
+                    'book_title', 'translation', 'summary', 'notes', 'commentary',
+                    'folio', 'el', 'grc', 'greek', 'la', 'de', 'fr', 'it', 'da',
+                    'apparatus',
                 }
                 docnames = [
                     d for d in docnames
@@ -548,6 +549,37 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
         if limit:
             collection_items = collection_items[:limit]
 
+        # Build recursive hierarchy when rendering collection/outline.html across multiple depths
+        outline_tree = None
+        if template_name == 'collection/outline.html' and (
+            'recursive' in options or int(options.get('depth', 1)) > 1
+        ):
+            def _dir_prefix(docname: str) -> str:
+                if docname.endswith('/index'):
+                    return docname[:-5]
+                return docname + '/'
+
+            items_by_doc = {it['docname']: dict(it, children=[]) for it in collection_items}
+            roots: List[Dict[str, Any]] = []
+            ordered_docs = [it['docname'] for it in collection_items]
+            # Link each item to its deepest ancestor present in items_by_doc
+            for d in ordered_docs:
+                node_obj = items_by_doc[d]
+                best_parent = None
+                best_len = -1
+                for cand in ordered_docs:
+                    if cand == d:
+                        continue
+                    pref = _dir_prefix(cand)
+                    if d.startswith(pref) and len(pref) > best_len:
+                        best_parent = cand
+                        best_len = len(pref)
+                if best_parent is not None:
+                    items_by_doc[best_parent]['children'].append(node_obj)
+                else:
+                    roots.append(node_obj)
+            outline_tree = roots
+
         def pathto(otheruri, resource=False, baseuri=None):
             if resource:
                 return relative_uri(builder.get_target_uri(fromdocname), otheruri)
@@ -557,6 +589,7 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
             'collection': {
                 'title': title,
                 'articles': collection_items,
+                'tree': outline_tree,
                 'class': collection_class,
                 'directory_kind': options.get('directory_kind', ''),
             },

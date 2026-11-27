@@ -159,13 +159,13 @@ def test_breadcrumbs_across_all_hierarchies_and_companion_tracks(tmp_path: Path)
     assert ctx_comm["page_breadcrumbs"][-1]["link_when_current"] is True
     assert ctx_comm["page_breadcrumbs"][-1]["docname"] == p_name
 
-    # 5. Multi-track chapter without canonical_id -> shows 'Caput I' / 'Chapter I' instead of empty!
+    # 5. Multi-track chapter without canonical_id -> English-first primary shows 'CHAPTER I'
     h_name = "de_noetica/caput-1/caput-1-summary"
     ctx_hoe = resolve_book_context(env, h_name)
     ctx_hoe.update(resolve_page_breadcrumbs(app, env, h_name, ctx_hoe))
     assert [c["title"] for c in ctx_hoe["page_breadcrumbs"]] == [
         "De Noetica Geometriae",
-        "CAPUT I",
+        "CHAPTER I",
     ]
     assert ctx_hoe["page_breadcrumbs"][-1]["link_when_current"] is True
 

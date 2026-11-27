@@ -62,15 +62,23 @@ Authoritative runbook for ingesting archival treatises, calibrating interactive 
 │       ├── <NNNN>.json                 # Calibrated figure manifest (bbox, white_point, svg_file, geometry — NO py_file)
 │       ├── <NNNN>.g1.png               # Cropped & normalized archival figure plate (+ .inverted.png if raster)
 │       └── <NNNN>.g1.svg               # Calibrated Ink-to-Vector interactive .euclid-graphic SVG
-└── docsrc/<edition>/                   # Compiled de-paginated multi-track Book Codex (:layout: book)
-    ├── index.rst
-    ├── <unit>/<item>/                  # Parallel companion tracks auto-linked by photon_platform.publish.book:
-    │   ├── index.rst (or <stem>_en.rst / <stem>_la.rst / <stem>_grc.rst)
-    │   └── commentary.rst (or <stem>_notes.rst)
-    ├── bibliography.rst
-    ├── persons.rst
-    └── glossary.rst
+└── docsrc/<edition>/                   # Compiled de-paginated multi-track Book Codex (:layout: book, :book_title:)
+    ├── index.rst                       # Book Title Page (English) + .. collection:: :sort: order
+    ├── title-<lang>.rst                # Native-language Book Title Page (auto-linked English | <Language>)
+    ├── outline.html                    # Auto-generated full-book hierarchical outline (+ outline-data.js drawer)
+    └── <division>/<unit>/              # Folder-per-unit (bare companion tracks auto-registered & English-first):
+        ├── index.rst                   # Primary English authorial text + co-located .. picture:: graphics
+        ├── <lang>.rst                  # Original witness (el.rst, la.rst, de.rst, fr.rst, it.rst, da.rst)
+        ├── summary.rst                 # Optional concise synopsis & modern notation bridge (also for containers!)
+        ├── notes.rst                   # Optional provenance, textual variants & cross-corpus links (or commentary.rst)
+        └── <NNNN>.g<k>.{svg,png}       # Co-located calibrated vector SVG + archival figure bitmap
 ```
+
+### Canonical Hierarchy, Container Purity & Outline Rules
+- **English-is-`index.rst` (Folder-Per-Unit)**: Always name the primary English text `index.rst` inside `<unit>/` with bare siblings `<lang>.rst`, `summary.rst`, and `notes.rst`. `photon-platform/publish` automatically detects English-first tracks (`English · <Language> · Summary · Notes`) and auto-registers bare companion tracks in hidden toctrees—do **not** add redundant manual hidden `.. toctree::` blocks or `Parallel Reading Tracks` body lists.
+- **Container Page Cleanliness**: Keep Division/Book/Chapter `index.rst` pages strictly focused on the heading, native rubric, author's own preamble (if any), and `.. collection:: :sort: order`. Move editorial chapter synopses into `<chapter>/summary.rst` and witness provenance into `<chapter>/notes.rst`.
+- **Single `:book_title:` Root**: Declare `:book_title:` ONLY on `docsrc/<edition>/index.rst` (never on sub-books or chapters).
+- **Full-Book Outline**: Every `:layout: book` codex automatically receives `<edition>/outline.html` and a header/footer **Outline** slide-over drawer (plus the `.. book-outline::` directive and recursive `:template: collection/outline.html`). Never hand-write duplicate bulleted TOCs above `.. collection::`.
 
 ### Native `publish folio` Workstation (Never Duplicate Flask Apps!)
 - Always inspect and vet `resources/<edition>/` with the shared `photon-platform/publish` workstation (`FolioScanner` + `ReviewManager`):
@@ -155,7 +163,8 @@ With centre :g:`A <0255.g1:A>` and distance :g:`AB <0255.g1:/ A B />` let the ci
 Compile and verify the Sphinx HTML (and optional EPUB 3) codex inside the sandbox:
 
 ```bash
+publish audit-book
 publish build
 ```
 
-Confirm zero Sphinx errors, intact companion-track tabs (`.book-reading-pane`), live `geometor_interactive.js` highlighting, and populated `persons.rst`, `bibliography.rst`, and `glossary.rst` indices.
+Confirm zero Sphinx errors, zero `publish audit-book` regressions, English-first companion-track tabs (`.book-reading-pane`), live `geometor_interactive.js` highlighting, generated `<edition>/outline.html` + Outline drawer, and populated `persons.rst`, `bibliography.rst`, and `glossary.rst` indices.
