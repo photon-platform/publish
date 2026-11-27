@@ -1222,6 +1222,11 @@ def protect_rst_math_segments(
     def _replacer(match: re.Match) -> str:
         seg = match.group(0)
         if seg.startswith("$"):
+            if not seg.startswith("$$"):
+                inner = seg[1:-1]
+                # Guard against English currency prose like "$100,000 a simultaneous debit of $40,000"
+                if re.match(r"^\d[\d,.]*\s+[a-z]{2,}\s+[a-z]{2,}", inner):
+                    return seg
             return _store(seg)
         return seg
 
@@ -1271,18 +1276,70 @@ def _on_sphinx_source_read(app: Any, docname: str, source: List[str]) -> None:
 
 
 def _on_sphinx_doctree_read(app: Any, doctree: nodes.document) -> None:
-    """Sphinx doctree-read hook to restore protected $...$ and $$...$$ segments into AST nodes."""
+    """Sphinx doctree-read hook to convert protected $...$ / $$...$$ tokens into Sphinx math nodes."""
     env = getattr(app, "env", None)
     store: Optional[Dict[str, str]] = getattr(env, "_photon_math_placeholders", None) if env else None
     if not store:
         return
 
+    created_math = False
     for text_node in list(doctree.findall(nodes.Text)):
         raw_str = str(text_node)
-        if "PHOTONMATHPLACEHOLDER" in raw_str:
-            restored = _restore_math_string(raw_str, store)
-            if restored != raw_str and text_node.parent is not None:
-                text_node.parent.replace(text_node, nodes.Text(restored))
+        if "PHOTONMATHPLACEHOLDER" not in raw_str or text_node.parent is None:
+            continue
+        parent = text_node.parent
+        # Check if parent is a paragraph containing solely a single display $$...$$ math token
+        stripped = raw_str.strip()
+        if (
+            isinstance(parent, nodes.paragraph)
+            and len(parent.children) == 1
+            and _PLACEHOLDER_TOKEN_RE.fullmatch(stripped)
+            and parent.parent is not None
+        ):
+            orig = store.get(stripped, "")
+            if orig.startswith("$$") and orig.endswith("$$"):
+                latex = orig[2:-2].strip()
+                docname_cur = getattr(env, "docname", "")
+                mb = nodes.math_block(
+                    orig,
+                    latex,
+                    nowrap=False,
+                    number=None,
+                    label=None,
+                    docname=docname_cur,
+                )
+                parent.parent.replace(parent, mb)
+                created_math = True
+                continue
+
+        # Split mixed text and math placeholders into Text + nodes.math siblings
+        new_nodes: List[nodes.Node] = []
+        pos = 0
+        for m in _PLACEHOLDER_TOKEN_RE.finditer(raw_str):
+            if m.start() > pos:
+                new_nodes.append(nodes.Text(raw_str[pos : m.start()]))
+            tok = m.group(0)
+            orig = store.get(tok, tok)
+            if orig.startswith("$$") and orig.endswith("$$"):
+                latex = orig[2:-2].strip()
+                new_nodes.append(nodes.math(orig, latex))
+                created_math = True
+            elif orig.startswith("$") and orig.endswith("$"):
+                latex = orig[1:-1].strip()
+                new_nodes.append(nodes.math(orig, latex))
+                created_math = True
+            else:
+                new_nodes.append(nodes.Text(orig))
+            pos = m.end()
+        if pos < len(raw_str):
+            new_nodes.append(nodes.Text(raw_str[pos:]))
+
+        if new_nodes:
+            parent.replace(text_node, new_nodes)
+
+    docname = getattr(env, "docname", None)
+    if created_math and docname and hasattr(env, "domains") and "math" in env.domains:
+        env.domains["math"].data.setdefault("has_equations", {})[docname] = True
 
     lower_token_re = re.compile(r"photonmathplaceholder\d+end")
     for el in doctree.findall(nodes.Element):
@@ -1306,7 +1363,6 @@ def _on_sphinx_doctree_read(app: Any, doctree: nodes.document) -> None:
                 if changed:
                     el.attributes[attr_key] = new_list
 
-    docname = getattr(env, "docname", None)
     if docname and hasattr(env, "metadata") and docname in env.metadata:
         meta = env.metadata[docname]
         for k, v in list(meta.items()):

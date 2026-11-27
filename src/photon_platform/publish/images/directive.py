@@ -549,6 +549,20 @@ class picture_node(nodes.General, nodes.Element):
     """Custom node for containing responsive picture elements."""
 
 
+class picture_caption_node(nodes.Part, nodes.TextElement):
+    """Inline TextElement container for RST-parsed `<figcaption>` content."""
+
+
+def visit_picture_caption_node(self: Any, node: nodes.Element) -> None:
+    """Open `<figcaption>` for parsed caption inline nodes."""
+    self.body.append('<figcaption>')
+
+
+def depart_picture_caption_node(self: Any, node: nodes.Element) -> None:
+    """Close `</figcaption>` for parsed caption inline nodes."""
+    self.body.append('</figcaption>\n')
+
+
 
 def _resolve_node_uri(translator: Any, uri: str) -> str:
     """Resolve URI relative to current Sphinx document, or return as-is in standalone Docutils mode."""
@@ -597,6 +611,8 @@ def visit_picture_node(self: Any, node: nodes.Element) -> None:
             fallback_src = _resolve_node_uri(self, node.get('fallback_src') or node.get('main_src', ''))
             alt_text = node.get('alt', '')
             self.body.append(f'    <img src="{fallback_src}" alt="{alt_text}"/>\n')
+        if node.children:
+            return
         if node.get('caption'):
             self.body.append(f'<figcaption>{node["caption"]}</figcaption>\n')
         self.body.append('</figure>\n')
@@ -632,6 +648,8 @@ def visit_picture_node(self: Any, node: nodes.Element) -> None:
         self.body.append('</a>\n')
 
     # Caption
+    if node.children:
+        return
     if node.get('caption'):
         self.body.append(f'<figcaption>{node["caption"]}</figcaption>\n')
 
@@ -648,6 +666,7 @@ def depart_picture_node(self: Any, node: nodes.Element) -> None:
         node: The picture_node being visited.
 
     """
+    self.body.append('</figure>\n')
 
 
 class PictureDirective(Directive):
@@ -694,7 +713,11 @@ class PictureDirective(Directive):
             node['is_svg'] = is_svg
             node['standalone'] = True
             node['alt'] = self.options.get('alt', '')
-            node['caption'] = self.options.get('caption', '')
+            caption_text = self.options.get('caption', '')
+            node['caption'] = caption_text
+            if caption_text:
+                inodes, _messages = self.state.inline_text(caption_text, self.lineno)
+                node += picture_caption_node('', '', *inodes)
             node['class'] = classes
             return [node]
 
@@ -759,7 +782,11 @@ class PictureDirective(Directive):
         if svg_content:
             node['svg_content'] = svg_content
         node['alt'] = self.options.get('alt', '')
-        node['caption'] = self.options.get('caption', '')
+        caption_text = self.options.get('caption', '')
+        node['caption'] = caption_text
+        if caption_text:
+            inodes, _messages = self.state.inline_text(caption_text, self.lineno)
+            node += picture_caption_node('', '', *inodes)
         node['class'] = classes
 
         return [node]
@@ -771,3 +798,5 @@ def register_standalone_picture() -> None:
     for translator_cls in (BaseHTMLTranslator, HTML5Translator):
         translator_cls.visit_picture_node = visit_picture_node
         translator_cls.depart_picture_node = depart_picture_node
+        translator_cls.visit_picture_caption_node = visit_picture_caption_node
+        translator_cls.depart_picture_caption_node = depart_picture_caption_node

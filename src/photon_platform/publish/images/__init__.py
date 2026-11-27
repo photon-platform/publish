@@ -2,7 +2,10 @@
 
 from .directive import (
     PictureDirective,
+    picture_caption_node,
     picture_node,
+    visit_picture_caption_node,
+    depart_picture_caption_node,
     visit_picture_node,
     depart_picture_node,
     prepare_inline_svg,
@@ -24,6 +27,12 @@ def setup(app: Any) -> Dict[str, Any]:
         picture_node,
         html=(visit_picture_node, depart_picture_node),
         epub=(visit_picture_node, depart_picture_node),
+        override=True,
+    )
+    app.add_node(
+        picture_caption_node,
+        html=(visit_picture_caption_node, depart_picture_caption_node),
+        epub=(visit_picture_caption_node, depart_picture_caption_node),
         override=True,
     )
     app.add_directive('picture', PictureDirective, override=True)
