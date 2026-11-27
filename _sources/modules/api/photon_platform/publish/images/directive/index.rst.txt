@@ -15,6 +15,7 @@ Classes
 .. autoapisummary::
 
    photon_platform.publish.images.directive.picture_node
+   photon_platform.publish.images.directive.picture_caption_node
    photon_platform.publish.images.directive.PictureDirective
 
 
@@ -24,6 +25,8 @@ Functions
 .. autoapisummary::
 
    photon_platform.publish.images.directive.prepare_inline_svg
+   photon_platform.publish.images.directive.visit_picture_caption_node
+   photon_platform.publish.images.directive.depart_picture_caption_node
    photon_platform.publish.images.directive.visit_picture_node
    photon_platform.publish.images.directive.depart_picture_node
    photon_platform.publish.images.directive.register_standalone_picture
@@ -53,6 +56,24 @@ Module Contents
 
 
    Custom node for containing responsive picture elements.
+
+
+.. py:class:: picture_caption_node(rawsource: str = '', text: str = '', *children, **attributes: Any)
+
+   Bases: :py:obj:`docutils.nodes.Part`, :py:obj:`docutils.nodes.TextElement`
+
+
+   Inline TextElement container for RST-parsed `<figcaption>` content.
+
+
+.. py:function:: visit_picture_caption_node(self: Any, node: docutils.nodes.Element) -> None
+
+   Open `<figcaption>` for parsed caption inline nodes.
+
+
+.. py:function:: depart_picture_caption_node(self: Any, node: docutils.nodes.Element) -> None
+
+   Close `</figcaption>` for parsed caption inline nodes.
 
 
 .. py:function:: visit_picture_node(self: Any, node: docutils.nodes.Element) -> None
