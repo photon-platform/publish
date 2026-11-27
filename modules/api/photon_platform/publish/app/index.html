@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../../../../_static/css/styles.css?v=6f74f1da" />
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/css/styles.css?v=0b57331d" />
   <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="../../../../../_static/css/print.css" type="text/css" media="print" />
   <link rel="icon" href="../../../../../_static/favicon.ico" />
@@ -136,6 +136,9 @@
         <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.app.folio_ingest_cmd" title="photon_platform.publish.app.folio_ingest_cmd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">folio_ingest_cmd</span></code></a>(repo, pdf, edition, dpi, ...)</p></td>
         <td><p>Renders 300-DPI &lt;NNNN&gt;.png folios, extracts embedded text &amp; graphics, and updates folio_map.json.</p></td>
         </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.app.audit_book_cmd" title="photon_platform.publish.app.audit_book_cmd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">audit_book_cmd</span></code></a>(repo, as_json)</p></td>
+        <td><p>Audits Book Codex hierarchy, English-first tracks, collections, and apparatus placement.</p></td>
+        </tr>
         </tbody>
         </table>
         </section>
@@ -205,6 +208,12 @@
         <dt class="sig sig-object py" id="photon_platform.publish.app.folio_ingest_cmd">
         <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.app.</span></span><span class="sig-name descname"><span class="pre">folio_ingest_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edition</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserve_color</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector_svg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first_page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_json</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.app.folio_ingest_cmd" title="Link to this definition">¶</a></dt>
         <dd><p>Renders 300-DPI &lt;NNNN&gt;.png folios, extracts embedded text &amp; graphics, and updates folio_map.json.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.app.audit_book_cmd">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.app.</span></span><span class="sig-name descname"><span class="pre">audit_book_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_json</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.app.audit_book_cmd" title="Link to this definition">¶</a></dt>
+        <dd><p>Audits Book Codex hierarchy, English-first tracks, collections, and apparatus placement.</p>
         </dd></dl>
 
         </section>
@@ -306,12 +315,13 @@
 
   <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
   <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-  <script src="../../../../../_static/documentation_options.js?v=70a41c31"></script>
+  <script src="../../../../../_static/documentation_options.js?v=d4dc9828"></script>
   <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>
   <script src="../../../../../_static/js/collection_directory.js?v=0928c9d3"></script>
   <script src="../../../../../_static/js/geometor_interactive.js?v=219c1955"></script>
+  <script src="../../../../../_static/js/book_outline.js?v=aca1ae7c"></script>
   <script src="../../../../../_static/js/search_highlight.js"></script>
 
 </body>

@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=ea5fcf70" />
-  <link rel="stylesheet" type="text/css" href="../../../../../_static/css/styles.css?v=6f74f1da" />
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/css/styles.css?v=0b57331d" />
   <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=4ae1632d" />
   <link rel="stylesheet" href="../../../../../_static/css/print.css" type="text/css" media="print" />
   <link rel="icon" href="../../../../../_static/favicon.ico" />
@@ -91,7 +91,7 @@
           <div class="book-nav-center">
           </div>
           <div class="book-nav-next">
-            <a class="book-nav-btn" href="../directives/index.html" title="photon_platform.publish.directives"><span class="nav-label">Next</span> &rarr;</a>
+            <a class="book-nav-btn" href="../book_audit/index.html" title="photon_platform.publish.book_audit"><span class="nav-label">Next</span> &rarr;</a>
           </div>
         </div>
       </header>
@@ -105,6 +105,19 @@
         <tbody>
         <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.book.nodes" title="photon_platform.publish.book.nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nodes</span></code></a></p></td>
         <td><p></p></td>
+        </tr>
+        </tbody>
+        </table>
+        </section>
+        <section class="level-2" id="classes">
+        <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
+        <table class="autosummary longtable docutils align-default">
+        <tbody>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.book.PendingBookOutline" title="photon_platform.publish.book.PendingBookOutline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PendingBookOutline</span></code></a></p></td>
+        <td><p>Placeholder resolved on <cite>doctree-resolved</cite> into a full nested Book Outline.</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.book.BookOutlineDirective" title="photon_platform.publish.book.BookOutlineDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BookOutlineDirective</span></code></a></p></td>
+        <td><p>Directive <cite>.. book-outline::</cite> embedding the full nested outline of the current book.</p></td>
         </tr>
         </tbody>
         </table>
@@ -134,11 +147,23 @@
         <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.book.resolve_page_breadcrumbs" title="photon_platform.publish.book.resolve_page_breadcrumbs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_page_breadcrumbs</span></code></a>(app, env, pagename, context) → Dict[str, Any]</p></td>
         <td><p>Build unified section/book-anchored <cite>page_breadcrumbs</cite> and separate <cite>provenance_badges</cite> across all page types.</p></td>
         </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.book.inject_companion_tracks_toctree" title="photon_platform.publish.book.inject_companion_tracks_toctree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inject_companion_tracks_toctree</span></code></a>(app, docname, source) → None</p></td>
+        <td><p>Automatically register bare sibling companion tracks into a hidden toctree on book <cite>index.rst</cite> files.</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.book.discover_book_roots" title="photon_platform.publish.book.discover_book_roots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discover_book_roots</span></code></a>(env) → List[str]</p></td>
+        <td><p>Return sorted outermost Book Root docnames in <cite>env.found_docs</cite>.</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.book.build_book_outline_tree" title="photon_platform.publish.book.build_book_outline_tree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_book_outline_tree</span></code></a>(env, book_root) → List[Dict[str, Any]]</p></td>
+        <td><p>Build a recursive structural outline tree starting from <cite>book_root</cite> via Sphinx toctree_includes.</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.book.generate_book_outline_pages" title="photon_platform.publish.book.generate_book_outline_pages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_book_outline_pages</span></code></a>(app) → Any</p></td>
+        <td><p>Dynamically generate <cite>&lt;book&gt;/outline.html</cite> and <cite>&lt;book&gt;/outline-data.js</cite> for every Book Codex.</p></td>
+        </tr>
         <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.book.setup_book_page_context" title="photon_platform.publish.book.setup_book_page_context"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_book_page_context</span></code></a>(app, pagename, templatename, ...) → Optional[str]</p></td>
         <td><p>Sphinx <cite>html-page-context</cite> hook to inject Book Codex, breadcrumbs, and social <cite>&lt;head&gt;</cite> context.</p></td>
         </tr>
         <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.book.setup" title="photon_platform.publish.book.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(app) → Dict[str, Any]</p></td>
-        <td><p>Register the book subtree inheritance and EPUB 3 hooks with Sphinx.</p></td>
+        <td><p>Register the book subtree inheritance, full-book outline, and EPUB 3 hooks with Sphinx.</p></td>
         </tr>
         </tbody>
         </table>
@@ -203,6 +228,64 @@
         </dd></dl>
 
         <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.book.inject_companion_tracks_toctree">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.book.</span></span><span class="sig-name descname"><span class="pre">inject_companion_tracks_toctree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.book.inject_companion_tracks_toctree" title="Link to this definition">¶</a></dt>
+        <dd><p>Automatically register bare sibling companion tracks into a hidden toctree on book <cite>index.rst</cite> files.</p>
+        <p>Eliminates manual hidden <cite>.. toctree::</cite> boilerplate for <cite>la.rst</cite>, <cite>el.rst</cite>, <cite>de.rst</cite>,
+        <cite>fr.rst</cite>, <cite>it.rst</cite>, <cite>da.rst</cite>, <cite>summary.rst</cite>, <cite>notes.rst</cite>, <cite>commentary.rst</cite>, <cite>folio.rst</cite>,
+        and <cite>title-&lt;lang&gt;.rst</cite> files inside <cite>:layout: book</cite> directories.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.book.discover_book_roots">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.book.</span></span><span class="sig-name descname"><span class="pre">discover_book_roots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.book.discover_book_roots" title="Link to this definition">¶</a></dt>
+        <dd><p>Return sorted outermost Book Root docnames in <cite>env.found_docs</cite>.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.book.build_book_outline_tree">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.book.</span></span><span class="sig-name descname"><span class="pre">build_book_outline_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">book_root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.book.build_book_outline_tree" title="Link to this definition">¶</a></dt>
+        <dd><p>Build a recursive structural outline tree starting from <cite>book_root</cite> via Sphinx toctree_includes.</p>
+        </dd></dl>
+
+        <dl class="py class">
+        <dt class="sig sig-object py" id="photon_platform.publish.book.PendingBookOutline">
+        <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.book.</span></span><span class="sig-name descname"><span class="pre">PendingBookOutline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rawsource</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">children</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.book.PendingBookOutline" title="Link to this definition">¶</a></dt>
+        <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.General</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.Element</span></code></p>
+        <p>Placeholder resolved on <cite>doctree-resolved</cite> into a full nested Book Outline.</p>
+        </dd></dl>
+
+        <dl class="py class">
+        <dt class="sig sig-object py" id="photon_platform.publish.book.BookOutlineDirective">
+        <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.book.</span></span><span class="sig-name descname"><span class="pre">BookOutlineDirective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_machine</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.book.BookOutlineDirective" title="Link to this definition">¶</a></dt>
+        <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">sphinx.util.docutils.SphinxDirective</span></code></p>
+        <p>Directive <cite>.. book-outline::</cite> embedding the full nested outline of the current book.</p>
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.book.BookOutlineDirective.has_content">
+        <span class="sig-name descname"><span class="pre">has_content</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#photon_platform.publish.book.BookOutlineDirective.has_content" title="Link to this definition">¶</a></dt>
+        <dd><p>May the directive have content?</p>
+        </dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.book.BookOutlineDirective.option_spec">
+        <span class="sig-name descname"><span class="pre">option_spec</span></span><a class="headerlink" href="#photon_platform.publish.book.BookOutlineDirective.option_spec" title="Link to this definition">¶</a></dt>
+        <dd><p>Mapping of option names to validator functions.</p>
+        </dd></dl>
+
+        <dl class="py method">
+        <dt class="sig sig-object py" id="photon_platform.publish.book.BookOutlineDirective.run">
+        <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.book.BookOutlineDirective.run" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.book.generate_book_outline_pages">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.book.</span></span><span class="sig-name descname"><span class="pre">generate_book_outline_pages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#photon_platform.publish.book.generate_book_outline_pages" title="Link to this definition">¶</a></dt>
+        <dd><p>Dynamically generate <cite>&lt;book&gt;/outline.html</cite> and <cite>&lt;book&gt;/outline-data.js</cite> for every Book Codex.</p>
+        </dd></dl>
+
+        <dl class="py function">
         <dt class="sig sig-object py" id="photon_platform.publish.book.setup_book_page_context">
         <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.book.</span></span><span class="sig-name descname"><span class="pre">setup_book_page_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pagename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">templatename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doctree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">docutils.nodes.document</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.book.setup_book_page_context" title="Link to this definition">¶</a></dt>
         <dd><p>Sphinx <cite>html-page-context</cite> hook to inject Book Codex, breadcrumbs, and social <cite>&lt;head&gt;</cite> context.</p>
@@ -211,7 +294,7 @@
         <dl class="py function">
         <dt class="sig sig-object py" id="photon_platform.publish.book.setup">
         <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.book.</span></span><span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.book.setup" title="Link to this definition">¶</a></dt>
-        <dd><p>Register the book subtree inheritance and EPUB 3 hooks with Sphinx.</p>
+        <dd><p>Register the book subtree inheritance, full-book outline, and EPUB 3 hooks with Sphinx.</p>
         </dd></dl>
 
         </section>
@@ -228,7 +311,7 @@
             <a class="book-toc-link" href="../../../../index.html">modules</a>
           </div>
           <div class="book-nav-next">
-            <a class="book-nav-btn" href="../directives/index.html" title="photon_platform.publish.directives"><span class="nav-label">Next</span> &rarr;</a>
+            <a class="book-nav-btn" href="../book_audit/index.html" title="photon_platform.publish.book_audit"><span class="nav-label">Next</span> &rarr;</a>
           </div>
         </div>
       </footer>
@@ -313,12 +396,13 @@
 
   <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
   <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-  <script src="../../../../../_static/documentation_options.js?v=70a41c31"></script>
+  <script src="../../../../../_static/documentation_options.js?v=d4dc9828"></script>
   <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
   <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
   <script src="../../../../../_static/js/collection_controls.js?v=b6b5297a"></script>
   <script src="../../../../../_static/js/collection_directory.js?v=0928c9d3"></script>
   <script src="../../../../../_static/js/geometor_interactive.js?v=219c1955"></script>
+  <script src="../../../../../_static/js/book_outline.js?v=aca1ae7c"></script>
   <script src="../../../../../_static/js/search_highlight.js"></script>
 
 </body>

@@ -25,6 +25,7 @@ Functions
    photon_platform.publish.app.folio_links_cmd
    photon_platform.publish.app.social_banner_cmd
    photon_platform.publish.app.folio_ingest_cmd
+   photon_platform.publish.app.audit_book_cmd
 
 
 Module Contents
@@ -83,5 +84,10 @@ Module Contents
 .. py:function:: folio_ingest_cmd(repo, pdf, edition, dpi, preserve_color, vector_svg, first_page, last_page, force, as_json)
 
    Renders 300-DPI <NNNN>.png folios, extracts embedded text & graphics, and updates folio_map.json.
+
+
+.. py:function:: audit_book_cmd(repo, as_json)
+
+   Audits Book Codex hierarchy, English-first tracks, collections, and apparatus placement.
 
 
