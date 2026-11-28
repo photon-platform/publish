@@ -2,6 +2,14 @@ changelog
 =========
 
 
+0.5.3
+=====
+*2026-11-28*
+
+- perf(bibliography): Record ``:person:``, ``:cite:``, and ``:term:`` backlink occurrences on ``doctree-read`` (with ``env-purge-doc`` and ``env-merge-info`` support) instead of unpickling every doctree during ``env-updated``, dramatically speeding up 1,500+ page codices like ``geometor/elements`` and ``geometor/etc``.
+- fix(cards): Tighten ``*:type=book`` wildcard queries to require root or ``<slug>/index`` documents so nested chapter pages never leak into book-codex directories.
+
+
 0.5.2
 =====
 *2026-11-28*

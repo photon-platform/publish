@@ -1055,6 +1055,7 @@ class CardRegistry:
                     for c in cards_map.values()
                     if c.type == "book"
                     and c.docname.count("/") <= 1
+                    and (c.docname == "index" or c.docname.endswith("/index"))
                     and c.docname.split("/", 1)[0] not in non_book
                 ]
             return [c for c in cards_map.values() if c.type == want_type]
