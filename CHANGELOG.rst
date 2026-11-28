@@ -2,6 +2,13 @@ changelog
 =========
 
 
+0.5.1
+=====
+*2026-11-28*
+
+- fix(cards,bibliography): Optimize ``build_all_cards`` with O(M) inverted label index, cached site emblem, and deferred inline SVG parsing for 1,500+ page codices; add folder-per-unit bare track pairing (``<unit>/index`` + ``<unit>/la``) and locus-prefix citation matching to ``.. backlinks::``; restrict inferred ``type="book"`` to top-level book roots; exclude directory ``index`` pages from wildcard ``prefix/*`` card queries; scope remote card IDs as ``<inventory>:<docname>``; fix Sphinx 10 ``_InventoryItem`` attribute access.
+
+
 0.5.0
 =====
 *2026-11-28*

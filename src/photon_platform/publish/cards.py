@@ -245,7 +245,7 @@ class Card:
         site_info = site_info or {}
         facets = raw.get("facets") or {}
         docname = str(raw.get("docname") or "")
-        card_id = str(raw.get("id") or (f"{inventory}:{docname}" if inventory else docname))
+        card_id = f"{inventory}:{docname}" if inventory and docname else str(raw.get("id") or docname)
         kicker = str(raw.get("kicker") or "")
         if not kicker and site_info:
             org_name = site_info.get("org_name") or site_info.get("org") or ""
@@ -492,6 +492,21 @@ def _collect_doc_labels(env: Any, docname: str) -> list[str]:
     return labels
 
 
+def _build_labels_by_doc(env: Any) -> dict[str, list[str]]:
+    """Invert Sphinx `std` domain labels into `docname -> [labels]` once in O(M)."""
+    by_doc: dict[str, list[str]] = {}
+    with contextlib.suppress(AttributeError, KeyError, TypeError):
+        std = env.domains.get("std") if hasattr(env, "domains") else None
+        if std is not None:
+            for mapping in (getattr(std, "labels", {}), getattr(std, "anonlabels", {})):
+                for lbl, entry in mapping.items():
+                    if entry and entry[0]:
+                        bucket = by_doc.setdefault(entry[0], [])
+                        if lbl not in bucket:
+                            bucket.append(lbl)
+    return by_doc
+
+
 def resolve_document_card(
     env: Any,
     builder: Any,
@@ -499,6 +514,9 @@ def resolve_document_card(
     doctree: nodes.document | None = None,
     *,
     registry: CardRegistry | None = None,
+    labels_by_doc: dict[str, list[str]] | None = None,
+    site_emblem: tuple[str, str] | None = None,
+    inline_hero_svg: bool = True,
 ) -> Card:
     """Resolve a single canonical `Card` for local document `docname`."""
     from .directives.collection import (
@@ -512,7 +530,15 @@ def resolve_document_card(
     raw_meta = dict((getattr(env, "metadata", {}) or {}).get(docname, {}) or {})
     meta = _normalize_log_meta(docname, raw_meta)
 
-    if doctree is None and hasattr(env, "get_doctree"):
+    # Only unpickle doctree if we need body text (no explicit description) or figure discovery
+    has_explicit_desc = any(
+        str(meta.get(k) or "").strip() for k in ("card_description", "description", "summary")
+    ) or (bool(meta.get("excerpt")) and not meta.get("_enunciation_excerpt"))
+    has_explicit_img = any(
+        str(meta.get(k) or "").strip() for k in ("card_image", "image", "featured_image")
+    )
+    need_doctree = (not has_explicit_desc) or (not has_explicit_img and inline_hero_svg)
+    if doctree is None and need_doctree and hasattr(env, "get_doctree"):
         with contextlib.suppress(Exception):
             doctree = env.get_doctree(docname)
 
@@ -566,7 +592,10 @@ def resolve_document_card(
                     description_source = "meta"
 
     # Media: small medallion (emblem) + larger hero visual (image)
-    emblem_uri, emblem_svg = resolve_site_emblem(env, meta)
+    if site_emblem is not None and not (meta.get("emblem") or meta.get("medallion")):
+        emblem_uri, emblem_svg = site_emblem
+    else:
+        emblem_uri, emblem_svg = resolve_site_emblem(env, meta)
     image_uri = ""
     image_alt = card_title
     image_width = ""
@@ -584,7 +613,7 @@ def resolve_document_card(
         image_uri = str(fig_info.get("uri") or "")
         image_alt = str(fig_info.get("alt") or card_title)
         image_width = str(fig_info.get("width") or "")
-        if fig_info.get("svg_disk_path"):
+        if inline_hero_svg and fig_info.get("svg_disk_path"):
             image_svg = _read_inline_svg(Path(fig_info["svg_disk_path"]), as_thumbnail=True)
 
     # Companion tracks
@@ -612,11 +641,34 @@ def resolve_document_card(
     cfg = getattr(env, "config", None)
     master_doc = getattr(cfg, "master_doc", "index") if cfg else "index"
     entity_type = str(meta.get("type") or "").strip()
+    _non_book_top_dirs = {
+        "about",
+        "usage",
+        "log",
+        "demos",
+        "modules",
+        "todos",
+        "people",
+        "sources",
+        "bibliography",
+        "glossary",
+        "refs",
+    }
+    top_seg = docname.split("/", 1)[0] if "/" in docname else ""
+    if entity_type == "book" and (docname.count("/") > 1 or top_seg in _non_book_top_dirs):
+        entity_type = "section"
     if not entity_type:
         if docname == master_doc:
             entity_type = "project"
-        elif meta.get("layout") == "book" and docname.endswith("/index"):
+        elif (
+            docname.count("/") == 1
+            and docname.endswith("/index")
+            and top_seg not in _non_book_top_dirs
+            and (meta.get("layout") == "book" or meta.get("book_title"))
+        ):
             entity_type = "book"
+        elif meta.get("layout") == "book":
+            entity_type = "section"
         else:
             entity_type = "article"
 
@@ -673,7 +725,7 @@ def resolve_document_card(
         github_url=str(meta.get("github_url") or "").strip(),
         companion_tracks=companion_tracks,
         bib=bib,
-        labels=_collect_doc_labels(env, docname),
+        labels=list(labels_by_doc.get(docname, ())) if labels_by_doc is not None else _collect_doc_labels(env, docname),
         card_ref=card_ref,
         meta=meta,
     )
@@ -877,7 +929,12 @@ class CardRegistry:
         for domain_type in ("std:doc", "std:label"):
             bucket = inv_data.get(domain_type) or {}
             if target in bucket:
-                _proj, _ver, uri, disp = bucket[target]
+                item = bucket[target]
+                if hasattr(item, "uri"):
+                    uri = item.uri
+                    disp = getattr(item, "displayname", "-")
+                else:
+                    _proj, _ver, uri, disp = item
                 title = disp if disp and disp != "-" else target
                 return Card(
                     id=f"{inventory}:{target}",
@@ -983,10 +1040,20 @@ class CardRegistry:
             return list(cards_map.values())
         if expr.startswith("type="):
             want_type = expr.split("=", 1)[1].strip()
+            if want_type == "book":
+                non_book = {"about", "usage", "log", "demos", "modules", "todos", "people", "sources", "bibliography", "glossary", "refs"}
+                return [
+                    c
+                    for c in cards_map.values()
+                    if c.type == "book"
+                    and c.docname.count("/") <= 1
+                    and c.docname.split("/", 1)[0] not in non_book
+                ]
             return [c for c in cards_map.values() if c.type == want_type]
         if expr.endswith("/*"):
             prefix = expr[:-1].lstrip("/")
-            return [c for d, c in cards_map.items() if d.startswith(prefix)]
+            index_doc = f"{prefix}index"
+            return [c for d, c in cards_map.items() if d.startswith(prefix) and d != index_doc]
 
         one = self.resolve(pat)
         return [one] if one else []
@@ -1086,11 +1153,25 @@ def _attach_registry_to_builder(app: Any) -> None:
 def build_all_cards(app: Any, env: Any) -> None:
     """Resolve `Card` objects for every document in `env.found_docs` on `env-updated`."""
     registry = get_card_registry(app)
+    labels_by_doc = _build_labels_by_doc(env)
+    site_emblem = resolve_site_emblem(env)
     cards: dict[str, Card] = {}
     uncurated: list[str] = []
 
-    for docname in sorted(getattr(env, "found_docs", set()) or ()):
-        card = resolve_document_card(env, getattr(app, "builder", None), docname, registry=registry)
+    docs = sorted(getattr(env, "found_docs", set()) or ())
+    # For huge codices (>250 docs), defer inline SVG thumbnail parsing until collection render
+    eager_svg = len(docs) <= 250
+
+    for docname in docs:
+        card = resolve_document_card(
+            env,
+            getattr(app, "builder", None),
+            docname,
+            registry=registry,
+            labels_by_doc=labels_by_doc,
+            site_emblem=site_emblem,
+            inline_hero_svg=eager_svg,
+        )
         cards[docname] = card
         if card.description_source in ("fallback", "empty"):
             uncurated.append(docname)

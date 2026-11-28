@@ -313,8 +313,33 @@ class RoleOccurrence:
     index_in_doc: int
 
 
+BARE_TRACK_STEMS = {
+    "index": "EN",
+    "en": "EN",
+    "la": "LA",
+    "el": "EL",
+    "grc": "EL",
+    "de": "DE",
+    "fr": "FR",
+    "it": "IT",
+    "da": "DA",
+    "summary": "Summary",
+    "notes": "Notes",
+    "commentary": "Commentary",
+}
+
+
 def _infer_track_and_group(docname: str, meta: dict[str, Any]) -> tuple[str, str]:
-    """Return `(base_group, track_label)` so parallel tracks pair cleanly."""
+    """Return `(base_group, track_label)` so parallel tracks pair cleanly
+    for both legacy `<stem>-en` and folder-per-unit `<unit>/index` + `<unit>/la` layouts."""
+    if "/" in docname:
+        parent_dir, leaf = docname.rsplit("/", 1)
+        leaf_low = leaf.lower()
+        if leaf_low in BARE_TRACK_STEMS:
+            lang = str(meta.get("lang") or meta.get("language") or "").strip().upper()
+            label = lang if (leaf_low == "index" and lang and len(lang) <= 3) else BARE_TRACK_STEMS[leaf_low]
+            return parent_dir, label
+
     stem = docname
     m = TRACK_SUFFIX_RE.search(stem)
     if m:
@@ -323,7 +348,7 @@ def _infer_track_and_group(docname: str, meta: dict[str, Any]) -> tuple[str, str
         label = suffix.upper() if len(suffix) <= 3 else suffix.title()
         return base_group, label
 
-    lang = str(meta.get("language") or meta.get("track") or "").strip()
+    lang = str(meta.get("lang") or meta.get("language") or meta.get("track") or "").strip()
     if lang:
         return stem, lang.upper() if len(lang) <= 3 else lang.title()
     return stem, ""
@@ -513,7 +538,13 @@ def process_bibliography_nodes(app: Any, doctree: nodes.document, fromdocname: s
         else:
             slug = _slugify(raw_key)
 
-        occs = backlink_index.get((kind, slug), [])
+        occs = list(backlink_index.get((kind, slug), []))
+        # Also match locus-qualified citations (e.g. `aristotle:anal-post:I.2` for work `aristotle-anal-post`)
+        if kind == "cite" and slug:
+            prefix = f"{slug}-"
+            for (rk, rslug), rlist in sorted(backlink_index.items()):
+                if rk == "cite" and rslug.startswith(prefix):
+                    occs.extend(rlist)
         # Exclude self-references from the record page itself
         occs = [o for o in occs if o.docname != fromdocname]
         if not occs:
