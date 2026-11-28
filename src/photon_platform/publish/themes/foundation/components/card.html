@@ -1,0 +1,155 @@
+{# Canonical 4-slot semantic Card component (`photon-platform/publish`).
+   Driven purely via CSS into vertical cards, horizontal banners, compact list rows,
+   searchable directory cards, standalone `.. card::` embeds, and 1280x640 social banners.
+
+   Expected context:
+     - `article` (Card.to_template_dict())
+     - `pathto(uri, resource=False)`
+     - optional: `is_directory` (bool), `is_social` (bool), `note_label` (str), `extra_class` (str)
+#}
+{%- set is_dir = is_directory | default(false) -%}
+{%- set is_soc = is_social | default(false) -%}
+{%- set primary_href = article.site_url or article.url or (pathto(article.docname) if article.docname else '#') -%}
+{%- set opens_external = bool(article.site_url or article.is_remote) if bool is defined else (true if (article.site_url or article.is_remote) else false) -%}
+{%- set langs_str = (article.languages | join('|')) if (article.languages is iterable and article.languages is not string) else (article.languages or '') -%}
+{%- set eras_str = article.era or article.series or '' -%}
+{%- set death_num = article.death_year_sort if (article.death_year_sort is defined and article.death_year_sort is not none) else (article.death_year if (article.death_year is defined and article.death_year is not none and article.death_year != '') else '') -%}
+{%- set year_num = article.year_sort if (article.year_sort is defined and article.year_sort is not none) else (article.year if (article.year is defined and article.year is not none and article.year != '') else '') -%}
+{%- set year_disp = article.year_display or article.year_label or article.year or '' -%}
+{%- set pub_str = article.published_at or '' -%}
+{%- set hero_src = article.excerpt_figure_filename or article.image or '' -%}
+{%- set hero_svg = article.excerpt_svg_content or '' -%}
+{%- set emblem_src = article.emblem or '' -%}
+{%- set emblem_svg = article.emblem_svg or '' -%}
+<article class="card excerpt{% if is_dir %} collection-directory-card{% endif %}{% if is_soc %} card--social{% endif %}{% if extra_class %} {{ extra_class }}{% endif %}"
+         data-card-id="{{ (article.id or article.docname or '') | e }}"
+         data-card-type="{{ (article.type or 'article') | e }}"
+         data-title="{{ (article.title or '') | e }}"
+         data-death-year="{{ death_num | e }}"
+         data-year="{{ year_num | e }}"
+         data-published-at="{{ pub_str | e }}"
+         data-languages="{{ langs_str | e }}"
+         data-era="{{ eras_str | e }}"
+         data-search="{{ ((article.title or '') ~ ' ' ~ (article.author or '') ~ ' ' ~ (article.native_title or '') ~ ' ' ~ year_disp ~ ' ' ~ (article.edition_year or '') ~ ' ' ~ (article.era or '') ~ ' ' ~ (article.series or '') ~ ' ' ~ (article.description or article.excerpt or '') ~ ' ' ~ langs_str) | striptags | e }}">
+  <div class="content card-inner">
+{%- if hero_svg or hero_src %}
+    <figure class="card-media{% if hero_svg %} excerpt-svg{% endif %}"{% if article.excerpt_figure_width %} style="width: {{ article.excerpt_figure_width }};"{% endif %}>
+{%-   if emblem_svg or emblem_src %}
+      <span class="card-medallion card-medallion--corner" aria-hidden="true">
+{%-     if emblem_svg %}
+        {{ emblem_svg | safe }}
+{%-     else %}
+        <img src="{{ pathto(emblem_src, 1) }}" alt="" loading="lazy" decoding="async" />
+{%-     endif %}
+      </span>
+{%-   endif %}
+      <a href="{{ primary_href | e }}"{% if opens_external %} target="_blank" rel="noopener"{% endif %}{% if article.excerpt_figure_alt %} aria-label="{{ article.excerpt_figure_alt | e }}"{% endif %}>
+{%-   if hero_svg %}
+        {{ hero_svg | safe }}
+{%-   else %}
+        <img src="{{ pathto(hero_src, 1) }}" alt="{{ (article.excerpt_figure_alt or article.title) | e }}" loading="lazy" decoding="async" />
+{%-   endif %}
+      </a>
+    </figure>
+{%- endif %}
+    <section class="card-main">
+      <header class="card-header">
+{%- if emblem_svg or emblem_src %}
+        <span class="card-medallion card-medallion--header" title="{{ (article.kicker or article.title) | e }}">
+{%-   if emblem_svg %}
+          {{ emblem_svg | safe }}
+{%-   else %}
+          <img src="{{ pathto(emblem_src, 1) }}" alt="" loading="lazy" decoding="async" />
+{%-   endif %}
+        </span>
+{%- endif %}
+        <div class="card-header-text">
+{%- if article.kicker or is_soc %}
+          <div class="card-kicker">
+{%-   if article.kicker %}
+            <span class="card-kicker-org">{{ article.kicker }}</span>
+{%-   endif %}
+{%-   if not is_soc and article.type and article.type not in ('article', 'project_record', 'book_record', 'social') %}
+            <span class="card-type-badge">{{ article.type }}</span>
+{%-   endif %}
+          </div>
+{%- endif %}
+          <h2 class="card-title"><a href="{{ primary_href | e }}"{% if opens_external %} target="_blank" rel="noopener"{% endif %}>{{ article.title }}</a></h2>
+{%- if article.native_title %}
+          <p class="card-subtitle collection-directory-native"><em>{{ article.native_title }}</em></p>
+{%- elif article.subtitle and article.subtitle != article.title %}
+          <p class="card-subtitle"><em>{{ article.subtitle }}</em></p>
+{%- endif %}
+        </div>
+      </header>
+{%- if is_dir or article.author or article.lifespan or article.death_label or year_disp or article.era or article.series %}
+      <div class="card-meta collection-directory-meta">
+{%-   if article.author %}<span>{% if article.author_doc %}<a href="{{ pathto(article.author_doc) }}">{{ article.author }}</a>{% else %}{{ article.author }}{% endif %}</span>{% endif %}
+{%-   if article.lifespan %}<span>{{ article.lifespan }}</span>{% endif %}
+{%-   if article.death_label %}<span>Date: <strong>{{ article.death_label }}</strong></span>{% endif %}
+{%-   if year_disp %}<span>{{ year_disp }}</span>{% endif %}
+{%-   if article.era %}<span>{{ article.era }}</span>{% endif %}
+{%-   if article.series %}<span>{{ article.series }}</span>{% endif %}
+      </div>
+{%- endif %}
+{%- if article.excerpt_text or article.local_note_html %}
+      <div class="card-body collection-directory-excerpt">
+{%-   if article.excerpt_text %}
+        {{ article.excerpt_text | safe }}
+{%-   endif %}
+{%-   if article.local_note_html %}
+        <div class="card-local-note">
+          <span class="card-local-note-label">{{ note_label | default('In This Work') }}</span>
+          {{ article.local_note_html | safe }}
+        </div>
+{%-   endif %}
+      </div>
+{%- endif %}
+{%- if article.languages and not is_soc %}
+      <div class="card-tags collection-directory-tags">
+{%-   for lang in article.languages %}
+        <span class="card-tag collection-directory-tag">{{ lang }}</span>
+{%-   endfor %}
+      </div>
+{%- endif %}
+{%- if article.companion_tracks and article.companion_tracks | length > 1 and not is_soc %}
+      <nav class="excerpt-tracks" aria-label="Tracks">
+{%-   for tr in article.companion_tracks %}
+{%-     if not loop.first %}
+        <span class="excerpt-track-sep">&middot;</span>
+{%-     endif %}
+        <a class="excerpt-track-link" href="{{ pathto(tr.docname) }}">{{ tr.label }}</a>
+{%-   endfor %}
+      </nav>
+{%- endif %}
+{%- if is_dir and not is_soc %}
+      <nav class="excerpt-tracks collection-directory-links" aria-label="Record links">
+{%-   if article.site_url %}
+        <a class="excerpt-track-link" href="{{ article.site_url | e }}" target="_blank" rel="noopener">Open Site &rarr;</a>
+        <span class="excerpt-track-sep">&middot;</span>
+{%-   endif %}
+{%-   if article.docname and not article.is_remote %}
+        <a class="excerpt-track-link" href="{{ pathto(article.docname) }}">Record</a>
+{%-   elif article.url %}
+        <a class="excerpt-track-link" href="{{ article.url | e }}" target="_blank" rel="noopener">Canonical Record</a>
+{%-   endif %}
+{%-   if article.github_url %}
+        <span class="excerpt-track-sep">&middot;</span>
+        <a class="excerpt-track-link" href="{{ article.github_url | e }}" target="_blank" rel="noopener">GitHub</a>
+{%-   endif %}
+      </nav>
+{%- endif %}
+{%- if is_soc and (article.url or article.site_url) %}
+      <footer class="card-footer card-social-footer">
+        <span class="card-social-domain">{{ (article.site_url or article.url) | replace('https://', '') | replace('http://', '') }}</span>
+      </footer>
+{%- endif %}
+    </section>
+  </div>
+{%- if not is_dir and not is_soc and (article.date or article.author or article.category or article.categories or article.tags) %}
+  <footer class="card-footer">
+{%-   set meta = article %}
+{%    include "article/_nav_meta.html" %}
+  </footer>
+{%- endif %}
+</article>

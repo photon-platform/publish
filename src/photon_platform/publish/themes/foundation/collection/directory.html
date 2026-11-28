@@ -13,73 +13,9 @@
     <div class="collection-directory-filters"></div>
   </div>
   <div class="collection layout-cards collection-directory-grid">
+{%- set is_directory = true -%}
 {%- for article in collection.articles %}
-{%-   set primary_href = article.site_url or pathto(article.docname) %}
-{%-   set langs_str = (article.languages | join('|')) if article.languages is iterable and article.languages is not string else (article.languages or '') %}
-{%-   set eras_str = article.era or article.series or '' %}
-{%-   set death_num = article.death_year_sort if article.death_year_sort is defined and article.death_year_sort is not none else (article.death_year if article.death_year is defined and article.death_year != '' else '') %}
-{%-   set year_num = article.year_sort if article.year_sort is defined and article.year_sort is not none else (article.year if article.year is defined and article.year != '' else '') %}
-{%-   set year_disp = article.year_display or article.year_label or article.year or '' %}
-{%-   set pub_str = article.published_at or '' %}
-    <article class="excerpt collection-directory-card"
-             data-title="{{ (article.title or '') | e }}"
-             data-death-year="{{ death_num | e }}"
-             data-year="{{ year_num | e }}"
-             data-published-at="{{ pub_str | e }}"
-             data-languages="{{ langs_str | e }}"
-             data-era="{{ eras_str | e }}"
-             data-search="{{ ((article.title or '') ~ ' ' ~ (article.author or '') ~ ' ' ~ (article.native_title or '') ~ ' ' ~ year_disp ~ ' ' ~ (article.edition_year or '') ~ ' ' ~ (article.era or '') ~ ' ' ~ (article.series or '') ~ ' ' ~ (article.excerpt or '') ~ ' ' ~ langs_str) | striptags | e }}">
-      <div class="content">
-{%-   if article.excerpt_svg_content %}
-        <figure class="excerpt-svg">
-          <a href="{{ primary_href | e }}"{% if article.site_url %} target="_blank" rel="noopener"{% endif %}>
-            {{ article.excerpt_svg_content | safe }}
-          </a>
-        </figure>
-{%-   elif article.excerpt_figure_filename %}
-        <figure>
-          <a href="{{ primary_href | e }}"{% if article.site_url %} target="_blank" rel="noopener"{% endif %}>
-            <img src="{{ pathto(article.excerpt_figure_filename, 1) }}" alt="{{ (article.excerpt_figure_alt or article.title) | e }}" loading="lazy" />
-          </a>
-        </figure>
-{%-   endif %}
-        <section>
-          <h2><a href="{{ primary_href | e }}"{% if article.site_url %} target="_blank" rel="noopener"{% endif %}>{{ article.title }}</a></h2>
-{%-   if article.native_title %}
-          <p class="collection-directory-native"><em>{{ article.native_title }}</em></p>
-{%-   endif %}
-          <div class="collection-directory-meta">
-{%-   if article.author %}<span>{% if article.author_doc %}<a href="{{ pathto(article.author_doc) }}">{{ article.author }}</a>{% else %}{{ article.author }}{% endif %}</span>{% endif %}
-{%-   if article.lifespan %}<span>{{ article.lifespan }}</span>{% endif %}
-{%-   if article.death_label %}<span>Date: <strong>{{ article.death_label }}</strong></span>{% endif %}
-{%-   if year_disp %}<span>{{ year_disp }}</span>{% endif %}
-{%-   if article.era %}<span>{{ article.era }}</span>{% endif %}
-{%-   if article.series %}<span>{{ article.series }}</span>{% endif %}
-          </div>
-{%-   if article.excerpt_text %}
-          <div class="collection-directory-excerpt">{{ article.excerpt_text | safe }}</div>
-{%-   endif %}
-{%-   if article.languages %}
-          <div class="collection-directory-tags">
-{%-     for lang in article.languages %}
-            <span class="collection-directory-tag">{{ lang }}</span>
-{%-     endfor %}
-          </div>
-{%-   endif %}
-          <nav class="excerpt-tracks collection-directory-links" aria-label="Record links">
-{%-   if article.site_url %}
-            <a class="excerpt-track-link" href="{{ article.site_url | e }}" target="_blank" rel="noopener">Open Site &rarr;</a>
-            <span class="excerpt-track-sep">&middot;</span>
-{%-   endif %}
-            <a class="excerpt-track-link" href="{{ pathto(article.docname) }}">Record</a>
-{%-   if article.github_url %}
-            <span class="excerpt-track-sep">&middot;</span>
-            <a class="excerpt-track-link" href="{{ article.github_url | e }}" target="_blank" rel="noopener">GitHub</a>
-{%-   endif %}
-          </nav>
-        </section>
-      </div>
-    </article>
+{%    include "components/card.html" %}
 {%- endfor %}
   </div>
 </section>

@@ -2,6 +2,16 @@ changelog
 =========
 
 
+0.5.0
+=====
+*2026-11-28*
+
+- feat(cards): Add unified ``Card`` engine (``cards.py``) with hybrid description precedence (``:description:`` > ``.. summary::`` > ``.. enunciation::`` > flagged fallback), dual visual slots (small project ``emblem`` medallion + larger ``image`` hero), ``:card_ref:`` canonical inheritance, automatic ``docs/cards.json`` (``photon.card.v1``) export alongside ``objects.inv``, and lazy Intersphinx-backed ``CardRegistry`` with ``register_sisters(...)`` in ``global_conf.py``.
+- feat(directives & collections): Add ``.. card:: <address>``, ``.. summary::``, ``.. citation-formats::``, and ``.. backlinks::`` directives (``directives/card.py``), and extend ``.. collection::`` / directory presets to seamlessly mix local records with remote Intersphinx card addresses, wildcard queries (``euclid:books/*``, ``*:type=book``), and ``:from-roles:`` auto-collections.
+- feat(theme & social): Unify card markup into one 4-slot semantic ``<article class="card">`` template (``components/card.html`` + ``_cards.scss``) driving vertical cards, horizontal banners, compact lists, directories, inline embeds, and local ``google-chrome --headless=new`` ``1280x640`` HTML+CSS social banner capture (``social_capture.py`` + ``social_card.html``).
+- feat(bibliography & roles): Add ``bibliography.py`` with pure-Python Chicago, MLA, APA, and BibTeX citation formatters, ``docs/bibliography.bib`` export, and automated parallel-track Hoenen-style passage backlinks (``LA · EN``); upgrade ``:person:``, ``:cite:``, and ``:term:`` in ``roles/geometry.py`` to resolve per-record directories and cross-project ``cards.json`` Cards with rich tooltips.
+
+
 0.4.13
 ======
 *2026-11-27*

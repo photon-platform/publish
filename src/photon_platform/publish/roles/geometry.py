@@ -304,11 +304,13 @@ def _resolve_apparatus_link(
         return href, occ_id, title_text
 
     target_doc = None
-    if role_type == "person":
-        if first_seg and f"{first_seg}/people/{slug}" in found_docs:
-            target_doc = f"{first_seg}/people/{slug}"
-        elif f"people/{slug}" in found_docs:
-            target_doc = f"people/{slug}"
+    record_dirs = {"person": "people", "cite": "bibliography", "term": "glossary"}
+    rec_dir = record_dirs.get(role_type)
+    if rec_dir:
+        if first_seg and f"{first_seg}/{rec_dir}/{slug}" in found_docs:
+            target_doc = f"{first_seg}/{rec_dir}/{slug}"
+        elif f"{rec_dir}/{slug}" in found_docs:
+            target_doc = f"{rec_dir}/{slug}"
     if target_doc is None:
         if first_seg and f"{first_seg}/{base_doc}" in found_docs:
             target_doc = f"{first_seg}/{base_doc}"
@@ -318,12 +320,33 @@ def _resolve_apparatus_link(
             target_doc = f"{first_seg}/{base_doc}"
 
     href = None
+    resolved_card = None
+
     if target_doc and hasattr(builder, "get_relative_uri"):
         try:
             rel_uri = builder.get_relative_uri(current_docname, target_doc)
-            href = f"{rel_uri}#{anchor_prefix}-{slug}"
+            # Standalone per-entity record pages link directly to the page (no redundant fragment needed
+            # unless it's a monolithic bibliography/persons/glossary page)
+            if rec_dir and target_doc.endswith(f"/{slug}"):
+                href = rel_uri
+            else:
+                href = f"{rel_uri}#{anchor_prefix}-{slug}"
         except Exception:
             href = None
+        if env is not None:
+            resolved_card = (getattr(env, "publish_cards", None) or {}).get(target_doc)
+
+    # Cross-project Intersphinx / `cards.json` resolution when no local record exists
+    if href is None and env is not None:
+        reg = getattr(builder, "_photon_card_registry", None)
+        if reg is not None:
+            try:
+                remote_card = reg.resolve_by_role(role_type, target)
+                if remote_card is not None:
+                    resolved_card = remote_card
+                    href = remote_card.url or remote_card.site_url or None
+            except Exception:
+                pass
 
     # Track per-page occurrence counter for back-link targets
     occ_doc = getattr(translator, "_apparatus_occ_doc", None)
@@ -335,8 +358,12 @@ def _resolve_apparatus_link(
     counts[key_pair] = counts.get(key_pair, 0) + 1
     occ_id = f"occ-{role_type}-{slug}-{counts[key_pair]}"
 
-    # Enrich tooltip title from book apparatus registries if available
-    if env is not None:
+    # Enrich tooltip title: prefer unified Card tooltip, falling back to legacy sidecar JSON
+    if resolved_card is not None:
+        tip = resolved_card.tooltip_text()
+        if tip:
+            title_text = tip
+    elif env is not None:
         regs = _load_book_apparatus(env, first_seg or "default")
         entry = regs.get(role_type, {}).get(target)
         if isinstance(entry, dict):

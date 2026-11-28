@@ -9,6 +9,53 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'directi
 html_context = {}
 
 
+def _sister_base_url(target_org: str, sister_repo: str) -> str:
+    """Resolve canonical published base URL for an org sister repository."""
+    if sister_repo == "geometor.com":
+        return "https://geometor.com"
+    if sister_repo == f"{target_org}.github.io":
+        return f"https://{target_org}.github.io"
+    return f"https://{target_org}.github.io/{sister_repo}"
+
+
+def register_sisters(*repos: str, org: str | None = None) -> None:
+    """Register sister repositories in `intersphinx_mapping` (local-first + HTTPS fallback).
+
+    Because `publish` automatically derives `cards.json` right beside each site's
+    `objects.inv`, calling `register_sisters("aristotle", "aquinas", "catalog")` in
+    `docsrc/conf.py` enables both Sphinx cross-references and federated `.. card::` /
+    `.. collection::` embeds with zero duplicate configuration.
+    """
+    caller_globals = sys._getframe(1).f_globals
+    target_org = org or caller_globals.get("org") or globals().get("org") or "geometor"
+    current_repo = caller_globals.get("repo") or globals().get("repo") or ""
+    base_root = project_root or os.getcwd()
+    mapping = caller_globals.get("intersphinx_mapping")
+    if mapping is None:
+        mapping = globals().get("intersphinx_mapping")
+    if mapping is None:
+        return
+
+    for spec in repos:
+        if not spec:
+            continue
+        if ":" in spec:
+            alias, sister_repo = spec.split(":", 1)
+        else:
+            alias, sister_repo = spec, spec
+        if sister_repo == current_repo:
+            mapping.pop(alias, None)
+            continue
+        base_url = _sister_base_url(target_org, sister_repo)
+        local_inv = os.path.abspath(
+            os.path.join(base_root, "..", sister_repo, "docs", "objects.inv")
+        )
+        if os.path.isfile(local_inv):
+            mapping[alias] = (base_url, (local_inv, None))
+        else:
+            mapping[alias] = (base_url, None)
+
+
 def setup_globals(org: str, org_name: str, repo: str, repo_name: str) -> None:
     """Set up global variables for the Sphinx configuration.
 
@@ -43,26 +90,35 @@ def setup_globals(org: str, org_name: str, repo: str, repo_name: str) -> None:
     globals().update(config_updates)
     caller_globals.update(config_updates)
 
-    # Register sister GEOMETOR intersphinx inventories (euclid, elements) with local fallback
+    # Register core sister inventories with local-first fallback (zero network when built locally)
     base_root = project_root or os.getcwd()
     if "intersphinx_mapping" in globals():
-        for sister_repo in ("euclid", "elements"):
+        core_sisters: list[tuple[str, str, bool]] = [
+            ("euclid", "euclid", org == "geometor"),
+            ("elements", "elements", org == "geometor"),
+            ("catalog", "catalog", False),
+            ("geometor", "geometor.com", False),
+        ]
+        if org == "photon-platform":
+            core_sisters.extend(
+                [
+                    ("publish", "publish", False),
+                    ("clerk", "clerk", False),
+                    ("photon", "photon-platform.github.io", False),
+                ]
+            )
+        for alias, sister_repo, always_remote in core_sisters:
             if repo == sister_repo:
-                intersphinx_mapping.pop(sister_repo, None)
+                intersphinx_mapping.pop(alias, None)
                 continue
             local_inv = os.path.abspath(
                 os.path.join(base_root, "..", sister_repo, "docs", "objects.inv")
             )
+            base_url = _sister_base_url(org if alias in ("publish", "clerk", "photon") else "geometor", sister_repo)
             if os.path.isfile(local_inv):
-                intersphinx_mapping[sister_repo] = (
-                    f"https://geometor.github.io/{sister_repo}",
-                    (local_inv, None),
-                )
-            elif org == "geometor":
-                intersphinx_mapping[sister_repo] = (
-                    f"https://geometor.github.io/{sister_repo}",
-                    None,
-                )
+                intersphinx_mapping[alias] = (base_url, (local_inv, None))
+            elif always_remote:
+                intersphinx_mapping[alias] = (base_url, None)
 
     # Add exclusion for the main package index to avoid duplicates with modules/index.rst
     # We assume the structure modules/api/<namespace>/<repo>/index.rst
@@ -147,9 +203,12 @@ extensions = [
     "sphinxcontrib.youtube",
     "myst_parser",
     "sphinxcontrib.jquery",
+    "photon_platform.publish.cards",
+    "photon_platform.publish.directives.card",
     "photon_platform.publish.directives.collection",
     "photon_platform.publish.directives.elements",
     "photon_platform.publish.roles.geometry",
+    "photon_platform.publish.bibliography",
     "photon_platform.publish.book",
     "photon_platform.publish.images",
     "autoapi.extension",

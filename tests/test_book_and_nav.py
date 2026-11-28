@@ -215,7 +215,7 @@ def test_etc_multitrack_and_mathjax_unification() -> None:
     folio_base = (pkg_root / "folio_review" / "templates" / "base.html").read_text(encoding="utf-8")
     assert "katex" not in folio_base.lower()
     assert "mathjax@4/tex-mml-chtml.js" in folio_base
-    excerpt_html = (pkg_root / "themes" / "foundation" / "article" / "excerpt.html").read_text(encoding="utf-8")
-    assert 'loading="lazy"' in excerpt_html
+    card_html = (pkg_root / "themes" / "foundation" / "components" / "card.html").read_text(encoding="utf-8")
+    assert 'loading="lazy"' in card_html
 
 

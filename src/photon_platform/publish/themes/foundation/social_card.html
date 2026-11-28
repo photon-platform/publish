@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ article.title | e }}</title>
+  <style>
+{{ theme_css | safe }}
+  </style>
+</head>
+<body class="social-card-canvas is-book-page">
+{%- set is_social = true -%}
+{%- set is_directory = false -%}
+{% include "components/card.html" %}
+</body>
+</html>

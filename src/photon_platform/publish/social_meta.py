@@ -202,8 +202,14 @@ def extract_page_description(
     context: dict[str, Any],
 ) -> str:
     """Extract a clean 160-200 character social description for `pagename`."""
+    # Prefer unified Card description when already resolved (handles :description: > .. summary:: > .. enunciation::)
+    publish_cards = getattr(env, "publish_cards", None) or {}
+    card = publish_cards.get(pagename)
+    if card is not None and getattr(card, "description", ""):
+        return _clean_text_snippet(card.description)
+
     meta = (getattr(env, "metadata", {}) or {}).get(pagename, {}) or {}
-    for key in ("description", "excerpt", "summary"):
+    for key in ("card_description", "description", "excerpt", "summary"):
         val = str(meta.get(key) or "").strip()
         if val:
             return _clean_text_snippet(val)
@@ -618,12 +624,50 @@ def generate_social_banner(
     overline: str = "",
     subtitle: str = "",
     emblem_path: Path | None = None,
+    hero_path: Path | None = None,
     site_domain: str = "",
     force: bool = False,
 ) -> bool:
-    """Render a dedicated 1200x630 obsidian-vellum & gold social sharing PNG banner."""
+    """Render a dedicated 1280x640 social sharing PNG banner from the Foundation HTML+CSS card.
+
+    Uses local headless Chrome (`social_capture.py`) when available so the social
+    card matches the live webpage's typography, tokens, and SVG rendering 1-to-1.
+    Falls back to Pillow rendering only if no local Chromium/Chrome binary is present.
+    """
     if output_path.is_file() and not force:
         return False
+
+    from .social_capture import (
+        build_social_card_from_params,
+        capture_social_card_png,
+        find_chrome_binary,
+    )
+
+    chrome_bin = find_chrome_binary()
+    if chrome_bin:
+        card = build_social_card_from_params(
+            org_brand=org_brand,
+            repo_slug=repo_slug,
+            title=_smart_title_case_if_all_caps(title.strip()),
+            overline=overline.strip(),
+            subtitle=subtitle.strip(),
+            emblem_path=emblem_path,
+            hero_path=hero_path or emblem_path,
+            site_domain=site_domain,
+        )
+        try:
+            return capture_social_card_png(
+                card,
+                output_path,
+                asset_root=output_path.parents[2] if len(output_path.parents) >= 3 else output_path.parent,
+                force=force,
+                width=BANNER_WIDTH,
+                height=BANNER_HEIGHT,
+                chrome_bin=chrome_bin,
+            )
+        except Exception:
+            # Fall through to Pillow emergency fallback if Chrome fails inside a restricted sandbox
+            pass
 
     from PIL import Image, ImageDraw
 

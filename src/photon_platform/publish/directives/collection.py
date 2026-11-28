@@ -169,6 +169,8 @@ class CollectionDirective(SphinxDirective):
         'depth': directives.positive_int,
         'recursive': directives.flag,
         'docs': directives.unchanged,
+        'cards': directives.unchanged,
+        'from-roles': directives.unchanged,
     }
 
 
@@ -206,9 +208,14 @@ class CollectionDirective(SphinxDirective):
             return _normalize_log_meta(docname, meta)
 
         explicit_docs = []
+        remote_refs = []
         if self.options.get('docs'):
             explicit_docs.extend(
                 [d.strip() for d in re.split(r'[, \t\n]+', self.options['docs']) if d.strip()]
+            )
+        if self.options.get('cards'):
+            explicit_docs.extend(
+                [d.strip() for d in re.split(r'[, \t\n]+', self.options['cards']) if d.strip()]
             )
         if self.content:
             for line in self.content:
@@ -224,9 +231,15 @@ class CollectionDirective(SphinxDirective):
             current_dir = os.path.dirname(env.docname)
             resolved_docs = []
             for ed in explicit_docs:
-                clean_ed = ed.lstrip('/')
-                cand = f"{current_dir}/{clean_ed}" if current_dir else clean_ed
-                cand_norm = os.path.normpath(cand).replace(os.sep, '/')
+                # Cross-project Intersphinx/card address or wildcard query (e.g. `euclid:heath/index`, `*:type=book`)
+                if ':' in ed and not ed.startswith(':'):
+                    remote_refs.append(ed)
+                    continue
+                if ed.startswith('/'):
+                    cand_norm = os.path.normpath(ed.lstrip('/')).replace(os.sep, '/')
+                else:
+                    cand = f"{current_dir}/{ed}" if current_dir else ed
+                    cand_norm = os.path.normpath(cand).replace(os.sep, '/')
                 resolved_docs.append(cand_norm)
             docnames = resolved_docs
         elif collection_type == 'header':
@@ -348,6 +361,7 @@ class CollectionDirective(SphinxDirective):
         # Create PendingCollection node
         pending = PendingCollection()
         pending['docnames'] = docnames
+        pending['remote_refs'] = remote_refs
         pending['options'] = self.options
         
         return [pending, toc]
@@ -434,13 +448,17 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
     """
     env = app.env
     builder = app.builder
-    
-    for node in doctree.traverse(PendingCollection):
+
+    from ..cards import get_card_registry, resolve_document_card
+
+    registry = get_card_registry(app)
+    cached_cards = getattr(env, 'publish_cards', None) or {}
+
+    for node in list(doctree.findall(PendingCollection)):
         options = node['options']
         docnames = node['docnames']
-        
-        # Determine the template path based on the current theme
-        # Determine the template path based on the current theme
+        remote_refs = node.get('remote_refs') or []
+
         default_template = 'collection/index.html'
 
         collection_type = options.get('type')
@@ -451,88 +469,69 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
         title = options.get('title')
         collection_class = options.get('class', '')
         hidden = 'hidden' in options
+        from_roles = (options.get('from-roles') or '').strip().lower()
 
         if hidden:
             node.replace_self([])
-            return
+            continue
 
-        collection_items = []
+        collection_items: List[Dict[str, Any]] = []
+        seen_ids: set[str] = set()
+
         for docname in docnames:
             meta = _normalize_log_meta(docname, dict(env.metadata.get(docname, {})))
             if not collection_type or meta.get('type') == collection_type:
-                title_node = env.titles.get(docname)
-                if title_node:
-                    item = {
-                        'title': title_node.astext(),
-                        'docname': docname,
-                        'excerpt_text': '',
-                        'excerpt_figure_filename': None,
-                    }
-                    item.update(meta)
+                if docname not in env.titles and docname not in cached_cards:
+                    continue
+                card = cached_cards.get(docname)
+                if card is None:
+                    card = resolve_document_card(env, builder, docname, registry=registry)
+                item = card.to_template_dict()
+                seen_ids.add(card.id)
+                for lbl in card.labels:
+                    seen_ids.add(lbl)
+                if card.card_ref:
+                    seen_ids.add(card.card_ref)
+                collection_items.append(item)
 
-                    # We need to load the doctree to get excerpt/figure
-                    # Since we are in doctree-resolved, the pickle should exist/be up to date
-                    try:
-                        item_doctree = env.get_doctree(docname)
-                    except Exception:
-                        # Fallback if doctree cannot be loaded
-                        item_doctree = None
+        # Resolve explicit remote card addresses / wildcard queries (`euclid:heath/index`, `*:type=book`)
+        for ref in remote_refs:
+            for rcard in registry.query(ref):
+                if collection_type and rcard.type != collection_type:
+                    continue
+                if rcard.id in seen_ids:
+                    continue
+                seen_ids.add(rcard.id)
+                collection_items.append(rcard.to_template_dict())
 
-                    if meta.get('excerpt') and not meta.get('_enunciation_excerpt'):
-                        item['excerpt_text'] = f"<p>{meta['excerpt']}</p>"
-                    elif item_doctree:
-                        # Find enunciation or first paragraph/blockquote outside admonitions
-                        first_text = _find_first_excerpt_node(item_doctree)
-                        if first_text:
-                            item['excerpt_text'] = render_node_html(builder, first_text)
-                    if not item['excerpt_text'] and meta.get('excerpt'):
-                        item['excerpt_text'] = f"<p>{meta['excerpt']}</p>"
+        # Auto-populate from inline apparatus roles (`:from-roles: person | cite | term`)
+        if from_roles in ('person', 'cite', 'term'):
+            meta_key = {'person': 'persons', 'cite': 'citations', 'term': 'terms'}[from_roles]
+            scope_prefix = ''
+            if '/' in fromdocname:
+                parts = fromdocname.split('/')
+                # Scope to book root if inside `<book>/people/index` or `<book>/bibliography/index`
+                if len(parts) >= 2 and parts[0] not in ('people', 'bibliography', 'sources', 'glossary'):
+                    scope_prefix = parts[0] + '/'
 
-                    fig_info = _resolve_representative_figure(env, builder, docname, meta, item_doctree)
-                    if fig_info:
-                        item['excerpt_figure_filename'] = fig_info['uri']
-                        item['excerpt_figure_alt'] = fig_info.get('alt') or item['title']
-                        if fig_info.get('width'):
-                            item['excerpt_figure_width'] = fig_info['width']
-                        if prepare_inline_svg and fig_info.get('svg_disk_path'):
-                            item['excerpt_svg_content'] = prepare_inline_svg(
-                                fig_info['svg_disk_path'], as_thumbnail=True
-                            )
+            cited_keys: list[str] = []
+            for dname, dmeta in sorted((env.metadata or {}).items()):
+                if scope_prefix and not dname.startswith(scope_prefix):
+                    continue
+                for key in dmeta.get(meta_key, []) or []:
+                    if key and key not in cited_keys:
+                        cited_keys.append(key)
 
-                    try:
-                        from ..book import detect_companion_tracks
-                        c_tracks = detect_companion_tracks(env, docname)
-                        if len(c_tracks) > 1:
-                            item['companion_tracks'] = c_tracks
-                    except Exception:
-                        pass
-
-                    if 'tags' in item and isinstance(item['tags'], str):
-                        item['tags'] = [tag.strip() for tag in item['tags'].split(',') if tag.strip()]
-                    if 'categories' in item and isinstance(item['categories'], str):
-                        item['categories'] = [cat.strip() for cat in item['categories'].split(',') if cat.strip()]
-                    if 'category' in item and isinstance(item['category'], str):
-                        item['category'] = [cat.strip() for cat in item['category'].split(',') if cat.strip()]
-                        item.setdefault('categories', item['category'])
-                    if 'languages' in item and isinstance(item['languages'], str):
-                        item['languages'] = [lang.strip() for lang in item['languages'].split(',') if lang.strip()]
-
-                    raw_year_sort = (
-                        item.get('year_sort')
-                        if item.get('year_sort') not in (None, '')
-                        else item.get('year')
-                    )
-                    parsed_year = parse_year_sort_value(raw_year_sort)
-                    if parsed_year is not None:
-                        item['year_sort'] = parsed_year
-                    year_disp = format_year_display(item.get('year'), item.get('year_label'))
-                    if year_disp:
-                        item['year_display'] = year_disp
-                    parsed_death = parse_year_sort_value(item.get('death_year'))
-                    if parsed_death is not None:
-                        item['death_year_sort'] = parsed_death
-
-                    collection_items.append(item)
+            for key in cited_keys:
+                slug = re.sub(r'[^a-z0-9]+', '-', key.lower()).strip('-')
+                lbl = f'{from_roles}-{slug}'
+                if lbl in seen_ids or key in seen_ids:
+                    continue
+                rcard = registry.resolve_by_role(from_roles, key)
+                if rcard is not None and rcard.id not in seen_ids:
+                    seen_ids.add(rcard.id)
+                    seen_ids.add(lbl)
+                    collection_items.append(rcard.to_template_dict())
 
         if sort_key:
             if sort_key in YEAR_SORT_KEYS:
@@ -581,6 +580,10 @@ def process_collections(app: Any, doctree: nodes.document, fromdocname: str) -> 
             outline_tree = roots
 
         def pathto(otheruri, resource=False, baseuri=None):
+            if not otheruri:
+                return ''
+            if isinstance(otheruri, str) and otheruri.startswith(('http://', 'https://', 'data:', '#')):
+                return otheruri
             if resource:
                 return relative_uri(builder.get_target_uri(fromdocname), otheruri)
             return builder.get_relative_uri(fromdocname, otheruri)
