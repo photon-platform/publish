@@ -20,6 +20,7 @@ Attributes
 .. autoapisummary::
 
    photon_platform.publish.bibliography.TRACK_SUFFIX_RE
+   photon_platform.publish.bibliography.BARE_TRACK_STEMS
 
 
 Classes
@@ -121,6 +122,8 @@ Module Contents
    .. py:attribute:: index_in_doc
       :type:  int
 
+
+.. py:data:: BARE_TRACK_STEMS
 
 .. py:function:: collect_apparatus_occurrences(app: Any, env: Any) -> None
 

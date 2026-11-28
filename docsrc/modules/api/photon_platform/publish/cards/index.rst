@@ -371,7 +371,7 @@ Module Contents
    Resolve the small project/org medallion `(rel_uri, inline_svg)`.
 
 
-.. py:function:: resolve_document_card(env: Any, builder: Any, docname: str, doctree: docutils.nodes.document | None = None, *, registry: CardRegistry | None = None) -> Card
+.. py:function:: resolve_document_card(env: Any, builder: Any, docname: str, doctree: docutils.nodes.document | None = None, *, registry: CardRegistry | None = None, labels_by_doc: dict[str, list[str]] | None = None, site_emblem: tuple[str, str] | None = None, inline_hero_svg: bool = True) -> Card
 
    Resolve a single canonical `Card` for local document `docname`.
 

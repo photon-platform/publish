@@ -74,7 +74,7 @@ Package Contents
 
 
 .. py:data:: __version__
-   :value: '0.5.0'
+   :value: '0.5.2'
 
 
 .. py:data:: __licence__
