@@ -365,40 +365,36 @@ def _nearest_section_title(node: nodes.Node, fallback: str) -> str:
     return fallback
 
 
-def collect_apparatus_occurrences(app: Any, env: Any) -> None:
-    """Scan all doctrees on `env-updated` to build the automated bidirectional backlink index."""
+def _extract_occurrences_from_doctree(
+    doctree: nodes.document,
+    docname: str,
+    doc_title: str,
+    doc_meta: dict[str, Any],
+) -> list[RoleOccurrence]:
+    """Extract all `:cite:`, `:person:`, `:term:` occurrences from an in-memory doctree."""
     from .roles.geometry import cite_ref_node, person_ref_node, term_ref_node
 
-    index: dict[tuple[str, str], list[RoleOccurrence]] = defaultdict(list)
-
-    for docname in sorted(getattr(env, "found_docs", set()) or ()):
-        try:
-            doctree = env.get_doctree(docname)
-        except (OSError, KeyError, AttributeError, ValueError):
-            continue
-        title_node = (getattr(env, "titles", {}) or {}).get(docname)
-        doc_title = title_node.astext().strip() if title_node is not None else docname.split("/")[-1]
-        doc_meta = (getattr(env, "metadata", {}) or {}).get(docname, {}) or {}
-        base_group, track_label = _infer_track_and_group(docname, doc_meta)
-
-        per_doc_counts: dict[tuple[str, str], int] = {}
-        node_types = (
-            ("cite", cite_ref_node),
-            ("person", person_ref_node),
-            ("term", term_ref_node),
-        )
-        for role_type, cls in node_types:
-            for n in doctree.findall(cls):
-                target = str(n.get("ref_target") or "").strip()
-                if not target:
-                    continue
-                slug = _slugify(target)
-                pair = (role_type, target)
-                per_doc_counts[pair] = per_doc_counts.get(pair, 0) + 1
-                idx_in_doc = per_doc_counts[pair]
-                occ_id = f"occ-{role_type}-{slug}-{idx_in_doc}"
-                sec_title = _nearest_section_title(n, doc_title)
-                occ = RoleOccurrence(
+    base_group, track_label = _infer_track_and_group(docname, doc_meta)
+    per_doc_counts: dict[tuple[str, str], int] = {}
+    out: list[RoleOccurrence] = []
+    node_types = (
+        ("cite", cite_ref_node),
+        ("person", person_ref_node),
+        ("term", term_ref_node),
+    )
+    for role_type, cls in node_types:
+        for n in doctree.findall(cls):
+            target = str(n.get("ref_target") or "").strip()
+            if not target:
+                continue
+            slug = _slugify(target)
+            pair = (role_type, target)
+            per_doc_counts[pair] = per_doc_counts.get(pair, 0) + 1
+            idx_in_doc = per_doc_counts[pair]
+            occ_id = f"occ-{role_type}-{slug}-{idx_in_doc}"
+            sec_title = _nearest_section_title(n, doc_title)
+            out.append(
+                RoleOccurrence(
                     role_type=role_type,
                     target=target,
                     slug=slug,
@@ -410,7 +406,83 @@ def collect_apparatus_occurrences(app: Any, env: Any) -> None:
                     occ_id=occ_id,
                     index_in_doc=idx_in_doc,
                 )
-                index[(role_type, slug)].append(occ)
+            )
+    return out
+
+
+def record_doc_apparatus_occurrences(app: Any, doctree: nodes.document) -> None:
+    """Record role occurrences during `doctree-read` while the doctree is already in memory."""
+    env = app.env
+    docname = getattr(env, "docname", "")
+    if not docname:
+        return
+    if not hasattr(env, "publish_doc_occurrences"):
+        env.publish_doc_occurrences = {}
+
+    title_node = (getattr(env, "titles", {}) or {}).get(docname)
+    if title_node is None:
+        title_node = doctree.next_node(nodes.title)
+    doc_title = title_node.astext().strip() if title_node is not None else docname.split("/")[-1]
+    doc_meta = (getattr(env, "metadata", {}) or {}).get(docname, {}) or {}
+
+    occs = _extract_occurrences_from_doctree(doctree, docname, doc_title, doc_meta)
+    if occs:
+        env.publish_doc_occurrences[docname] = occs
+    else:
+        env.publish_doc_occurrences.pop(docname, None)
+
+
+def purge_doc_apparatus_occurrences(app: Any, env: Any, docname: str) -> None:
+    """Remove cached role occurrences when a document is re-read or deleted."""
+    store = getattr(env, "publish_doc_occurrences", None)
+    if isinstance(store, dict):
+        store.pop(docname, None)
+
+
+def merge_doc_apparatus_occurrences(app: Any, env: Any, docnames: list[str], other: Any) -> None:
+    """Merge per-document role occurrences from parallel read workers."""
+    if not hasattr(env, "publish_doc_occurrences"):
+        env.publish_doc_occurrences = {}
+    other_store = getattr(other, "publish_doc_occurrences", None) or {}
+    for dn in docnames:
+        if dn in other_store:
+            env.publish_doc_occurrences[dn] = other_store[dn]
+        else:
+            env.publish_doc_occurrences.pop(dn, None)
+
+
+def collect_apparatus_occurrences(app: Any, env: Any) -> None:
+    """Aggregate recorded role occurrences on `env-updated` with zero doctree unpickling."""
+    index: dict[tuple[str, str], list[RoleOccurrence]] = defaultdict(list)
+    per_doc = getattr(env, "publish_doc_occurrences", None)
+
+    if isinstance(per_doc, dict):
+        found = getattr(env, "found_docs", None)
+        for docname in sorted(per_doc.keys()):
+            if found is not None and docname not in found:
+                continue
+            title_node = (getattr(env, "titles", {}) or {}).get(docname)
+            doc_title = title_node.astext().strip() if title_node is not None else None
+            doc_meta = (getattr(env, "metadata", {}) or {}).get(docname, {}) or {}
+            base_group, track_label = _infer_track_and_group(docname, doc_meta)
+            for occ in per_doc[docname]:
+                if doc_title:
+                    occ.doc_title = doc_title
+                occ.base_group = base_group
+                occ.track_label = track_label
+                index[(occ.role_type, occ.slug)].append(occ)
+    else:
+        # Fallback for direct/synthetic calls where doctree-read did not run
+        for docname in sorted(getattr(env, "found_docs", set()) or ()):
+            try:
+                doctree = env.get_doctree(docname)
+            except (OSError, KeyError, AttributeError, ValueError):
+                continue
+            title_node = (getattr(env, "titles", {}) or {}).get(docname)
+            doc_title = title_node.astext().strip() if title_node is not None else docname.split("/")[-1]
+            doc_meta = (getattr(env, "metadata", {}) or {}).get(docname, {}) or {}
+            for occ in _extract_occurrences_from_doctree(doctree, docname, doc_title, doc_meta):
+                index[(occ.role_type, occ.slug)].append(occ)
 
     env.publish_apparatus_backlinks = dict(index)
 
@@ -584,6 +656,9 @@ def emit_bibliography_bib(app: Any, exception: Exception | None) -> None:
 
 
 def setup(app: Any) -> dict[str, Any]:
+    app.connect("doctree-read", record_doc_apparatus_occurrences)
+    app.connect("env-purge-doc", purge_doc_apparatus_occurrences)
+    app.connect("env-merge-info", merge_doc_apparatus_occurrences)
     app.connect("env-updated", collect_apparatus_occurrences)
     app.connect("doctree-resolved", process_bibliography_nodes)
     app.connect("build-finished", emit_bibliography_bib)
