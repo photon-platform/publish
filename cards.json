@@ -28,7 +28,7 @@
       "type": "article",
       "title": "Changelog",
       "url": "https://photon-platform.github.io/publish/changelog.html",
-      "description": "perf(bibliography): Record :person:, :cite:, and :term: backlink occurrences on doctree-read (with env-purge-doc and env-merge-info support) instead of unpickling every doctree during env-updated, dramatically speeding up 1,500+ page…",
+      "description": "fix(cards): Unwrap Sphinx 8+ normalized intersphinx_mapping entries (name, (uri, targets)) in CardRegistry._inventory_sources() so remote HTTPS cards.json federation works cleanly on GitHub Actions CI when sister repositories are…",
       "description_source": "fallback",
       "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
       "image_alt": "Changelog",
