@@ -97,6 +97,11 @@ article.card {
     color: var(--book-text-muted, #9c958a);
   }
 
+  .card-body,
+  .card-body p {
+    font-style: normal;
+  }
+
   .card-local-note {
     margin-top: 0.6rem;
     padding: 0.5rem 0.75rem;

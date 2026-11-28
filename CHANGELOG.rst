@@ -2,6 +2,13 @@ changelog
 =========
 
 
+0.5.2
+=====
+*2026-11-28*
+
+- fix(cards,controls): Scope ``collection_controls.js`` header lookup to ``:scope > header`` (and skip standalone ``.card-embed`` blocks) so layout-switcher buttons never inject into the first card's ``<header class="card-header">``; escape leading single-letter/numeral abbreviations (e.g. ``c. 427–347 BC``) across all top-of-file RST frontmatter fields to prevent Docutils ``(INFO/1) Enumerated list`` leaks; strip leaked/unbalanced ``*``/``**`` RST emphasis from plain card excerpts; deduplicate ``lifespan``/``death_label`` display and omit redundant local header medallions on same-site cards.
+
+
 0.5.1
 =====
 *2026-11-28*

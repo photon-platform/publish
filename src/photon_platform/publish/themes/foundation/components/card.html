@@ -21,6 +21,7 @@
 {%- set hero_svg = article.excerpt_svg_content or '' -%}
 {%- set emblem_src = article.emblem or '' -%}
 {%- set emblem_svg = article.emblem_svg or '' -%}
+{%- set show_medallion = (is_soc or article.is_remote) and (emblem_svg or emblem_src) -%}
 <article class="card excerpt{% if is_dir %} collection-directory-card{% endif %}{% if is_soc %} card--social{% endif %}{% if extra_class %} {{ extra_class }}{% endif %}"
          data-card-id="{{ (article.id or article.docname or '') | e }}"
          data-card-type="{{ (article.type or 'article') | e }}"
@@ -34,15 +35,6 @@
   <div class="content card-inner">
 {%- if hero_svg or hero_src %}
     <figure class="card-media{% if hero_svg %} excerpt-svg{% endif %}"{% if article.excerpt_figure_width %} style="width: {{ article.excerpt_figure_width }};"{% endif %}>
-{%-   if emblem_svg or emblem_src %}
-      <span class="card-medallion card-medallion--corner" aria-hidden="true">
-{%-     if emblem_svg %}
-        {{ emblem_svg | safe }}
-{%-     else %}
-        <img src="{{ pathto(emblem_src, 1) }}" alt="" loading="lazy" decoding="async" />
-{%-     endif %}
-      </span>
-{%-   endif %}
       <a href="{{ primary_href | e }}"{% if opens_external %} target="_blank" rel="noopener"{% endif %}{% if article.excerpt_figure_alt %} aria-label="{{ article.excerpt_figure_alt | e }}"{% endif %}>
 {%-   if hero_svg %}
         {{ hero_svg | safe }}
@@ -54,7 +46,7 @@
 {%- endif %}
     <section class="card-main">
       <header class="card-header">
-{%- if emblem_svg or emblem_src %}
+{%- if show_medallion %}
         <span class="card-medallion card-medallion--header" title="{{ (article.kicker or article.title) | e }}">
 {%-   if emblem_svg %}
           {{ emblem_svg | safe }}
@@ -64,7 +56,7 @@
         </span>
 {%- endif %}
         <div class="card-header-text">
-{%- if article.kicker or is_soc %}
+{%- if is_soc or article.is_remote %}
           <div class="card-kicker">
 {%-   if article.kicker %}
             <span class="card-kicker-org">{{ article.kicker }}</span>
@@ -77,7 +69,7 @@
           <h2 class="card-title"><a href="{{ primary_href | e }}"{% if opens_external %} target="_blank" rel="noopener"{% endif %}>{{ article.title }}</a></h2>
 {%- if article.native_title %}
           <p class="card-subtitle collection-directory-native"><em>{{ article.native_title }}</em></p>
-{%- elif article.subtitle and article.subtitle != article.title %}
+{%- elif article.subtitle and article.subtitle != article.title and article.subtitle != article.lifespan %}
           <p class="card-subtitle"><em>{{ article.subtitle }}</em></p>
 {%- endif %}
         </div>
@@ -86,7 +78,7 @@
       <div class="card-meta collection-directory-meta">
 {%-   if article.author %}<span>{% if article.author_doc %}<a href="{{ pathto(article.author_doc) }}">{{ article.author }}</a>{% else %}{{ article.author }}{% endif %}</span>{% endif %}
 {%-   if article.lifespan %}<span>{{ article.lifespan }}</span>{% endif %}
-{%-   if article.death_label %}<span>Date: <strong>{{ article.death_label }}</strong></span>{% endif %}
+{%-   if article.death_label and article.death_label != article.lifespan %}<span>Date: <strong>{{ article.death_label }}</strong></span>{% endif %}
 {%-   if year_disp %}<span>{{ year_disp }}</span>{% endif %}
 {%-   if article.era %}<span>{{ article.era }}</span>{% endif %}
 {%-   if article.series %}<span>{{ article.series }}</span>{% endif %}

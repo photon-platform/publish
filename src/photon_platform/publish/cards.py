@@ -66,10 +66,19 @@ def _split_list(val: Any) -> list[str]:
 
 
 def _clean_plain_text(text: str, max_len: int = 240) -> str:
-    """Normalize whitespace and strip inline RST markup leaks for crisp card copy."""
+    """Normalize whitespace and strip leaked RST/Markdown emphasis for crisp card copy."""
     txt = re.sub(r"\s+", " ", (text or "").strip())
     if not txt:
         return ""
+    # Strip leaked Sphinx roles like :person:`Euclid <euclid>` -> Euclid
+    txt = re.sub(r":[a-zA-Z0-9_+-]+:`([^`<]+?)(?:\s*<[^>]+>)?`", r"\1", txt)
+    # Strip paired **bold**, *italic*, ``code``, and any leftover stray unbalanced asterisks
+    txt = re.sub(r"\*\*([^*]+)\*\*", r"\1", txt)
+    txt = re.sub(r"(?<!\w)\*([^*]+)\*(?!\w)", r"\1", txt)
+    txt = re.sub(r"``([^`]+)``", r"\1", txt)
+    if "*" in txt:
+        txt = txt.replace("**", "").replace("*", "")
+    txt = re.sub(r"\s+", " ", txt).strip()
     if len(txt) <= max_len:
         return txt
     cut = txt[: max_len - 1].rsplit(" ", 1)[0].rstrip(" ,;:-—–")
@@ -677,7 +686,6 @@ def resolve_document_card(
         or meta.get("subtitle")
         or meta.get("native_title")
         or meta.get("book_subtitle")
-        or meta.get("lifespan")
         or ""
     ).strip()
 
@@ -1113,31 +1121,30 @@ def get_card_registry(app: Any) -> CardRegistry:
     return reg
 
 
-_NAME_FIELD_RE = re.compile(
-    r"^(:(?:author|authors|editor|editors|translator|translators|publisher|place|series):[ \t]+)(.+)$"
-)
-_INITIAL_RE = re.compile(r"(^|[ \t])([A-Za-z])\.([ \t])")
+_ANY_FIELD_RE = re.compile(r"^(:[a-zA-Z0-9_-]+:[ \t]+)(.+)$")
+_LEADING_ENUM_RE = re.compile(r"^([A-Za-z]|[0-9]+|[ivxlcdmIVXLCDM]+)\.([ \t]+)")
+_MID_INITIAL_RE = re.compile(r"(^|[ \t])([A-Za-z])\.([ \t])")
 
 
 def _escape_frontmatter_initials(app: Any, docname: str, source: list[str]) -> None:
-    """Prevent Docutils from parsing leading name initials (e.g. `:editors: W. D. Ross`)
-    as RST enumerated lists in top-of-file frontmatter."""
+    """Prevent Docutils from parsing single-letter abbreviations/initials
+    (e.g. `:lifespan: c. 427–347 BC`, `:editors: W. D. Ross`) as RST enumerated lists
+    in any top-of-file frontmatter field."""
     if not source:
         return
     lines = source[0].splitlines(keepends=True)
     changed = False
     for idx, line in enumerate(lines):
         stripped = line.strip()
-        if not stripped:
+        if not stripped or not stripped.startswith(":"):
             break
-        if not stripped.startswith(":"):
-            break
-        m = _NAME_FIELD_RE.match(line.rstrip("\r\n"))
+        m = _ANY_FIELD_RE.match(line.rstrip("\r\n"))
         if m:
             prefix, val = m.group(1), m.group(2)
+            escaped = _LEADING_ENUM_RE.sub(r"\1\\.\2", val)
             # Run twice to handle consecutive single-letter initials like `W. D. Ross`
-            escaped = _INITIAL_RE.sub(r"\1\2\\.\3", val)
-            escaped = _INITIAL_RE.sub(r"\1\2\\.\3", escaped)
+            escaped = _MID_INITIAL_RE.sub(r"\1\2\\.\3", escaped)
+            escaped = _MID_INITIAL_RE.sub(r"\1\2\\.\3", escaped)
             if escaped != val:
                 eol = line[len(line.rstrip("\r\n")) :]
                 lines[idx] = f"{prefix}{escaped}{eol}"
