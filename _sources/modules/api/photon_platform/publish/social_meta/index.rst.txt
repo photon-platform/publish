@@ -68,9 +68,13 @@ Module Contents
    Compute bookmark-friendly `page_browser_title` and OpenGraph/Twitter `<head>` context.
 
 
-.. py:function:: generate_social_banner(output_path: pathlib.Path, *, org_brand: str, repo_slug: str, title: str, overline: str = '', subtitle: str = '', emblem_path: pathlib.Path | None = None, site_domain: str = '', force: bool = False) -> bool
+.. py:function:: generate_social_banner(output_path: pathlib.Path, *, org_brand: str, repo_slug: str, title: str, overline: str = '', subtitle: str = '', emblem_path: pathlib.Path | None = None, hero_path: pathlib.Path | None = None, site_domain: str = '', force: bool = False) -> bool
 
-   Render a dedicated 1200x630 obsidian-vellum & gold social sharing PNG banner.
+   Render a dedicated 1280x640 social sharing PNG banner from the Foundation HTML+CSS card.
+
+   Uses local headless Chrome (`social_capture.py`) when available so the social
+   card matches the live webpage's typography, tokens, and SVG rendering 1-to-1.
+   Falls back to Pillow rendering only if no local Chromium/Chrome binary is present.
 
 
 .. py:function:: generate_repo_social_banners(repo_root: str | pathlib.Path, force: bool = False) -> dict[str, Any]

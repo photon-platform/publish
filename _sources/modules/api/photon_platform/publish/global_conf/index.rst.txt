@@ -58,6 +58,7 @@ Functions
 
 .. autoapisummary::
 
+   photon_platform.publish.global_conf.register_sisters
    photon_platform.publish.global_conf.setup_globals
 
 
@@ -65,6 +66,16 @@ Module Contents
 ---------------
 
 .. py:data:: html_context
+
+.. py:function:: register_sisters(*repos: str, org: str | None = None) -> None
+
+   Register sister repositories in `intersphinx_mapping` (local-first + HTTPS fallback).
+
+   Because `publish` automatically derives `cards.json` right beside each site's
+   `objects.inv`, calling `register_sisters("aristotle", "aquinas", "catalog")` in
+   `docsrc/conf.py` enables both Sphinx cross-references and federated `.. card::` /
+   `.. collection::` embeds with zero duplicate configuration.
+
 
 .. py:function:: setup_globals(org: str, org_name: str, repo: str, repo_name: str) -> None
 

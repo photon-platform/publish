@@ -1,0 +1,948 @@
+{
+  "schema": "photon.card.v1",
+  "site": {
+    "org": "photon-platform",
+    "org_name": "PHOTON",
+    "repo": "publish",
+    "repo_name": "publish",
+    "title": "Publish",
+    "base_url": "https://photon-platform.github.io/publish",
+    "github_url": "https://github.com/photon-platform/publish",
+    "emblem": "https://photon-platform.github.io/publish/_static/logo.png"
+  },
+  "cards": {
+    "about": {
+      "id": "about",
+      "docname": "about",
+      "type": "article",
+      "title": "about",
+      "url": "https://photon-platform.github.io/publish/about.html",
+      "description": "photon-platform.publish is the core documentation and Book Codex publishing engine of the PHOTON Platform, created and maintained by phi ARCHITECT.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "about"
+    },
+    "changelog": {
+      "id": "changelog",
+      "docname": "changelog",
+      "type": "article",
+      "title": "Changelog",
+      "url": "https://photon-platform.github.io/publish/changelog.html",
+      "description": "perf(bibliography): Record :person:, :cite:, and :term: backlink occurrences on doctree-read (with env-purge-doc and env-merge-info support) instead of unpickling every doctree during env-updated, dramatically speeding up 1,500+ page…",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Changelog",
+      "labels": [
+        "changelog"
+      ]
+    },
+    "connect": {
+      "id": "connect",
+      "docname": "connect",
+      "type": "article",
+      "title": "connect",
+      "url": "https://photon-platform.github.io/publish/connect.html",
+      "description": "Join the discussion, report issues, or explore the PHOTON Platform on GitHub:",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "connect"
+    },
+    "index": {
+      "id": "index",
+      "docname": "index",
+      "type": "project",
+      "title": "PHOTON • publish",
+      "url": "https://photon-platform.github.io/publish/",
+      "description": "Unified Sphinx publishing engine, Book Codex reader, and interactive geometry/apparatus toolkit for the PHOTON and GEOMETOR ecosystems.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image": "https://photon-platform.github.io/publish/_static/logo_300w_d79e16c5.webp",
+      "image_alt": "PHOTON • publish"
+    },
+    "log/24.125-164141/index": {
+      "id": "log/24.125-164141/index",
+      "docname": "log/24.125-164141/index",
+      "type": "log",
+      "title": "introducing publish",
+      "url": "https://photon-platform.github.io/publish/log/24.125-164141/",
+      "description": "As the architect behind publish, my primary goal is to create a unified platform that simplifies and enhances the Sphinx documentation process across multiple projects. The genesis of this initiative is rooted in the complexities I…",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "introducing publish",
+      "facets": {
+        "date": "24.125-164141",
+        "tags": [
+          "introduction"
+        ]
+      }
+    },
+    "log/24.126-084330/index": {
+      "id": "log/24.126-084330/index",
+      "docname": "log/24.126-084330/index",
+      "type": "log",
+      "title": "test",
+      "url": "https://photon-platform.github.io/publish/log/24.126-084330/",
+      "description_source": "empty",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "test",
+      "facets": {
+        "date": "24.126-084330",
+        "tags": [
+          "test"
+        ],
+        "categories": [
+          "publish"
+        ]
+      }
+    },
+    "log/24.126-084512/index": {
+      "id": "log/24.126-084512/index",
+      "docname": "log/24.126-084512/index",
+      "type": "log",
+      "title": "add global_conf.py",
+      "url": "https://photon-platform.github.io/publish/log/24.126-084512/",
+      "description": "common settings for photon conf files",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "add global_conf.py",
+      "facets": {
+        "date": "24.126-084512",
+        "tags": [
+          "code"
+        ],
+        "categories": [
+          "publish"
+        ]
+      }
+    },
+    "log/26.302-183000/index": {
+      "id": "log/26.302-183000/index",
+      "docname": "log/26.302-183000/index",
+      "type": "log",
+      "title": "Unified Classical Scriptorium Theme & Collection Redesign",
+      "url": "https://photon-platform.github.io/publish/log/26.302-183000/",
+      "description": "Unified the visual design, navigation architecture, and collection/log templates of photon-platform.publish around the Classical Scriptorium Book Codex aesthetic across all PHOTON and GEOMETOR sites.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Unified Classical Scriptorium Theme & Collection Redesign",
+      "facets": {
+        "author": "phi ARCHITECT",
+        "date": "26.302-183000",
+        "tags": [
+          "codex",
+          "navigation",
+          "collection",
+          "taxonomy"
+        ],
+        "categories": [
+          "theme",
+          "architecture"
+        ]
+      }
+    },
+    "log/26.332-063100/index": {
+      "id": "log/26.332-063100/index",
+      "docname": "log/26.332-063100/index",
+      "type": "log",
+      "title": "Unified Page Cards, Federated Collections & HTML Social Capture (v0.5.0)",
+      "url": "https://photon-platform.github.io/publish/log/26.332-063100/",
+      "description": "Every Sphinx page in photon-platform/publish now resolves to one canonical Card driving collections, searchable directories, inline .. card:: embeds, cross-repo cards.json federation, standard scholarly citations, and 1280×640 HTML+CSS…",
+      "description_source": "summary",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Unified Page Cards, Federated Collections & HTML Social Capture (v0.5.0)",
+      "facets": {
+        "author": "phi",
+        "date": "26.332-063100",
+        "tags": [
+          "cards",
+          "collections",
+          "bibliography",
+          "social-banners"
+        ]
+      }
+    },
+    "log/index": {
+      "id": "log/index",
+      "docname": "log/index",
+      "type": "article",
+      "title": "log",
+      "url": "https://photon-platform.github.io/publish/log/",
+      "description": "Chronological development and design log for photon-platform.publish.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "log"
+    },
+    "mission/goals/automated_publishing": {
+      "id": "mission/goals/automated_publishing",
+      "docname": "mission/goals/automated_publishing",
+      "type": "goal",
+      "title": "Automated Publishing",
+      "url": "https://photon-platform.github.io/publish/mission/goals/automated_publishing.html",
+      "description": "We create tools for gathering, processing, and publishing content.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Automated Publishing"
+    },
+    "mission/goals/interactive_elements": {
+      "id": "mission/goals/interactive_elements",
+      "docname": "mission/goals/interactive_elements",
+      "type": "goal",
+      "title": "Interactive Elements",
+      "url": "https://photon-platform.github.io/publish/mission/goals/interactive_elements.html",
+      "description": "When the structure is well-known and consistent, we can build tremendous functionality around it.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Interactive Elements"
+    },
+    "mission/goals/semantic_html": {
+      "id": "mission/goals/semantic_html",
+      "docname": "mission/goals/semantic_html",
+      "type": "goal",
+      "title": "Semantic HTML",
+      "url": "https://photon-platform.github.io/publish/mission/goals/semantic_html.html",
+      "description": "We emphasize the cascade in CSS, thinking hierarchically all the way down to the last HTML tag.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Semantic HTML"
+    },
+    "mission/goals/state_of_the_art_css": {
+      "id": "mission/goals/state_of_the_art_css",
+      "docname": "mission/goals/state_of_the_art_css",
+      "type": "goal",
+      "title": "State of the Art CSS",
+      "url": "https://photon-platform.github.io/publish/mission/goals/state_of_the_art_css.html",
+      "description": "Inspired by the CSS Zen Garden philosophy, we aim to demonstrate that a single, well-structured HTML document can be presented in vastly different ways purely through CSS.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "State of the Art CSS"
+    },
+    "mission/index": {
+      "id": "mission/index",
+      "docname": "mission/index",
+      "type": "article",
+      "title": "mission",
+      "url": "https://photon-platform.github.io/publish/mission/",
+      "description": "photon-platform.publish provides a unified scholarly publishing framework built on Sphinx, Jinja2, and SCSS. Its mission is to transform structured ReStructuredText, symbolic mathematics, interactive geometric diagrams, and multi-track…",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "mission"
+    },
+    "modules/api/index": {
+      "id": "modules/api/index",
+      "docname": "modules/api/index",
+      "type": "article",
+      "title": "API Reference",
+      "url": "https://photon-platform.github.io/publish/modules/api/",
+      "description": "This page contains auto-generated API reference documentation 1.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "API Reference"
+    },
+    "modules/api/photon_platform/publish/__main__/index": {
+      "id": "modules/api/photon_platform/publish/__main__/index",
+      "docname": "modules/api/photon_platform/publish/__main__/index",
+      "type": "article",
+      "title": "photon_platform.publish.__main__",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/__main__/",
+      "description": "The package entry point into the application.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.__main__"
+    },
+    "modules/api/photon_platform/publish/app/index": {
+      "id": "modules/api/photon_platform/publish/app/index",
+      "docname": "modules/api/photon_platform/publish/app/index",
+      "type": "article",
+      "title": "photon_platform.publish.app",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/app/",
+      "description": "Command-line interface for the publish tool.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.app"
+    },
+    "modules/api/photon_platform/publish/bibliography/index": {
+      "id": "modules/api/photon_platform/publish/bibliography/index",
+      "docname": "modules/api/photon_platform/publish/bibliography/index",
+      "type": "article",
+      "title": "photon_platform.publish.bibliography",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/bibliography/",
+      "description": "Scholarly Bibliography formatting (Chicago, MLA, APA, BibTeX) and automated bidirectional passage backlinks (.. citation-formats:: and .. backlinks::).",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.bibliography"
+    },
+    "modules/api/photon_platform/publish/book/index": {
+      "id": "modules/api/photon_platform/publish/book/index",
+      "docname": "modules/api/photon_platform/publish/book/index",
+      "type": "article",
+      "title": "photon_platform.publish.book",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/book/",
+      "description": "Book subtree inheritance and multi-track context injection for the ‘Website in a Website’ Codex layout.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.book"
+    },
+    "modules/api/photon_platform/publish/book_audit/index": {
+      "id": "modules/api/photon_platform/publish/book_audit/index",
+      "docname": "modules/api/photon_platform/publish/book_audit/index",
+      "type": "article",
+      "title": "photon_platform.publish.book_audit",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/book_audit/",
+      "description": "Book Codex hierarchy, track, collection, and apparatus compliance linter.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.book_audit"
+    },
+    "modules/api/photon_platform/publish/cards/index": {
+      "id": "modules/api/photon_platform/publish/cards/index",
+      "docname": "modules/api/photon_platform/publish/cards/index",
+      "type": "article",
+      "title": "photon_platform.publish.cards",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/cards/",
+      "description": "Unified Page Card model, cards.json manifest emitter, and Intersphinx-backed CardRegistry.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.cards"
+    },
+    "modules/api/photon_platform/publish/directives/card/index": {
+      "id": "modules/api/photon_platform/publish/directives/card/index",
+      "docname": "modules/api/photon_platform/publish/directives/card/index",
+      "type": "article",
+      "title": "photon_platform.publish.directives.card",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/directives/card/",
+      "description": "Directives for Page Cards, Summaries, Standard Citations, and Automated Backlinks.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.directives.card"
+    },
+    "modules/api/photon_platform/publish/directives/collection/index": {
+      "id": "modules/api/photon_platform/publish/directives/collection/index",
+      "docname": "modules/api/photon_platform/publish/directives/collection/index",
+      "type": "article",
+      "title": "photon_platform.publish.directives.collection",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/directives/collection/",
+      "description": "Directive for creating content collections.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.directives.collection"
+    },
+    "modules/api/photon_platform/publish/directives/elements/index": {
+      "id": "modules/api/photon_platform/publish/directives/elements/index",
+      "docname": "modules/api/photon_platform/publish/directives/elements/index",
+      "type": "article",
+      "title": "photon_platform.publish.directives.elements",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/directives/elements/",
+      "description": "Semantic directives for classical mathematical and philosophical texts (Elements, Pacioli, Hoenen).",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.directives.elements"
+    },
+    "modules/api/photon_platform/publish/directives/index": {
+      "id": "modules/api/photon_platform/publish/directives/index",
+      "docname": "modules/api/photon_platform/publish/directives/index",
+      "type": "article",
+      "title": "photon_platform.publish.directives",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/directives/",
+      "description": "Custom Sphinx directives for the publish tool.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.directives"
+    },
+    "modules/api/photon_platform/publish/folio_ingest/index": {
+      "id": "modules/api/photon_platform/publish/folio_ingest/index",
+      "docname": "modules/api/photon_platform/publish/folio_ingest/index",
+      "type": "article",
+      "title": "photon_platform.publish.folio_ingest",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/folio_ingest/",
+      "description": "Deterministic archival PDF ingestion: 300-DPI folio PNG scans, text streams, embedded graphics, and folio_map.json.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.folio_ingest"
+    },
+    "modules/api/photon_platform/publish/folio_links/index": {
+      "id": "modules/api/photon_platform/publish/folio_links/index",
+      "docname": "modules/api/photon_platform/publish/folio_links/index",
+      "type": "article",
+      "title": "photon_platform.publish.folio_links",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/folio_links/",
+      "description": "Primary-source folio URL resolution, repository link auditing, and lossless scan optimization.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.folio_links"
+    },
+    "modules/api/photon_platform/publish/folio_review/app/index": {
+      "id": "modules/api/photon_platform/publish/folio_review/app/index",
+      "docname": "modules/api/photon_platform/publish/folio_review/app/index",
+      "type": "article",
+      "title": "photon_platform.publish.folio_review.app",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/folio_review/app/",
+      "description": "Flask web application for Folio Review & Vetting.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.folio_review.app"
+    },
+    "modules/api/photon_platform/publish/folio_review/index": {
+      "id": "modules/api/photon_platform/publish/folio_review/index",
+      "docname": "modules/api/photon_platform/publish/folio_review/index",
+      "type": "article",
+      "title": "photon_platform.publish.folio_review",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/folio_review/",
+      "description": "Folio Review & Vetting Web Application for PHOTON Publish.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.folio_review"
+    },
+    "modules/api/photon_platform/publish/folio_review/reviews/index": {
+      "id": "modules/api/photon_platform/publish/folio_review/reviews/index",
+      "docname": "modules/api/photon_platform/publish/folio_review/reviews/index",
+      "type": "article",
+      "title": "photon_platform.publish.folio_review.reviews",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/folio_review/reviews/",
+      "description": "Persistent review and vetting status tracker for folios.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.folio_review.reviews"
+    },
+    "modules/api/photon_platform/publish/folio_review/rst_utils/index": {
+      "id": "modules/api/photon_platform/publish/folio_review/rst_utils/index",
+      "docname": "modules/api/photon_platform/publish/folio_review/rst_utils/index",
+      "type": "article",
+      "title": "photon_platform.publish.folio_review.rst_utils",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/folio_review/rst_utils/",
+      "description": "Custom Docutils RST renderer for Folio Review.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.folio_review.rst_utils"
+    },
+    "modules/api/photon_platform/publish/folio_review/scanner/index": {
+      "id": "modules/api/photon_platform/publish/folio_review/scanner/index",
+      "docname": "modules/api/photon_platform/publish/folio_review/scanner/index",
+      "type": "article",
+      "title": "photon_platform.publish.folio_review.scanner",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/folio_review/scanner/",
+      "description": "Folio discovery, metadata parsing, and statistics aggregation.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.folio_review.scanner"
+    },
+    "modules/api/photon_platform/publish/global_conf/index": {
+      "id": "modules/api/photon_platform/publish/global_conf/index",
+      "docname": "modules/api/photon_platform/publish/global_conf/index",
+      "type": "article",
+      "title": "photon_platform.publish.global_conf",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/global_conf/",
+      "description": "A global, reusable configuration file for Sphinx documentation.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.global_conf"
+    },
+    "modules/api/photon_platform/publish/images/directive/index": {
+      "id": "modules/api/photon_platform/publish/images/directive/index",
+      "docname": "modules/api/photon_platform/publish/images/directive/index",
+      "type": "article",
+      "title": "photon_platform.publish.images.directive",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/images/directive/",
+      "description": "Directives for image processing.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.images.directive"
+    },
+    "modules/api/photon_platform/publish/images/index": {
+      "id": "modules/api/photon_platform/publish/images/index",
+      "docname": "modules/api/photon_platform/publish/images/index",
+      "type": "article",
+      "title": "photon_platform.publish.images",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/images/",
+      "description": "Image processing and directive registration.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.images"
+    },
+    "modules/api/photon_platform/publish/images/processor/index": {
+      "id": "modules/api/photon_platform/publish/images/processor/index",
+      "docname": "modules/api/photon_platform/publish/images/processor/index",
+      "type": "article",
+      "title": "photon_platform.publish.images.processor",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/images/processor/",
+      "description": "Image processing logic.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.images.processor"
+    },
+    "modules/api/photon_platform/publish/mcp_server/index": {
+      "id": "modules/api/photon_platform/publish/mcp_server/index",
+      "docname": "modules/api/photon_platform/publish/mcp_server/index",
+      "type": "article",
+      "title": "photon_platform.publish.mcp_server",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/mcp_server/",
+      "description": "Zero-dependency MCP stdio server for photon-platform/publish (publish mcp).",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.mcp_server"
+    },
+    "modules/api/photon_platform/publish/publish/index": {
+      "id": "modules/api/photon_platform/publish/publish/index",
+      "docname": "modules/api/photon_platform/publish/publish/index",
+      "type": "article",
+      "title": "photon_platform.publish.publish",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/publish/",
+      "description": "Core publishing functions.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.publish"
+    },
+    "modules/api/photon_platform/publish/roles/geometry/index": {
+      "id": "modules/api/photon_platform/publish/roles/geometry/index",
+      "docname": "modules/api/photon_platform/publish/roles/geometry/index",
+      "type": "article",
+      "title": "photon_platform.publish.roles.geometry",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/roles/geometry/",
+      "description": "Semantic roles for geometric elements (:g:), justifications (:just:), and diplomatic line numbers (:line:).",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.roles.geometry"
+    },
+    "modules/api/photon_platform/publish/roles/index": {
+      "id": "modules/api/photon_platform/publish/roles/index",
+      "docname": "modules/api/photon_platform/publish/roles/index",
+      "type": "article",
+      "title": "photon_platform.publish.roles",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/roles/",
+      "description": "Custom Docutils and Sphinx roles for photon-platform/publish.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.roles"
+    },
+    "modules/api/photon_platform/publish/rst_renderer/index": {
+      "id": "modules/api/photon_platform/publish/rst_renderer/index",
+      "docname": "modules/api/photon_platform/publish/rst_renderer/index",
+      "type": "article",
+      "title": "photon_platform.publish.rst_renderer",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/rst_renderer/",
+      "description": "Fast, standalone in-memory Docutils RST renderer and metadata parser for Scriptorium and folio_review.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.rst_renderer"
+    },
+    "modules/api/photon_platform/publish/social_capture/index": {
+      "id": "modules/api/photon_platform/publish/social_capture/index",
+      "docname": "modules/api/photon_platform/publish/social_capture/index",
+      "type": "article",
+      "title": "photon_platform.publish.social_capture",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/social_capture/",
+      "description": "Local HTML+CSS Social Media Card Capture (1280×640 PNG) via headless Chrome.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.social_capture"
+    },
+    "modules/api/photon_platform/publish/social_meta/index": {
+      "id": "modules/api/photon_platform/publish/social_meta/index",
+      "docname": "modules/api/photon_platform/publish/social_meta/index",
+      "type": "article",
+      "title": "photon_platform.publish.social_meta",
+      "url": "https://photon-platform.github.io/publish/modules/api/photon_platform/publish/social_meta/",
+      "description": "Social media metadata (OpenGraph / Twitter Cards), A-Z <title> formatting, and 1280x640 sharing banners.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "photon_platform.publish.social_meta"
+    },
+    "modules/index": {
+      "id": "modules/index",
+      "docname": "modules/index",
+      "type": "article",
+      "title": "modules",
+      "url": "https://photon-platform.github.io/publish/modules/",
+      "description": "photon_platform.publish",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "modules"
+    },
+    "orphan": {
+      "id": "orphan",
+      "docname": "orphan",
+      "type": "article",
+      "title": "Orphan Page",
+      "url": "https://photon-platform.github.io/publish/orphan.html",
+      "description": "This page is not in index.rst explicitly.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Orphan Page"
+    },
+    "refs/extensions": {
+      "id": "refs/extensions",
+      "docname": "refs/extensions",
+      "type": "article",
+      "title": "Extensions",
+      "url": "https://photon-platform.github.io/publish/refs/extensions.html",
+      "description": "We use a curated set of Sphinx extensions to enhance our documentation.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Extensions"
+    },
+    "refs/index": {
+      "id": "refs/index",
+      "docname": "refs/index",
+      "type": "article",
+      "title": "refs",
+      "url": "https://photon-platform.github.io/publish/refs/",
+      "description_source": "empty",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "refs"
+    },
+    "refs/inspirations": {
+      "id": "refs/inspirations",
+      "docname": "refs/inspirations",
+      "type": "article",
+      "title": "Inspirations",
+      "url": "https://photon-platform.github.io/publish/refs/inspirations.html",
+      "description": "We stand on the shoulders of giants. Our work is inspired by these excellent projects:",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Inspirations"
+    },
+    "todos/citations_bibliography": {
+      "id": "todos/citations_bibliography",
+      "docname": "todos/citations_bibliography",
+      "type": "article",
+      "title": "Citations and Bibliography",
+      "url": "https://photon-platform.github.io/publish/todos/citations_bibliography.html",
+      "description": "general support for citations and bibliography",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Citations and Bibliography"
+    },
+    "todos/clickable_articles": {
+      "id": "todos/clickable_articles",
+      "docname": "todos/clickable_articles",
+      "type": "article",
+      "title": "Clickable Articles",
+      "url": "https://photon-platform.github.io/publish/todos/clickable_articles.html",
+      "description": "make articles in collections as clickable with hover",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Clickable Articles"
+    },
+    "todos/collections_widgets": {
+      "id": "todos/collections_widgets",
+      "docname": "todos/collections_widgets",
+      "type": "article",
+      "title": "Collections Widgets",
+      "url": "https://photon-platform.github.io/publish/todos/collections_widgets.html",
+      "description": "get the collections widgets working",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Collections Widgets"
+    },
+    "todos/ebook_production": {
+      "id": "todos/ebook_production",
+      "docname": "todos/ebook_production",
+      "type": "article",
+      "title": "Ebook Production",
+      "url": "https://photon-platform.github.io/publish/todos/ebook_production.html",
+      "description": "ebook production",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Ebook Production"
+    },
+    "todos/gh_cname_support": {
+      "id": "todos/gh_cname_support",
+      "docname": "todos/gh_cname_support",
+      "type": "article",
+      "title": "GH CNAME Support",
+      "url": "https://photon-platform.github.io/publish/todos/gh_cname_support.html",
+      "description": "support for gh CNAME",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "GH CNAME Support"
+    },
+    "todos/html_title_error": {
+      "id": "todos/html_title_error",
+      "docname": "todos/html_title_error",
+      "type": "article",
+      "title": "Fix HTML Title Error",
+      "url": "https://photon-platform.github.io/publish/todos/html_title_error.html",
+      "description": "html title has error - remove docstitle and use org and repo",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Fix HTML Title Error"
+    },
+    "todos/index": {
+      "id": "todos/index",
+      "docname": "todos/index",
+      "type": "article",
+      "title": "todos",
+      "url": "https://photon-platform.github.io/publish/todos/",
+      "description_source": "empty",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "todos"
+    },
+    "todos/integrate_sphinx_js": {
+      "id": "todos/integrate_sphinx_js",
+      "docname": "todos/integrate_sphinx_js",
+      "type": "article",
+      "title": "Integrate Sphinx JS",
+      "url": "https://photon-platform.github.io/publish/todos/integrate_sphinx_js.html",
+      "description": "integrate sphinx-js and jsdocs extension",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Integrate Sphinx JS"
+    },
+    "todos/missing_italic_font": {
+      "id": "todos/missing_italic_font",
+      "docname": "todos/missing_italic_font",
+      "type": "article",
+      "title": "Missing Italic Font",
+      "url": "https://photon-platform.github.io/publish/todos/missing_italic_font.html",
+      "description": "regularitalic font is missing (404)",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Missing Italic Font"
+    },
+    "todos/nested_css_conversion": {
+      "id": "todos/nested_css_conversion",
+      "docname": "todos/nested_css_conversion",
+      "type": "article",
+      "title": "Complete SCSS Conversion",
+      "url": "https://photon-platform.github.io/publish/todos/nested_css_conversion.html",
+      "description": "complete scss conversion to nested css - build with Lightning CSS",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Complete SCSS Conversion"
+    },
+    "todos/publish_to_pypi": {
+      "id": "todos/publish_to_pypi",
+      "docname": "todos/publish_to_pypi",
+      "type": "article",
+      "title": "Publish to PyPI",
+      "url": "https://photon-platform.github.io/publish/todos/publish_to_pypi.html",
+      "description_source": "empty",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Publish to PyPI"
+    },
+    "todos/refactor_directives": {
+      "id": "todos/refactor_directives",
+      "docname": "todos/refactor_directives",
+      "type": "article",
+      "title": "Refactor Directives",
+      "url": "https://photon-platform.github.io/publish/todos/refactor_directives.html",
+      "description": "refactor custom directives to follow same implementation pattern - there will be more",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Refactor Directives"
+    },
+    "todos/replace_carousel": {
+      "id": "todos/replace_carousel",
+      "docname": "todos/replace_carousel",
+      "type": "article",
+      "title": "Remove Carousel Extension",
+      "url": "https://photon-platform.github.io/publish/todos/replace_carousel.html",
+      "description": "remove carousel extension - build something new extending pictures directive",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Remove Carousel Extension"
+    },
+    "todos/vim_motions": {
+      "id": "todos/vim_motions",
+      "docname": "todos/vim_motions",
+      "type": "article",
+      "title": "Vim Motions",
+      "url": "https://photon-platform.github.io/publish/todos/vim_motions.html",
+      "description": "vim motions on navigation",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Vim Motions"
+    },
+    "usage/admonitions": {
+      "id": "usage/admonitions",
+      "docname": "usage/admonitions",
+      "type": "article",
+      "title": "Admonitions",
+      "url": "https://photon-platform.github.io/publish/usage/admonitions.html",
+      "description": "This page demonstrates the various admonition styles.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Admonitions"
+    },
+    "usage/colors": {
+      "id": "usage/colors",
+      "docname": "usage/colors",
+      "type": "article",
+      "title": "Color Swatches",
+      "url": "https://photon-platform.github.io/publish/usage/colors.html",
+      "description": "This page demonstrates the color palette variables.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Color Swatches"
+    },
+    "usage/components/collections": {
+      "id": "usage/components/collections",
+      "docname": "usage/components/collections",
+      "type": "article",
+      "title": "Collections",
+      "url": "https://photon-platform.github.io/publish/usage/components/collections.html",
+      "description": "The collection directive is a powerful tool for aggregating and listing content. It allows you to create dynamic indexes of your content based on metadata.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Collections"
+    },
+    "usage/components/diagrams": {
+      "id": "usage/components/diagrams",
+      "docname": "usage/components/diagrams",
+      "type": "article",
+      "title": "Diagrams",
+      "url": "https://photon-platform.github.io/publish/usage/components/diagrams.html",
+      "description": "Publish supports Graphviz for creating diagrams. You can embed the DOT code directly in your RST files.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Diagrams"
+    },
+    "usage/components/math": {
+      "id": "usage/components/math",
+      "docname": "usage/components/math",
+      "type": "article",
+      "title": "Math",
+      "url": "https://photon-platform.github.io/publish/usage/components/math.html",
+      "description": "You can include beautiful mathematical equations using LaTeX syntax, rendered by MathJax.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Math"
+    },
+    "usage/components/references": {
+      "id": "usage/components/references",
+      "docname": "usage/components/references",
+      "type": "article",
+      "title": "References & Citations",
+      "url": "https://photon-platform.github.io/publish/usage/components/references.html",
+      "description": "The glossary directive allows you to define terms and link to them easily throughout your documentation.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "References & Citations",
+      "labels": [
+        "ref2025"
+      ]
+    },
+    "usage/figures/featured": {
+      "id": "usage/figures/featured",
+      "docname": "usage/figures/featured",
+      "type": "article",
+      "title": "Featured Images",
+      "url": "https://photon-platform.github.io/publish/usage/figures/featured.html",
+      "description": "The picture directive is an enhanced version of the standard image directive designed for performance and responsiveness. It automatically generates optimized WebP variants of your images and context-aware thumbnails for use in collection…",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image": "https://photon-platform.github.io/publish/usage/figures/wide_300w_9e97fe04.webp",
+      "image_alt": "A wide example image"
+    },
+    "usage/figures/index": {
+      "id": "usage/figures/index",
+      "docname": "usage/figures/index",
+      "type": "article",
+      "title": "Using Images",
+      "url": "https://photon-platform.github.io/publish/usage/figures/",
+      "description_source": "empty",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image": "https://photon-platform.github.io/publish/usage/figures/wide_300w_9e97fe04.webp",
+      "image_alt": "A wide example image"
+    },
+    "usage/figures/square": {
+      "id": "usage/figures/square",
+      "docname": "usage/figures/square",
+      "type": "article",
+      "title": "square",
+      "url": "https://photon-platform.github.io/publish/usage/figures/square.html",
+      "description": "this is a square image",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image": "https://photon-platform.github.io/publish/usage/figures/square_300w_12f3971e.webp",
+      "image_alt": "square"
+    },
+    "usage/figures/tall": {
+      "id": "usage/figures/tall",
+      "docname": "usage/figures/tall",
+      "type": "article",
+      "title": "tall",
+      "url": "https://photon-platform.github.io/publish/usage/figures/tall.html",
+      "description": "This is a tall image",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image": "https://photon-platform.github.io/publish/usage/figures/tall_300w_8b42a984.webp",
+      "image_alt": "tall"
+    },
+    "usage/figures/wide": {
+      "id": "usage/figures/wide",
+      "docname": "usage/figures/wide",
+      "type": "article",
+      "title": "wide",
+      "url": "https://photon-platform.github.io/publish/usage/figures/wide.html",
+      "description": "This is a wide image",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image": "https://photon-platform.github.io/publish/usage/figures/wide_300w_9e97fe04.webp",
+      "image_alt": "wide"
+    },
+    "usage/fonts": {
+      "id": "usage/fonts",
+      "docname": "usage/fonts",
+      "type": "article",
+      "title": "Fonts",
+      "url": "https://photon-platform.github.io/publish/usage/fonts.html",
+      "description": "This page demonstrates the various fonts used in the theme.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Fonts"
+    },
+    "usage/index": {
+      "id": "usage/index",
+      "docname": "usage/index",
+      "type": "article",
+      "title": "usage",
+      "url": "https://photon-platform.github.io/publish/usage/",
+      "description_source": "empty",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image": "https://photon-platform.github.io/publish/usage/figures/wide_300w_9e97fe04.webp",
+      "image_alt": "A wide example image",
+      "facets": {
+        "tags": [
+          "usage"
+        ]
+      }
+    },
+    "usage/organization/code_docs": {
+      "id": "usage/organization/code_docs",
+      "docname": "usage/organization/code_docs",
+      "type": "article",
+      "title": "Code Documentation",
+      "url": "https://photon-platform.github.io/publish/usage/organization/code_docs.html",
+      "description": "Publish integrates with sphinx.ext.autodoc and sphinx-autoapi to automatically generate documentation from your code.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Code Documentation"
+    },
+    "usage/organization/structure": {
+      "id": "usage/organization/structure",
+      "docname": "usage/organization/structure",
+      "type": "article",
+      "title": "Structure & Vision",
+      "url": "https://photon-platform.github.io/publish/usage/organization/structure.html",
+      "description": "The mission of Publish is to create tools for gathering, processing, and publishing content. We believe that content structures should be versatile, capable of being transformed into many form factors.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Structure & Vision"
+    },
+    "usage/organization/taxonomy": {
+      "id": "usage/organization/taxonomy",
+      "docname": "usage/organization/taxonomy",
+      "type": "article",
+      "title": "Taxonomy & Indexes",
+      "url": "https://photon-platform.github.io/publish/usage/organization/taxonomy.html",
+      "description": "Publish automatically generates taxonomy pages for Tags, Categories, and Types based on the metadata in your RST files.",
+      "description_source": "fallback",
+      "emblem": "https://photon-platform.github.io/publish/_static/logo.png",
+      "image_alt": "Taxonomy & Indexes"
+    }
+  },
+  "labels": {
+    "changelog": "changelog",
+    "ref2025": "usage/components/references"
+  }
+}

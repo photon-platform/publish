@@ -15,6 +15,7 @@ Submodules
 .. toctree::
    :maxdepth: 1
 
+   /modules/api/photon_platform/publish/directives/card/index
    /modules/api/photon_platform/publish/directives/collection/index
    /modules/api/photon_platform/publish/directives/elements/index
 

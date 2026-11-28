@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const collections = document.querySelectorAll('.collection');
 
     collections.forEach(collection => {
+        if (collection.classList.contains('card-embed')) {
+            return;
+        }
         // Create controls container
         const controls = document.createElement('div');
         controls.className = 'collection-controls';
@@ -49,8 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
             controls.querySelector('.layout-btn').click();
         }
 
-        // Insert controls before the collection items, but after header if exists
-        const header = collection.querySelector('header');
+        // Insert controls before the collection items, or inside the collection's own direct <header>
+        const header = collection.querySelector(':scope > header');
         if (header) {
             header.appendChild(controls);
         } else {

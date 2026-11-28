@@ -1,0 +1,469 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-content_root="../../../../../../">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>photon_platform.publish.directives.card — Publish • PHOTON</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="canonical" href="https://photon-platform.github.io/publish/modules/api/photon_platform/publish/directives/card/" />
+  <meta name="description" content="Directives for Page Cards, Summaries, Standard Citations, and Automated Backlinks." />
+  <meta property="og:site_name" content="PHOTON" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="photon_platform.publish.directives.card — Publish • PHOTON" />
+  <meta property="og:description" content="Directives for Page Cards, Summaries, Standard Citations, and Automated Backlinks." />
+  <meta property="og:url" content="https://photon-platform.github.io/publish/modules/api/photon_platform/publish/directives/card/" />
+  <meta property="og:image" content="https://photon-platform.github.io/publish/_static/logo.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="512" />
+  <meta property="og:image:height" content="512" />
+  <meta property="og:image:alt" content="Publish — PHOTON" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="photon_platform.publish.directives.card — Publish • PHOTON" />
+  <meta name="twitter:description" content="Directives for Page Cards, Summaries, Standard Citations, and Automated Backlinks." />
+  <meta name="twitter:image" content="https://photon-platform.github.io/publish/_static/logo.png" />
+  <meta name="twitter:image:alt" content="Publish — PHOTON" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=ea5fcf70" />
+  <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/styles.css?v=74ac3328" />
+  <link rel="stylesheet" type="text/css" href="../../../../../../_static/graphviz.css?v=4ae1632d" />
+  <link rel="stylesheet" href="../../../../../../_static/css/print.css" type="text/css" media="print" />
+  <link rel="icon" href="../../../../../../_static/favicon.ico" />
+</head>
+
+<body class="book-theme-classical-serif">
+  <header>
+    <div class="logo">
+      <a href="../../../../../../index.html" title="Home">
+        <img src="../../../../../../_static/logo.png" class="logo" alt="PHOTON publish"/>
+        <div class="org-repo">
+          <span class="org">PHOTON</span>
+          <span class="sep" aria-hidden="true">&bull;</span>
+          <span class="repo">publish</span>
+        </div>
+      </a>
+    </div>
+    <nav aria-label="Header">
+      <input type="checkbox" id="nav-Header-toggle" >
+      <label for="nav-Header-toggle" >Header</label>
+      <ul>
+        <li>
+          <a href="../../../../../../mission/index.html"  >mission</a>
+        </li>
+        <li>
+          <a href="../../../../../../usage/index.html"  >usage</a>
+        </li>
+        <li>
+          <a href="../../../../../../log/index.html"  >log</a>
+        </li>
+        <li>
+          <a href="../../../../../index.html" class="is-active" aria-selected="true" >modules</a>
+        </li>
+        <li>
+          <a href="../../../../../../refs/index.html"  >refs</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="motto"></div>
+  </header>
+  <main class="book-main">
+    <article class="book-layout book-reading-pane">
+      <header class="book-header">
+        <div class="book-header-bar">
+          <nav class="book-breadcrumbs" aria-label="Breadcrumb">
+            <a class="book-section-home-link" href="../../../../../index.html">modules</a>
+            <span class="book-crumb-sep" aria-hidden="true">/</span>
+            <a class="book-crumb-link" href="../../../../index.html">API Reference</a>
+            <span class="book-crumb-sep" aria-hidden="true">/</span>
+            <a class="book-crumb-link" href="../index.html">photon_platform.publish.directives</a>
+            <span class="book-crumb-sep" aria-hidden="true">/</span>
+            <span class="book-crumb-current" aria-current="page">photon_platform.publish.directives.card</span>
+          </nav>
+        </div>
+        <div class="book-header-nav">
+          <div class="book-nav-prev">
+            <a class="book-nav-btn" href="../index.html" title="photon_platform.publish.directives">&larr; <span class="nav-label">Prev</span></a>
+          </div>
+          <div class="book-nav-center">
+          </div>
+          <div class="book-nav-next">
+            <a class="book-nav-btn" href="../collection/index.html" title="photon_platform.publish.directives.collection"><span class="nav-label">Next</span> &rarr;</a>
+          </div>
+        </div>
+      </header>
+      <div class="content body book-content" role="main">
+        <section class="level-1" id="module-photon_platform.publish.directives.card">
+        <span id="photon-platform-publish-directives-card"></span><h1>photon_platform.publish.directives.card<a class="headerlink" href="#module-photon_platform.publish.directives.card" title="Link to this heading">¶</a></h1>
+        <p>Directives for Page Cards, Summaries, Standard Citations, and Automated Backlinks.</p>
+        <p>Provides:</p>
+        <ul class="simple">
+        <li><p><code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">summary::</span></code> — Visible editorial lead block that also populates the page’s <code class="docutils literal notranslate"><span class="pre">Card.description</span></code></p></li>
+        <li><p><code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">card::</span> <span class="pre">&lt;address&gt;</span></code> — Embeds any local or cross-project (Intersphinx + <code class="docutils literal notranslate"><span class="pre">cards.json</span></code>) Card
+        with optional local contextual body note</p></li>
+        <li><p><code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">citation-formats::</span></code> — Renders auto-generated Chicago/MLA/APA/BibTeX tabs for a record</p></li>
+        <li><p><code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">backlinks::</span></code> — Renders automated Hoenen-style passage backlinks for a person or citation</p></li>
+        </ul>
+        <section class="level-2" id="classes">
+        <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
+        <table class="autosummary longtable docutils align-default">
+        <tbody>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.card.PendingCard" title="photon_platform.publish.directives.card.PendingCard"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PendingCard</span></code></a></p></td>
+        <td><p>Deferred placeholder resolved on <cite>doctree-resolved</cite> once all cards are built.</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.card.PendingCitationFormats" title="photon_platform.publish.directives.card.PendingCitationFormats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PendingCitationFormats</span></code></a></p></td>
+        <td><p>Deferred placeholder for standard citation format tabs (Chicago/MLA/APA/BibTeX).</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.card.PendingBacklinks" title="photon_platform.publish.directives.card.PendingBacklinks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PendingBacklinks</span></code></a></p></td>
+        <td><p>Deferred placeholder for automated bidirectional apparatus backlinks.</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.card.SummaryDirective" title="photon_platform.publish.directives.card.SummaryDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SummaryDirective</span></code></a></p></td>
+        <td><p>Editorial summary block that renders cleanly on the page AND feeds <cite>Card.description</cite>.</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.card.CardDirective" title="photon_platform.publish.directives.card.CardDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CardDirective</span></code></a></p></td>
+        <td><p>Embed a formatted Card for any local page or cross-project Intersphinx address.</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.card.CitationFormatsDirective" title="photon_platform.publish.directives.card.CitationFormatsDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CitationFormatsDirective</span></code></a></p></td>
+        <td><p>Render auto-generated Chicago, MLA, APA, and BibTeX citations for the current record</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.card.BacklinksDirective" title="photon_platform.publish.directives.card.BacklinksDirective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BacklinksDirective</span></code></a></p></td>
+        <td><p>Render automated passage backlinks (grouped by chapter &amp; paired tracks) for a person/work.</p></td>
+        </tr>
+        </tbody>
+        </table>
+        </section>
+        <section class="level-2" id="functions">
+        <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
+        <table class="autosummary longtable docutils align-default">
+        <tbody>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.card.render_card_html" title="photon_platform.publish.directives.card.render_card_html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_card_html</span></code></a>(builder, fromdocname, card, *[, ...]) → str</p></td>
+        <td><p>Render a <cite>Card</cite> using the unified <cite>components/card.html</cite> Jinja template.</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.directives.card.process_cards" title="photon_platform.publish.directives.card.process_cards"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_cards</span></code></a>(app, doctree, fromdocname) → None</p></td>
+        <td><p>Resolve <cite>PendingCard</cite> nodes on <cite>doctree-resolved</cite>.</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.directives.card.setup" title="photon_platform.publish.directives.card.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(app) → dict[str, Any]</p></td>
+        <td><p></p></td>
+        </tr>
+        </tbody>
+        </table>
+        </section>
+        <section class="level-2" id="module-contents">
+        <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+        <dl class="py class">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.PendingCard">
+        <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.card.</span></span><span class="sig-name descname"><span class="pre">PendingCard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rawsource</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">children</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.card.PendingCard" title="Link to this definition">¶</a></dt>
+        <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.General</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.Element</span></code></p>
+        <p>Deferred placeholder resolved on <cite>doctree-resolved</cite> once all cards are built.</p>
+        </dd></dl>
+
+        <dl class="py class">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.PendingCitationFormats">
+        <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.card.</span></span><span class="sig-name descname"><span class="pre">PendingCitationFormats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rawsource</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">children</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.card.PendingCitationFormats" title="Link to this definition">¶</a></dt>
+        <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.General</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.Element</span></code></p>
+        <p>Deferred placeholder for standard citation format tabs (Chicago/MLA/APA/BibTeX).</p>
+        </dd></dl>
+
+        <dl class="py class">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.PendingBacklinks">
+        <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.card.</span></span><span class="sig-name descname"><span class="pre">PendingBacklinks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rawsource</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">children</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.card.PendingBacklinks" title="Link to this definition">¶</a></dt>
+        <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.General</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">docutils.nodes.Element</span></code></p>
+        <p>Deferred placeholder for automated bidirectional apparatus backlinks.</p>
+        </dd></dl>
+
+        <dl class="py class">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.SummaryDirective">
+        <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.card.</span></span><span class="sig-name descname"><span class="pre">SummaryDirective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_machine</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.card.SummaryDirective" title="Link to this definition">¶</a></dt>
+        <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">sphinx.util.docutils.SphinxDirective</span></code></p>
+        <p>Editorial summary block that renders cleanly on the page AND feeds <cite>Card.description</cite>.</p>
+        <p>Use <cite>:hidden:</cite> if you want multi-line editorial card copy without repeating it in body prose.</p>
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.SummaryDirective.has_content">
+        <span class="sig-name descname"><span class="pre">has_content</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#photon_platform.publish.directives.card.SummaryDirective.has_content" title="Link to this definition">¶</a></dt>
+        <dd><p>May the directive have content?</p>
+        </dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.SummaryDirective.option_spec">
+        <span class="sig-name descname"><span class="pre">option_spec</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#photon_platform.publish.directives.card.SummaryDirective.option_spec" title="Link to this definition">¶</a></dt>
+        <dd><p>Mapping of option names to validator functions.</p>
+        </dd></dl>
+
+        <dl class="py method">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.SummaryDirective.run">
+        <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><span class="pre">docutils.nodes.Node</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.directives.card.SummaryDirective.run" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        </dd></dl>
+
+        <dl class="py class">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.CardDirective">
+        <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.card.</span></span><span class="sig-name descname"><span class="pre">CardDirective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_machine</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.card.CardDirective" title="Link to this definition">¶</a></dt>
+        <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">sphinx.util.docutils.SphinxDirective</span></code></p>
+        <p>Embed a formatted Card for any local page or cross-project Intersphinx address.</p>
+        <p>Example:</p>
+        <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">card</span><span class="p">::</span> <span class="n">aristotle</span><span class="p">:</span><span class="n">analytica_posteriora</span><span class="o">/</span><span class="n">index</span>
+           <span class="p">:</span><span class="n">variant</span><span class="p">:</span> <span class="n">banner</span>
+
+           <span class="n">Cited</span> <span class="mi">5</span> <span class="n">times</span> <span class="ow">in</span> <span class="n">Hoenen</span><span class="s1">'s Caput I, III, and VII.</span>
+        </pre></div>
+        </div>
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.CardDirective.required_arguments">
+        <span class="sig-name descname"><span class="pre">required_arguments</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></span><a class="headerlink" href="#photon_platform.publish.directives.card.CardDirective.required_arguments" title="Link to this definition">¶</a></dt>
+        <dd><p>Number of required directive arguments.</p>
+        </dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.CardDirective.optional_arguments">
+        <span class="sig-name descname"><span class="pre">optional_arguments</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></span><a class="headerlink" href="#photon_platform.publish.directives.card.CardDirective.optional_arguments" title="Link to this definition">¶</a></dt>
+        <dd><p>Number of optional arguments after the required arguments.</p>
+        </dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.CardDirective.final_argument_whitespace">
+        <span class="sig-name descname"><span class="pre">final_argument_whitespace</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#photon_platform.publish.directives.card.CardDirective.final_argument_whitespace" title="Link to this definition">¶</a></dt>
+        <dd><p>May the final argument contain whitespace?</p>
+        </dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.CardDirective.has_content">
+        <span class="sig-name descname"><span class="pre">has_content</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#photon_platform.publish.directives.card.CardDirective.has_content" title="Link to this definition">¶</a></dt>
+        <dd><p>May the directive have content?</p>
+        </dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.CardDirective.option_spec">
+        <span class="sig-name descname"><span class="pre">option_spec</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#photon_platform.publish.directives.card.CardDirective.option_spec" title="Link to this definition">¶</a></dt>
+        <dd><p>Mapping of option names to validator functions.</p>
+        </dd></dl>
+
+        <dl class="py method">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.CardDirective.run">
+        <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><span class="pre">docutils.nodes.Node</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.directives.card.CardDirective.run" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        </dd></dl>
+
+        <dl class="py class">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.CitationFormatsDirective">
+        <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.card.</span></span><span class="sig-name descname"><span class="pre">CitationFormatsDirective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_machine</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.card.CitationFormatsDirective" title="Link to this definition">¶</a></dt>
+        <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">sphinx.util.docutils.SphinxDirective</span></code></p>
+        <p>Render auto-generated Chicago, MLA, APA, and BibTeX citations for the current record
+        (or an optional referenced Card address).</p>
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.CitationFormatsDirective.required_arguments">
+        <span class="sig-name descname"><span class="pre">required_arguments</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></span><a class="headerlink" href="#photon_platform.publish.directives.card.CitationFormatsDirective.required_arguments" title="Link to this definition">¶</a></dt>
+        <dd><p>Number of required directive arguments.</p>
+        </dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.CitationFormatsDirective.optional_arguments">
+        <span class="sig-name descname"><span class="pre">optional_arguments</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></span><a class="headerlink" href="#photon_platform.publish.directives.card.CitationFormatsDirective.optional_arguments" title="Link to this definition">¶</a></dt>
+        <dd><p>Number of optional arguments after the required arguments.</p>
+        </dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.CitationFormatsDirective.final_argument_whitespace">
+        <span class="sig-name descname"><span class="pre">final_argument_whitespace</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#photon_platform.publish.directives.card.CitationFormatsDirective.final_argument_whitespace" title="Link to this definition">¶</a></dt>
+        <dd><p>May the final argument contain whitespace?</p>
+        </dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.CitationFormatsDirective.has_content">
+        <span class="sig-name descname"><span class="pre">has_content</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#photon_platform.publish.directives.card.CitationFormatsDirective.has_content" title="Link to this definition">¶</a></dt>
+        <dd><p>May the directive have content?</p>
+        </dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.CitationFormatsDirective.option_spec">
+        <span class="sig-name descname"><span class="pre">option_spec</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#photon_platform.publish.directives.card.CitationFormatsDirective.option_spec" title="Link to this definition">¶</a></dt>
+        <dd><p>Mapping of option names to validator functions.</p>
+        </dd></dl>
+
+        <dl class="py method">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.CitationFormatsDirective.run">
+        <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><span class="pre">docutils.nodes.Node</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.directives.card.CitationFormatsDirective.run" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        </dd></dl>
+
+        <dl class="py class">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.BacklinksDirective">
+        <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.card.</span></span><span class="sig-name descname"><span class="pre">BacklinksDirective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_machine</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photon_platform.publish.directives.card.BacklinksDirective" title="Link to this definition">¶</a></dt>
+        <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">sphinx.util.docutils.SphinxDirective</span></code></p>
+        <p>Render automated passage backlinks (grouped by chapter &amp; paired tracks) for a person/work.</p>
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.BacklinksDirective.required_arguments">
+        <span class="sig-name descname"><span class="pre">required_arguments</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></span><a class="headerlink" href="#photon_platform.publish.directives.card.BacklinksDirective.required_arguments" title="Link to this definition">¶</a></dt>
+        <dd><p>Number of required directive arguments.</p>
+        </dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.BacklinksDirective.optional_arguments">
+        <span class="sig-name descname"><span class="pre">optional_arguments</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></span><a class="headerlink" href="#photon_platform.publish.directives.card.BacklinksDirective.optional_arguments" title="Link to this definition">¶</a></dt>
+        <dd><p>Number of optional arguments after the required arguments.</p>
+        </dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.BacklinksDirective.final_argument_whitespace">
+        <span class="sig-name descname"><span class="pre">final_argument_whitespace</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#photon_platform.publish.directives.card.BacklinksDirective.final_argument_whitespace" title="Link to this definition">¶</a></dt>
+        <dd><p>May the final argument contain whitespace?</p>
+        </dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.BacklinksDirective.has_content">
+        <span class="sig-name descname"><span class="pre">has_content</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#photon_platform.publish.directives.card.BacklinksDirective.has_content" title="Link to this definition">¶</a></dt>
+        <dd><p>May the directive have content?</p>
+        </dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.BacklinksDirective.option_spec">
+        <span class="sig-name descname"><span class="pre">option_spec</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#photon_platform.publish.directives.card.BacklinksDirective.option_spec" title="Link to this definition">¶</a></dt>
+        <dd><p>Mapping of option names to validator functions.</p>
+        </dd></dl>
+
+        <dl class="py method">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.BacklinksDirective.run">
+        <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><span class="pre">docutils.nodes.Node</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.directives.card.BacklinksDirective.run" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.render_card_html">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.card.</span></span><span class="sig-name descname"><span class="pre">render_card_html</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">builder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromdocname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">card</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../cards/index.html#photon_platform.publish.cards.Card" title="photon_platform.publish.cards.Card"><span class="pre">photon_platform.publish.cards.Card</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'banner'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_class</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">note_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'In</span> <span class="pre">This</span> <span class="pre">Work'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.directives.card.render_card_html" title="Link to this definition">¶</a></dt>
+        <dd><p>Render a <cite>Card</cite> using the unified <cite>components/card.html</cite> Jinja template.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.process_cards">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.card.</span></span><span class="sig-name descname"><span class="pre">process_cards</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doctree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">docutils.nodes.document</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromdocname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.directives.card.process_cards" title="Link to this definition">¶</a></dt>
+        <dd><p>Resolve <cite>PendingCard</cite> nodes on <cite>doctree-resolved</cite>.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.directives.card.setup">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.directives.card.</span></span><span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.directives.card.setup" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        </section>
+        </section>
+
+      </div>
+      <footer class="book-footer">
+        <div class="book-footer-ornament">&#10086;</div>
+        <div class="book-footer-nav">
+          <div class="book-nav-prev">
+            <a class="book-nav-btn" href="../index.html" title="photon_platform.publish.directives">&larr; <span class="nav-label">Prev</span></a>
+          </div>
+          <div class="book-nav-center">
+            <a class="book-toc-link" href="../../../../../index.html">modules</a>
+          </div>
+          <div class="book-nav-next">
+            <a class="book-nav-btn" href="../collection/index.html" title="photon_platform.publish.directives.collection"><span class="nav-label">Next</span> &rarr;</a>
+          </div>
+        </div>
+      </footer>
+    </article>
+  </main>
+  <div class="asides">
+    <aside class="aside-search">
+      <h3>Search</h3>
+      <div id="searchbox" role="search">
+        <form id="rtd-search-form" class="wy-form search-form" action="../../../../../../search.html" method="get">
+          <div class="search-field">
+            <input type="search" name="q" placeholder="Search docs..." aria-label="Search docs" autocomplete="off" />
+            <button type="submit" class="search-submit" aria-label="Search" title="Search">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </button>
+          </div>
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+      </div>
+    </aside>
+    <aside class="aside-recent-logs">
+      <h3>Recent Logs</h3>
+      <ul>
+        <li><a href="../../../../../../log/26.332-063100/index.html">Unified Page Cards, Federated Collections & HTML Social Capture (v0.5.0)</a></li>
+        <li><a href="../../../../../../log/26.302-183000/index.html">Unified Classical Scriptorium Theme & Collection Redesign</a></li>
+        <li><a href="../../../../../../log/24.126-084512/index.html">add global_conf.py</a></li>
+        <li><a href="../../../../../../log/24.126-084330/index.html">test</a></li>
+        <li><a href="../../../../../../log/24.125-164141/index.html">introducing publish</a></li>
+      </ul>
+    </aside>
+    <aside class="aside-tags">
+      <h3>Tags</h3>
+      <ul>
+        <li><a href="../../../../../../tags/bibliography.html">bibliography</a></li>
+        <li><a href="../../../../../../tags/cards.html">cards</a></li>
+        <li><a href="../../../../../../tags/code.html">code</a></li>
+        <li><a href="../../../../../../tags/codex.html">codex</a></li>
+        <li><a href="../../../../../../tags/collection.html">collection</a></li>
+        <li><a href="../../../../../../tags/collections.html">collections</a></li>
+        <li><a href="../../../../../../tags/introduction.html">introduction</a></li>
+        <li><a href="../../../../../../tags/navigation.html">navigation</a></li>
+        <li><a href="../../../../../../tags/social-banners.html">social-banners</a></li>
+        <li><a href="../../../../../../tags/taxonomy.html">taxonomy</a></li>
+        <li><a href="../../../../../../tags/test.html">test</a></li>
+        <li><a href="../../../../../../tags/usage.html">usage</a></li>
+      </ul>
+    </aside>
+    <aside class="aside-categories">
+      <h3>Categories</h3>
+      <ul>
+        <li><a href="../../../../../../categories/architecture.html">architecture</a></li>
+        <li><a href="../../../../../../categories/publish.html">publish</a></li>
+        <li><a href="../../../../../../categories/theme.html">theme</a></li>
+      </ul>
+    </aside>
+    <aside class="aside-types">
+      <h3>Types</h3>
+      <ul>
+        <li><a href="../../../../../../types/goal.html">goal</a></li>
+        <li><a href="../../../../../../types/log.html">log</a></li>
+      </ul>
+    </aside>
+  </div>
+  <footer>
+    <div class="footer-nav">
+      <ul>
+        <li><a href="../../../../../../about.html"  >about</a></li>
+        <li><a href="../../../../../../connect.html"  >connect</a></li>
+        <li><a href="../../../../../../todos/index.html"  >todos</a></li>
+        <li><a href="../../../../../../changelog.html"  >Changelog</a></li>
+        <li><a href="../../../../../../orphan.html"  >Orphan Page</a></li>
+        <li><a href="https://github.com/photon-platform/publish" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://github.com/photon-platform/publish/issues" target="_blank" rel="noopener">Support</a></li>
+      </ul>
+    </div>
+    <hr />
+    <div role="contentinfo">
+      <p>
+        &copy; Copyright 2026, PHOTON.
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../../../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../../../../_static/documentation_options.js?v=2a2fe768"></script>
+  <script src="../../../../../../_static/doctools.js?v=fd6eb6e6"></script>
+  <script src="../../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+  <script src="../../../../../../_static/js/collection_controls.js?v=35d67a15"></script>
+  <script src="../../../../../../_static/js/collection_directory.js?v=0928c9d3"></script>
+  <script src="../../../../../../_static/js/geometor_interactive.js?v=219c1955"></script>
+  <script src="../../../../../../_static/js/book_outline.js?v=aca1ae7c"></script>
+  <script src="../../../../../../_static/js/search_highlight.js"></script>
+
+</body>
+</html>

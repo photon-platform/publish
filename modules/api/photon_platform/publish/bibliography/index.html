@@ -1,0 +1,441 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-content_root="../../../../../">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>photon_platform.publish.bibliography — Publish • PHOTON</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="canonical" href="https://photon-platform.github.io/publish/modules/api/photon_platform/publish/bibliography/" />
+  <meta name="description" content="Scholarly Bibliography formatting (Chicago, MLA, APA, BibTeX) and automated bidirectional passage backlinks (.. citation-formats:: and .. backlinks::)." />
+  <meta property="og:site_name" content="PHOTON" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="photon_platform.publish.bibliography — Publish • PHOTON" />
+  <meta property="og:description" content="Scholarly Bibliography formatting (Chicago, MLA, APA, BibTeX) and automated bidirectional passage backlinks (.. citation-formats:: and .. backlinks::)." />
+  <meta property="og:url" content="https://photon-platform.github.io/publish/modules/api/photon_platform/publish/bibliography/" />
+  <meta property="og:image" content="https://photon-platform.github.io/publish/_static/logo.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="512" />
+  <meta property="og:image:height" content="512" />
+  <meta property="og:image:alt" content="Publish — PHOTON" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="photon_platform.publish.bibliography — Publish • PHOTON" />
+  <meta name="twitter:description" content="Scholarly Bibliography formatting (Chicago, MLA, APA, BibTeX) and automated bidirectional passage backlinks (.. citation-formats:: and .. backlinks::)." />
+  <meta name="twitter:image" content="https://photon-platform.github.io/publish/_static/logo.png" />
+  <meta name="twitter:image:alt" content="Publish — PHOTON" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=ea5fcf70" />
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/css/styles.css?v=74ac3328" />
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=4ae1632d" />
+  <link rel="stylesheet" href="../../../../../_static/css/print.css" type="text/css" media="print" />
+  <link rel="icon" href="../../../../../_static/favicon.ico" />
+</head>
+
+<body class="book-theme-classical-serif">
+  <header>
+    <div class="logo">
+      <a href="../../../../../index.html" title="Home">
+        <img src="../../../../../_static/logo.png" class="logo" alt="PHOTON publish"/>
+        <div class="org-repo">
+          <span class="org">PHOTON</span>
+          <span class="sep" aria-hidden="true">&bull;</span>
+          <span class="repo">publish</span>
+        </div>
+      </a>
+    </div>
+    <nav aria-label="Header">
+      <input type="checkbox" id="nav-Header-toggle" >
+      <label for="nav-Header-toggle" >Header</label>
+      <ul>
+        <li>
+          <a href="../../../../../mission/index.html"  >mission</a>
+        </li>
+        <li>
+          <a href="../../../../../usage/index.html"  >usage</a>
+        </li>
+        <li>
+          <a href="../../../../../log/index.html"  >log</a>
+        </li>
+        <li>
+          <a href="../../../../index.html" class="is-active" aria-selected="true" >modules</a>
+        </li>
+        <li>
+          <a href="../../../../../refs/index.html"  >refs</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="motto"></div>
+  </header>
+  <main class="book-main">
+    <article class="book-layout book-reading-pane">
+      <header class="book-header">
+        <div class="book-header-bar">
+          <nav class="book-breadcrumbs" aria-label="Breadcrumb">
+            <a class="book-section-home-link" href="../../../../index.html">modules</a>
+            <span class="book-crumb-sep" aria-hidden="true">/</span>
+            <a class="book-crumb-link" href="../../../index.html">API Reference</a>
+            <span class="book-crumb-sep" aria-hidden="true">/</span>
+            <span class="book-crumb-current" aria-current="page">photon_platform.publish.bibliography</span>
+          </nav>
+        </div>
+        <div class="book-header-nav">
+          <div class="book-nav-prev">
+            <a class="book-nav-btn" href="../app/index.html" title="photon_platform.publish.app">&larr; <span class="nav-label">Prev</span></a>
+          </div>
+          <div class="book-nav-center">
+          </div>
+          <div class="book-nav-next">
+            <a class="book-nav-btn" href="../book/index.html" title="photon_platform.publish.book"><span class="nav-label">Next</span> &rarr;</a>
+          </div>
+        </div>
+      </header>
+      <div class="content body book-content" role="main">
+        <section class="level-1" id="module-photon_platform.publish.bibliography">
+        <span id="photon-platform-publish-bibliography"></span><h1>photon_platform.publish.bibliography<a class="headerlink" href="#module-photon_platform.publish.bibliography" title="Link to this heading">¶</a></h1>
+        <p>Scholarly Bibliography formatting (Chicago, MLA, APA, BibTeX) and automated
+        bidirectional passage backlinks (<cite>.. citation-formats::</cite> and <cite>.. backlinks::</cite>).</p>
+        <p>Works directly from unified <cite>Card</cite> objects (local or inherited via <cite>:card_ref:</cite>)
+        and Sphinx’s <cite>:cite:</cite>, <cite>:person:</cite>, and <cite>:term:</cite> inline role occurrences, grouping
+        parallel companion tracks (e.g., <cite>LA · EN</cite>, <cite>EL · EN</cite>) automatically.</p>
+        <section class="level-2" id="attributes">
+        <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
+        <table class="autosummary longtable docutils align-default">
+        <tbody>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.bibliography.TRACK_SUFFIX_RE" title="photon_platform.publish.bibliography.TRACK_SUFFIX_RE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TRACK_SUFFIX_RE</span></code></a></p></td>
+        <td><p></p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.bibliography.BARE_TRACK_STEMS" title="photon_platform.publish.bibliography.BARE_TRACK_STEMS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BARE_TRACK_STEMS</span></code></a></p></td>
+        <td><p></p></td>
+        </tr>
+        </tbody>
+        </table>
+        </section>
+        <section class="level-2" id="classes">
+        <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
+        <table class="autosummary longtable docutils align-default">
+        <tbody>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.bibliography.RoleOccurrence" title="photon_platform.publish.bibliography.RoleOccurrence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RoleOccurrence</span></code></a></p></td>
+        <td><p></p></td>
+        </tr>
+        </tbody>
+        </table>
+        </section>
+        <section class="level-2" id="functions">
+        <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
+        <table class="autosummary longtable docutils align-default">
+        <tbody>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.bibliography.format_chicago" title="photon_platform.publish.bibliography.format_chicago"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_chicago</span></code></a>(card) → str</p></td>
+        <td><p>Format a Chicago Notes &amp; Bibliography entry from <cite>card</cite>.</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.bibliography.format_mla" title="photon_platform.publish.bibliography.format_mla"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_mla</span></code></a>(card) → str</p></td>
+        <td><p>Format an MLA 9th-edition citation entry from <cite>card</cite>.</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.bibliography.format_apa" title="photon_platform.publish.bibliography.format_apa"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_apa</span></code></a>(card) → str</p></td>
+        <td><p>Format an APA 7th-edition citation entry from <cite>card</cite>.</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.bibliography.format_bibtex" title="photon_platform.publish.bibliography.format_bibtex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_bibtex</span></code></a>(card) → str</p></td>
+        <td><p>Format a standards-compliant BibTeX entry from <cite>card</cite>.</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.bibliography.format_all_citations" title="photon_platform.publish.bibliography.format_all_citations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_all_citations</span></code></a>(card) → dict[str, str]</p></td>
+        <td><p></p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.bibliography.render_citation_formats_html" title="photon_platform.publish.bibliography.render_citation_formats_html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_citation_formats_html</span></code></a>(card, *[, title, extra_class]) → str</p></td>
+        <td><p>Render interactive Chicago / MLA / APA / BibTeX tabs for a detail record.</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.bibliography.record_doc_apparatus_occurrences" title="photon_platform.publish.bibliography.record_doc_apparatus_occurrences"><code class="xref py py-obj docutils literal notranslate"><span class="pre">record_doc_apparatus_occurrences</span></code></a>(app, doctree) → None</p></td>
+        <td><p>Record role occurrences during <cite>doctree-read</cite> while the doctree is already in memory.</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.bibliography.purge_doc_apparatus_occurrences" title="photon_platform.publish.bibliography.purge_doc_apparatus_occurrences"><code class="xref py py-obj docutils literal notranslate"><span class="pre">purge_doc_apparatus_occurrences</span></code></a>(app, env, docname) → None</p></td>
+        <td><p>Remove cached role occurrences when a document is re-read or deleted.</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.bibliography.merge_doc_apparatus_occurrences" title="photon_platform.publish.bibliography.merge_doc_apparatus_occurrences"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_doc_apparatus_occurrences</span></code></a>(app, env, docnames, other) → None</p></td>
+        <td><p>Merge per-document role occurrences from parallel read workers.</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.bibliography.collect_apparatus_occurrences" title="photon_platform.publish.bibliography.collect_apparatus_occurrences"><code class="xref py py-obj docutils literal notranslate"><span class="pre">collect_apparatus_occurrences</span></code></a>(app, env) → None</p></td>
+        <td><p>Aggregate recorded role occurrences on <cite>env-updated</cite> with zero doctree unpickling.</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.bibliography.render_backlinks_html" title="photon_platform.publish.bibliography.render_backlinks_html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_backlinks_html</span></code></a>(builder, fromdocname, occurrences, *) → str</p></td>
+        <td><p>Render Hoenen-style passage backlinks grouped by <cite>(base_group, index_in_doc)</cite> with paired tracks.</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.bibliography.process_bibliography_nodes" title="photon_platform.publish.bibliography.process_bibliography_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_bibliography_nodes</span></code></a>(app, doctree, fromdocname) → None</p></td>
+        <td><p>Resolve <cite>PendingCitationFormats</cite> and <cite>PendingBacklinks</cite> nodes on <cite>doctree-resolved</cite>.</p></td>
+        </tr>
+        <tr class="row-odd"><td><p><a class="reference internal" href="#photon_platform.publish.bibliography.emit_bibliography_bib" title="photon_platform.publish.bibliography.emit_bibliography_bib"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emit_bibliography_bib</span></code></a>(app, exception) → None</p></td>
+        <td><p>Export <cite>docs/bibliography.bib</cite> when the build contains bibliographic work records.</p></td>
+        </tr>
+        <tr class="row-even"><td><p><a class="reference internal" href="#photon_platform.publish.bibliography.setup" title="photon_platform.publish.bibliography.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(app) → dict[str, Any]</p></td>
+        <td><p></p></td>
+        </tr>
+        </tbody>
+        </table>
+        </section>
+        <section class="level-2" id="module-contents">
+        <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.format_chicago">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.bibliography.</span></span><span class="sig-name descname"><span class="pre">format_chicago</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">card</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../cards/index.html#photon_platform.publish.cards.Card" title="photon_platform.publish.cards.Card"><span class="pre">photon_platform.publish.cards.Card</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.bibliography.format_chicago" title="Link to this definition">¶</a></dt>
+        <dd><p>Format a Chicago Notes &amp; Bibliography entry from <cite>card</cite>.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.format_mla">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.bibliography.</span></span><span class="sig-name descname"><span class="pre">format_mla</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">card</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../cards/index.html#photon_platform.publish.cards.Card" title="photon_platform.publish.cards.Card"><span class="pre">photon_platform.publish.cards.Card</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.bibliography.format_mla" title="Link to this definition">¶</a></dt>
+        <dd><p>Format an MLA 9th-edition citation entry from <cite>card</cite>.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.format_apa">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.bibliography.</span></span><span class="sig-name descname"><span class="pre">format_apa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">card</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../cards/index.html#photon_platform.publish.cards.Card" title="photon_platform.publish.cards.Card"><span class="pre">photon_platform.publish.cards.Card</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.bibliography.format_apa" title="Link to this definition">¶</a></dt>
+        <dd><p>Format an APA 7th-edition citation entry from <cite>card</cite>.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.format_bibtex">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.bibliography.</span></span><span class="sig-name descname"><span class="pre">format_bibtex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">card</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../cards/index.html#photon_platform.publish.cards.Card" title="photon_platform.publish.cards.Card"><span class="pre">photon_platform.publish.cards.Card</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.bibliography.format_bibtex" title="Link to this definition">¶</a></dt>
+        <dd><p>Format a standards-compliant BibTeX entry from <cite>card</cite>.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.format_all_citations">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.bibliography.</span></span><span class="sig-name descname"><span class="pre">format_all_citations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">card</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../cards/index.html#photon_platform.publish.cards.Card" title="photon_platform.publish.cards.Card"><span class="pre">photon_platform.publish.cards.Card</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.bibliography.format_all_citations" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.render_citation_formats_html">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.bibliography.</span></span><span class="sig-name descname"><span class="pre">render_citation_formats_html</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">card</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../cards/index.html#photon_platform.publish.cards.Card" title="photon_platform.publish.cards.Card"><span class="pre">photon_platform.publish.cards.Card</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Cite</span> <span class="pre">This</span> <span class="pre">Work'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_class</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.bibliography.render_citation_formats_html" title="Link to this definition">¶</a></dt>
+        <dd><p>Render interactive Chicago / MLA / APA / BibTeX tabs for a detail record.</p>
+        </dd></dl>
+
+        <dl class="py data">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.TRACK_SUFFIX_RE">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.bibliography.</span></span><span class="sig-name descname"><span class="pre">TRACK_SUFFIX_RE</span></span><a class="headerlink" href="#photon_platform.publish.bibliography.TRACK_SUFFIX_RE" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        <dl class="py class">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.RoleOccurrence">
+        <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">photon_platform.publish.bibliography.</span></span><span class="sig-name descname"><span class="pre">RoleOccurrence</span></span><a class="headerlink" href="#photon_platform.publish.bibliography.RoleOccurrence" title="Link to this definition">¶</a></dt>
+        <dd><dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.RoleOccurrence.role_type">
+        <span class="sig-name descname"><span class="pre">role_type</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><a class="headerlink" href="#photon_platform.publish.bibliography.RoleOccurrence.role_type" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.RoleOccurrence.target">
+        <span class="sig-name descname"><span class="pre">target</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><a class="headerlink" href="#photon_platform.publish.bibliography.RoleOccurrence.target" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.RoleOccurrence.slug">
+        <span class="sig-name descname"><span class="pre">slug</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><a class="headerlink" href="#photon_platform.publish.bibliography.RoleOccurrence.slug" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.RoleOccurrence.docname">
+        <span class="sig-name descname"><span class="pre">docname</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><a class="headerlink" href="#photon_platform.publish.bibliography.RoleOccurrence.docname" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.RoleOccurrence.doc_title">
+        <span class="sig-name descname"><span class="pre">doc_title</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><a class="headerlink" href="#photon_platform.publish.bibliography.RoleOccurrence.doc_title" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.RoleOccurrence.section_title">
+        <span class="sig-name descname"><span class="pre">section_title</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><a class="headerlink" href="#photon_platform.publish.bibliography.RoleOccurrence.section_title" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.RoleOccurrence.base_group">
+        <span class="sig-name descname"><span class="pre">base_group</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><a class="headerlink" href="#photon_platform.publish.bibliography.RoleOccurrence.base_group" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.RoleOccurrence.track_label">
+        <span class="sig-name descname"><span class="pre">track_label</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><a class="headerlink" href="#photon_platform.publish.bibliography.RoleOccurrence.track_label" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.RoleOccurrence.occ_id">
+        <span class="sig-name descname"><span class="pre">occ_id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><a class="headerlink" href="#photon_platform.publish.bibliography.RoleOccurrence.occ_id" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        <dl class="py attribute">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.RoleOccurrence.index_in_doc">
+        <span class="sig-name descname"><span class="pre">index_in_doc</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><a class="headerlink" href="#photon_platform.publish.bibliography.RoleOccurrence.index_in_doc" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        </dd></dl>
+
+        <dl class="py data">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.BARE_TRACK_STEMS">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.bibliography.</span></span><span class="sig-name descname"><span class="pre">BARE_TRACK_STEMS</span></span><a class="headerlink" href="#photon_platform.publish.bibliography.BARE_TRACK_STEMS" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.record_doc_apparatus_occurrences">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.bibliography.</span></span><span class="sig-name descname"><span class="pre">record_doc_apparatus_occurrences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doctree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">docutils.nodes.document</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.bibliography.record_doc_apparatus_occurrences" title="Link to this definition">¶</a></dt>
+        <dd><p>Record role occurrences during <cite>doctree-read</cite> while the doctree is already in memory.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.purge_doc_apparatus_occurrences">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.bibliography.</span></span><span class="sig-name descname"><span class="pre">purge_doc_apparatus_occurrences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.bibliography.purge_doc_apparatus_occurrences" title="Link to this definition">¶</a></dt>
+        <dd><p>Remove cached role occurrences when a document is re-read or deleted.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.merge_doc_apparatus_occurrences">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.bibliography.</span></span><span class="sig-name descname"><span class="pre">merge_doc_apparatus_occurrences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docnames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.bibliography.merge_doc_apparatus_occurrences" title="Link to this definition">¶</a></dt>
+        <dd><p>Merge per-document role occurrences from parallel read workers.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.collect_apparatus_occurrences">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.bibliography.</span></span><span class="sig-name descname"><span class="pre">collect_apparatus_occurrences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.bibliography.collect_apparatus_occurrences" title="Link to this definition">¶</a></dt>
+        <dd><p>Aggregate recorded role occurrences on <cite>env-updated</cite> with zero doctree unpickling.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.render_backlinks_html">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.bibliography.</span></span><span class="sig-name descname"><span class="pre">render_backlinks_html</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">builder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromdocname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">occurrences</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#photon_platform.publish.bibliography.RoleOccurrence" title="photon_platform.publish.bibliography.RoleOccurrence"><span class="pre">RoleOccurrence</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Occurrences</span> <span class="pre">in</span> <span class="pre">This</span> <span class="pre">Work'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_class</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#photon_platform.publish.bibliography.render_backlinks_html" title="Link to this definition">¶</a></dt>
+        <dd><p>Render Hoenen-style passage backlinks grouped by <cite>(base_group, index_in_doc)</cite> with paired tracks.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.process_bibliography_nodes">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.bibliography.</span></span><span class="sig-name descname"><span class="pre">process_bibliography_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doctree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">docutils.nodes.document</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromdocname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.bibliography.process_bibliography_nodes" title="Link to this definition">¶</a></dt>
+        <dd><p>Resolve <cite>PendingCitationFormats</cite> and <cite>PendingBacklinks</cite> nodes on <cite>doctree-resolved</cite>.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.emit_bibliography_bib">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.bibliography.</span></span><span class="sig-name descname"><span class="pre">emit_bibliography_bib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.13/builtins/exceptions.html#Exception" title="(in Python v3.13)"><span class="pre">Exception</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#photon_platform.publish.bibliography.emit_bibliography_bib" title="Link to this definition">¶</a></dt>
+        <dd><p>Export <cite>docs/bibliography.bib</cite> when the build contains bibliographic work records.</p>
+        </dd></dl>
+
+        <dl class="py function">
+        <dt class="sig sig-object py" id="photon_platform.publish.bibliography.setup">
+        <span class="sig-prename descclassname"><span class="pre">photon_platform.publish.bibliography.</span></span><span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.13/builtins/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#photon_platform.publish.bibliography.setup" title="Link to this definition">¶</a></dt>
+        <dd></dd></dl>
+
+        </section>
+        </section>
+
+      </div>
+      <footer class="book-footer">
+        <div class="book-footer-ornament">&#10086;</div>
+        <div class="book-footer-nav">
+          <div class="book-nav-prev">
+            <a class="book-nav-btn" href="../app/index.html" title="photon_platform.publish.app">&larr; <span class="nav-label">Prev</span></a>
+          </div>
+          <div class="book-nav-center">
+            <a class="book-toc-link" href="../../../../index.html">modules</a>
+          </div>
+          <div class="book-nav-next">
+            <a class="book-nav-btn" href="../book/index.html" title="photon_platform.publish.book"><span class="nav-label">Next</span> &rarr;</a>
+          </div>
+        </div>
+      </footer>
+    </article>
+  </main>
+  <div class="asides">
+    <aside class="aside-search">
+      <h3>Search</h3>
+      <div id="searchbox" role="search">
+        <form id="rtd-search-form" class="wy-form search-form" action="../../../../../search.html" method="get">
+          <div class="search-field">
+            <input type="search" name="q" placeholder="Search docs..." aria-label="Search docs" autocomplete="off" />
+            <button type="submit" class="search-submit" aria-label="Search" title="Search">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </button>
+          </div>
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+      </div>
+    </aside>
+    <aside class="aside-recent-logs">
+      <h3>Recent Logs</h3>
+      <ul>
+        <li><a href="../../../../../log/26.332-063100/index.html">Unified Page Cards, Federated Collections & HTML Social Capture (v0.5.0)</a></li>
+        <li><a href="../../../../../log/26.302-183000/index.html">Unified Classical Scriptorium Theme & Collection Redesign</a></li>
+        <li><a href="../../../../../log/24.126-084512/index.html">add global_conf.py</a></li>
+        <li><a href="../../../../../log/24.126-084330/index.html">test</a></li>
+        <li><a href="../../../../../log/24.125-164141/index.html">introducing publish</a></li>
+      </ul>
+    </aside>
+    <aside class="aside-tags">
+      <h3>Tags</h3>
+      <ul>
+        <li><a href="../../../../../tags/bibliography.html">bibliography</a></li>
+        <li><a href="../../../../../tags/cards.html">cards</a></li>
+        <li><a href="../../../../../tags/code.html">code</a></li>
+        <li><a href="../../../../../tags/codex.html">codex</a></li>
+        <li><a href="../../../../../tags/collection.html">collection</a></li>
+        <li><a href="../../../../../tags/collections.html">collections</a></li>
+        <li><a href="../../../../../tags/introduction.html">introduction</a></li>
+        <li><a href="../../../../../tags/navigation.html">navigation</a></li>
+        <li><a href="../../../../../tags/social-banners.html">social-banners</a></li>
+        <li><a href="../../../../../tags/taxonomy.html">taxonomy</a></li>
+        <li><a href="../../../../../tags/test.html">test</a></li>
+        <li><a href="../../../../../tags/usage.html">usage</a></li>
+      </ul>
+    </aside>
+    <aside class="aside-categories">
+      <h3>Categories</h3>
+      <ul>
+        <li><a href="../../../../../categories/architecture.html">architecture</a></li>
+        <li><a href="../../../../../categories/publish.html">publish</a></li>
+        <li><a href="../../../../../categories/theme.html">theme</a></li>
+      </ul>
+    </aside>
+    <aside class="aside-types">
+      <h3>Types</h3>
+      <ul>
+        <li><a href="../../../../../types/goal.html">goal</a></li>
+        <li><a href="../../../../../types/log.html">log</a></li>
+      </ul>
+    </aside>
+  </div>
+  <footer>
+    <div class="footer-nav">
+      <ul>
+        <li><a href="../../../../../about.html"  >about</a></li>
+        <li><a href="../../../../../connect.html"  >connect</a></li>
+        <li><a href="../../../../../todos/index.html"  >todos</a></li>
+        <li><a href="../../../../../changelog.html"  >Changelog</a></li>
+        <li><a href="../../../../../orphan.html"  >Orphan Page</a></li>
+        <li><a href="https://github.com/photon-platform/publish" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://github.com/photon-platform/publish/issues" target="_blank" rel="noopener">Support</a></li>
+      </ul>
+    </div>
+    <hr />
+    <div role="contentinfo">
+      <p>
+        &copy; Copyright 2026, PHOTON.
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../../../_static/documentation_options.js?v=2a2fe768"></script>
+  <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
+  <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+  <script src="../../../../../_static/js/collection_controls.js?v=35d67a15"></script>
+  <script src="../../../../../_static/js/collection_directory.js?v=0928c9d3"></script>
+  <script src="../../../../../_static/js/geometor_interactive.js?v=219c1955"></script>
+  <script src="../../../../../_static/js/book_outline.js?v=aca1ae7c"></script>
+  <script src="../../../../../_static/js/search_highlight.js"></script>
+
+</body>
+</html>

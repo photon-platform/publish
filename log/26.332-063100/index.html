@@ -1,0 +1,259 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-content_root="../../">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Unified Page Cards, Federated Collections &amp; HTML Social Capture (v0.5.0) — Publish • PHOTON</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="canonical" href="https://photon-platform.github.io/publish/log/26.332-063100/" />
+  <meta name="description" content="Every Sphinx page in photon-platform/publish now resolves to one canonical Card driving collections, searchable directories, inline .. card:: embeds, cross-repo cards.json federation, standard…" />
+  <meta property="og:site_name" content="PHOTON" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Unified Page Cards, Federated Collections &amp; HTML Social Capture (v0.5.0) — Publish • PHOTON" />
+  <meta property="og:description" content="Every Sphinx page in photon-platform/publish now resolves to one canonical Card driving collections, searchable directories, inline .. card:: embeds, cross-repo cards.json federation, standard…" />
+  <meta property="og:url" content="https://photon-platform.github.io/publish/log/26.332-063100/" />
+  <meta property="og:image" content="https://photon-platform.github.io/publish/_static/logo.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="512" />
+  <meta property="og:image:height" content="512" />
+  <meta property="og:image:alt" content="Publish — PHOTON" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Unified Page Cards, Federated Collections &amp; HTML Social Capture (v0.5.0) — Publish • PHOTON" />
+  <meta name="twitter:description" content="Every Sphinx page in photon-platform/publish now resolves to one canonical Card driving collections, searchable directories, inline .. card:: embeds, cross-repo cards.json federation, standard…" />
+  <meta name="twitter:image" content="https://photon-platform.github.io/publish/_static/logo.png" />
+  <meta name="twitter:image:alt" content="Publish — PHOTON" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=ea5fcf70" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/styles.css?v=74ac3328" />
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+  <link rel="stylesheet" href="../../_static/css/print.css" type="text/css" media="print" />
+  <link rel="icon" href="../../_static/favicon.ico" />
+</head>
+
+<body class="book-theme-classical-serif">
+  <header>
+    <div class="logo">
+      <a href="../../index.html" title="Home">
+        <img src="../../_static/logo.png" class="logo" alt="PHOTON publish"/>
+        <div class="org-repo">
+          <span class="org">PHOTON</span>
+          <span class="sep" aria-hidden="true">&bull;</span>
+          <span class="repo">publish</span>
+        </div>
+      </a>
+    </div>
+    <nav aria-label="Header">
+      <input type="checkbox" id="nav-Header-toggle" >
+      <label for="nav-Header-toggle" >Header</label>
+      <ul>
+        <li>
+          <a href="../../mission/index.html"  >mission</a>
+        </li>
+        <li>
+          <a href="../../usage/index.html"  >usage</a>
+        </li>
+        <li>
+          <a href="../index.html" class="is-active" aria-selected="true" >log</a>
+        </li>
+        <li>
+          <a href="../../modules/index.html"  >modules</a>
+        </li>
+        <li>
+          <a href="../../refs/index.html"  >refs</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="motto"></div>
+  </header>
+  <main class="book-main">
+    <article class="book-layout book-reading-pane">
+      <header class="book-header">
+        <div class="book-header-bar">
+          <nav class="book-breadcrumbs" aria-label="Breadcrumb">
+            <a class="book-section-home-link" href="../index.html">log</a>
+            <span class="book-crumb-sep" aria-hidden="true">/</span>
+            <span class="book-crumb-current" aria-current="page">Unified Page Cards, Federated Collections &…</span>
+          </nav>
+          <div class="book-provenance-badges">
+            <span class="book-badge canonical-badge">26.332-063100</span>
+          </div>
+        </div>
+        <div class="book-header-nav">
+          <div class="book-nav-prev">
+            <a class="book-nav-btn" href="../index.html" title="log">&larr; <span class="nav-label">Prev</span></a>
+          </div>
+          <div class="book-nav-center">
+          </div>
+          <div class="book-nav-next">
+            <a class="book-nav-btn" href="../26.302-183000/index.html" title="Unified Classical Scriptorium Theme &amp; Collection Redesign"><span class="nav-label">Next</span> &rarr;</a>
+          </div>
+        </div>
+      </header>
+      <div class="content body book-content" role="main">
+        <section class="level-1" id="unified-page-cards-federated-collections-html-social-capture-v0-5-0">
+        <h1>Unified Page Cards, Federated Collections &amp; HTML Social Capture (v0.5.0)<a class="headerlink" href="#unified-page-cards-federated-collections-html-social-capture-v0-5-0" title="Link to this heading">¶</a></h1>
+        <div class="card-summary docutils container">
+        <p>Every Sphinx page in <code class="docutils literal notranslate"><span class="pre">photon-platform/publish</span></code> now resolves to one canonical <code class="docutils literal notranslate"><span class="pre">Card</span></code>
+        driving collections, searchable directories, inline <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">card::</span></code> embeds, cross-repo
+        <code class="docutils literal notranslate"><span class="pre">cards.json</span></code> federation, standard scholarly citations, and <code class="docutils literal notranslate"><span class="pre">1280×640</span></code> HTML+CSS social
+        media banner capture.</p>
+        </div>
+        <section class="level-2" id="architectural-summary">
+        <h2>Architectural Summary<a class="headerlink" href="#architectural-summary" title="Link to this heading">¶</a></h2>
+        <ol class="arabic simple">
+        <li><p><strong>Unified Page Card Model (``cards.py``)</strong>: Replaces duplicated metadata extraction across
+        <code class="docutils literal notranslate"><span class="pre">social_meta.py</span></code>, <code class="docutils literal notranslate"><span class="pre">collection.py</span></code>, and <code class="docutils literal notranslate"><span class="pre">directory.html</span></code> with a single <code class="docutils literal notranslate"><span class="pre">Card</span></code> contract
+        featuring hybrid curated descriptions (<code class="docutils literal notranslate"><span class="pre">:description:</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">summary::</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">enunciation::</span></code>),
+        dual visual slots (small project medallion + larger hero diagram), <code class="docutils literal notranslate"><span class="pre">:card_ref:</span></code> inheritance,
+        and automatic <code class="docutils literal notranslate"><span class="pre">docs/cards.json</span></code> export beside <code class="docutils literal notranslate"><span class="pre">docs/objects.inv</span></code>.</p></li>
+        <li><p><strong>One Semantic Card Template (``components/card.html`` &amp; ``_cards.scss``)</strong>: A single 4-slot
+        <code class="docutils literal notranslate"><span class="pre">&lt;article</span> <span class="pre">class=&quot;card&quot;&gt;</span></code> morphs purely via CSS into vertical cards, horizontal banners,
+        compact list rows, searchable directory items, standalone <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">card::</span></code> embeds, and
+        <code class="docutils literal notranslate"><span class="pre">1280×640</span></code> social banners captured locally with <code class="docutils literal notranslate"><span class="pre">google-chrome</span> <span class="pre">--headless=new</span></code>.</p></li>
+        <li><p><strong>Scholarly Bibliography &amp; Apparatus (``bibliography.py`` &amp; ``roles/geometry.py``)</strong>:
+        Standard Chicago, MLA, APA, and BibTeX citation tabs, <code class="docutils literal notranslate"><span class="pre">docs/bibliography.bib</span></code> export,
+        automated parallel-track passage backlinks (<code class="docutils literal notranslate"><span class="pre">LA</span> <span class="pre">·</span> <span class="pre">EN</span></code>), and cross-project <code class="docutils literal notranslate"><span class="pre">:person:</span></code> /
+        <code class="docutils literal notranslate"><span class="pre">:cite:</span></code> / <code class="docutils literal notranslate"><span class="pre">:term:</span></code> resolution via <code class="docutils literal notranslate"><span class="pre">cards.json</span></code>.</p></li>
+        </ol>
+        </section>
+        <section class="level-2" id="verification">
+        <h2>Verification<a class="headerlink" href="#verification" title="Link to this heading">¶</a></h2>
+        <ul class="simple">
+        <li><p><strong>72/72</strong> tests passing (including multi-site federation, <code class="docutils literal notranslate"><span class="pre">:card_ref:</span></code> inheritance,
+        parallel-track backlinks, and live <code class="docutils literal notranslate"><span class="pre">1280×640</span></code> Chrome social capture).</p></li>
+        <li><p><code class="docutils literal notranslate"><span class="pre">ruff</span> <span class="pre">check</span></code> clean across all new modules and tests.</p></li>
+        <li><p><code class="docutils literal notranslate"><span class="pre">publish</span> <span class="pre">build</span></code> clean with valid <code class="docutils literal notranslate"><span class="pre">docs/cards.json</span></code> output.</p></li>
+        </ul>
+        </section>
+        </section>
+
+      </div>
+      <footer class="book-footer">
+
+        <div class="meta">
+          <span class="date">26.332-063100</span>
+          <span class="author">phi</span>
+          <span class="tags">
+            <a href="../../tags/cards.html">cards</a>
+            <a href="../../tags/collections.html">collections</a>
+            <a href="../../tags/bibliography.html">bibliography</a>
+            <a href="../../tags/social-banners.html">social-banners</a>
+          </span>
+        </div>
+        <div class="book-footer-ornament">&#10086;</div>
+        <div class="book-footer-nav">
+          <div class="book-nav-prev">
+            <a class="book-nav-btn" href="../index.html" title="log">&larr; <span class="nav-label">Prev</span></a>
+          </div>
+          <div class="book-nav-center">
+            <a class="book-toc-link" href="../index.html">log</a>
+          </div>
+          <div class="book-nav-next">
+            <a class="book-nav-btn" href="../26.302-183000/index.html" title="Unified Classical Scriptorium Theme &amp; Collection Redesign"><span class="nav-label">Next</span> &rarr;</a>
+          </div>
+        </div>
+      </footer>
+    </article>
+  </main>
+  <div class="asides">
+    <aside class="aside-search">
+      <h3>Search</h3>
+      <div id="searchbox" role="search">
+        <form id="rtd-search-form" class="wy-form search-form" action="../../search.html" method="get">
+          <div class="search-field">
+            <input type="search" name="q" placeholder="Search docs..." aria-label="Search docs" autocomplete="off" />
+            <button type="submit" class="search-submit" aria-label="Search" title="Search">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </button>
+          </div>
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+      </div>
+    </aside>
+    <aside class="aside-recent-logs">
+      <h3>Recent Logs</h3>
+      <ul>
+        <li><a href="#" class="is-active" aria-current="page" aria-selected="true">Unified Page Cards, Federated Collections & HTML Social Capture (v0.5.0)</a></li>
+        <li><a href="../26.302-183000/index.html">Unified Classical Scriptorium Theme & Collection Redesign</a></li>
+        <li><a href="../24.126-084512/index.html">add global_conf.py</a></li>
+        <li><a href="../24.126-084330/index.html">test</a></li>
+        <li><a href="../24.125-164141/index.html">introducing publish</a></li>
+      </ul>
+    </aside>
+    <aside class="aside-tags">
+      <h3>Tags</h3>
+      <ul>
+        <li><a href="../../tags/bibliography.html">bibliography</a></li>
+        <li><a href="../../tags/cards.html">cards</a></li>
+        <li><a href="../../tags/code.html">code</a></li>
+        <li><a href="../../tags/codex.html">codex</a></li>
+        <li><a href="../../tags/collection.html">collection</a></li>
+        <li><a href="../../tags/collections.html">collections</a></li>
+        <li><a href="../../tags/introduction.html">introduction</a></li>
+        <li><a href="../../tags/navigation.html">navigation</a></li>
+        <li><a href="../../tags/social-banners.html">social-banners</a></li>
+        <li><a href="../../tags/taxonomy.html">taxonomy</a></li>
+        <li><a href="../../tags/test.html">test</a></li>
+        <li><a href="../../tags/usage.html">usage</a></li>
+      </ul>
+    </aside>
+    <aside class="aside-categories">
+      <h3>Categories</h3>
+      <ul>
+        <li><a href="../../categories/architecture.html">architecture</a></li>
+        <li><a href="../../categories/publish.html">publish</a></li>
+        <li><a href="../../categories/theme.html">theme</a></li>
+      </ul>
+    </aside>
+    <aside class="aside-types">
+      <h3>Types</h3>
+      <ul>
+        <li><a href="../../types/goal.html">goal</a></li>
+        <li><a href="../../types/log.html">log</a></li>
+      </ul>
+    </aside>
+  </div>
+  <footer>
+    <div class="footer-nav">
+      <ul>
+        <li><a href="../../about.html"  >about</a></li>
+        <li><a href="../../connect.html"  >connect</a></li>
+        <li><a href="../../todos/index.html"  >todos</a></li>
+        <li><a href="../../changelog.html"  >Changelog</a></li>
+        <li><a href="../../orphan.html"  >Orphan Page</a></li>
+        <li><a href="https://github.com/photon-platform/publish" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://github.com/photon-platform/publish/issues" target="_blank" rel="noopener">Support</a></li>
+      </ul>
+    </div>
+    <hr />
+    <div role="contentinfo">
+      <p>
+        &copy; Copyright 2026, PHOTON.
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=2a2fe768"></script>
+  <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+  <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+  <script src="../../_static/js/collection_controls.js?v=35d67a15"></script>
+  <script src="../../_static/js/collection_directory.js?v=0928c9d3"></script>
+  <script src="../../_static/js/geometor_interactive.js?v=219c1955"></script>
+  <script src="../../_static/js/book_outline.js?v=aca1ae7c"></script>
+  <script src="../../_static/js/search_highlight.js"></script>
+
+</body>
+</html>
