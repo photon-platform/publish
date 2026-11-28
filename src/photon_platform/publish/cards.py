@@ -812,6 +812,16 @@ class CardRegistry:
         for inv_name, spec in mapping.items():
             if not isinstance(spec, (tuple, list)) or len(spec) < 1:
                 continue
+            # Sphinx's validate_intersphinx_mapping normalizes values to
+            # `(name, (uri, tuple(targets)))` on config-inited.
+            if (
+                len(spec) == 2
+                and isinstance(spec[1], (tuple, list))
+                and len(spec[1]) >= 1
+                and isinstance(spec[1][0], str)
+                and (spec[0] == inv_name or spec[1][0].startswith(("http://", "https://")))
+            ):
+                spec = spec[1]
             base_url = str(spec[0] or "").rstrip("/")
             inv_locs = spec[1] if len(spec) > 1 else None
             local_candidates: list[Path] = []
@@ -893,7 +903,8 @@ class CardRegistry:
                 except (OSError, json.JSONDecodeError):
                     pass
 
-            timeout = getattr(getattr(self.env, "config", None), "intersphinx_timeout", 3) or 3
+            raw_timeout = getattr(getattr(self.env, "config", None), "intersphinx_timeout", None)
+            timeout = max(10, int(raw_timeout)) if raw_timeout else 10
             cards_url = f"{base_url.rstrip('/')}/cards.json"
             try:
                 req = urllib.request.Request(cards_url, headers={"User-Agent": "photon-publish/cards"})

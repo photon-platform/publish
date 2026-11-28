@@ -414,3 +414,33 @@ People
     people_html = (h_out / "people" / "index.html").read_text(encoding="utf-8")
     card_titles = re.findall(r'data-title="([^"]+)"', people_html)
     assert card_titles == ["Eudoxus of Cnidus", "Peter Hoenen, S.J."]
+
+
+def test_inventory_sources_unwraps_sphinx_normalized_intersphinx_mapping(tmp_path: Path) -> None:
+    """Sphinx 8+ normalizes intersphinx_mapping entries to `(name, (uri, targets))`;
+    CardRegistry._inventory_sources() must still recover the HTTPS base_url for CI fetches."""
+    from types import SimpleNamespace
+
+    from photon_platform.publish.cards import CardRegistry
+
+    src = tmp_path / "portal" / "docsrc"
+    src.mkdir(parents=True)
+    cfg = SimpleNamespace(
+        intersphinx_mapping={
+            "catalog": ("catalog", ("https://geometor.github.io/catalog", (None,))),
+            "euclid": ("euclid", ("https://geometor.github.io/euclid/", ("../euclid/docs/objects.inv", None))),
+            "raw_pair": ("https://geometor.github.io/aristotle", None),
+        },
+        card_sites={"catalog": "https://geometor.github.io/catalog"},
+    )
+    fake_app = SimpleNamespace(
+        env=SimpleNamespace(srcdir=str(src), config=cfg),
+        outdir=str(tmp_path / "portal" / "docs"),
+        builder=None,
+    )
+    reg = CardRegistry(fake_app)
+    sources = reg._inventory_sources()
+
+    assert sources["catalog"][0] == "https://geometor.github.io/catalog"
+    assert sources["euclid"][0] == "https://geometor.github.io/euclid"
+    assert sources["raw_pair"][0] == "https://geometor.github.io/aristotle"

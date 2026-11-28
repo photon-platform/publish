@@ -2,6 +2,13 @@ changelog
 =========
 
 
+0.5.4
+=====
+*2026-11-28*
+
+- fix(cards): Unwrap Sphinx 8+ normalized ``intersphinx_mapping`` entries ``(name, (uri, targets))`` in ``CardRegistry._inventory_sources()`` so remote HTTPS ``cards.json`` federation works cleanly on GitHub Actions CI when sister repositories are registered via ``register_sisters(...)``; raise default remote ``cards.json`` fetch timeout to 10s for large codex manifests.
+
+
 0.5.3
 =====
 *2026-11-28*
